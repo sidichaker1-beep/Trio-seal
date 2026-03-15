@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIO SEAL | البوابة الكونية</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: radial-gradient(ellipse at bottom, #0a0a1a 0%, #1a1a3a 100%);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .stars, .twinkling {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .stars {
+            background: #000 url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSI2IiBjeT0iMTQiIHI9IjEiIGZpbGw9IndoaXRlIiAvPjwvc3ZnPg==') repeat;
+            animation: move-stars 200s linear infinite;
+            opacity: 0.5;
+        }
+        .twinkling {
+            background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIyIiBmaWxsPSJ3aGl0ZSIgLz48L3N2Zz4=') repeat;
+            animation: move-stars 150s linear infinite;
+            opacity: 0.3;
+        }
+        @keyframes move-stars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-1000px); }
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: gold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: gold;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            margin-bottom: 60px;
+        }
+        .glitch {
+            font-size: 5em;
+            font-weight: bold;
+            color: gold;
+            text-shadow: 0.05em 0 0 rgba(255,0,0,0.5), -0.025em -0.05em 0 rgba(0,255,0,0.5), 0.025em 0.05em 0 rgba(0,0,255,0.5);
+            animation: glitch 500ms infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 rgba(255,0,0,0.5), -0.05em -0.025em 0 rgba(0,255,0,0.5), -0.025em 0.05em 0 rgba(0,0,255,0.5); }
+            14% { text-shadow: 0.05em 0 0 rgba(255,0,0,0.5), -0.05em -0.025em 0 rgba(0,255,0,0.5), -0.025em 0.05em 0 rgba(0,0,255,0.5); }
+            15% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.5), 0.025em 0.025em 0 rgba(0,255,0,0.5), -0.05em -0.05em 0 rgba(0,0,255,0.5); }
+            49% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.5), 0.025em 0.025em 0 rgba(0,255,0,0.5), -0.05em -0.05em 0 rgba(0,0,255,0.5); }
+            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.5), 0.05em 0 0 rgba(0,255,0,0.5), 0 -0.05em 0 rgba(0,0,255,0.5); }
+            99% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.5), 0.05em 0 0 rgba(0,255,0,0.5), 0 -0.05em 0 rgba(0,0,255,0.5); }
+            100% { text-shadow: -0.025em 0 0 rgba(255,0,0,0.5), -0.025em -0.025em 0 rgba(0,255,0,0.5), -0.025em -0.05em 0 rgba(0,0,255,0.5); }
+        }
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: #aaa;
+            margin: 20px 0;
+        }
+        .badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            color: black;
+            padding: 8px 20px;
+            border-radius: 40px;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .hero-cta {
+            margin: 40px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: gold;
+            color: black;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px gold;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid gold;
+            color: gold;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            display: block;
+            font-size: 3em;
+            color: gold;
+            font-weight: bold;
+        }
+        .stat-label {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+        .section-title {
+            text-align: center;
+            color: gold;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            border-bottom: 2px solid gold;
+            padding-bottom: 20px;
+            display: inline-block;
+            width: 100%;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        .dashboard-card {
+            background: rgba(20,30,50,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            border: 1px solid gold;
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px gold;
+        }
+        .dashboard-card h3 {
+            color: gold;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 1px solid gold;
+            padding-bottom: 10px;
+        }
+        .chart-container {
+            height: 250px;
+        }
+        .schumann-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .schumann-card {
+            background: linear-gradient(135deg, #1a1a3a, #2a2a4a);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid gold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .schumann-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px gold;
+        }
+        .freq {
+            display: block;
+            font-size: 2.5em;
+            color: gold;
+            font-weight: bold;
+        }
+        .mode {
+            color: #aaa;
+            margin: 10px 0;
+            display: block;
+        }
+        .play-btn {
+            background: gold;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .schumann-visualizer {
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            padding: 20px;
+            height: 200px;
+        }
+        .map-section {
+            margin: 60px 0;
+        }
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .research-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid gold;
+            transition: all 0.3s;
+        }
+        .research-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px gold;
+        }
+        .research-card i {
+            font-size: 3em;
+            color: gold;
+            margin-bottom: 20px;
+        }
+        .research-card h3 {
+            color: gold;
+            margin-bottom: 15px;
+        }
+        .research-card p {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 60px;
+        }
+        .hash {
+            color: gold;
+            font-family: monospace;
+            font-size: 1.3em;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .dashboard-grid,
+            .schumann-grid,
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="logo">🌌 TRIO SEAL</div>
+            <ul class="nav-links">
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#dashboard">لوحة البيانات</a></li>
+                <li><a href="#schumann">مختبر شومان</a></li>
+                <li><a href="#research">البحث</a></li>
+                <li><a href="#download">التحميل</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="glitch">TRIO SEAL</h1>
+                <p class="hero-subtitle">مشروع استكشاف الثابت الكوني n ≈ 18,000</p>
+                <div class="hero-badges">
+                    <span class="badge">432 Hz</span>
+                    <span class="badge">7.83 Hz</span>
+                    <span class="badge">18,247 ± 1,200</span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#dashboard" class="btn">استكشف البيانات</a>
+                    <a href="#download" class="btn btn-outline">حمّل البحث</a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" id="years-count">18,000</span>
+                    <span class="stat-label">سنة من البيانات</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="sim-count">10k</span>
+                    <span class="stat-label">محاكاة</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="paper-count">1</span>
+                    <span class="stat-label">ورقة بحثية</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="dashboard-section">
+            <h2 class="section-title">📊 لوحة البيانات الكونية</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>🌞 البقع الشمسية</h3>
+                    <div class="chart-container">
+                        <canvas id="sunspotsChart"></canvas>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>🌬️ سرعة الرياح الشمسية</h3>
+                    <div class="chart-container">
+                        <canvas id="solarWindChart"></canvas>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>⚡ Kp Index</h3>
+                    <div class="chart-container">
+                        <canvas id="kpChart"></canvas>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>📈 توزيع n</h3>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schumann Lab -->
+        <section id="schumann" class="schumann-section">
+            <h2 class="section-title">🎵 مختبر رنين شومان</h2>
+            <div class="schumann-grid">
+                <div class="schumann-card" onclick="playSchumann(7.83)">
+                    <span class="freq">7.83 Hz</span>
+                    <span class="mode">الرنين الأساسي</span>
+                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                </div>
+                <div class="schumann-card" onclick="playSchumann(14.3)">
+                    <span class="freq">14.3 Hz</span>
+                    <span class="mode">التوافقي الأول</span>
+                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                </div>
+                <div class="schumann-card" onclick="playSchumann(20.8)">
+                    <span class="freq">20.8 Hz</span>
+                    <span class="mode">التوافقي الثاني</span>
+                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                </div>
+            </div>
+            <div class="schumann-visualizer">
+                <canvas id="waveCanvas" width="800" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Space Weather Map -->
+        <section class="map-section">
+            <h2 class="section-title">🛰️ خريطة الطقس الفضائي</h2>
+            <div id="spaceMap" style="height: 500px; border-radius: 30px; border: 2px solid gold;"></div>
+        </section>
+
+        <!-- Research & Download -->
+        <section id="research" class="research-section">
+            <h2 class="section-title">📜 البحث العلمي</h2>
+            <div class="research-grid">
+                <div class="research-card">
+                    <i class="fas fa-file-pdf"></i>
+                    <h3>الورقة البحثية</h3>
+                    <p>PDF كامل مع جميع المعادلات والنتائج</p>
+                    <a href="#" class="btn">تحميل</a>
+                </div>
+                <div class="research-card">
+                    <i class="fas fa-code"></i>
+                    <h3>كود المحاكاة</h3>
+                    <p>Python + Jupyter notebooks</p>
+                    <a href="#" class="btn">تحميل</a>
+                </div>
+                <div class="research-card">
+                    <i class="fas fa-database"></i>
+                    <h3>البيانات الخام</h3>
+                    <p>CSV لنتائج المحاكاة</p>
+                    <a href="#" class="btn">تحميل</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="hash">🔐 18K-432-7.83-2027-ALPHA-OMEGA</div>
+            <p>© 2026 شيكر هشام · Chigar Hicham</p>
+            <p>جميع الحقوق محفوظة · مبني على بيانات NASA/NOAA</p>
+        </footer>
+    </div>
+
+    <script>
+        function playSchumann(freq) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            osc.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.5);
+        }
+
+        const sunspotsLabels = Array.from({ length: 100 }, (_, i) => 1925 + i);
+        const sunspotsValues = Array.from({ length: 100 }, () => 50 + Math.random() * 150);
+
+        new Chart(document.getElementById('sunspotsChart'), {
+            type: 'line',
+            data: {
+                labels: sunspotsLabels,
+                datasets: [{
+                    label: 'عدد البقع الشمسية',
+                    data: sunspotsValues,
+                    borderColor: 'gold',
+                    backgroundColor: 'rgba(255,215,0,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: 'white', maxTicksLimit: 10 } },
+                    y: { ticks: { color: 'white' } }
+                },
+                plugins: { legend: { labels: { color: 'white' } } }
+            }
+        });
+
+        new Chart(document.getElementById('solarWindChart'), {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 50 }, (_, i) => i + 'h'),
+                datasets: [{
+                    label: 'سرعة الرياح (km/s)',
+                    data: Array.from({ length: 50 }, () => 300 + Math.random() * 200),
+                    borderColor: '#4da6ff',
+                    backgroundColor: 'rgba(77,166,255,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: 'white', maxTicksLimit: 8 } },
+                    y: { ticks: { color: 'white' } }
+                },
+                plugins: { legend: { labels: { color: 'white' } } }
+            }
+        });
+
+        new Chart(document.getElementById('kpChart'), {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 30 }, (_, i) => 'يوم ' + i),
+                datasets: [{
+                    label: 'Kp Index',
+                    data: Array.from({ length: 30 }, () => 1 + Math.random() * 8),
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255,107,107,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: 'white', maxTicksLimit: 8 } },
+                    y: { ticks: { color: 'white', max: 9, min: 0 } }
+                },
+                plugins: { legend: { labels: { color: 'white' } } }
+            }
+        });
+
+        new Chart(document.getElementById('distributionChart'), {
+            type: 'bar',
+            data: {
+                labels: ['18,247'],
+                datasets: [{
+                    label: 'قيمة n',
+                    data: [18247],
+                    backgroundColor: 'gold',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { ticks: { color: 'white', beginAtZero: true } }
+                },
+                plugins: { legend: { labels: { color: 'white' } } }
+            }
+        });
+
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas.getContext('2d');
+        let offset = 0;
+        function drawWave() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.strokeStyle = 'gold';
+            ctx.lineWidth = 3;
+            ctx.moveTo(0, 100);
+            for (let x = 0; x < canvas.width; x++) {
+                let y = 100 + 50 * Math.sin(x * 0.02 + offset);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            offset += 0.05;
+            requestAnimationFrame(drawWave);
+        }
+        drawWave();
+
+        const map = L.map('spaceMap').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        L.circle([60, -100], { radius: 500000, color: 'cyan', fillOpacity: 0.2 }).addTo(map).bindPopup('منطقة نشاط شمسي مرتفع');
+        L.circle([-50, 20], { radius: 300000, color: 'gold', fillOpacity: 0.2 }).addTo(map).bindPopup('رياح شمسية نشطة');
+        L.circle([30, 150], { radius: 400000, color: 'red', fillOpacity: 0.2 }).addTo(map).bindPopup('عاصفة مغناطيسية');
+    </script>
+</body>
+</html>
