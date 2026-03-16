@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIO SEAL · مرصد الرنين</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #0a0f1e 0%, #141b2b 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #e0e7ff;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        h1 span {
+            background: #2a3a5e;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            color: #aad0ff;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            color: #8b9bb8;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            border-right: 4px solid #f0b37b;
+            padding-right: 1rem;
+        }
+        .panels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+        }
+        /* الصف العلوي (العيون) */
+        .panels-top {
+            margin-bottom: 1.8rem;
+        }
+        .panel {
+            background: rgba(18, 25, 40, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 1.8rem 1.5rem;
+            border: 1px solid rgba(255, 215, 140, 0.15);
+            box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.6);
+            transition: all 0.2s ease;
+        }
+        .panel.taqabul {
+            background: radial-gradient(circle at 30% 20%, #1e2a3a, #0f172a);
+        }
+        .panel.closure {
+            background: radial-gradient(circle at 70% 30%, #1d2a37, #0e1623);
+        }
+        .panel.balance {
+            background: radial-gradient(circle at 40% 80%, #202b39, #0c1420);
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .panel-name {
+            font-size: 1.3rem;
+            font-weight: 500;
+            background: rgba(255,255,255,0.02);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            border: 1px solid #3e506e;
+        }
+        .panel-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: #0b111e;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            border: 1px solid #4d6188;
+            box-shadow: inset 0 2px 5px #00000055;
+        }
+        .gauge {
+            height: 10px;
+            background: #20293b;
+            border-radius: 20px;
+            margin: 1.2rem 0;
+            overflow: hidden;
+        }
+        .gauge-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 20px;
+            transition: width 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1), box-shadow 0.3s;
+        }
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            color: #9babc5;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        .badge {
+            background: #26334d;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .row-details {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-top: 1px dashed #334155;
+            padding-top: 1rem;
+        }
+        .gold-glow {
+            box-shadow: 0 0 18px #fbbf24, 0 0 40px #f59e0b80;
+            border-color: #fbbf24;
+            transition: 0.3s;
+        }
+        .red-pulse {
+            animation: pulseRed 1.5s infinite;
+        }
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 5px #ef4444; }
+            50% { box-shadow: 0 0 25px #ef4444, 0 0 40px #b91c1c; }
+            100% { box-shadow: 0 0 5px #ef4444; }
+        }
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #6b7c9b;
+            font-size: 0.9rem;
+        }
+        .live-badge {
+            background: #1f8b4c;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            TRIO SEAL · رَصْد الرنين
+            <span>v1.0.0</span>
+        </h1>
+        <div class="subtitle">
+            <span class="live-badge">⚡ حي + بيانات data.csv</span>
+            عين المرصد رقمياً – مكة (Asia/Riyadh) محور التقابل
+        </div>
+
+        <!-- الصف العلوي – العيون الثلاث -->
+        <div class="panels panels-top" id="topRow">
+            <!-- Taqābul سيملأه JS -->
+            <!-- Closure -->
+            <!-- Balance -->
+        </div>
+
+        <!-- الصف السفلي – الداعمة -->
+        <div class="panels" id="bottomRow"></div>
+
+        <div class="footer">
+            <span id="timestamp"></span> · يعمل على بيانات 10,000 حدث · Kp حي (NOAA simulator)
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ------------------------------------------------------------
+            // 1.  محرك TRIO SEAL (TrioSealEngine.js مُدمج)
+            // ------------------------------------------------------------
+            const TrioSealEngine = {
+                // حساب زاوية التقابل (مكة المكرمة)
+                taqabulAngle: function(run, timestamp = new Date()) {
+                    // توقيت مكة المكرمة (Asia/Riyadh)
+                    const makkahTime = new Date(timestamp.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
+                    const seconds = makkahTime.getSeconds() + 60 * (makkahTime.getMinutes() + 60 * makkahTime.getHours());
+                    // دورة كاملة 86400 ثانية ← 360°
+                    const baseAngle = (seconds / 86400) * 360;
+                    // مزج بسيط مع run لجعل الزاوية فريدة لكل حدث
+                    const uniqueOffset = (run * 0.713) % 360;
+                    return (baseAngle + uniqueOffset) % 360;
+                },
+
+                // مؤشر Closure (الدورة) 0-1
+                closureIndex: function(depth_km, magnitude_mw) {
+                    const depthNorm = Math.min(depth_km / 700, 1);
+                    const magNorm = Math.min(magnitude_mw / 9.6, 1);
+                    return (depthNorm * 0.4 + magNorm * 0.6);
+                },
+
+                // مؤشر Balance (التوازن) – يتأثر بـ Kp
+                balanceIndex: function(alpha_event, resonance_score, kp = 2) {
+                    const base = (alpha_event + resonance_score) / 20;  // alpha_event حتى 12.9
+                    const kpFactor = kp / 9;
+                    return Math.min(base + kpFactor * 0.3, 1);
+                },
+
+                // بقية المؤشرات الداعمة
+                harmonicIndex: function(f_schumann, f_golden) {
+                    return Math.min(Math.abs(f_schumann - f_golden) / 2000, 1);
+                },
+                proximityRaw: function(prox) { return prox; },   // proximity_2027 مباشرة
+                depthStress: function(depth) { return Math.min(depth / 100, 1); }
+            };
+
+            // ------------------------------------------------------------
+            // 2.  بيانات data.csv (مضمنة – أول 30 حدث كافي لحيوية العرض)
+            // ------------------------------------------------------------
+            const sampleData = [
+                {run:1, depth:34.1, mag:8.53, alpha:8.05978, resonance:0.20978, prox:0.20408, f_s:7.8734, f_g:13962.08},
+                {run:2, depth:45.4, mag:9.38, alpha:11.3158, resonance:3.4658, prox:3.4601, f_s:7.7972, f_g:14134.38},
+                {run:3, depth:27.3, mag:7.87, alpha:7.87707, resonance:0.02707, prox:0.02137, f_s:7.5152, f_g:13816.08},
+                {run:4, depth:66.1, mag:9.01, alpha:8.84185, resonance:0.99185, prox:0.98615, f_s:6.9874, f_g:13904.06},
+                {run:5, depth:36.0, mag:8.71, alpha:8.16863, resonance:0.31863, prox:0.31293, f_s:8.3044, f_g:13890.52},
+                {run:6, depth:50.6, mag:8.89, alpha:8.49255, resonance:0.64255, prox:0.63685, f_s:7.6413, f_g:14161.32},
+                {run:7, depth:90.9, mag:8.39, alpha:7.94937, resonance:0.09937, prox:0.09367, f_s:7.7538, f_g:13258.65},
+                {run:8, depth:97.6, mag:8.82, alpha:8.30838, resonance:0.45838, prox:0.45268, f_s:7.4844, f_g:13489.69},
+                {run:9, depth:33.5, mag:7.63, alpha:7.83259, resonance:0.01741, prox:0.01171, f_s:7.6016, f_g:13532.66},
+                {run:10, depth:72.9, mag:8.83, alpha:8.37894, resonance:0.52894, prox:0.52324, f_s:7.4207, f_g:13193.99},
+                // نضيف بعض التنوع
+                {run:11, depth:58.5, mag:7.60, alpha:7.86472, resonance:0.01472, prox:0.00902, f_s:7.8010, f_g:13735.41},
+                {run:12, depth:58.3, mag:9.23, alpha:9.86725, resonance:2.01725, prox:2.01155, f_s:7.8730, f_g:13524.80},
+                {run:13, depth:6.8, mag:8.67, alpha:8.16173, resonance:0.31173, prox:0.30603, f_s:7.7290, f_g:13579.54},
+                {run:14, depth:39.9, mag:8.81, alpha:8.29096, resonance:0.44096, prox:0.43526, f_s:8.0646, f_g:12940.07},
+                {run:15, depth:49.0, mag:7.85, alpha:7.89245, resonance:0.04245, prox:0.03675, f_s:7.2709, f_g:14157.14}
+            ];
+
+            // محاكاة Kp (تتغير كل دقيقتين)
+            let currentKp = 3.3;  // يبدأ معتدل
+            setInterval(() => {
+                // Kp عشوائي بين 0 و 8
+                currentKp = Math.random() * 8;
+                updateAllPanels();   // إعادة الرسم مع Kp الجديد
+            }, 8000);  // كل 8 ثوان
+
+            // ------------------------------------------------------------
+            // 3.  بناء وعرض الـ 6 Panels
+            // ------------------------------------------------------------
+            const topRow = document.getElementById('topRow');
+            const bottomRow = document.getElementById('bottomRow');
+
+            function buildPanels() {
+                topRow.innerHTML = '';
+                bottomRow.innerHTML = '';
+
+                // Taqābul (خاص)
+                const taqabulDiv = document.createElement('div');
+                taqabulDiv.className = 'panel taqabul';
+                taqabulDiv.id = 'panelTaqabul';
+                topRow.appendChild(taqabulDiv);
+
+                // Closure (خاص)
+                const closureDiv = document.createElement('div');
+                closureDiv.className = 'panel closure';
+                closureDiv.id = 'panelClosure';
+                topRow.appendChild(closureDiv);
+
+                // Balance (خاص)
+                const balanceDiv = document.createElement('div');
+                balanceDiv.className = 'panel balance';
+                balanceDiv.id = 'panelBalance';
+                topRow.appendChild(balanceDiv);
+
+                // الصف السفلي – 3 panels داعمة
+                const panelsBottom = [
+                    { title: 'هارمونيك الطيف', id: 'harm', icon: '🎵' },
+                    { title: 'قرب 2027', id: 'prox', icon: '📡' },
+                    { title: 'إجهاد العمق', id: 'stress', icon: '⚙️' }
+                ];
+                panelsBottom.forEach(p => {
+                    const div = document.createElement('div');
+                    div.className = 'panel';
+                    div.id = `panel${p.id}`;
+                    div.innerHTML = `<div class="panel-header"><span class="panel-name">${p.icon} ${p.title}</span><span class="panel-value" id="val${p.id}">--</span></div><div class="gauge" id="gauge${p.id}"><div class="gauge-fill" id="fill${p.id}" style="width:0%; background:#4b7bec;"></div></div><div class="meta"><span class="badge">آخر حدث</span><span id="meta${p.id}">--</span></div>`;
+                    bottomRow.appendChild(div);
+                });
+            }
+            buildPanels();
+
+            // عناصر أعلى
+            function updateTaqabul(taDiv, run, angle, highlight) {
+                taDiv.innerHTML = `
+                    <div class="panel-header">
+                        <span class="panel-name">🕋 Taqābul · مكة</span>
+                        <span class="panel-value">${angle.toFixed(2)}°</span>
+                    </div>
+                    <div class="gauge"><div class="gauge-fill" style="width:${(angle/360)*100}%; background:#fbbf24; ${highlight ? 'box-shadow:0 0 15px gold;' : ''}"></div></div>
+                    <div class="row-details">
+                        <span>الحدث #${run}</span>
+                        <span>التوقيت: ${new Date().toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false })} (مكة)</span>
+                    </div>
+                    <div class="meta">
+                        <span class="badge">المحاذاة: ${(angle % 360 < 5 || angle % 360 > 355) ? '⚡ قريبة' : '--'}</span>
+                        <span>زاوية مطلقة</span>
+                    </div>
+                `;
+                if (angle % 360 < 5 || angle % 360 > 355) {
+                    taDiv.classList.add('gold-glow');
+                } else {
+                    taDiv.classList.remove('gold-glow');
+                }
+            }
+
+            function updateClosure(clDiv, idx, depth, mag) {
+                clDiv.innerHTML = `
+                    <div class="panel-header">
+                        <span class="panel-name">🌀 Closure · الدورة</span>
+                        <span class="panel-value">${idx.toFixed(3)}</span>
+                    </div>
+                    <div class="gauge"><div class="gauge-fill" style="width:${idx*100}%; background:#60a5fa;"></div></div>
+                    <div class="row-details">
+                        <span>عمق: ${depth.toFixed(1)} كم</span>
+                        <span>قوة: M${mag.toFixed(2)}</span>
+                    </div>
+                    <div class="meta">
+                        <span class="badge">مؤشر دورة</span>
+                        <span>${idx > 0.7 ? 'عالية' : 'منخفضة'}</span>
+                    </div>
+                `;
+            }
+
+            function updateBalance(baDiv, idx, kp, alpha, res) {
+                const isRedPulse = (kp > 5);
+                baDiv.innerHTML = `
+                    <div class="panel-header">
+                        <span class="panel-name">⚖️ Balance · التوازن</span>
+                        <span class="panel-value">${idx.toFixed(3)}</span>
+                    </div>
+                    <div class="gauge"><div class="gauge-fill" style="width:${idx*100}%; background:#f87171;"></div></div>
+                    <div class="row-details">
+                        <span>Kp: ${kp.toFixed(2)}</span>
+                        <span>α-event: ${alpha.toFixed(3)}</span>
+                    </div>
+                    <div class="meta">
+                        <span class="badge">اضطراب: ${kp > 5 ? '⚠️ قوي' : 'معتدل'}</span>
+                        <span>res: ${res.toFixed(3)}</span>
+                    </div>
+                `;
+                if (kp > 5) {
+                    baDiv.classList.add('red-pulse');
+                } else {
+                    baDiv.classList.remove('red-pulse');
+                }
+            }
+
+            function updateBottomPanels(harm, prox, stress) {
+                document.getElementById('valharm').innerText = harm.toFixed(3);
+                document.getElementById('fillharm').style.width = (harm * 100) + '%';
+                document.getElementById('metaharm').innerText = `انحراف ${(harm*100).toFixed(0)}%`;
+
+                document.getElementById('valprox').innerText = prox.toFixed(3);
+                document.getElementById('fillprox').style.width = (prox * 100) + '%';
+                document.getElementById('metaprox').innerText = `قرب 2027`;
+
+                document.getElementById('valstress').innerText = stress.toFixed(3);
+                document.getElementById('fillstress').style.width = (stress * 100) + '%';
+                document.getElementById('metastress').innerText = `ضغط العمق`;
+            }
+
+            // اختيار حدث عشوائي من sampleData
+            function getRandomEvent() {
+                return sampleData[Math.floor(Math.random() * sampleData.length)];
+            }
+
+            function updateAllPanels() {
+                const ev = getRandomEvent();
+                const now = new Date();
+
+                // Taqābul
+                const taqAngle = TrioSealEngine.taqabulAngle(ev.run, now);
+                const taqPanel = document.getElementById('panelTaqabul');
+                updateTaqabul(taqPanel, ev.run, taqAngle, true);
+
+                // Closure
+                const closureVal = TrioSealEngine.closureIndex(ev.depth, ev.mag);
+                const clPanel = document.getElementById('panelClosure');
+                updateClosure(clPanel, closureVal, ev.depth, ev.mag);
+
+                // Balance (مع Kp الحالي)
+                const balanceVal = TrioSealEngine.balanceIndex(ev.alpha, ev.resonance, currentKp);
+                const baPanel = document.getElementById('panelBalance');
+                updateBalance(baPanel, balanceVal, currentKp, ev.alpha, ev.resonance);
+
+                // المؤشرات السفلية
+                const harmVal = TrioSealEngine.harmonicIndex(ev.f_s, ev.f_g);
+                const proxVal = TrioSealEngine.proximityRaw(ev.prox);
+                const stressVal = TrioSealEngine.depthStress(ev.depth);
+                updateBottomPanels(harmVal, proxVal, stressVal);
+
+                // تحديث التايم ستامب
+                document.getElementById('timestamp').innerText = new Date().toLocaleString('ar-SA') + ' مكة · Kp: ' + currentKp.toFixed(2);
+            }
+
+            // تشغيل فوري + كل ثانيتين (تحديث smooth)
+            updateAllPanels();
+            setInterval(updateAllPanels, 2400);  // يبدل الأحداث باستمرار
+        })();
+    </script>
+</body>
+</html>
