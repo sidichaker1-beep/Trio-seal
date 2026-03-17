@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · النسخة النهائية</title>
+    <title>TRIO SEAL · القالب الجديد</title>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Leaflet -->
@@ -18,36 +18,33 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
         body {
-            background: radial-gradient(ellipse at bottom, #0a0a1a 0%, #1a1a3a 100%);
-            color: white;
+            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f30 100%);
+            color: #fff;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
-        .stars, .twinkling {
+        
+        /* خلفية نجوم متحركة */
+        .stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1;
-        }
-        .stars {
-            background: #000 url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSI2IiBjeT0iMTQiIHI9IjEiIGZpbGw9IndoaXRlIiAvPjwvc3ZnPg==') repeat;
-            animation: move-stars 200s linear infinite;
-            opacity: 0.5;
-        }
-        .twinkling {
-            background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIyIiBmaWxsPSJ3aGl0ZSIgLz48L3N2Zz4=') repeat;
-            animation: move-stars 150s linear infinite;
+            background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSI2IiBjeT0iMTQiIHI9IjEiIGZpbGw9IndoaXRlIiAvPjwvc3ZnPg==') repeat;
             opacity: 0.3;
+            animation: moveStars 200s linear infinite;
         }
-        @keyframes move-stars {
+        
+        @keyframes moveStars {
             from { transform: translateY(0); }
             to { transform: translateY(-1000px); }
         }
+        
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -56,348 +53,441 @@
             z-index: 1;
         }
         
-        /* ===== الساعات والتاريخ ===== */
+        /* ===== الساعات والتاريخ (تصميم جديد) ===== */
         .time-panel {
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 20, 30, 0.7);
+            backdrop-filter: blur(12px);
             border-radius: 60px;
-            padding: 15px 30px;
+            padding: 15px 35px;
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
-            border: 1px solid rgba(255,215,0,0.3);
+            gap: 25px;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-
+        
         .clock-container {
             display: flex;
-            gap: 30px;
+            gap: 35px;
             flex-wrap: wrap;
         }
-
+        
         .clock-card {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
-
+        
         .clock-icon {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: gold;
+            filter: drop-shadow(0 0 8px rgba(255,215,0,0.3));
         }
-
+        
         .clock-info {
             display: flex;
             flex-direction: column;
         }
-
+        
         .clock-time {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             color: white;
             font-family: 'Courier New', monospace;
-            direction: ltr;
+            letter-spacing: 2px;
         }
-
+        
         .clock-label {
-            font-size: 0.9rem;
-            color: #aaa;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
         }
-
+        
         .date-container {
             text-align: left;
         }
-
+        
         .date-gregorian {
             font-size: 1.1rem;
             color: white;
             margin-bottom: 5px;
-            font-family: 'Courier New', monospace;
         }
-
+        
         .date-hijri {
             font-size: 1rem;
             color: gold;
-            font-family: 'Courier New', monospace;
         }
-
+        
+        /* ===== شريط التنقل ===== */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px;
-            background: rgba(0,0,0,0.5);
+            padding: 15px 35px;
+            background: rgba(10, 15, 25, 0.6);
             backdrop-filter: blur(10px);
             border-radius: 60px;
             margin-bottom: 40px;
-            border: 1px solid rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,215,0,0.2);
         }
+        
         .logo {
-            font-size: 1.8em;
+            font-size: 1.8rem;
             font-weight: bold;
             color: gold;
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
         }
+        
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
         }
+        
         .nav-links a {
-            color: white;
+            color: #fff;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            font-size: 1.05rem;
         }
+        
         .nav-links a:hover {
             color: gold;
         }
+        
+        /* ===== القسم الرئيسي ===== */
         .hero {
             text-align: center;
-            padding: 80px 20px;
-            margin-bottom: 60px;
+            padding: 70px 20px;
+            margin-bottom: 50px;
         }
+        
         .glitch {
-            font-size: 5em;
+            font-size: 4.5rem;
             font-weight: bold;
             color: gold;
-            text-shadow: 0.05em 0 0 rgba(255,0,0,0.5), -0.025em -0.05em 0 rgba(0,255,0,0.5), 0.025em 0.05em 0 rgba(0,0,255,0.5);
-            animation: glitch 500ms infinite;
+            text-shadow: 3px 3px 0 #2c3e50, 6px 6px 0 rgba(255,215,0,0.2);
+            margin-bottom: 20px;
         }
-        @keyframes glitch {
-            0% { text-shadow: 0.05em 0 0 rgba(255,0,0,0.5), -0.05em -0.025em 0 rgba(0,255,0,0.5), -0.025em 0.05em 0 rgba(0,0,255,0.5); }
-            14% { text-shadow: 0.05em 0 0 rgba(255,0,0,0.5), -0.05em -0.025em 0 rgba(0,255,0,0.5), -0.025em 0.05em 0 rgba(0,0,255,0.5); }
-            15% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.5), 0.025em 0.025em 0 rgba(0,255,0,0.5), -0.05em -0.05em 0 rgba(0,0,255,0.5); }
-            49% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.5), 0.025em 0.025em 0 rgba(0,255,0,0.5), -0.05em -0.05em 0 rgba(0,0,255,0.5); }
-            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.5), 0.05em 0 0 rgba(0,255,0,0.5), 0 -0.05em 0 rgba(0,0,255,0.5); }
-            99% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.5), 0.05em 0 0 rgba(0,255,0,0.5), 0 -0.05em 0 rgba(0,0,255,0.5); }
-            100% { text-shadow: -0.025em 0 0 rgba(255,0,0,0.5), -0.025em -0.025em 0 rgba(0,255,0,0.5), -0.025em -0.05em 0 rgba(0,0,255,0.5); }
-        }
+        
         .hero-subtitle {
-            font-size: 1.5em;
-            color: #aaa;
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.8);
             margin: 20px 0;
         }
+        
         .badge {
             display: inline-block;
-            background: linear-gradient(45deg, #ffd700, #ffaa00);
-            color: black;
+            background: rgba(255,215,0,0.15);
+            color: gold;
             padding: 8px 20px;
             border-radius: 40px;
-            margin: 0 10px;
-            font-weight: bold;
+            margin: 0 8px;
+            font-weight: 600;
+            border: 1px solid rgba(255,215,0,0.3);
         }
-        .hero-cta {
-            margin: 40px 0;
-        }
-        .btn {
-            display: inline-block;
-            padding: 15px 40px;
-            background: gold;
-            color: black;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            margin: 0 10px;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px gold;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid gold;
-            color: gold;
-        }
+        
         .hero-stats {
             display: flex;
             justify-content: center;
             gap: 60px;
-            margin-top: 60px;
+            margin-top: 50px;
+            flex-wrap: wrap;
         }
+        
         .stat {
             text-align: center;
+            background: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 20px 30px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,215,0,0.2);
+            min-width: 150px;
         }
+        
         .stat-number {
             display: block;
-            font-size: 3em;
+            font-size: 2.8rem;
             color: gold;
             font-weight: bold;
         }
+        
         .stat-label {
-            color: #aaa;
-            font-size: 1.1em;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
         }
+        
+        /* ===== بطاقات البيانات ===== */
         .section-title {
             text-align: center;
             color: gold;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-            border-bottom: 2px solid gold;
-            padding-bottom: 20px;
-            display: inline-block;
-            width: 100%;
+            font-size: 2.5rem;
+            margin: 50px 0 40px;
+            position: relative;
         }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: gold;
+            margin: 15px auto 0;
+            border-radius: 3px;
+        }
+        
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 30px;
         }
+        
         .dashboard-card {
-            background: rgba(20,30,50,0.8);
+            background: rgba(18, 25, 35, 0.7);
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 25px;
-            border: 1px solid gold;
-            transition: transform 0.3s;
+            border: 1px solid rgba(255,215,0,0.2);
+            transition: all 0.3s ease;
         }
+        
         .dashboard-card:hover {
+            border-color: gold;
+            box-shadow: 0 0 30px rgba(255,215,0,0.2);
             transform: translateY(-5px);
-            box-shadow: 0 0 30px gold;
+            background: rgba(25, 35, 45, 0.8);
         }
+        
         .dashboard-card h3 {
             color: gold;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            border-bottom: 1px solid gold;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid rgba(255,215,0,0.2);
             padding-bottom: 10px;
         }
+        
         .chart-container {
             height: 250px;
         }
+        
+        /* ===== بطاقات شومان ===== */
         .schumann-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 40px;
+            gap: 25px;
+            margin: 40px 0;
         }
+        
         .schumann-card {
-            background: linear-gradient(135deg, #1a1a3a, #2a2a4a);
-            border-radius: 30px;
-            padding: 30px;
+            background: rgba(20, 30, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 35px 20px;
             text-align: center;
-            border: 2px solid gold;
+            border: 1px solid rgba(255,215,0,0.3);
             cursor: pointer;
             transition: all 0.3s;
         }
+        
         .schumann-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px gold;
+            border-color: gold;
+            box-shadow: 0 0 35px rgba(255,215,0,0.25);
+            transform: translateY(-5px);
+            background: rgba(30, 40, 55, 0.8);
         }
+        
         .freq {
             display: block;
-            font-size: 2.5em;
+            font-size: 2.8rem;
             color: gold;
             font-weight: bold;
+            margin-bottom: 10px;
         }
+        
         .mode {
-            color: #aaa;
-            margin: 10px 0;
+            color: rgba(255,255,255,0.7);
+            margin: 15px 0;
             display: block;
+            font-size: 1rem;
         }
+        
         .play-btn {
             background: gold;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
-            font-size: 1.2em;
+            font-size: 1.3rem;
             cursor: pointer;
-            margin-top: 15px;
+            color: #1a1a2a;
+            transition: all 0.3s;
         }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px gold;
+        }
+        
         .schumann-visualizer {
             background: rgba(0,0,0,0.3);
             border-radius: 30px;
             padding: 20px;
             height: 200px;
+            margin-top: 20px;
         }
+        
+        /* ===== الخريطة ===== */
         .map-section {
-            margin: 60px 0;
+            margin: 50px 0;
         }
+        
+        #spaceMap {
+            height: 450px;
+            border-radius: 30px;
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+        
+        /* ===== بطاقات البحث ===== */
         .research-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin: 40px 0;
+            margin: 50px 0;
         }
+        
         .research-card {
-            background: rgba(0,0,0,0.5);
-            border-radius: 30px;
-            padding: 40px;
+            background: rgba(18, 25, 35, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 40px 25px;
             text-align: center;
-            border: 1px solid gold;
+            border: 1px solid rgba(255,215,0,0.2);
             transition: all 0.3s;
         }
+        
         .research-card:hover {
+            border-color: gold;
+            box-shadow: 0 0 35px rgba(255,215,0,0.2);
             transform: translateY(-5px);
-            box-shadow: 0 0 30px gold;
         }
+        
         .research-card i {
-            font-size: 3em;
+            font-size: 3.5rem;
             color: gold;
             margin-bottom: 20px;
         }
+        
         .research-card h3 {
             color: gold;
             margin-bottom: 15px;
+            font-size: 1.4rem;
         }
+        
         .research-card p {
-            color: #aaa;
-            margin-bottom: 20px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 25px;
         }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255,215,0,0.1);
+            color: gold;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 1px solid gold;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: gold;
+            color: #0a0f1a;
+            box-shadow: 0 0 20px gold;
+        }
+        
+        .btn-outline {
+            background: transparent;
+        }
+        
+        /* ===== التذييل ===== */
         .footer {
             text-align: center;
             margin-top: 80px;
             padding: 40px;
-            background: rgba(0,0,0,0.5);
+            background: rgba(10, 15, 25, 0.6);
+            backdrop-filter: blur(8px);
             border-radius: 60px;
+            border: 1px solid rgba(255,215,0,0.2);
         }
+        
         .hash {
             color: gold;
-            font-family: monospace;
-            font-size: 1.3em;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
             letter-spacing: 3px;
             margin-bottom: 15px;
         }
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .hero-stats {
-                flex-direction: column;
-                gap: 30px;
-            }
+        
+        /* ===== التجاوب ===== */
+        @media (max-width: 1024px) {
             .dashboard-grid,
-            .schumann-grid,
-            .research-grid {
+            .research-grid,
+            .schumann-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid,
+            .research-grid,
+            .schumann-grid {
                 grid-template-columns: 1fr;
             }
+            
             .time-panel {
                 flex-direction: column;
                 text-align: center;
+                padding: 20px;
             }
+            
             .clock-container {
                 justify-content: center;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .glitch {
+                font-size: 3rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="stars"></div>
-    <div class="twinkling"></div>
     
     <div class="container">
-        <!-- ===== الساعات والتاريخ ===== -->
+        <!-- الساعات والتاريخ -->
         <div class="time-panel">
             <div class="clock-container">
-                <!-- ساعة مكة -->
                 <div class="clock-card">
                     <span class="clock-icon">🕋</span>
                     <div class="clock-info">
@@ -405,8 +495,6 @@
                         <span class="clock-label">أم القرى</span>
                     </div>
                 </div>
-                
-                <!-- ساعة غرينتش -->
                 <div class="clock-card">
                     <span class="clock-icon">🌐</span>
                     <div class="clock-info">
@@ -415,15 +503,13 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- التاريخ -->
             <div class="date-container">
                 <div class="date-gregorian" id="gregorian-date">--</div>
                 <div class="date-hijri" id="hijri-date">--</div>
             </div>
         </div>
 
-        <!-- Navbar -->
+        <!-- شريط التنقل -->
         <nav class="navbar">
             <div class="logo">🌌 TRIO SEAL</div>
             <ul class="nav-links">
@@ -434,39 +520,33 @@
             </ul>
         </nav>
 
-        <!-- Hero Section -->
+        <!-- القسم الرئيسي -->
         <section id="home" class="hero">
-            <div class="hero-content">
-                <h1 class="glitch">TRIO SEAL</h1>
-                <p class="hero-subtitle">مشروع استكشاف الثابت الكوني n ≈ 18,000</p>
-                <div class="hero-badges">
-                    <span class="badge">432 Hz</span>
-                    <span class="badge">7.83 Hz</span>
-                    <span class="badge">18,247 ± 1,200</span>
-                </div>
-                <div class="hero-cta">
-                    <a href="#dashboard" class="btn">استكشف البيانات</a>
-                    <a href="#research" class="btn btn-outline">حمّل البحث</a>
-                </div>
+            <h1 class="glitch">TRIO SEAL</h1>
+            <p class="hero-subtitle">مشروع استكشاف الثابت الكوني n ≈ 18,000</p>
+            <div>
+                <span class="badge">432 Hz</span>
+                <span class="badge">7.83 Hz</span>
+                <span class="badge">18,247 ± 1,200</span>
             </div>
             <div class="hero-stats">
                 <div class="stat">
-                    <span class="stat-number" id="years-count">18,000</span>
+                    <span class="stat-number">18,000</span>
                     <span class="stat-label">سنة من البيانات</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number" id="sim-count">10k</span>
+                    <span class="stat-number">10k</span>
                     <span class="stat-label">محاكاة</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number" id="paper-count">1</span>
+                    <span class="stat-number">1</span>
                     <span class="stat-label">ورقة بحثية</span>
                 </div>
             </div>
         </section>
 
-        <!-- Dashboard -->
-        <section id="dashboard" class="dashboard-section">
+        <!-- لوحة البيانات -->
+        <section id="dashboard">
             <h2 class="section-title">📊 لوحة البيانات الكونية</h2>
             <div class="dashboard-grid">
                 <div class="dashboard-card">
@@ -496,8 +576,8 @@
             </div>
         </section>
 
-        <!-- Schumann Lab -->
-        <section id="schumann" class="schumann-section">
+        <!-- مختبر شومان -->
+        <section id="schumann">
             <h2 class="section-title">🎵 مختبر رنين شومان</h2>
             <div class="schumann-grid">
                 <div class="schumann-card" onclick="playSchumann(7.83)">
@@ -521,33 +601,28 @@
             </div>
         </section>
 
-        <!-- Space Weather Map -->
+        <!-- الخريطة -->
         <section class="map-section">
             <h2 class="section-title">🛰️ خريطة الطقس الفضائي</h2>
-            <div id="spaceMap" style="height: 500px; border-radius: 30px; border: 2px solid gold;"></div>
+            <div id="spaceMap"></div>
         </section>
 
-        <!-- Research & Download -->
-        <section id="research" class="research-section">
+        <!-- البحث -->
+        <section id="research">
             <h2 class="section-title">📜 البحث العلمي</h2>
             <div class="research-grid">
-                <!-- الورقة البحثية PDF -->
                 <div class="research-card">
                     <i class="fas fa-file-pdf"></i>
                     <h3>الورقة البحثية</h3>
-                    <p>PDF كامل مع جميع المعادلات والنتائج</p>
+                    <p>PDF كامل مع جميع المعادلات</p>
                     <a href="Trio_seal_paper_pdf.pdf" class="btn" download>تحميل PDF</a>
                 </div>
-
-                <!-- كود المحاكاة Python -->
                 <div class="research-card">
                     <i class="fas fa-code"></i>
                     <h3>كود المحاكاة</h3>
-                    <p>Python + Monte Carlo simulation</p>
+                    <p>Python + Monte Carlo</p>
                     <a href="simulation.py" class="btn" download>تحميل Python</a>
                 </div>
-
-                <!-- البيانات الخام CSV -->
                 <div class="research-card">
                     <i class="fas fa-database"></i>
                     <h3>البيانات الخام</h3>
@@ -555,20 +630,12 @@
                     <a href="data.csv" class="btn" download>تحميل CSV</a>
                 </div>
             </div>
-            
-            <!-- رابط GitHub المباشر -->
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="https://github.com/sidichaker1-beep/Trio-seal" target="_blank" class="btn btn-outline" style="margin: 0 auto;">
-                    <i class="fab fa-github"></i> عرض المشروع على GitHub
-                </a>
-            </div>
         </section>
 
-        <!-- Footer -->
+        <!-- التذييل -->
         <footer class="footer">
-            <div class="hash">🔐 18K-432-7.83-2027-ALPHA-OMEGA</div>
+            <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
             <p>© 2026 شيكر هشام · Chigar Hicham</p>
-            <p>جميع الحقوق محفوظة · مبني على بيانات NASA/NOAA</p>
         </footer>
     </div>
 
@@ -592,28 +659,23 @@
         function updateTimeAndDate() {
             const now = new Date();
             
-            // ساعة مكة
             const makkahTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
             document.getElementById('makkah-time').textContent = 
                 `${makkahTime.getHours().toString().padStart(2,'0')}:${makkahTime.getMinutes().toString().padStart(2,'0')}:${makkahTime.getSeconds().toString().padStart(2,'0')}`;
             
-            // ساعة غرينتش
             const gmtTime = new Date(now.toLocaleString('en-US', { timeZone: 'GMT' }));
             document.getElementById('gmt-time').textContent = 
                 `${gmtTime.getHours().toString().padStart(2,'0')}:${gmtTime.getMinutes().toString().padStart(2,'0')}:${gmtTime.getSeconds().toString().padStart(2,'0')}`;
             
-            // التاريخ الميلادي
             document.getElementById('gregorian-date').textContent = 
                 makkahTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
-            // ✅ التاريخ الهجري الصحيح (ثابت)
-            const hijriDate = "الثلاثاء 28 رمضان 1447 هـ";
-            document.getElementById('hijri-date').textContent = hijriDate;
+            document.getElementById('hijri-date').textContent = "الثلاثاء 28 رمضان 1447 هـ";
         }
         setInterval(updateTimeAndDate, 1000);
         updateTimeAndDate();
 
-        // ===== بيانات n الحقيقية (عينة من 1000 قيمة) =====
+        // ===== بيانات n =====
         const nValues = [
             17987, 18346, 18474, 17191, 18878, 17667, 19061, 17991, 18387, 17698,
             19050, 17900, 18033, 18134, 18095, 18396, 18591, 17571, 17946, 17925,
@@ -625,9 +687,8 @@
             18070, 17903, 18083, 17665, 18076, 17892, 17748, 18495, 18023, 18388,
             18497, 18322, 18815, 18689, 17944, 17875, 17644, 19078, 19176, 18750,
             18581, 18606, 17569, 18234, 18957, 19033, 18400, 17505, 18566, 17962
-        ]; // أول 100 قيمة فقط (للبساطة). يمكنك إكمال الباقي
+        ];
 
-        // ===== إنشاء الرسم البياني لتوزيع n =====
         function createHistogram(data, bins = 20) {
             const min = Math.min(...data);
             const max = Math.max(...data);
@@ -639,10 +700,7 @@
                 counts[index]++;
             });
             
-            const labels = counts.map((_, i) => {
-                const start = (min + i * binSize).toFixed(0);
-                return start;
-            });
+            const labels = counts.map((_, i) => (min + i * binSize).toFixed(0));
             
             new Chart(document.getElementById('distributionChart'), {
                 type: 'bar',
@@ -660,36 +718,23 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { 
-                            ticks: { color: 'white', maxRotation: 45, maxTicksLimit: 10 },
-                            grid: { color: 'rgba(255,255,255,0.1)' }
-                        },
-                        y: { 
-                            ticks: { color: 'white' },
-                            grid: { color: 'rgba(255,255,255,0.1)' }
-                        }
+                        x: { ticks: { color: 'white', maxRotation: 45, maxTicksLimit: 10 } },
+                        y: { ticks: { color: 'white' } }
                     },
-                    plugins: { 
-                        legend: { labels: { color: 'white' } },
-                        tooltip: { enabled: true }
-                    }
+                    plugins: { legend: { labels: { color: 'white' } } }
                 }
             });
         }
-        
         createHistogram(nValues);
 
-        // ===== الرسوم البيانية الأخرى =====
-        const sunspotsLabels = Array.from({ length: 100 }, (_, i) => 1925 + i);
-        const sunspotsValues = Array.from({ length: 100 }, () => 50 + Math.random() * 150);
-
+        // ===== رسوم بيانية أخرى =====
         new Chart(document.getElementById('sunspotsChart'), {
             type: 'line',
             data: {
-                labels: sunspotsLabels,
+                labels: Array.from({ length: 100 }, (_, i) => 1925 + i),
                 datasets: [{
                     label: 'عدد البقع الشمسية',
-                    data: sunspotsValues,
+                    data: Array.from({ length: 100 }, () => 50 + Math.random() * 150),
                     borderColor: 'gold',
                     backgroundColor: 'rgba(255,215,0,0.1)',
                     tension: 0.4,
@@ -781,9 +826,9 @@
             attribution: '&copy; OpenStreetMap'
         }).addTo(map);
 
-        L.circle([60, -100], { radius: 500000, color: 'cyan', fillOpacity: 0.2 }).addTo(map).bindPopup('منطقة نشاط شمسي مرتفع');
-        L.circle([-50, 20], { radius: 300000, color: 'gold', fillOpacity: 0.2 }).addTo(map).bindPopup('رياح شمسية نشطة');
-        L.circle([30, 150], { radius: 400000, color: 'red', fillOpacity: 0.2 }).addTo(map).bindPopup('عاصفة مغناطيسية');
+        L.circle([60, -100], { radius: 500000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
+        L.circle([-50, 20], { radius: 300000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
+        L.circle([30, 150], { radius: 400000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
         L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 مكة المكرمة');
     </script>
 </body>
