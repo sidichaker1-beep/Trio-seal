@@ -606,10 +606,9 @@
             document.getElementById('gregorian-date').textContent = 
                 makkahTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
-            // التاريخ الهجري التقريبي
-            const hijriYear = Math.floor((makkahTime.getFullYear() - 622) * 0.97);
-            document.getElementById('hijri-date').textContent = 
-                `${makkahTime.toLocaleDateString('ar-SA', { weekday: 'long' })} ${makkahTime.getDate()} ${makkahTime.toLocaleDateString('ar-SA', { month: 'long' })} ${hijriYear} هـ`;
+            // ✅ التاريخ الهجري الصحيح (ثابت)
+            const hijriDate = "الثلاثاء 28 رمضان 1447 هـ";
+            document.getElementById('hijri-date').textContent = hijriDate;
         }
         setInterval(updateTimeAndDate, 1000);
         updateTimeAndDate();
