@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL | البوابة الكونية</title>
+    <title>TRIO SEAL · النسخة النهائية</title>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Leaflet -->
@@ -55,6 +55,74 @@
             position: relative;
             z-index: 1;
         }
+        
+        /* ===== الساعات والتاريخ ===== */
+        .time-panel {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .clock-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .clock-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-icon {
+            font-size: 2rem;
+            color: gold;
+        }
+
+        .clock-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .clock-time {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+        }
+
+        .clock-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .date-container {
+            text-align: left;
+        }
+
+        .date-gregorian {
+            font-size: 1.1rem;
+            color: white;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .date-hijri {
+            font-size: 1rem;
+            color: gold;
+            font-family: 'Courier New', monospace;
+        }
+
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -311,6 +379,13 @@
             .research-grid {
                 grid-template-columns: 1fr;
             }
+            .time-panel {
+                flex-direction: column;
+                text-align: center;
+            }
+            .clock-container {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -319,6 +394,35 @@
     <div class="twinkling"></div>
     
     <div class="container">
+        <!-- ===== الساعات والتاريخ ===== -->
+        <div class="time-panel">
+            <div class="clock-container">
+                <!-- ساعة مكة -->
+                <div class="clock-card">
+                    <span class="clock-icon">🕋</span>
+                    <div class="clock-info">
+                        <span class="clock-time" id="makkah-time">--:--:--</span>
+                        <span class="clock-label">أم القرى</span>
+                    </div>
+                </div>
+                
+                <!-- ساعة غرينتش -->
+                <div class="clock-card">
+                    <span class="clock-icon">🌐</span>
+                    <div class="clock-info">
+                        <span class="clock-time" id="gmt-time">--:--:--</span>
+                        <span class="clock-label">GMT</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- التاريخ -->
+            <div class="date-container">
+                <div class="date-gregorian" id="gregorian-date">--</div>
+                <div class="date-hijri" id="hijri-date">--</div>
+            </div>
+        </div>
+
         <!-- Navbar -->
         <nav class="navbar">
             <div class="logo">🌌 TRIO SEAL</div>
@@ -327,7 +431,6 @@
                 <li><a href="#dashboard">لوحة البيانات</a></li>
                 <li><a href="#schumann">مختبر شومان</a></li>
                 <li><a href="#research">البحث</a></li>
-                <li><a href="#download">التحميل</a></li>
             </ul>
         </nav>
 
@@ -424,7 +527,7 @@
             <div id="spaceMap" style="height: 500px; border-radius: 30px; border: 2px solid gold;"></div>
         </section>
 
-        <!-- Research & Download - معدل بالكامل -->
+        <!-- Research & Download -->
         <section id="research" class="research-section">
             <h2 class="section-title">📜 البحث العلمي</h2>
             <div class="research-grid">
@@ -452,6 +555,13 @@
                     <a href="data.csv" class="btn" download>تحميل CSV</a>
                 </div>
             </div>
+            
+            <!-- رابط GitHub المباشر -->
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="https://github.com/sidichaker1-beep/Trio-seal" target="_blank" class="btn btn-outline" style="margin: 0 auto;">
+                    <i class="fab fa-github"></i> عرض المشروع على GitHub
+                </a>
+            </div>
         </section>
 
         <!-- Footer -->
@@ -463,16 +573,114 @@
     </div>
 
     <script>
+        // ===== تشغيل ترددات شومان =====
         function playSchumann(freq) {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            osc.type = 'sine';
-            osc.frequency.value = freq;
-            osc.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 1.5);
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                osc.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.5);
+            } catch(e) {
+                alert("متصفحك لا يدعم تشغيل الصوت");
+            }
         }
 
+        // ===== تحديث الساعات والتاريخ =====
+        function updateTimeAndDate() {
+            const now = new Date();
+            
+            // ساعة مكة
+            const makkahTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
+            document.getElementById('makkah-time').textContent = 
+                `${makkahTime.getHours().toString().padStart(2,'0')}:${makkahTime.getMinutes().toString().padStart(2,'0')}:${makkahTime.getSeconds().toString().padStart(2,'0')}`;
+            
+            // ساعة غرينتش
+            const gmtTime = new Date(now.toLocaleString('en-US', { timeZone: 'GMT' }));
+            document.getElementById('gmt-time').textContent = 
+                `${gmtTime.getHours().toString().padStart(2,'0')}:${gmtTime.getMinutes().toString().padStart(2,'0')}:${gmtTime.getSeconds().toString().padStart(2,'0')}`;
+            
+            // التاريخ الميلادي
+            document.getElementById('gregorian-date').textContent = 
+                makkahTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            // التاريخ الهجري التقريبي
+            const hijriYear = Math.floor((makkahTime.getFullYear() - 622) * 0.97);
+            document.getElementById('hijri-date').textContent = 
+                `${makkahTime.toLocaleDateString('ar-SA', { weekday: 'long' })} ${makkahTime.getDate()} ${makkahTime.toLocaleDateString('ar-SA', { month: 'long' })} ${hijriYear} هـ`;
+        }
+        setInterval(updateTimeAndDate, 1000);
+        updateTimeAndDate();
+
+        // ===== بيانات n الحقيقية (عينة من 1000 قيمة) =====
+        const nValues = [
+            17987, 18346, 18474, 17191, 18878, 17667, 19061, 17991, 18387, 17698,
+            19050, 17900, 18033, 18134, 18095, 18396, 18591, 17571, 17946, 17925,
+            17465, 18292, 19536, 17943, 18519, 17180, 18074, 18407, 18023, 18987,
+            19027, 18415, 18387, 18509, 19675, 17974, 17721, 18386, 18543, 18182,
+            17891, 18428, 18006, 17862, 18257, 17900, 18330, 18167, 18167, 18006,
+            18850, 17746, 17982, 17584, 18166, 17983, 17893, 18577, 17568, 17990,
+            17940, 17983, 17908, 18277, 17933, 18615, 18751, 18389, 18395, 18737,
+            18070, 17903, 18083, 17665, 18076, 17892, 17748, 18495, 18023, 18388,
+            18497, 18322, 18815, 18689, 17944, 17875, 17644, 19078, 19176, 18750,
+            18581, 18606, 17569, 18234, 18957, 19033, 18400, 17505, 18566, 17962
+        ]; // أول 100 قيمة فقط (للبساطة). يمكنك إكمال الباقي
+
+        // ===== إنشاء الرسم البياني لتوزيع n =====
+        function createHistogram(data, bins = 20) {
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const binSize = (max - min) / bins;
+            
+            const counts = new Array(bins).fill(0);
+            data.forEach(value => {
+                const index = Math.min(Math.floor((value - min) / binSize), bins - 1);
+                counts[index]++;
+            });
+            
+            const labels = counts.map((_, i) => {
+                const start = (min + i * binSize).toFixed(0);
+                return start;
+            });
+            
+            new Chart(document.getElementById('distributionChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'عدد التكرارات',
+                        data: counts,
+                        backgroundColor: 'gold',
+                        borderColor: '#ffd700',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            ticks: { color: 'white', maxRotation: 45, maxTicksLimit: 10 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: { 
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    },
+                    plugins: { 
+                        legend: { labels: { color: 'white' } },
+                        tooltip: { enabled: true }
+                    }
+                }
+            });
+        }
+        
+        createHistogram(nValues);
+
+        // ===== الرسوم البيانية الأخرى =====
         const sunspotsLabels = Array.from({ length: 100 }, (_, i) => 1925 + i);
         const sunspotsValues = Array.from({ length: 100 }, () => 50 + Math.random() * 150);
 
@@ -548,26 +756,7 @@
             }
         });
 
-        new Chart(document.getElementById('distributionChart'), {
-            type: 'bar',
-            data: {
-                labels: ['18,247'],
-                datasets: [{
-                    label: 'قيمة n',
-                    data: [18247],
-                    backgroundColor: 'gold',
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: { ticks: { color: 'white', beginAtZero: true } }
-                },
-                plugins: { legend: { labels: { color: 'white' } } }
-            }
-        });
-
+        // ===== الموجة =====
         const canvas = document.getElementById('waveCanvas');
         const ctx = canvas.getContext('2d');
         let offset = 0;
@@ -587,6 +776,7 @@
         }
         drawWave();
 
+        // ===== الخريطة =====
         const map = L.map('spaceMap').setView([20, 0], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap'
@@ -595,6 +785,7 @@
         L.circle([60, -100], { radius: 500000, color: 'cyan', fillOpacity: 0.2 }).addTo(map).bindPopup('منطقة نشاط شمسي مرتفع');
         L.circle([-50, 20], { radius: 300000, color: 'gold', fillOpacity: 0.2 }).addTo(map).bindPopup('رياح شمسية نشطة');
         L.circle([30, 150], { radius: 400000, color: 'red', fillOpacity: 0.2 }).addTo(map).bindPopup('عاصفة مغناطيسية');
+        L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 مكة المكرمة');
     </script>
 </body>
 </html>
