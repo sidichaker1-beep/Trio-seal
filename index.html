@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · النسخة الخارقة</title>
+    <title>TRIO SEAL · The Ultimate Version</title>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Leaflet -->
@@ -44,7 +44,7 @@
             margin: 0 auto;
         }
         
-        /* ===== الشريط العلوي الخارق ===== */
+        /* ===== Super Navbar ===== */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -54,7 +54,6 @@
             border: 1px solid var(--gray-border);
             border-radius: 70px;
             margin-bottom: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
         
         .logo {
@@ -62,7 +61,6 @@
             font-weight: 900;
             color: var(--gold);
             text-shadow: 3px 3px 0 var(--blue-darker);
-            letter-spacing: 1px;
         }
         
         .nav-links {
@@ -77,62 +75,64 @@
             font-weight: 700;
             font-size: 1.4rem;
             transition: all 0.3s;
-            position: relative;
         }
         
         .nav-links a:hover {
             color: var(--gold);
         }
         
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--gold);
-            transition: width 0.3s;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* ===== قائمة اللغات العالمية ===== */
-        .language-selector {
-            display: flex;
-            gap: 8px;
-            background: var(--white);
-            padding: 8px 15px;
-            border-radius: 50px;
-            border: 1px solid var(--gray-border);
+        /* ===== Language Dropdown ===== */
+        .language-dropdown {
+            position: relative;
         }
         
         .lang-btn {
             background: transparent;
-            border: none;
+            border: 1px solid var(--gray-border);
             color: var(--blue-dark);
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .lang-btn:hover {
             background: var(--gold);
-            color: var(--white);
-            transform: scale(1.05);
-        }
-        
-        .lang-btn.active {
-            background: var(--blue-dark);
             color: white;
         }
         
-        /* ===== الساعات والتاريخ ===== */
+        .language-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-border);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+            min-width: 180px;
+            margin-top: 5px;
+        }
+        
+        .language-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--blue-dark);
+            font-weight: 500;
+            border-bottom: 1px solid var(--gray-border);
+        }
+        
+        .language-option:hover {
+            background: var(--gold);
+            color: white;
+        }
+        
+        /* ===== Time Panel ===== */
         .time-panel {
             background: var(--gray-light);
             border: 1px solid var(--gray-border);
@@ -177,7 +177,7 @@
         }
         
         .date-container {
-            text-align: left;
+            text-align: right;
         }
         
         .date-gregorian {
@@ -193,7 +193,7 @@
             color: #000000;
         }
         
-        /* ===== القسم الرئيسي ===== */
+        /* ===== Hero Section ===== */
         .hero {
             text-align: center;
             padding: 70px 20px;
@@ -204,13 +204,8 @@
             font-size: 5rem;
             font-weight: 900;
             color: var(--gold);
-            text-shadow: 
-                4px 4px 0 var(--blue-darker),
-                -4px -4px 0 var(--blue-darker),
-                4px -4px 0 var(--blue-darker),
-                -4px 4px 0 var(--blue-darker);
+            text-shadow: 4px 4px 0 var(--blue-darker);
             margin-bottom: 20px;
-            letter-spacing: 3px;
         }
         
         .hero-subtitle {
@@ -261,7 +256,7 @@
             font-weight: 600;
         }
         
-        /* ===== عناوين الأقسام ===== */
+        /* ===== Section Titles ===== */
         .section-title {
             color: var(--blue-darker);
             font-size: 2.5rem;
@@ -271,7 +266,7 @@
             padding-bottom: 15px;
         }
         
-        /* ===== بطاقات البيانات ===== */
+        /* ===== Dashboard Cards ===== */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -289,7 +284,6 @@
         .dashboard-card:hover {
             border-color: var(--gold);
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         
         .dashboard-card h3 {
@@ -305,7 +299,7 @@
             height: 280px;
         }
         
-        /* ===== بطاقات شومان ===== */
+        /* ===== Schumann Cards ===== */
         .schumann-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -326,7 +320,6 @@
         .schumann-card:hover {
             border-color: var(--gold);
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         
         .freq {
@@ -370,7 +363,7 @@
             margin-top: 20px;
         }
         
-        /* ===== مرصد الزلازل الخارق ===== */
+        /* ===== Earthquake Observatory ===== */
         .quake-stats {
             display: flex;
             justify-content: space-between;
@@ -407,7 +400,7 @@
             border-radius: 30px;
             padding: 20px;
             margin-bottom: 12px;
-            border-right: 8px solid;
+            border-left: 8px solid;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -416,8 +409,7 @@
         
         .quake-item:hover {
             border-color: var(--gold);
-            transform: translateX(-5px);
-            background: rgba(0,0,0,0.02);
+            transform: translateX(5px);
         }
         
         .quake-magnitude {
@@ -440,11 +432,7 @@
             font-weight: 500;
         }
         
-        .quake-meta span {
-            margin: 0 5px;
-        }
-        
-        /* ===== أزرار التحميل الخضراء ===== */
+        /* ===== Green Download Buttons ===== */
         .download-section {
             display: flex;
             justify-content: space-between;
@@ -453,7 +441,7 @@
         }
         
         .btn-download {
-            background: var(--green);
+            background: #10b981;
             color: white;
             padding: 12px 25px;
             border-radius: 40px;
@@ -512,7 +500,7 @@
             font-weight: 500;
         }
         
-        /* ===== الخريطة ===== */
+        /* ===== Map ===== */
         .map-section {
             margin: 60px 0;
         }
@@ -523,7 +511,7 @@
             border: 2px solid var(--gray-border);
         }
         
-        /* ===== التذييل الخارق ===== */
+        /* ===== Footer ===== */
         .footer {
             text-align: center;
             margin-top: 80px;
@@ -549,7 +537,21 @@
             margin: 8px 0;
         }
         
-        /* ===== التجاوب الخارق ===== */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== Responsive ===== */
         @media (max-width: 1024px) {
             .dashboard-grid,
             .research-grid,
@@ -562,16 +564,9 @@
             .navbar {
                 flex-direction: column;
                 gap: 20px;
-                padding: 20px;
             }
             
             .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 20px;
-            }
-            
-            .language-selector {
                 flex-wrap: wrap;
                 justify-content: center;
             }
@@ -587,10 +582,6 @@
                 text-align: center;
             }
             
-            .clock-container {
-                justify-content: center;
-            }
-            
             .glitch {
                 font-size: 3.5rem;
             }
@@ -599,38 +590,43 @@
 </head>
 <body>
     <div class="container">
-        <!-- الشريط العلوي الخارق -->
+        <!-- Navbar with Language Dropdown -->
         <nav class="navbar">
             <div class="logo">🌌 TRIO SEAL</div>
             
             <ul class="nav-links">
-                <li><a href="#home">الرئيسية</a></li>
-                <li><a href="#dashboard">لوحة البيانات</a></li>
-                <li><a href="#schumann">مختبر شومان</a></li>
-                <li><a href="#earthquake">الزلازل</a></li>
-                <li><a href="#research">البحث</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#schumann">Schumann Lab</a></li>
+                <li><a href="#earthquake">Earthquakes</a></li>
+                <li><a href="#research">Research</a></li>
             </ul>
             
-            <!-- قائمة اللغات العالمية -->
-            <div class="language-selector">
-                <button class="lang-btn active">🇸🇦 AR</button>
-                <button class="lang-btn">🇬🇧 EN</button>
-                <button class="lang-btn">🇫🇷 FR</button>
-                <button class="lang-btn">🇪🇸 ES</button>
-                <button class="lang-btn">🇨🇳 ZH</button>
-                <button class="lang-btn">🇮🇳 HI</button>
-                <button class="lang-btn">🇷🇺 RU</button>
+            <!-- Language Dropdown -->
+            <div class="language-dropdown">
+                <button class="lang-btn" onclick="toggleLanguageMenu()">
+                    🌐 Language <i class="fas fa-chevron-down"></i>
+                </button>
+                <div id="language-menu" class="language-menu" style="display: none;">
+                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
+                    <div class="language-option" onclick="changeLanguage('zh')">🇨🇳 中文</div>
+                    <div class="language-option" onclick="changeLanguage('hi')">🇮🇳 हिन्दी</div>
+                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+                </div>
             </div>
         </nav>
 
-        <!-- الساعات والتاريخ -->
+        <!-- Time Panel -->
         <div class="time-panel">
             <div class="clock-container">
                 <div class="clock-card">
                     <span class="clock-icon">🕋</span>
                     <div>
                         <span class="clock-time" id="makkah-time">--:--:--</span>
-                        <span class="clock-label">أم القرى</span>
+                        <span class="clock-label">Makkah</span>
                     </div>
                 </div>
                 <div class="clock-card">
@@ -647,10 +643,10 @@
             </div>
         </div>
 
-        <!-- القسم الرئيسي -->
+        <!-- Hero Section -->
         <section id="home" class="hero">
             <h1 class="glitch">TRIO SEAL</h1>
-            <p class="hero-subtitle">مشروع استكشاف الثابت الكوني n ≈ 18,000</p>
+            <p class="hero-subtitle">Exploring the Cosmic Constant n ≈ 18,000</p>
             <div>
                 <span class="badge">432 Hz</span>
                 <span class="badge">7.83 Hz</span>
@@ -659,31 +655,31 @@
             <div class="hero-stats">
                 <div class="stat-card">
                     <div class="stat-number">18,000</div>
-                    <div class="stat-label">سنة من البيانات</div>
+                    <div class="stat-label">Years of Data</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">10k</div>
-                    <div class="stat-label">محاكاة</div>
+                    <div class="stat-label">Simulations</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">1</div>
-                    <div class="stat-label">ورقة بحثية</div>
+                    <div class="stat-label">Research Paper</div>
                 </div>
             </div>
         </section>
 
-        <!-- لوحة البيانات -->
+        <!-- Dashboard -->
         <section id="dashboard">
-            <h2 class="section-title">📊 لوحة البيانات الكونية</h2>
+            <h2 class="section-title">📊 Cosmic Dashboard</h2>
             <div class="dashboard-grid">
                 <div class="dashboard-card">
-                    <h3>🌞 البقع الشمسية</h3>
+                    <h3>🌞 Sunspots</h3>
                     <div class="chart-container">
                         <canvas id="sunspotsChart"></canvas>
                     </div>
                 </div>
                 <div class="dashboard-card">
-                    <h3>🌬️ سرعة الرياح الشمسية</h3>
+                    <h3>🌬️ Solar Wind Speed</h3>
                     <div class="chart-container">
                         <canvas id="solarWindChart"></canvas>
                     </div>
@@ -695,7 +691,7 @@
                     </div>
                 </div>
                 <div class="dashboard-card">
-                    <h3>📈 توزيع n</h3>
+                    <h3>📈 n Distribution</h3>
                     <div class="chart-container">
                         <canvas id="distributionChart"></canvas>
                     </div>
@@ -703,23 +699,23 @@
             </div>
         </section>
 
-        <!-- مختبر شومان -->
+        <!-- Schumann Lab -->
         <section id="schumann">
-            <h2 class="section-title">🎵 مختبر رنين شومان</h2>
+            <h2 class="section-title">🎵 Schumann Resonance Lab</h2>
             <div class="schumann-grid">
                 <div class="schumann-card" onclick="playSchumann(7.83)">
                     <span class="freq">7.83 Hz</span>
-                    <span class="mode">الرنين الأساسي</span>
+                    <span class="mode">Fundamental</span>
                     <button class="play-btn"><i class="fas fa-play"></i></button>
                 </div>
                 <div class="schumann-card" onclick="playSchumann(14.3)">
                     <span class="freq">14.3 Hz</span>
-                    <span class="mode">التوافقي الأول</span>
+                    <span class="mode">1st Harmonic</span>
                     <button class="play-btn"><i class="fas fa-play"></i></button>
                 </div>
                 <div class="schumann-card" onclick="playSchumann(20.8)">
                     <span class="freq">20.8 Hz</span>
-                    <span class="mode">التوافقي الثاني</span>
+                    <span class="mode">2nd Harmonic</span>
                     <button class="play-btn"><i class="fas fa-play"></i></button>
                 </div>
             </div>
@@ -728,10 +724,10 @@
             </div>
         </section>
 
-        <!-- مرصد الزلازل الخارق -->
+        <!-- Earthquake Observatory -->
         <section id="earthquake">
             <div class="download-section">
-                <h2 class="section-title" style="margin:0;">🌋 مرصد الزلازل المباشر</h2>
+                <h2 class="section-title" style="margin:0;">🌋 Live Earthquake Observatory</h2>
                 <div>
                     <button onclick="downloadEarthquakeData('csv')" class="btn-download">📥 CSV</button>
                     <button onclick="downloadEarthquakeData('json')" class="btn-download">📥 JSON</button>
@@ -741,97 +737,110 @@
             <div class="quake-stats">
                 <div class="quake-stat-card">
                     <div class="quake-stat-number" id="quake-total">--</div>
-                    <div class="quake-stat-label">زلزال آخر 24 ساعة</div>
+                    <div class="quake-stat-label">Last 24h Earthquakes</div>
                 </div>
                 <div class="quake-stat-card">
                     <div class="quake-stat-number" id="quake-strongest">--</div>
-                    <div class="quake-stat-label">أقوى زلزال</div>
+                    <div class="quake-stat-label">Strongest</div>
                 </div>
                 <div class="quake-stat-card">
                     <div class="quake-stat-number" id="quake-latest-time">--</div>
-                    <div class="quake-stat-label">آخر تحديث</div>
+                    <div class="quake-stat-label">Last Update</div>
                 </div>
             </div>
             
             <div id="quake-list-container">
                 <div id="quake-loading" style="text-align: center; padding: 40px;">
                     <div class="loading-spinner"></div>
-                    <p style="margin-top: 20px; font-weight: 600;">جاري تحميل بيانات الزلازل...</p>
+                    <p style="margin-top: 20px;">Loading earthquake data...</p>
                 </div>
                 <div id="quake-list-limited" style="display: none;"></div>
                 <div id="quake-list-full" style="display: none;"></div>
                 
                 <div id="show-more-container" style="margin-top: 20px; text-align: center; display: none;">
-                    <button id="show-more-btn" style="background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--blue-dark); padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%;">
-                        🔽 عرض الـ <span id="remaining-count">0</span> زلزال متبقية
+                    <button id="show-more-btn" style="background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--blue-dark); padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; width: 100%;">
+                        🔽 Show <span id="remaining-count">0</span> more earthquakes
                     </button>
                 </div>
                 
                 <div id="show-less-container" style="margin-top: 20px; text-align: center; display: none;">
-                    <button id="show-less-btn" style="background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--blue-dark); padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%;">
-                        🔼 إخفاء الزلازل الإضافية
+                    <button id="show-less-btn" style="background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--blue-dark); padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; width: 100%;">
+                        🔼 Show less
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- الخريطة -->
+        <!-- Map -->
         <section class="map-section">
-            <h2 class="section-title">🛰️ خريطة الطقس الفضائي</h2>
+            <h2 class="section-title">🛰️ Space Weather Map</h2>
             <div id="spaceMap"></div>
         </section>
 
-        <!-- البحث العلمي -->
+        <!-- Research -->
         <section id="research">
-            <h2 class="section-title">📜 البحث العلمي</h2>
+            <h2 class="section-title">📜 Scientific Research</h2>
             <div class="research-grid">
                 <div class="research-card">
                     <i class="fas fa-file-pdf"></i>
-                    <h3>الورقة البحثية</h3>
-                    <p>PDF كامل مع جميع المعادلات</p>
-                    <a href="Trio_seal_paper_pdf.pdf" class="btn-download" download>تحميل PDF</a>
+                    <h3>Research Paper</h3>
+                    <p>Complete PDF with all equations and results</p>
+                    <a href="Trio_seal_paper_pdf.pdf" class="btn-download" download>Download PDF</a>
                 </div>
                 <div class="research-card">
                     <i class="fas fa-code"></i>
-                    <h3>كود المحاكاة</h3>
+                    <h3>Simulation Code</h3>
                     <p>Python + Monte Carlo</p>
-                    <a href="simulation.py" class="btn-download" download>تحميل Python</a>
+                    <a href="simulation.py" class="btn-download" download>Download Python</a>
                 </div>
                 <div class="research-card">
                     <i class="fas fa-database"></i>
-                    <h3>البيانات الخام</h3>
-                    <p>CSV لنتائج 10,000 محاكاة</p>
-                    <a href="data.csv" class="btn-download" download>تحميل CSV</a>
+                    <h3>Raw Data</h3>
+                    <p>CSV with 10,000 simulation results</p>
+                    <a href="data.csv" class="btn-download" download>Download CSV</a>
                 </div>
             </div>
         </section>
 
-        <!-- التذييل الخارق -->
+        <!-- Footer -->
         <footer class="footer">
             <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
-            <p>شيكر هشام · Chigar Hicham</p>
-            <p>© 2026 جميع الحقوق محفوظة</p>
+            <p>Hicham Chigar · شيكر هشام</p>
+            <p>© 2026 All Rights Reserved</p>
         </footer>
     </div>
 
-    <style>
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--gray-border);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
-
     <script>
-        // ===== تشغيل ترددات شومان =====
+        // ===== Language Dropdown Functions =====
+        function toggleLanguageMenu() {
+            const menu = document.getElementById('language-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('language-menu');
+            const btn = document.querySelector('.lang-btn');
+            
+            if (!btn.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        function changeLanguage(lang) {
+            const languages = {
+                'ar': 'العربية',
+                'en': 'English',
+                'fr': 'Français',
+                'es': 'Español',
+                'zh': '中文',
+                'hi': 'हिन्दी',
+                'ru': 'Русский'
+            };
+            alert(`Language changed to: ${languages[lang]}`);
+            document.getElementById('language-menu').style.display = 'none';
+        }
+
+        // ===== Play Schumann Frequencies =====
         function playSchumann(freq) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -842,11 +851,11 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 1.5);
             } catch(e) {
-                alert("متصفحك لا يدعم تشغيل الصوت");
+                alert("Your browser doesn't support audio playback");
             }
         }
 
-        // ===== تحديث الساعات والتاريخ =====
+        // ===== Update Time and Date =====
         function updateTimeAndDate() {
             const now = new Date();
             
@@ -861,12 +870,12 @@
             document.getElementById('gregorian-date').textContent = 
                 makkahTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
-            document.getElementById('hijri-date').textContent = "الثلاثاء 28 رمضان 1447 هـ";
+            document.getElementById('hijri-date').textContent = "Tuesday 28 Ramadan 1447 AH";
         }
         setInterval(updateTimeAndDate, 1000);
         updateTimeAndDate();
 
-        // ===== بيانات n =====
+        // ===== Charts Data =====
         const nValues = [
             17987, 18346, 18474, 17191, 18878, 17667, 19061, 17991, 18387, 17698,
             19050, 17900, 18033, 18134, 18095, 18396, 18591, 17571, 17946, 17925,
@@ -880,7 +889,7 @@
             18581, 18606, 17569, 18234, 18957, 19033, 18400, 17505, 18566, 17962
         ];
 
-        // ===== إنشاء الرسوم البيانية بالألوان المطلوبة =====
+        // ===== Create Histogram =====
         function createHistogram(data, bins = 20) {
             const min = Math.min(...data);
             const max = Math.max(...data);
@@ -899,7 +908,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'عدد التكرارات',
+                        label: 'Frequency',
                         data: counts,
                         backgroundColor: '#ffd700',
                         borderColor: '#ffd700',
@@ -920,13 +929,13 @@
         
         createHistogram(nValues);
 
-        // ===== البقع الشمسية (برتقالي) =====
+        // ===== Sunspots Chart (Orange) =====
         new Chart(document.getElementById('sunspotsChart'), {
             type: 'line',
             data: {
                 labels: Array.from({ length: 100 }, (_, i) => 1925 + i),
                 datasets: [{
-                    label: 'عدد البقع الشمسية',
+                    label: 'Sunspot Count',
                     data: Array.from({ length: 100 }, () => 50 + Math.random() * 150),
                     borderColor: '#f97316',
                     backgroundColor: 'rgba(249,115,22,0.1)',
@@ -945,13 +954,13 @@
             }
         });
 
-        // ===== سرعة الرياح الشمسية (أحمر) =====
+        // ===== Solar Wind Chart (Red) =====
         new Chart(document.getElementById('solarWindChart'), {
             type: 'line',
             data: {
                 labels: Array.from({ length: 50 }, (_, i) => i + 'h'),
                 datasets: [{
-                    label: 'سرعة الرياح (km/s)',
+                    label: 'Wind Speed (km/s)',
                     data: Array.from({ length: 50 }, () => 300 + Math.random() * 200),
                     borderColor: '#ef4444',
                     backgroundColor: 'rgba(239,68,68,0.1)',
@@ -970,11 +979,11 @@
             }
         });
 
-        // ===== Kp Index (أزرق) =====
+        // ===== Kp Index Chart (Blue) =====
         new Chart(document.getElementById('kpChart'), {
             type: 'line',
             data: {
-                labels: Array.from({ length: 30 }, (_, i) => 'يوم ' + i),
+                labels: Array.from({ length: 30 }, (_, i) => 'Day ' + i),
                 datasets: [{
                     label: 'Kp Index',
                     data: Array.from({ length: 30 }, () => 1 + Math.random() * 8),
@@ -995,7 +1004,7 @@
             }
         });
 
-        // ===== الموجة =====
+        // ===== Wave Canvas =====
         const canvas = document.getElementById('waveCanvas');
         const ctx = canvas.getContext('2d');
         let offset = 0;
@@ -1015,7 +1024,7 @@
         }
         drawWave();
 
-        // ===== الخريطة =====
+        // ===== Map =====
         const map = L.map('spaceMap').setView([20, 0], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap'
@@ -1024,9 +1033,9 @@
         L.circle([60, -100], { radius: 500000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
         L.circle([-50, 20], { radius: 300000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
         L.circle([30, 150], { radius: 400000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 مكة المكرمة');
+        L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 Makkah');
 
-        // ===== مرصد الزلازل الخارق =====
+        // ===== Earthquake Data =====
         let allEarthquakes = [];
 
         async function fetchEarthquakes() {
@@ -1044,7 +1053,7 @@
                 
                 document.getElementById('quake-total').innerHTML = total;
                 document.getElementById('quake-strongest').innerHTML = strongest.properties.mag ? strongest.properties.mag.toFixed(1) + ' Mw' : '--';
-                document.getElementById('quake-latest-time').innerHTML = new Date().toLocaleTimeString('ar-SA');
+                document.getElementById('quake-latest-time').innerHTML = new Date().toLocaleTimeString();
                 
                 displayQuakes(allEarthquakes.slice(0, 6), 'limited');
                 
@@ -1054,9 +1063,9 @@
                 }
                 
             } catch (error) {
-                console.error('فشل جلب الزلازل:', error);
+                console.error('Error fetching earthquakes:', error);
                 document.getElementById('quake-loading').innerHTML = `
-                    <p style="color: #ef4444; font-weight: 600;">⚠️ تعذر تحميل بيانات الزلازل</p>
+                    <p style="color: #ef4444;">⚠️ Failed to load earthquake data</p>
                 `;
             }
         }
@@ -1064,7 +1073,6 @@
         function displayQuakes(earthquakes, target) {
             let html = '';
             
-            // قاموس الأعلام
             const flags = {
                 'USA': '🇺🇸', 'United States': '🇺🇸', 'California': '🇺🇸', 'Alaska': '🇺🇸', 'Hawaii': '🇺🇸',
                 'Japan': '🇯🇵', 'Japon': '🇯🇵', 'Tokyo': '🇯🇵',
@@ -1097,11 +1105,10 @@
             
             earthquakes.forEach(quake => {
                 const mag = quake.properties.mag || 0;
-                const place = quake.properties.place || 'موقع غير معروف';
+                const place = quake.properties.place || 'Unknown location';
                 const time = new Date(quake.properties.time);
                 const depth = quake.geometry.coordinates[2] || 0;
                 
-                // استخراج اسم الدولة والعلم
                 let countryName = 'Unknown';
                 let countryFlag = '🏳️';
                 
@@ -1109,7 +1116,6 @@
                     const parts = place.split(',').map(p => p.trim());
                     countryName = parts[parts.length - 1];
                     
-                    // البحث عن العلم المناسب
                     for (let [key, flag] of Object.entries(flags)) {
                         if (countryName.includes(key) || place.includes(key)) {
                             countryFlag = flag;
@@ -1118,19 +1124,17 @@
                     }
                 }
                 
-                // حساب الوقت المنقضي
                 const now = new Date();
                 const diffMs = now - time;
                 const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
                 const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
                 
-                // تحديد لون القوة
-                let magColor = '#4ade80'; // أخضر
-                if (mag >= 6) magColor = '#ef4444'; // أحمر
-                else if (mag >= 4.5) magColor = '#f97316'; // برتقالي
+                let magColor = '#4ade80';
+                if (mag >= 6) magColor = '#ef4444';
+                else if (mag >= 4.5) magColor = '#f97316';
                 
                 html += `
-                    <div class="quake-item" style="border-right-color: ${magColor};">
+                    <div class="quake-item" style="border-left-color: ${magColor};">
                         <div class="quake-magnitude" style="color: ${magColor};">${mag.toFixed(1)}</div>
                         <div class="quake-details">
                             <div class="quake-location">
@@ -1139,9 +1143,9 @@
                             <div class="quake-meta">
                                 <span>${countryFlag} ${countryName}</span>
                                 <span>•</span>
-                                <span>⚡ منذ ${diffHrs} ساعة ${diffMins} دقيقة</span>
+                                <span>⚡ ${diffHrs}h ${diffMins}m ago</span>
                                 <span>•</span>
-                                <span>📏 عمق ${depth.toFixed(1)} كم</span>
+                                <span>📏 Depth ${depth.toFixed(1)} km</span>
                             </div>
                         </div>
                     </div>
@@ -1151,7 +1155,6 @@
             document.getElementById(`quake-list-${target}`).innerHTML = html;
         }
 
-        // أزرار عرض المزيد/الإخفاء
         document.addEventListener('click', function(e) {
             if (e.target.id === 'show-more-btn' || e.target.closest('#show-more-btn')) {
                 document.getElementById('quake-list-limited').style.display = 'none';
@@ -1171,27 +1174,26 @@
             }
         });
 
-        // تحميل بيانات الزلازل
         window.downloadEarthquakeData = function(format) {
             if (!allEarthquakes || allEarthquakes.length === 0) {
-                alert('لا توجد بيانات متاحة حالياً');
+                alert('No data available');
                 return;
             }
             
             const dataForExport = allEarthquakes.map(quake => ({
                 time: new Date(quake.properties.time).toLocaleString(),
                 magnitude: quake.properties.mag || 0,
-                place: quake.properties.place || 'غير معروف',
-                country: quake.properties.place?.split(',').pop()?.trim() || 'غير معروف',
+                place: quake.properties.place || 'Unknown',
+                country: quake.properties.place?.split(',').pop()?.trim() || 'Unknown',
                 depth_km: quake.geometry.coordinates[2] || 0,
                 latitude: quake.geometry.coordinates[1],
                 longitude: quake.geometry.coordinates[0],
-                tsunami: quake.properties.tsunami === 1 ? 'نعم' : 'لا',
-                alert: quake.properties.alert || 'بدون'
+                tsunami: quake.properties.tsunami === 1 ? 'Yes' : 'No',
+                alert: quake.properties.alert || 'None'
             }));
             
             if (format === 'csv') {
-                const headers = ['الوقت', 'القوة', 'الموقع', 'الدولة', 'العمق (كم)', 'خط العرض', 'خط الطول', 'تسونامي', 'إنذار'];
+                const headers = ['Time', 'Magnitude', 'Location', 'Country', 'Depth (km)', 'Latitude', 'Longitude', 'Tsunami', 'Alert'];
                 const csvRows = [headers.join(',')];
                 
                 dataForExport.forEach(row => {
@@ -1214,7 +1216,7 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `زلازل_${new Date().toISOString().slice(0,10)}.csv`;
+                a.download = `earthquakes_${new Date().toISOString().slice(0,10)}.csv`;
                 a.click();
                 
             } else if (format === 'json') {
@@ -1223,12 +1225,11 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `زلازل_${new Date().toISOString().slice(0,10)}.json`;
+                a.download = `earthquakes_${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
             }
         };
 
-        // تشغيل مرصد الزلازل
         fetchEarthquakes();
         setInterval(fetchEarthquakes, 300000);
     </script>
