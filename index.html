@@ -44,7 +44,7 @@
             margin: 0 auto;
         }
         
-        /* ===== شريط التنقل مع قائمة اللغات ===== */
+        /* ===== شريط التنقل مع تثبيت الأيقونات ===== */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -60,12 +60,15 @@
             font-size: 2rem;
             font-weight: bold;
             color: var(--gold);
+            order: 0;  /* ثابت في اليسار */
         }
         
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
+            order: 1;  /* ثابت في المنتصف */
+            margin: 0 auto;  /* توسيط */
         }
         
         .nav-links a {
@@ -79,9 +82,10 @@
             color: var(--gold);
         }
         
-        /* ===== قائمة اللغات المنسدلة ===== */
+        /* ===== قائمة اللغات المنسدلة - مثبتة في اليمين ===== */
         .language-dropdown {
             position: relative;
+            order: 2;  /* ثابت في اليمين */
         }
         
         .lang-btn {
@@ -130,7 +134,7 @@
             color: white;
         }
         
-        /* ===== باقي التنسيقات كما هي ===== */
+        /* ===== باقي التنسيقات ===== */
         .time-panel {
             background: var(--gray-light);
             border: 1px solid var(--gray-border);
@@ -385,7 +389,6 @@
         }
         
         .btn-download {
-            background: var(--green);
             color: white;
             padding: 10px 20px;
             border-radius: 30px;
@@ -394,6 +397,7 @@
             margin-left: 10px;
         }
         
+        /* ===== بطاقات البحث العلمي - ألوان متفق عليها ===== */
         .research-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -407,22 +411,76 @@
             border-radius: 20px;
             padding: 30px 20px;
             text-align: center;
+            transition: all 0.3s ease;
         }
         
         .research-card i {
-            font-size: 3rem;
-            color: var(--gold);
-            margin-bottom: 15px;
+            font-size: 3.5rem;  /* تكبير الأيقونة */
+            margin-bottom: 20px;
         }
         
         .research-card h3 {
             color: var(--blue-darker);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.6rem;  /* تكبير العنوان */
+            font-weight: 700;
         }
         
         .research-card p {
             color: var(--blue-medium);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;  /* تكبير النص */
+            line-height: 1.5;
+        }
+        
+        .research-card .btn-download {
+            font-size: 1.1rem;    /* تكبير نص الزر */
+            padding: 12px 25px;    /* تكبير الزر */
+            display: inline-block;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            transition: opacity 0.3s;
+        }
+        
+        .research-card .btn-download:hover {
+            opacity: 0.9;
+        }
+        
+        /* البطاقة الأولى - الورقة البحثية PDF - أحمر */
+        .research-card:nth-child(1) i {
+            color: #ef4444;
+        }
+        
+        .research-card:nth-child(1) .btn-download {
+            background: #ef4444;
+            color: white;
+        }
+        
+        /* البطاقة الثانية - كود المحاكاة Python - أخضر */
+        .research-card:nth-child(2) i {
+            color: #10b981;
+        }
+        
+        .research-card:nth-child(2) .btn-download {
+            background: #10b981;
+            color: white;
+        }
+        
+        /* البطاقة الثالثة - البيانات الخام CSV - برتقالي */
+        .research-card:nth-child(3) i {
+            color: #f97316;
+        }
+        
+        .research-card:nth-child(3) .btn-download {
+            background: #f97316;
+            color: white;
+        }
+        
+        .research-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .map-section {
@@ -538,7 +596,7 @@
             </div>
             <div class="date-container">
                 <div class="date-gregorian" id="gregorian-date">--</div>
-                <div class="date-hijri" id="hijri-date">الثلاثاء 28 رمضان 1447 هـ</div>
+                <div class="date-hijri" id="hijri-date">--</div>
             </div>
         </div>
 
@@ -628,8 +686,8 @@
             <div class="download-section">
                 <h2 class="section-title" style="margin:0;" data-key="earthquakeTitle">🌋 مرصد الزلازل المباشر</h2>
                 <div>
-                    <button onclick="downloadEarthquakeData('csv')" class="btn-download">📥 CSV</button>
-                    <button onclick="downloadEarthquakeData('json')" class="btn-download">📥 JSON</button>
+                    <button onclick="downloadEarthquakeData('csv')" class="btn-download" style="background: var(--green);">📥 CSV</button>
+                    <button onclick="downloadEarthquakeData('json')" class="btn-download" style="background: var(--blue-dark);">📥 JSON</button>
                 </div>
             </div>
             
@@ -1008,6 +1066,8 @@
             }
         };
 
+        let currentLanguage = 'ar'; // اللغة الافتراضية
+
         // ===== دوال الترجمة =====
         function toggleLanguageMenu() {
             const menu = document.getElementById('language-menu');
@@ -1024,6 +1084,146 @@
             }
         });
 
+        // ===== دالة تحديث التاريخ حسب اللغة =====
+        function updateDateForLanguage(lang) {
+            const now = new Date();
+            const makkahTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
+            
+            // تنسيق التاريخ الميلادي والهجري حسب اللغة
+            let gregorianDate = '';
+            let hijriDate = '';
+            
+            try {
+                switch(lang) {
+                    case 'ar':
+                        gregorianDate = makkahTime.toLocaleDateString('ar-SA', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    case 'en':
+                        gregorianDate = makkahTime.toLocaleDateString('en-US', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('en-US-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    case 'fr':
+                        gregorianDate = makkahTime.toLocaleDateString('fr-FR', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('fr-FR-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    case 'es':
+                        gregorianDate = makkahTime.toLocaleDateString('es-ES', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('es-ES-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    case 'zh':
+                        gregorianDate = makkahTime.toLocaleDateString('zh-CN', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('zh-CN-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    case 'hi':
+                        gregorianDate = makkahTime.toLocaleDateString('hi-IN', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('hi-IN-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    case 'ru':
+                        gregorianDate = makkahTime.toLocaleDateString('ru-RU', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('ru-RU-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                        break;
+                        
+                    default:
+                        gregorianDate = makkahTime.toLocaleDateString('en-US', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        hijriDate = new Intl.DateTimeFormat('en-US-u-ca-islamic', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(makkahTime);
+                }
+            } catch (e) {
+                // Fallback إذا فشل التنسيق
+                gregorianDate = makkahTime.toDateString();
+                hijriDate = "Hijri date unavailable";
+            }
+            
+            document.getElementById('gregorian-date').textContent = gregorianDate;
+            document.getElementById('hijri-date').textContent = hijriDate;
+        }
+
         function setLanguage(lang) {
             const t = translations[lang];
             
@@ -1035,18 +1235,17 @@
                 }
             });
             
-            // تحديث اتجاه الصفحة للغات التي تكتب من اليسار لليمين
-            if (lang === 'ar') {
-                document.documentElement.dir = 'rtl';
-            } else {
-                document.documentElement.dir = 'ltr';
-            }
+            // تحديث اللغة الحالية
+            currentLanguage = lang;
+            
+            // تحديث التاريخ حسب اللغة
+            updateDateForLanguage(lang);
             
             // إغلاق القائمة بعد الاختيار
             document.getElementById('language-menu').style.display = 'none';
         }
 
-        // ===== دوال الموقع الأخرى (كما هي) =====
+        // ===== دوال الموقع الأخرى =====
         function playSchumann(freq) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1073,11 +1272,9 @@
             document.getElementById('gmt-time').textContent = 
                 `${gmtTime.getHours().toString().padStart(2,'0')}:${gmtTime.getMinutes().toString().padStart(2,'0')}:${gmtTime.getSeconds().toString().padStart(2,'0')}`;
             
-            document.getElementById('gregorian-date').textContent = 
-                makkahTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            // تحديث التاريخ حسب اللغة الحالية
+            updateDateForLanguage(currentLanguage);
         }
-        setInterval(updateTimeAndDate, 1000);
-        updateTimeAndDate();
 
         // بيانات n
         const nValues = [
@@ -1130,80 +1327,6 @@
                 }
             });
         }
-        
-        createHistogram(nValues);
-
-        new Chart(document.getElementById('sunspotsChart'), {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 100 }, (_, i) => 1925 + i),
-                datasets: [{
-                    label: 'Sunspot Count',
-                    data: Array.from({ length: 100 }, () => 50 + Math.random() * 150),
-                    borderColor: '#f97316',
-                    backgroundColor: 'rgba(249,115,22,0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#0f2b4f', maxTicksLimit: 10 } },
-                    y: { ticks: { color: '#0f2b4f' } }
-                },
-                plugins: { legend: { labels: { color: '#0f2b4f' } } }
-            }
-        });
-
-        new Chart(document.getElementById('solarWindChart'), {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 50 }, (_, i) => i + 'h'),
-                datasets: [{
-                    label: 'Wind Speed (km/s)',
-                    data: Array.from({ length: 50 }, () => 300 + Math.random() * 200),
-                    borderColor: '#ef4444',
-                    backgroundColor: 'rgba(239,68,68,0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#0f2b4f', maxTicksLimit: 8 } },
-                    y: { ticks: { color: '#0f2b4f' } }
-                },
-                plugins: { legend: { labels: { color: '#0f2b4f' } } }
-            }
-        });
-
-        new Chart(document.getElementById('kpChart'), {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 30 }, (_, i) => 'Day ' + i),
-                datasets: [{
-                    label: 'Kp Index',
-                    data: Array.from({ length: 30 }, () => 1 + Math.random() * 8),
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59,130,246,0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#0f2b4f', maxTicksLimit: 8 } },
-                    y: { ticks: { color: '#0f2b4f', max: 9, min: 0 } }
-                },
-                plugins: { legend: { labels: { color: '#0f2b4f' } } }
-            }
-        });
 
         // الموجة
         const canvas = document.getElementById('waveCanvas');
@@ -1223,18 +1346,19 @@
             offset += 0.05;
             requestAnimationFrame(drawWave);
         }
-        drawWave();
 
         // الخريطة
-        const map = L.map('spaceMap').setView([20, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap'
-        }).addTo(map);
+        function initMap() {
+            const map = L.map('spaceMap').setView([20, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
 
-        L.circle([60, -100], { radius: 500000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.circle([-50, 20], { radius: 300000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.circle([30, 150], { radius: 400000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 Makkah');
+            L.circle([60, -100], { radius: 500000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
+            L.circle([-50, 20], { radius: 300000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
+            L.circle([30, 150], { radius: 400000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
+            L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 Makkah');
+        }
 
         // بيانات الزلازل
         let allEarthquakes = [];
@@ -1431,8 +1555,95 @@
             }
         };
 
-        fetchEarthquakes();
-        setInterval(fetchEarthquakes, 300000);
+        // بدء تشغيل الموقع
+        window.onload = function() {
+            // تعيين اللغة الافتراضية
+            setLanguage('ar');
+            
+            // بدء تحديث الوقت
+            setInterval(updateTimeAndDate, 1000);
+            updateTimeAndDate();
+            
+            // إنشاء الرسوم البيانية
+            createHistogram(nValues);
+            
+            new Chart(document.getElementById('sunspotsChart'), {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 100 }, (_, i) => 1925 + i),
+                    datasets: [{
+                        label: 'Sunspot Count',
+                        data: Array.from({ length: 100 }, () => 50 + Math.random() * 150),
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249,115,22,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#0f2b4f', maxTicksLimit: 10 } },
+                        y: { ticks: { color: '#0f2b4f' } }
+                    },
+                    plugins: { legend: { labels: { color: '#0f2b4f' } } }
+                }
+            });
+
+            new Chart(document.getElementById('solarWindChart'), {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 50 }, (_, i) => i + 'h'),
+                    datasets: [{
+                        label: 'Wind Speed (km/s)',
+                        data: Array.from({ length: 50 }, () => 300 + Math.random() * 200),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239,68,68,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#0f2b4f', maxTicksLimit: 8 } },
+                        y: { ticks: { color: '#0f2b4f' } }
+                    },
+                    plugins: { legend: { labels: { color: '#0f2b4f' } } }
+                }
+            });
+
+            new Chart(document.getElementById('kpChart'), {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 30 }, (_, i) => 'Day ' + i),
+                    datasets: [{
+                        label: 'Kp Index',
+                        data: Array.from({ length: 30 }, () => 1 + Math.random() * 8),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59,130,246,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#0f2b4f', maxTicksLimit: 8 } },
+                        y: { ticks: { color: '#0f2b4f', max: 9, min: 0 } }
+                    },
+                    plugins: { legend: { labels: { color: '#0f2b4f' } } }
+                }
+            });
+            
+            drawWave();
+            initMap();
+            fetchEarthquakes();
+            setInterval(fetchEarthquakes, 300000);
+        };
     </script>
 </body>
-    </html>
+</html>
