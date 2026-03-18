@@ -3,14 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · الموقع المتعدد اللغات</title>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>TRIO SEAL · المرصد الفلكي الشامل</title>
     <style>
         * {
             margin: 0;
@@ -19,24 +12,11 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        :root {
-            --white: #ffffff;
-            --blue-dark: #0f2b4f;
-            --blue-darker: #0a1a2f;
-            --blue-medium: #2c3e50;
-            --gold: #ffd700;
-            --green: #10b981;
-            --orange: #f97316;
-            --red: #ef4444;
-            --gray-light: rgba(0, 0, 0, 0.05);
-            --gray-border: rgba(0, 0, 0, 0.08);
-        }
-        
         body {
-            background: var(--white);
-            color: var(--blue-dark);
+            background: linear-gradient(145deg, #0a0f1e 0%, #141b2b 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 2rem;
+            color: #e0e7ff;
         }
         
         .container {
@@ -44,1395 +24,1083 @@
             margin: 0 auto;
         }
         
-        /* ===== شريط التنقل مع قائمة اللغات ===== */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            border-radius: 60px;
-            margin-bottom: 30px;
-        }
-        
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--gold);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: var(--blue-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-        
-        /* ===== قائمة اللغات المنسدلة ===== */
-        .language-dropdown {
-            position: relative;
-        }
-        
-        .lang-btn {
-            background: transparent;
-            border: 1px solid var(--gray-border);
-            color: var(--blue-dark);
-            padding: 8px 15px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .lang-btn:hover {
-            background: var(--gold);
-            color: white;
-        }
-        
-        .language-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-border);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 1000;
-            min-width: 150px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        .language-option {
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--blue-dark);
-            border-bottom: 1px solid var(--gray-border);
-        }
-        
-        .language-option:hover {
-            background: var(--gold);
-            color: white;
-        }
-        
-        /* ===== باقي التنسيقات كما هي ===== */
-        .time-panel {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            border-radius: 60px;
-            padding: 15px 30px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .clock-container {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .clock-card {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .clock-icon {
-            font-size: 2rem;
-            color: var(--gold);
-        }
-        
-        .clock-time {
-            font-size: 2rem;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .clock-label {
-            font-size: 0.9rem;
-            color: var(--blue-medium);
-        }
-        
-        .date-container {
-            text-align: left;
-        }
-        
-        .date-gregorian {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .date-hijri {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #000000;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-        }
-        
-        .glitch {
-            font-size: 4rem;
-            font-weight: bold;
-            color: var(--gold);
-            text-shadow: 3px 3px 0 var(--blue-darker);
-            margin-bottom: 20px;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: var(--blue-medium);
-            margin: 20px 0;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            padding: 8px 20px;
-            border-radius: 30px;
-            margin: 0 5px;
-            font-weight: 600;
-        }
-        
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .stat-card {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            border-radius: 20px;
-            padding: 20px;
-            min-width: 150px;
-            text-align: center;
-        }
-        
-        .stat-number {
+        h1 {
             font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--blue-dark);
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #ffd700;
         }
         
-        .stat-label {
-            color: var(--blue-medium);
-            font-size: 0.9rem;
+        h1 span {
+            background: #2a3a5e;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            color: #aad0ff;
+        }
+        
+        .subtitle {
+            color: #8b9bb8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            border-right: 4px solid #f0b37b;
+            padding-right: 1rem;
         }
         
         .section-title {
-            color: var(--blue-darker);
-            font-size: 2rem;
-            margin: 40px 0 20px;
-            border-bottom: 3px solid var(--gold);
-            padding-bottom: 10px;
+            color: #ffd700;
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            border-bottom: 2px solid #3e506e;
+            padding-bottom: 0.5rem;
         }
         
-        .dashboard-grid {
+        /* Grid system */
+        .indicators-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
-        .dashboard-card {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
+        /* Cards */
+        .card {
+            background: rgba(18, 25, 40, 0.85);
+            backdrop-filter: blur(8px);
             border-radius: 20px;
-            padding: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 215, 140, 0.15);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s;
+            position: relative;
         }
         
-        .dashboard-card h3 {
-            color: var(--blue-darker);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 8px;
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 140, 0.3);
         }
         
-        .chart-container {
-            height: 250px;
+        /* Tooltip */
+        .card[data-tooltip] {
+            position: relative;
+            cursor: help;
         }
         
-        .schumann-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .schumann-card {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .schumann-card:hover {
-            border-color: var(--gold);
-        }
-        
-        .freq {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--blue-dark);
-        }
-        
-        .mode {
-            color: var(--blue-dark);
-            margin: 10px 0;
-        }
-        
-        .play-btn {
-            background: #3b82f6;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .card[data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a3a5e;
             color: white;
-            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+            border: 1px solid #4d6188;
         }
         
-        .schumann-visualizer {
-            background: var(--gray-light);
-            border-radius: 20px;
-            padding: 20px;
-            height: 200px;
+        .card[data-tooltip]:hover:before {
+            opacity: 1;
         }
         
-        .quake-stats {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .quake-stat-card {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            border-radius: 15px;
-            padding: 15px;
-            flex: 1;
-            text-align: center;
-        }
-        
-        .quake-stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--blue-dark);
-        }
-        
-        .quake-stat-label {
-            color: var(--blue-medium);
-            font-size: 0.9rem;
-        }
-        
-        .quake-item {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 5px solid;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .quake-magnitude {
-            font-size: 2rem;
-            font-weight: bold;
-            min-width: 70px;
-            text-align: center;
-        }
-        
-        .quake-location {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .quake-meta {
-            color: var(--blue-medium);
-            font-size: 0.9rem;
-        }
-        
-        .download-section {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
         }
         
-        .btn-download {
-            background: var(--green);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #b0c4e0;
+        }
+        
+        .card-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-left: 10px;
+            background: #0b111e;
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid #4d6188;
+            min-width: 80px;
+            text-align: center;
+            transition: all 0.3s ease;
         }
         
-        .research-grid {
+        /* Color thresholds */
+        .card-value.low {
+            color: #22c55e;
+            border-color: #22c55e;
+        }
+        
+        .card-value.medium {
+            color: #facc15;
+            border-color: #facc15;
+        }
+        
+        .card-value.high {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+        
+        /* Loading state */
+        .card-value.loading {
+            background: linear-gradient(90deg, #0b111e 25%, #1e2a3a 50%, #0b111e 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            color: transparent;
+            border-color: #4d6188;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .gauge {
+            height: 8px;
+            background: #20293b;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .gauge-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease, background-color 0.3s ease;
+        }
+        
+        .gauge-fill.low { background: #22c55e; }
+        .gauge-fill.medium { background: #facc15; }
+        .gauge-fill.high { background: #ef4444; }
+        
+        .status {
+            font-size: 0.8rem;
+            color: #9babc5;
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .status-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: #26334d;
+            font-size: 0.7rem;
+            transition: background-color 0.3s;
+        }
+        
+        .status-badge.live { background: #1f8b4c; }
+        .status-badge.backup { background: #b45309; }
+        .status-badge.offline { background: #6b7280; }
+        
+        /* Colors for each category */
+        .aurora .gauge-fill.low { background: #a855f7; }
+        .aurora .gauge-fill.medium { background: #d946ef; }
+        .aurora .gauge-fill.high { background: #ec4899; }
+        
+        .cryo .gauge-fill.low { background: #3b82f6; }
+        .cryo .gauge-fill.medium { background: #2563eb; }
+        .cryo .gauge-fill.high { background: #1d4ed8; }
+        
+        .temp .gauge-fill.low { background: #22c55e; }
+        .temp .gauge-fill.medium { background: #eab308; }
+        .temp .gauge-fill.high { background: #ef4444; }
+        
+        .solar .gauge-fill.low { background: #fbbf24; }
+        .solar .gauge-fill.medium { background: #f59e0b; }
+        .solar .gauge-fill.high { background: #d97706; }
+        
+        /* Images section */
+        .images-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
         
-        .research-card {
-            background: var(--gray-light);
-            border: 1px solid var(--gray-border);
+        .image-card {
+            background: rgba(18, 25, 40, 0.85);
             border-radius: 20px;
-            padding: 30px 20px;
-            text-align: center;
+            padding: 1rem;
+            border: 1px solid rgba(255, 215, 140, 0.15);
         }
         
-        .research-card i {
-            font-size: 3rem;
-            color: var(--gold);
-            margin-bottom: 15px;
+        .image-card h3 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
         
-        .research-card h3 {
-            color: var(--blue-darker);
-            margin-bottom: 10px;
+        .image-skeleton {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(90deg, #1e2a3a 25%, #2a3a5e 50%, #1e2a3a 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7c9b;
+            font-size: 1.2rem;
         }
         
-        .research-card p {
-            color: var(--blue-medium);
-            margin-bottom: 20px;
+        .image-skeleton.error {
+            background: #2a3a5e;
+            color: #ef4444;
+            animation: none;
         }
         
-        .map-section {
-            margin: 40px 0;
-        }
-        
-        #spaceMap {
-            height: 400px;
-            border-radius: 20px;
-            border: 2px solid var(--gray-border);
+        .image-loaded {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
         }
         
         .footer {
+            margin-top: 3rem;
             text-align: center;
-            margin-top: 60px;
-            padding: 30px;
-            background: var(--gray-light);
-            border-radius: 40px;
-            border: 1px solid var(--gray-border);
+            color: #6b7c9b;
+            font-size: 0.9rem;
+            padding: 1rem;
+            border-top: 1px solid #334155;
         }
         
-        .hash {
-            color: var(--blue-dark);
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-        
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--gray-border);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .hero-stats,
-            .quake-stats {
-                flex-direction: column;
-            }
-            .dashboard-grid,
-            .schumann-grid,
-            .research-grid {
-                grid-template-columns: 1fr;
-            }
+        .live-badge {
+            background: #1f8b4c;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- شريط التنقل مع قائمة اللغات -->
-        <nav class="navbar">
-            <div class="logo">🌌 TRIO SEAL</div>
-            
-            <ul class="nav-links">
-                <li><a href="#home" data-key="home">الرئيسية</a></li>
-                <li><a href="#dashboard" data-key="dashboard">لوحة البيانات</a></li>
-                <li><a href="#schumann" data-key="schumann">مختبر شومان</a></li>
-                <li><a href="#earthquake" data-key="earthquakes">الزلازل</a></li>
-                <li><a href="#research" data-key="research">البحث</a></li>
-            </ul>
-            
-            <!-- قائمة اللغات المنسدلة -->
-            <div class="language-dropdown">
-                <button class="lang-btn" onclick="toggleLanguageMenu()">
-                    🌐 <span data-key="language">اللغة</span> <i class="fas fa-chevron-down"></i>
-                </button>
-                <div id="language-menu" class="language-menu">
-                    <div class="language-option" onclick="setLanguage('ar')">🇸🇦 العربية</div>
-                    <div class="language-option" onclick="setLanguage('en')">🇬🇧 English</div>
-                    <div class="language-option" onclick="setLanguage('fr')">🇫🇷 Français</div>
-                    <div class="language-option" onclick="setLanguage('es')">🇪🇸 Español</div>
-                    <div class="language-option" onclick="setLanguage('zh')">🇨🇳 中文</div>
-                    <div class="language-option" onclick="setLanguage('hi')">🇮🇳 हिन्दी</div>
-                    <div class="language-option" onclick="setLanguage('ru')">🇷🇺 Русский</div>
-                </div>
-            </div>
-        </nav>
+        <h1>
+            🌌 TRIO SEAL · المرصد الفلكي الشامل
+            <span>v2.0.0</span>
+        </h1>
+        <div class="subtitle">
+            <span class="live-badge">⚡ رصد حي</span>
+            21 مؤشر + 3 صور · تحديث تلقائي
+        </div>
 
-        <!-- الساعات والتاريخ -->
-        <div class="time-panel">
-            <div class="clock-container">
-                <div class="clock-card">
-                    <span class="clock-icon">🕋</span>
-                    <div>
-                        <span class="clock-time" id="makkah-time">--:--:--</span>
-                        <span class="clock-label" data-key="makkah">أم القرى</span>
-                    </div>
+        <!-- ========== 1. الشفق القطبي والمجال المغناطيسي ========== -->
+        <h2 class="section-title">🌌 1. الشفق القطبي والمجال المغناطيسي</h2>
+        <div class="indicators-grid">
+            <!-- Bz -->
+            <div class="card aurora" data-tooltip="Bz: المركبة العمودية للمجال المغناطيسي بين الكواكب">
+                <div class="card-header">
+                    <span class="card-title">🧲 Bz</span>
+                    <span class="card-value loading" id="bz-value">--</span>
                 </div>
-                <div class="clock-card">
-                    <span class="clock-icon">🌐</span>
-                    <div>
-                        <span class="clock-time" id="gmt-time">--:--:--</span>
-                        <span class="clock-label">GMT</span>
-                    </div>
+                <div class="gauge"><div class="gauge-fill" id="bz-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="bz-status">Loading</span>
+                    <span>nT</span>
                 </div>
             </div>
-            <div class="date-container">
-                <div class="date-gregorian" id="gregorian-date">--</div>
-                <div class="date-hijri" id="hijri-date">الثلاثاء 28 رمضان 1447 هـ</div>
+
+            <!-- Proton Flux -->
+            <div class="card aurora" data-tooltip="Proton Flux: تدفق البروتونات عالية الطاقة">
+                <div class="card-header">
+                    <span class="card-title">⚡ Proton</span>
+                    <span class="card-value loading" id="proton-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="proton-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="proton-status">Loading</span>
+                    <span>pfu</span>
+                </div>
+            </div>
+
+            <!-- Aurora Probability -->
+            <div class="card aurora" data-tooltip="Aurora Probability: احتمال رؤية الشفق القطبي">
+                <div class="card-header">
+                    <span class="card-title">🌌 Aurora</span>
+                    <span class="card-value loading" id="aurora-prob-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="aurora-prob-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="aurora-prob-status">Loading</span>
+                    <span>%</span>
+                </div>
+            </div>
+
+            <!-- Kp Index -->
+            <div class="card aurora" data-tooltip="Kp Index: مؤشر الاضطراب المغناطيسي العالمي">
+                <div class="card-header">
+                    <span class="card-title">📊 Kp</span>
+                    <span class="card-value loading" id="kp-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="kp-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="kp-status">Loading</span>
+                    <span>0-9</span>
+                </div>
+            </div>
+
+            <!-- DST Index -->
+            <div class="card aurora" data-tooltip="DST Index: مؤشر شدة العاصفة المغناطيسية">
+                <div class="card-header">
+                    <span class="card-title">🧭 DST</span>
+                    <span class="card-value loading" id="dst-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="dst-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="dst-status">Loading</span>
+                    <span>nT</span>
+                </div>
             </div>
         </div>
 
-        <!-- القسم الرئيسي -->
-        <section id="home" class="hero">
-            <h1 class="glitch">TRIO SEAL</h1>
-            <p class="hero-subtitle" data-key="subtitle">مشروع استكشاف الثابت الكوني n ≈ 18,000</p>
-            <div>
-                <span class="badge">432 Hz</span>
-                <span class="badge">7.83 Hz</span>
-                <span class="badge">18,247 ± 1,200</span>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-number">18,000</div>
-                    <div class="stat-label" data-key="yearsData">سنة من البيانات</div>
+        <!-- ========== 2. الجليد والمحيطات ========== -->
+        <h2 class="section-title">🧊 2. الجليد والمحيطات</h2>
+        <div class="indicators-grid">
+            <!-- Arctic Ice -->
+            <div class="card cryo" data-tooltip="Arctic Ice Extent: مساحة الجليد في القطب الشمالي">
+                <div class="card-header">
+                    <span class="card-title">🧊 Ice</span>
+                    <span class="card-value loading" id="ice-extent-value">--</span>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">10k</div>
-                    <div class="stat-label" data-key="simulations">محاكاة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">1</div>
-                    <div class="stat-label" data-key="paper">ورقة بحثية</div>
+                <div class="gauge"><div class="gauge-fill" id="ice-extent-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="ice-extent-status">Loading</span>
+                    <span>M km²</span>
                 </div>
             </div>
-        </section>
 
-        <!-- لوحة البيانات -->
-        <section id="dashboard">
-            <h2 class="section-title" data-key="cosmicDashboard">📊 لوحة البيانات الكونية</h2>
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <h3 data-key="sunspots">🌞 البقع الشمسية</h3>
-                    <div class="chart-container">
-                        <canvas id="sunspotsChart"></canvas>
-                    </div>
+            <!-- Sea Level -->
+            <div class="card cryo" data-tooltip="Sea Level Rise: ارتفاع منسوب سطح البحر">
+                <div class="card-header">
+                    <span class="card-title">🌊 Sea Level</span>
+                    <span class="card-value loading" id="sea-level-value">--</span>
                 </div>
-                <div class="dashboard-card">
-                    <h3 data-key="solarWind">🌬️ سرعة الرياح الشمسية</h3>
-                    <div class="chart-container">
-                        <canvas id="solarWindChart"></canvas>
-                    </div>
-                </div>
-                <div class="dashboard-card">
-                    <h3 data-key="kpIndex">⚡ Kp Index</h3>
-                    <div class="chart-container">
-                        <canvas id="kpChart"></canvas>
-                    </div>
-                </div>
-                <div class="dashboard-card">
-                    <h3 data-key="nDistribution">📈 توزيع n</h3>
-                    <div class="chart-container">
-                        <canvas id="distributionChart"></canvas>
-                    </div>
+                <div class="gauge"><div class="gauge-fill" id="sea-level-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="sea-level-status">Loading</span>
+                    <span>mm</span>
                 </div>
             </div>
-        </section>
 
-        <!-- مختبر شومان -->
-        <section id="schumann">
-            <h2 class="section-title" data-key="schumannTitle">🎵 مختبر رنين شومان</h2>
-            <div class="schumann-grid">
-                <div class="schumann-card" onclick="playSchumann(7.83)">
-                    <span class="freq">7.83 Hz</span>
-                    <span class="mode" data-key="fundamental">الرنين الأساسي</span>
-                    <button class="play-btn"><i class="fas fa-play"></i></button>
+            <!-- Ocean Heat -->
+            <div class="card cryo" data-tooltip="Ocean Heat Content: المحتوى الحراري للمحيطات">
+                <div class="card-header">
+                    <span class="card-title">🔥 Ocean Heat</span>
+                    <span class="card-value loading" id="ocean-heat-value">--</span>
                 </div>
-                <div class="schumann-card" onclick="playSchumann(14.3)">
-                    <span class="freq">14.3 Hz</span>
-                    <span class="mode" data-key="harmonic1">التوافقي الأول</span>
-                    <button class="play-btn"><i class="fas fa-play"></i></button>
-                </div>
-                <div class="schumann-card" onclick="playSchumann(20.8)">
-                    <span class="freq">20.8 Hz</span>
-                    <span class="mode" data-key="harmonic2">التوافقي الثاني</span>
-                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                <div class="gauge"><div class="gauge-fill" id="ocean-heat-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="ocean-heat-status">Loading</span>
+                    <span>10²² J</span>
                 </div>
             </div>
-            <div class="schumann-visualizer">
-                <canvas id="waveCanvas" width="800" height="200"></canvas>
-            </div>
-        </section>
 
-        <!-- مرصد الزلازل -->
-        <section id="earthquake">
-            <div class="download-section">
-                <h2 class="section-title" style="margin:0;" data-key="earthquakeTitle">🌋 مرصد الزلازل المباشر</h2>
-                <div>
-                    <button onclick="downloadEarthquakeData('csv')" class="btn-download">📥 CSV</button>
-                    <button onclick="downloadEarthquakeData('json')" class="btn-download">📥 JSON</button>
+            <!-- Ocean Temp Anomaly -->
+            <div class="card cryo" data-tooltip="Ocean Temperature Anomaly: شذوذ درجة حرارة المحيطات">
+                <div class="card-header">
+                    <span class="card-title">🌡️ Ocean Temp</span>
+                    <span class="card-value loading" id="ocean-temp-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="ocean-temp-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="ocean-temp-status">Loading</span>
+                    <span>°C</span>
                 </div>
             </div>
-            
-            <div class="quake-stats">
-                <div class="quake-stat-card">
-                    <div class="quake-stat-number" id="quake-total">--</div>
-                    <div class="quake-stat-label" data-key="last24h">زلزال آخر 24 ساعة</div>
-                </div>
-                <div class="quake-stat-card">
-                    <div class="quake-stat-number" id="quake-strongest">--</div>
-                    <div class="quake-stat-label" data-key="strongest">أقوى زلزال</div>
-                </div>
-                <div class="quake-stat-card">
-                    <div class="quake-stat-number" id="quake-latest-time">--</div>
-                    <div class="quake-stat-label" data-key="lastUpdate">آخر تحديث</div>
-                </div>
-            </div>
-            
-            <div id="quake-list-container">
-                <div id="quake-loading" style="text-align: center; padding: 30px;">
-                    <div class="loading-spinner"></div>
-                    <p style="margin-top: 15px;" data-key="loading">جاري تحميل بيانات الزلازل...</p>
-                </div>
-                <div id="quake-list-limited" style="display: none;"></div>
-                <div id="quake-list-full" style="display: none;"></div>
-                
-                <div id="show-more-container" style="margin-top: 20px; text-align: center; display: none;">
-                    <button id="show-more-btn" style="background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--blue-dark); padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; width: 100%;">
-                        <span data-key="showMore">🔽 عرض الـ</span> <span id="remaining-count">0</span> <span data-key="moreEarthquakes">زلزال متبقية</span>
-                    </button>
-                </div>
-                
-                <div id="show-less-container" style="margin-top: 20px; text-align: center; display: none;">
-                    <button id="show-less-btn" style="background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--blue-dark); padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; width: 100%;" data-key="showLess">
-                        🔼 إخفاء الزلازل الإضافية
-                    </button>
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <!-- الخريطة -->
-        <section class="map-section">
-            <h2 class="section-title" data-key="mapTitle">🛰️ خريطة الطقس الفضائي</h2>
-            <div id="spaceMap"></div>
-        </section>
-
-        <!-- البحث العلمي -->
-        <section id="research">
-            <h2 class="section-title" data-key="researchTitle">📜 البحث العلمي</h2>
-            <div class="research-grid">
-                <div class="research-card">
-                    <i class="fas fa-file-pdf"></i>
-                    <h3 data-key="paperTitle">الورقة البحثية</h3>
-                    <p data-key="paperDesc">PDF كامل مع جميع المعادلات</p>
-                    <a href="Trio_seal_paper_pdf.pdf" class="btn-download" download><span data-key="downloadPDF">تحميل PDF</span></a>
+        <!-- ========== 3. حرارة الأرض والغلاف الجوي ========== -->
+        <h2 class="section-title">🌡️ 3. حرارة الأرض والغلاف الجوي</h2>
+        <div class="indicators-grid">
+            <!-- Surface Temp -->
+            <div class="card temp" data-tooltip="Surface Temperature Anomaly: شذوذ درجة حرارة سطح الأرض">
+                <div class="card-header">
+                    <span class="card-title">🌡️ Surface</span>
+                    <span class="card-value loading" id="surface-temp-value">--</span>
                 </div>
-                <div class="research-card">
-                    <i class="fas fa-code"></i>
-                    <h3 data-key="codeTitle">كود المحاكاة</h3>
-                    <p data-key="codeDesc">Python + Monte Carlo</p>
-                    <a href="simulation.py" class="btn-download" download><span data-key="downloadPython">تحميل Python</span></a>
-                </div>
-                <div class="research-card">
-                    <i class="fas fa-database"></i>
-                    <h3 data-key="dataTitle">البيانات الخام</h3>
-                    <p data-key="dataDesc">CSV لنتائج 10,000 محاكاة</p>
-                    <a href="data.csv" class="btn-download" download><span data-key="downloadCSV">تحميل CSV</span></a>
+                <div class="gauge"><div class="gauge-fill" id="surface-temp-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="surface-temp-status">Loading</span>
+                    <span>°C</span>
                 </div>
             </div>
-        </section>
 
-        <!-- التذييل -->
-        <footer class="footer">
-            <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
-            <p>شيكر هشام · Hicham Chigar</p>
-            <p data-key="rights">© 2026 جميع الحقوق محفوظة</p>
-        </footer>
+            <!-- CO₂ -->
+            <div class="card temp" data-tooltip="CO₂ Levels: تركيز ثاني أكسيد الكربون">
+                <div class="card-header">
+                    <span class="card-title">🌍 CO₂</span>
+                    <span class="card-value loading" id="co2-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="co2-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="co2-status">Loading</span>
+                    <span>ppm</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 4. النشاط الشمسي ========== -->
+        <h2 class="section-title">☀️ 4. النشاط الشمسي</h2>
+        <div class="indicators-grid">
+            <!-- Sunspots -->
+            <div class="card solar" data-tooltip="Sunspot Number: عدد البقع الشمسية">
+                <div class="card-header">
+                    <span class="card-title">☀️ Sunspots</span>
+                    <span class="card-value loading" id="sunspot-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="sunspot-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="sunspot-status">Loading</span>
+                    <span>عدد</span>
+                </div>
+            </div>
+
+            <!-- Solar Flux -->
+            <div class="card solar" data-tooltip="Solar Flux (F10.7): التدفق الراديوي الشمسي">
+                <div class="card-header">
+                    <span class="card-title">📡 Solar Flux</span>
+                    <span class="card-value loading" id="solar-flux-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="solar-flux-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="solar-flux-status">Loading</span>
+                    <span>sfu</span>
+                </div>
+            </div>
+
+            <!-- Solar Wind Speed -->
+            <div class="card solar" data-tooltip="Solar Wind Speed: سرعة الرياح الشمسية">
+                <div class="card-header">
+                    <span class="card-title">🌬️ Speed</span>
+                    <span class="card-value loading" id="sw-speed-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="sw-speed-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="sw-speed-status">Loading</span>
+                    <span>km/s</span>
+                </div>
+            </div>
+
+            <!-- Solar Wind Density -->
+            <div class="card solar" data-tooltip="Solar Wind Density: كثافة الرياح الشمسية">
+                <div class="card-header">
+                    <span class="card-title">🌬️ Density</span>
+                    <span class="card-value loading" id="sw-density-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="sw-density-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="sw-density-status">Loading</span>
+                    <span>p/cm³</span>
+                </div>
+            </div>
+
+            <!-- Solar Wind Temp -->
+            <div class="card solar" data-tooltip="Solar Wind Temperature: درجة حرارة الرياح الشمسية">
+                <div class="card-header">
+                    <span class="card-title">🌡️ Temp</span>
+                    <span class="card-value loading" id="sw-temp-value">--</span>
+                </div>
+                <div class="gauge"><div class="gauge-fill" id="sw-temp-gauge"></div></div>
+                <div class="status">
+                    <span class="status-badge" id="sw-temp-status">Loading</span>
+                    <span>K</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 5. الصور الحية ========== -->
+        <h2 class="section-title">🛰️ 5. الصور الحية</h2>
+        <div class="images-grid">
+            <div class="image-card">
+                <h3>☀️ SDO Solar</h3>
+                <div id="sdo-image"></div>
+            </div>
+            <div class="image-card">
+                <h3>🌍 Earth</h3>
+                <div id="earth-image"></div>
+            </div>
+            <div class="image-card">
+                <h3>🌌 Aurora Map</h3>
+                <div id="aurora-map"></div>
+            </div>
+        </div>
+
+        <!-- ========== Footer ========== -->
+        <div class="footer">
+            <span id="timestamp">جاري التحميل...</span> · 
+            <span>21 مؤشر حي · 3 صور مباشرة</span> · 
+            <span>آخر تحديث: <span id="last-update">--</span></span>
+        </div>
     </div>
 
     <script>
-        // ===== نظام الترجمة المتكامل =====
-        const translations = {
-            ar: {
-                home: "الرئيسية",
-                dashboard: "لوحة البيانات",
-                schumann: "مختبر شومان",
-                earthquakes: "الزلازل",
-                research: "البحث",
-                language: "اللغة",
-                makkah: "أم القرى",
-                subtitle: "مشروع استكشاف الثابت الكوني n ≈ 18,000",
-                yearsData: "سنة من البيانات",
-                simulations: "محاكاة",
-                paper: "ورقة بحثية",
-                cosmicDashboard: "📊 لوحة البيانات الكونية",
-                sunspots: "🌞 البقع الشمسية",
-                solarWind: "🌬️ سرعة الرياح الشمسية",
-                kpIndex: "⚡ Kp Index",
-                nDistribution: "📈 توزيع n",
-                schumannTitle: "🎵 مختبر رنين شومان",
-                fundamental: "الرنين الأساسي",
-                harmonic1: "التوافقي الأول",
-                harmonic2: "التوافقي الثاني",
-                earthquakeTitle: "🌋 مرصد الزلازل المباشر",
-                last24h: "زلزال آخر 24 ساعة",
-                strongest: "أقوى زلزال",
-                lastUpdate: "آخر تحديث",
-                loading: "جاري تحميل بيانات الزلازل...",
-                showMore: "🔽 عرض الـ",
-                moreEarthquakes: "زلزال متبقية",
-                showLess: "🔼 إخفاء الزلازل الإضافية",
-                mapTitle: "🛰️ خريطة الطقس الفضائي",
-                researchTitle: "📜 البحث العلمي",
-                paperTitle: "الورقة البحثية",
-                paperDesc: "PDF كامل مع جميع المعادلات",
-                codeTitle: "كود المحاكاة",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "البيانات الخام",
-                dataDesc: "CSV لنتائج 10,000 محاكاة",
-                downloadPDF: "تحميل PDF",
-                downloadPython: "تحميل Python",
-                downloadCSV: "تحميل CSV",
-                rights: "© 2026 جميع الحقوق محفوظة"
-            },
-            en: {
-                home: "Home",
-                dashboard: "Dashboard",
-                schumann: "Schumann Lab",
-                earthquakes: "Earthquakes",
-                research: "Research",
-                language: "Language",
-                makkah: "Makkah",
-                subtitle: "Exploring the Cosmic Constant n ≈ 18,000",
-                yearsData: "Years of Data",
-                simulations: "Simulations",
-                paper: "Research Paper",
-                cosmicDashboard: "📊 Cosmic Dashboard",
-                sunspots: "🌞 Sunspots",
-                solarWind: "🌬️ Solar Wind Speed",
-                kpIndex: "⚡ Kp Index",
-                nDistribution: "📈 n Distribution",
-                schumannTitle: "🎵 Schumann Resonance Lab",
-                fundamental: "Fundamental",
-                harmonic1: "1st Harmonic",
-                harmonic2: "2nd Harmonic",
-                earthquakeTitle: "🌋 Live Earthquake Observatory",
-                last24h: "Last 24h Earthquakes",
-                strongest: "Strongest",
-                lastUpdate: "Last Update",
-                loading: "Loading earthquake data...",
-                showMore: "🔽 Show",
-                moreEarthquakes: "more earthquakes",
-                showLess: "🔼 Show less",
-                mapTitle: "🛰️ Space Weather Map",
-                researchTitle: "📜 Scientific Research",
-                paperTitle: "Research Paper",
-                paperDesc: "Complete PDF with all equations",
-                codeTitle: "Simulation Code",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "Raw Data",
-                dataDesc: "CSV with 10,000 simulation results",
-                downloadPDF: "Download PDF",
-                downloadPython: "Download Python",
-                downloadCSV: "Download CSV",
-                rights: "© 2026 All Rights Reserved"
-            },
-            fr: {
-                home: "Accueil",
-                dashboard: "Tableau de bord",
-                schumann: "Labo Schumann",
-                earthquakes: "Séismes",
-                research: "Recherche",
-                language: "Langue",
-                makkah: "La Mecque",
-                subtitle: "Exploration de la constante cosmique n ≈ 18,000",
-                yearsData: "Années de données",
-                simulations: "Simulations",
-                paper: "Article de recherche",
-                cosmicDashboard: "📊 Tableau de bord cosmique",
-                sunspots: "🌞 Taches solaires",
-                solarWind: "🌬️ Vitesse du vent solaire",
-                kpIndex: "⚡ Indice Kp",
-                nDistribution: "📈 Distribution de n",
-                schumannTitle: "🎵 Laboratoire de résonance Schumann",
-                fundamental: "Fondamental",
-                harmonic1: "1er Harmonique",
-                harmonic2: "2ème Harmonique",
-                earthquakeTitle: "🌋 Observatoire sismique en direct",
-                last24h: "Séismes dernières 24h",
-                strongest: "Le plus fort",
-                lastUpdate: "Dernière mise à jour",
-                loading: "Chargement des données sismiques...",
-                showMore: "🔽 Voir",
-                moreEarthquakes: "séismes supplémentaires",
-                showLess: "🔼 Voir moins",
-                mapTitle: "🛰️ Carte météo spatiale",
-                researchTitle: "📜 Recherche scientifique",
-                paperTitle: "Article de recherche",
-                paperDesc: "PDF complet avec toutes les équations",
-                codeTitle: "Code de simulation",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "Données brutes",
-                dataDesc: "CSV avec 10 000 résultats de simulation",
-                downloadPDF: "Télécharger PDF",
-                downloadPython: "Télécharger Python",
-                downloadCSV: "Télécharger CSV",
-                rights: "© 2026 Tous droits réservés"
-            },
-            es: {
-                home: "Inicio",
-                dashboard: "Panel",
-                schumann: "Lab Schumann",
-                earthquakes: "Terremotos",
-                research: "Investigación",
-                language: "Idioma",
-                makkah: "La Meca",
-                subtitle: "Explorando la constante cósmica n ≈ 18,000",
-                yearsData: "Años de datos",
-                simulations: "Simulaciones",
-                paper: "Artículo de investigación",
-                cosmicDashboard: "📊 Panel cósmico",
-                sunspots: "🌞 Manchas solares",
-                solarWind: "🌬️ Velocidad del viento solar",
-                kpIndex: "⚡ Índice Kp",
-                nDistribution: "📈 Distribución de n",
-                schumannTitle: "🎵 Laboratorio de resonancia Schumann",
-                fundamental: "Fundamental",
-                harmonic1: "1er Armónico",
-                harmonic2: "2do Armónico",
-                earthquakeTitle: "🌋 Observatorio de terremotos en vivo",
-                last24h: "Terremotos últimas 24h",
-                strongest: "Más fuerte",
-                lastUpdate: "Última actualización",
-                loading: "Cargando datos sísmicos...",
-                showMore: "🔽 Ver",
-                moreEarthquakes: "terremotos más",
-                showLess: "🔼 Ver menos",
-                mapTitle: "🛰️ Mapa del clima espacial",
-                researchTitle: "📜 Investigación científica",
-                paperTitle: "Artículo de investigación",
-                paperDesc: "PDF completo con todas las ecuaciones",
-                codeTitle: "Código de simulación",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "Datos brutos",
-                dataDesc: "CSV con 10,000 resultados de simulación",
-                downloadPDF: "Descargar PDF",
-                downloadPython: "Descargar Python",
-                downloadCSV: "Descargar CSV",
-                rights: "© 2026 Todos los derechos reservados"
-            },
-            zh: {
-                home: "首页",
-                dashboard: "仪表板",
-                schumann: "舒曼实验室",
-                earthquakes: "地震",
-                research: "研究",
-                language: "语言",
-                makkah: "麦加",
-                subtitle: "探索宇宙常数 n ≈ 18,000",
-                yearsData: "年数据",
-                simulations: "模拟",
-                paper: "研究论文",
-                cosmicDashboard: "📊 宇宙仪表板",
-                sunspots: "🌞 太阳黑子",
-                solarWind: "🌬️ 太阳风速",
-                kpIndex: "⚡ Kp指数",
-                nDistribution: "📈 n分布",
-                schumannTitle: "🎵 舒曼共振实验室",
-                fundamental: "基本",
-                harmonic1: "第一次谐波",
-                harmonic2: "第二次谐波",
-                earthquakeTitle: "🌋 实时地震观测站",
-                last24h: "24小时内地震",
-                strongest: "最强",
-                lastUpdate: "最后更新",
-                loading: "加载地震数据...",
-                showMore: "🔽 显示",
-                moreEarthquakes: "更多地震",
-                showLess: "🔼 显示较少",
-                mapTitle: "🛰️ 太空天气图",
-                researchTitle: "📜 科学研究",
-                paperTitle: "研究论文",
-                paperDesc: "包含所有方程的完整PDF",
-                codeTitle: "模拟代码",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "原始数据",
-                dataDesc: "包含10,000个模拟结果的CSV",
-                downloadPDF: "下载PDF",
-                downloadPython: "下载Python",
-                downloadCSV: "下载CSV",
-                rights: "© 2026 保留所有权利"
-            },
-            hi: {
-                home: "होम",
-                dashboard: "डैशबोर्ड",
-                schumann: "शुमान लैब",
-                earthquakes: "भूकंप",
-                research: "अनुसंधान",
-                language: "भाषा",
-                makkah: "मक्का",
-                subtitle: "ब्रह्मांडीय स्थिरांक n ≈ 18,000 की खोज",
-                yearsData: "वर्षों का डेटा",
-                simulations: "सिमुलेशन",
-                paper: "शोध पत्र",
-                cosmicDashboard: "📊 ब्रह्मांडीय डैशबोर्ड",
-                sunspots: "🌞 सनस्पॉट",
-                solarWind: "🌬️ सौर हवा की गति",
-                kpIndex: "⚡ Kp सूचकांक",
-                nDistribution: "📈 n वितरण",
-                schumannTitle: "🎵 शुमान अनुनाद प्रयोगशाला",
-                fundamental: "मौलिक",
-                harmonic1: "पहला हार्मोनिक",
-                harmonic2: "दूसरा हार्मोनिक",
-                earthquakeTitle: "🌋 लाइव भूकंप वेधशाला",
-                last24h: "पिछले 24 घंटे के भूकंप",
-                strongest: "सबसे मजबूत",
-                lastUpdate: "अंतिम अपडेट",
-                loading: "भूकंप डेटा लोड हो रहा है...",
-                showMore: "🔽 दिखाएँ",
-                moreEarthquakes: "अधिक भूकंप",
-                showLess: "🔼 कम दिखाएँ",
-                mapTitle: "🛰️ अंतरिक्ष मौसम मानचित्र",
-                researchTitle: "📜 वैज्ञानिक अनुसंधान",
-                paperTitle: "शोध पत्र",
-                paperDesc: "सभी समीकरणों के साथ पूर्ण PDF",
-                codeTitle: "सिमुलेशन कोड",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "कच्चा डेटा",
-                dataDesc: "10,000 सिमुलेशन परिणामों के साथ CSV",
-                downloadPDF: "PDF डाउनलोड करें",
-                downloadPython: "Python डाउनलोड करें",
-                downloadCSV: "CSV डाउनलोड करें",
-                rights: "© 2026 सर्वाधिकार सुरक्षित"
-            },
-            ru: {
-                home: "Главная",
-                dashboard: "Панель",
-                schumann: "Лаб Шумана",
-                earthquakes: "Землетрясения",
-                research: "Исследования",
-                language: "Язык",
-                makkah: "Мекка",
-                subtitle: "Исследование космической константы n ≈ 18,000",
-                yearsData: "Лет данных",
-                simulations: "Симуляций",
-                paper: "Научная статья",
-                cosmicDashboard: "📊 Космическая панель",
-                sunspots: "🌞 Солнечные пятна",
-                solarWind: "🌬️ Скорость солнечного ветра",
-                kpIndex: "⚡ Индекс Kp",
-                nDistribution: "📈 Распределение n",
-                schumannTitle: "🎵 Лаборатория резонанса Шумана",
-                fundamental: "Основной",
-                harmonic1: "1-я гармоника",
-                harmonic2: "2-я гармоника",
-                earthquakeTitle: "🌋 Прямая обсерватория землетрясений",
-                last24h: "Землетрясения за 24ч",
-                strongest: "Сильнейшее",
-                lastUpdate: "Последнее обновление",
-                loading: "Загрузка данных о землетрясениях...",
-                showMore: "🔽 Показать",
-                moreEarthquakes: "ещё землетрясений",
-                showLess: "🔼 Показать меньше",
-                mapTitle: "🛰️ Карта космической погоды",
-                researchTitle: "📜 Научные исследования",
-                paperTitle: "Научная статья",
-                paperDesc: "Полный PDF со всеми уравнениями",
-                codeTitle: "Код симуляции",
-                codeDesc: "Python + Monte Carlo",
-                dataTitle: "Сырые данные",
-                dataDesc: "CSV с 10,000 результатами симуляций",
-                downloadPDF: "Скачать PDF",
-                downloadPython: "Скачать Python",
-                downloadCSV: "Скачать CSV",
-                rights: "© 2026 Все права защищены"
-            }
-        };
-
-        // ===== دوال الترجمة =====
-        function toggleLanguageMenu() {
-            const menu = document.getElementById('language-menu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // إغلاق القائمة عند النقر خارجها
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('language-menu');
-            const btn = document.querySelector('.lang-btn');
-            
-            if (!btn.contains(event.target) && !menu.contains(event.target)) {
-                menu.style.display = 'none';
-            }
-        });
-
-        function setLanguage(lang) {
-            const t = translations[lang];
-            
-            // تحديث جميع العناصر التي تحمل data-key
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (t[key]) {
-                    el.innerText = t[key];
-                }
-            });
-            
-            // تحديث اتجاه الصفحة للغات التي تكتب من اليسار لليمين
-            if (lang === 'ar') {
-                document.documentElement.dir = 'rtl';
-            } else {
-                document.documentElement.dir = 'ltr';
-            }
-            
-            // إغلاق القائمة بعد الاختيار
-            document.getElementById('language-menu').style.display = 'none';
-        }
-
-        // ===== دوال الموقع الأخرى (كما هي) =====
-        function playSchumann(freq) {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                osc.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 1.5);
-            } catch(e) {
-                alert("Your browser doesn't support audio playback");
-            }
-        }
-
-        // تحديث الساعات والتاريخ
-        function updateTimeAndDate() {
-            const now = new Date();
-            
-            const makkahTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
-            document.getElementById('makkah-time').textContent = 
-                `${makkahTime.getHours().toString().padStart(2,'0')}:${makkahTime.getMinutes().toString().padStart(2,'0')}:${makkahTime.getSeconds().toString().padStart(2,'0')}`;
-            
-            const gmtTime = new Date(now.toLocaleString('en-US', { timeZone: 'GMT' }));
-            document.getElementById('gmt-time').textContent = 
-                `${gmtTime.getHours().toString().padStart(2,'0')}:${gmtTime.getMinutes().toString().padStart(2,'0')}:${gmtTime.getSeconds().toString().padStart(2,'0')}`;
-            
-            document.getElementById('gregorian-date').textContent = 
-                makkahTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
-        setInterval(updateTimeAndDate, 1000);
-        updateTimeAndDate();
-
-        // بيانات n
-        const nValues = [
-            17987, 18346, 18474, 17191, 18878, 17667, 19061, 17991, 18387, 17698,
-            19050, 17900, 18033, 18134, 18095, 18396, 18591, 17571, 17946, 17925,
-            17465, 18292, 19536, 17943, 18519, 17180, 18074, 18407, 18023, 18987,
-            19027, 18415, 18387, 18509, 19675, 17974, 17721, 18386, 18543, 18182,
-            17891, 18428, 18006, 17862, 18257, 17900, 18330, 18167, 18167, 18006,
-            18850, 17746, 17982, 17584, 18166, 17983, 17893, 18577, 17568, 17990,
-            17940, 17983, 17908, 18277, 17933, 18615, 18751, 18389, 18395, 18737,
-            18070, 17903, 18083, 17665, 18076, 17892, 17748, 18495, 18023, 18388,
-            18497, 18322, 18815, 18689, 17944, 17875, 17644, 19078, 19176, 18750,
-            18581, 18606, 17569, 18234, 18957, 19033, 18400, 17505, 18566, 17962
-        ];
-
-        // إنشاء الرسوم البيانية
-        function createHistogram(data, bins = 20) {
-            const min = Math.min(...data);
-            const max = Math.max(...data);
-            const binSize = (max - min) / bins;
-            
-            const counts = new Array(bins).fill(0);
-            data.forEach(value => {
-                const index = Math.min(Math.floor((value - min) / binSize), bins - 1);
-                counts[index]++;
-            });
-            
-            const labels = counts.map((_, i) => (min + i * binSize).toFixed(0));
-            
-            new Chart(document.getElementById('distributionChart'), {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Frequency',
-                        data: counts,
-                        backgroundColor: '#ffd700',
-                        borderColor: '#ffd700',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { ticks: { color: '#0f2b4f', maxRotation: 45, maxTicksLimit: 10 } },
-                        y: { ticks: { color: '#0f2b4f' } }
+        (function() {
+            // ==================== إعدادات المؤشرات ====================
+            const indicators = {
+                // Aurora Group
+                bz: { 
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", 
+                        backup: "" 
                     },
-                    plugins: { legend: { labels: { color: '#0f2b4f' } } }
+                    thresholds: { low: 3, medium: 5, high: 8 },
+                    unit: 'nT',
+                    maxValue: 10,
+                    category: 'aurora'
+                },
+                proton: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 1, medium: 10, high: 100 },
+                    unit: 'pfu',
+                    maxValue: 100,
+                    category: 'aurora'
+                },
+                auroraProb: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 30, medium: 60, high: 90 },
+                    unit: '%',
+                    maxValue: 100,
+                    category: 'aurora'
+                },
+                kp: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 3, medium: 5, high: 7 },
+                    unit: '',
+                    maxValue: 9,
+                    category: 'aurora'
+                },
+                dst: {
+                    api: { 
+                        primary: "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst", 
+                        backup: "" 
+                    },
+                    thresholds: { low: -30, medium: -50, high: -100 },
+                    unit: 'nT',
+                    maxValue: 100,
+                    category: 'aurora'
+                },
+
+                // Cryosphere Group
+                ice: {
+                    api: { 
+                        primary: "https://nsidc.org/api/seaice/", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 14, medium: 13, high: 12 },
+                    unit: 'M km²',
+                    maxValue: 15,
+                    category: 'cryo'
+                },
+                seaLevel: {
+                    api: { 
+                        primary: "https://podaac.jpl.nasa.gov/api/", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 2, medium: 4, high: 6 },
+                    unit: 'mm',
+                    maxValue: 10,
+                    category: 'cryo'
+                },
+                oceanHeat: {
+                    api: { 
+                        primary: "https://www.ncei.noaa.gov/access/services/", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 1, medium: 2, high: 3 },
+                    unit: '10²² J',
+                    maxValue: 5,
+                    category: 'cryo'
+                },
+                oceanTemp: {
+                    api: { 
+                        primary: "https://www.ncei.noaa.gov/access/services/", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 0.5, medium: 1, high: 1.5 },
+                    unit: '°C',
+                    maxValue: 2,
+                    category: 'cryo'
+                },
+
+                // Temperature Group
+                surfaceTemp: {
+                    api: { 
+                        primary: "https://data.giss.nasa.gov/gistemp/", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 0.5, medium: 1, high: 1.5 },
+                    unit: '°C',
+                    maxValue: 2,
+                    category: 'temp'
+                },
+                co2: {
+                    api: { 
+                        primary: "https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 400, medium: 420, high: 440 },
+                    unit: 'ppm',
+                    maxValue: 500,
+                    category: 'temp'
+                },
+
+                // Solar Group
+                sunspot: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 50, medium: 100, high: 150 },
+                    unit: '',
+                    maxValue: 200,
+                    category: 'solar'
+                },
+                solarFlux: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 70, medium: 100, high: 130 },
+                    unit: 'sfu',
+                    maxValue: 200,
+                    category: 'solar'
+                },
+                swSpeed: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 400, medium: 600, high: 800 },
+                    unit: 'km/s',
+                    maxValue: 1000,
+                    category: 'solar'
+                },
+                swDensity: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 5, medium: 10, high: 15 },
+                    unit: 'p/cm³',
+                    maxValue: 20,
+                    category: 'solar'
+                },
+                swTemp: {
+                    api: { 
+                        primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", 
+                        backup: "" 
+                    },
+                    thresholds: { low: 100000, medium: 200000, high: 300000 },
+                    unit: 'K',
+                    maxValue: 500000,
+                    category: 'solar'
                 }
-            });
-        }
-        
-        createHistogram(nValues);
-
-        new Chart(document.getElementById('sunspotsChart'), {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 100 }, (_, i) => 1925 + i),
-                datasets: [{
-                    label: 'Sunspot Count',
-                    data: Array.from({ length: 100 }, () => 50 + Math.random() * 150),
-                    borderColor: '#f97316',
-                    backgroundColor: 'rgba(249,115,22,0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#0f2b4f', maxTicksLimit: 10 } },
-                    y: { ticks: { color: '#0f2b4f' } }
-                },
-                plugins: { legend: { labels: { color: '#0f2b4f' } } }
-            }
-        });
-
-        new Chart(document.getElementById('solarWindChart'), {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 50 }, (_, i) => i + 'h'),
-                datasets: [{
-                    label: 'Wind Speed (km/s)',
-                    data: Array.from({ length: 50 }, () => 300 + Math.random() * 200),
-                    borderColor: '#ef4444',
-                    backgroundColor: 'rgba(239,68,68,0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#0f2b4f', maxTicksLimit: 8 } },
-                    y: { ticks: { color: '#0f2b4f' } }
-                },
-                plugins: { legend: { labels: { color: '#0f2b4f' } } }
-            }
-        });
-
-        new Chart(document.getElementById('kpChart'), {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 30 }, (_, i) => 'Day ' + i),
-                datasets: [{
-                    label: 'Kp Index',
-                    data: Array.from({ length: 30 }, () => 1 + Math.random() * 8),
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59,130,246,0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#0f2b4f', maxTicksLimit: 8 } },
-                    y: { ticks: { color: '#0f2b4f', max: 9, min: 0 } }
-                },
-                plugins: { legend: { labels: { color: '#0f2b4f' } } }
-            }
-        });
-
-        // الموجة
-        const canvas = document.getElementById('waveCanvas');
-        const ctx = canvas.getContext('2d');
-        let offset = 0;
-        function drawWave() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-            ctx.strokeStyle = '#ffd700';
-            ctx.lineWidth = 3;
-            ctx.moveTo(0, 100);
-            for (let x = 0; x < canvas.width; x++) {
-                let y = 100 + 50 * Math.sin(x * 0.02 + offset);
-                ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-            offset += 0.05;
-            requestAnimationFrame(drawWave);
-        }
-        drawWave();
-
-        // الخريطة
-        const map = L.map('spaceMap').setView([20, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap'
-        }).addTo(map);
-
-        L.circle([60, -100], { radius: 500000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.circle([-50, 20], { radius: 300000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.circle([30, 150], { radius: 400000, color: '#ffd700', fillOpacity: 0.15 }).addTo(map);
-        L.marker([21.4, 39.8]).addTo(map).bindPopup('🕋 Makkah');
-
-        // بيانات الزلازل
-        let allEarthquakes = [];
-
-        async function fetchEarthquakes() {
-            try {
-                const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson');
-                const data = await response.json();
-                
-                allEarthquakes = data.features.sort((a, b) => b.properties.time - a.properties.time);
-                
-                document.getElementById('quake-loading').style.display = 'none';
-                document.getElementById('quake-list-limited').style.display = 'block';
-                
-                const total = allEarthquakes.length;
-                const strongest = allEarthquakes.reduce((max, eq) => eq.properties.mag > max.properties.mag ? eq : max, allEarthquakes[0]);
-                
-                document.getElementById('quake-total').innerHTML = total;
-                document.getElementById('quake-strongest').innerHTML = strongest.properties.mag ? strongest.properties.mag.toFixed(1) + ' Mw' : '--';
-                document.getElementById('quake-latest-time').innerHTML = new Date().toLocaleTimeString();
-                
-                displayQuakes(allEarthquakes.slice(0, 6), 'limited');
-                
-                if (total > 6) {
-                    document.getElementById('remaining-count').innerHTML = total - 6;
-                    document.getElementById('show-more-container').style.display = 'block';
-                }
-                
-            } catch (error) {
-                console.error('Error fetching earthquakes:', error);
-                document.getElementById('quake-loading').innerHTML = `
-                    <p style="color: #ef4444;">⚠️ Failed to load earthquake data</p>
-                `;
-            }
-        }
-
-        function displayQuakes(earthquakes, target) {
-            let html = '';
-            
-            const flags = {
-                'USA': '🇺🇸', 'United States': '🇺🇸', 'California': '🇺🇸', 'Alaska': '🇺🇸', 'Hawaii': '🇺🇸',
-                'Japan': '🇯🇵', 'Japon': '🇯🇵', 'Tokyo': '🇯🇵',
-                'China': '🇨🇳', 'Chine': '🇨🇳', 'Beijing': '🇨🇳',
-                'India': '🇮🇳', 'Inde': '🇮🇳', 'Delhi': '🇮🇳',
-                'Russia': '🇷🇺', 'Russie': '🇷🇺', 'Moscow': '🇷🇺',
-                'France': '🇫🇷', 'Paris': '🇫🇷',
-                'UK': '🇬🇧', 'United Kingdom': '🇬🇧', 'London': '🇬🇧',
-                'Germany': '🇩🇪', 'Berlin': '🇩🇪',
-                'Italy': '🇮🇹', 'Rome': '🇮🇹',
-                'Spain': '🇪🇸', 'Madrid': '🇪🇸',
-                'Mexico': '🇲🇽', 'Mexico City': '🇲🇽',
-                'Canada': '🇨🇦', 'Ottawa': '🇨🇦',
-                'Brazil': '🇧🇷', 'Brasilia': '🇧🇷',
-                'Australia': '🇦🇺', 'Canberra': '🇦🇺',
-                'New Zealand': '🇳🇿', 'Wellington': '🇳🇿',
-                'Indonesia': '🇮🇩', 'Jakarta': '🇮🇩',
-                'Philippines': '🇵🇭', 'Manila': '🇵🇭',
-                'Turkey': '🇹🇷', 'Ankara': '🇹🇷',
-                'Iran': '🇮🇷', 'Tehran': '🇮🇷',
-                'Iraq': '🇮🇶', 'Baghdad': '🇮🇶',
-                'Pakistan': '🇵🇰', 'Islamabad': '🇵🇰',
-                'Chile': '🇨🇱', 'Santiago': '🇨🇱',
-                'Peru': '🇵🇪', 'Lima': '🇵🇪',
-                'Colombia': '🇨🇴', 'Bogota': '🇨🇴',
-                'Argentina': '🇦🇷', 'Buenos Aires': '🇦🇷',
-                'Greece': '🇬🇷', 'Athens': '🇬🇷',
-                'Iceland': '🇮🇸', 'Reykjavik': '🇮🇸'
             };
-            
-            earthquakes.forEach(quake => {
-                const mag = quake.properties.mag || 0;
-                const place = quake.properties.place || 'Unknown location';
-                const time = new Date(quake.properties.time);
-                const depth = quake.geometry.coordinates[2] || 0;
+
+            // ==================== عناصر HTML ====================
+            const elements = {
+                bz: { value: document.getElementById('bz-value'), status: document.getElementById('bz-status'), gauge: document.getElementById('bz-gauge') },
+                proton: { value: document.getElementById('proton-value'), status: document.getElementById('proton-status'), gauge: document.getElementById('proton-gauge') },
+                auroraProb: { value: document.getElementById('aurora-prob-value'), status: document.getElementById('aurora-prob-status'), gauge: document.getElementById('aurora-prob-gauge') },
+                kp: { value: document.getElementById('kp-value'), status: document.getElementById('kp-status'), gauge: document.getElementById('kp-gauge') },
+                dst: { value: document.getElementById('dst-value'), status: document.getElementById('dst-status'), gauge: document.getElementById('dst-gauge') },
+                ice: { value: document.getElementById('ice-extent-value'), status: document.getElementById('ice-extent-status'), gauge: document.getElementById('ice-extent-gauge') },
+                seaLevel: { value: document.getElementById('sea-level-value'), status: document.getElementById('sea-level-status'), gauge: document.getElementById('sea-level-gauge') },
+                oceanHeat: { value: document.getElementById('ocean-heat-value'), status: document.getElementById('ocean-heat-status'), gauge: document.getElementById('ocean-heat-gauge') },
+                oceanTemp: { value: document.getElementById('ocean-temp-value'), status: document.getElementById('ocean-temp-status'), gauge: document.getElementById('ocean-temp-gauge') },
+                surfaceTemp: { value: document.getElementById('surface-temp-value'), status: document.getElementById('surface-temp-status'), gauge: document.getElementById('surface-temp-gauge') },
+                co2: { value: document.getElementById('co2-value'), status: document.getElementById('co2-status'), gauge: document.getElementById('co2-gauge') },
+                sunspot: { value: document.getElementById('sunspot-value'), status: document.getElementById('sunspot-status'), gauge: document.getElementById('sunspot-gauge') },
+                solarFlux: { value: document.getElementById('solar-flux-value'), status: document.getElementById('solar-flux-status'), gauge: document.getElementById('solar-flux-gauge') },
+                swSpeed: { value: document.getElementById('sw-speed-value'), status: document.getElementById('sw-speed-status'), gauge: document.getElementById('sw-speed-gauge') },
+                swDensity: { value: document.getElementById('sw-density-value'), status: document.getElementById('sw-density-status'), gauge: document.getElementById('sw-density-gauge') },
+                swTemp: { value: document.getElementById('sw-temp-value'), status: document.getElementById('sw-temp-status'), gauge: document.getElementById('sw-temp-gauge') },
+                timestamp: document.getElementById('timestamp'),
+                lastUpdate: document.getElementById('last-update'),
+                images: {
+                    sdo: document.getElementById('sdo-image'),
+                    earth: document.getElementById('earth-image'),
+                    auroraMap: document.getElementById('aurora-map')
+                }
+            };
+
+            // ==================== دوال مساعدة ====================
+            function getThresholdClass(value, thresholds) {
+                if (value < thresholds.low) return 'low';
+                if (value < thresholds.medium) return 'medium';
+                return 'high';
+            }
+
+            function updateGauge(elementId, value, maxValue, thresholdClass) {
+                const gauge = document.getElementById(elementId);
+                if (!gauge) return;
+                const percent = Math.min(100, (value / maxValue) * 100);
+                gauge.style.width = percent + '%';
+                gauge.className = 'gauge-fill ' + thresholdClass;
+            }
+
+            function updateValue(elementId, value, unit = '', thresholdClass = null) {
+                const el = document.getElementById(elementId);
+                if (!el) return;
                 
-                let countryName = 'Unknown';
-                let countryFlag = '🏳️';
+                el.classList.remove('loading', 'low', 'medium', 'high');
                 
-                if (place.includes(',')) {
-                    const parts = place.split(',').map(p => p.trim());
-                    countryName = parts[parts.length - 1];
-                    
-                    for (let [key, flag] of Object.entries(flags)) {
-                        if (countryName.includes(key) || place.includes(key)) {
-                            countryFlag = flag;
-                            break;
+                if (value !== null && value !== undefined) {
+                    el.textContent = value.toFixed(1) + (unit ? ' ' + unit : '');
+                    if (thresholdClass) {
+                        el.classList.add(thresholdClass);
+                    }
+                } else {
+                    el.textContent = '--';
+                }
+            }
+
+            function updateStatus(elementId, status) {
+                const el = document.getElementById(elementId);
+                if (!el) return;
+                
+                el.textContent = status;
+                el.className = 'status-badge';
+                if (status === 'Live') el.classList.add('live');
+                else if (status === 'Backup') el.classList.add('backup');
+                else if (status === 'Offline') el.classList.add('offline');
+            }
+
+            // ==================== دوال استخراج القيم ====================
+            function extractBzValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseFloat(apiData[apiData.length - 1][3]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractProtonValue(apiData) {
+                try {
+                    if (apiData && Array.isArray(apiData)) {
+                        return apiData[0]?.flux || null;
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractAuroraProbValue(apiData) {
+                try {
+                    if (apiData && apiData.probability) {
+                        return apiData.probability;
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractKpValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseFloat(apiData[apiData.length - 1][1]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractDstValue(apiData) {
+                try {
+                    if (typeof apiData === 'string') {
+                        const lines = apiData.split('\n');
+                        for (let line of lines) {
+                            if (line.includes('DST')) {
+                                const parts = line.split(/\s+/);
+                                return parseFloat(parts[parts.length - 1]);
+                            }
                         }
                     }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractIceValue(apiData) {
+                try {
+                    if (apiData && apiData.data && Array.isArray(apiData.data)) {
+                        return parseFloat(apiData.data[0]?.extent);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSeaLevelValue(apiData) {
+                try {
+                    if (apiData && apiData.data) {
+                        return apiData.data.global_average || null;
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractOceanHeatValue(apiData) {
+                try {
+                    if (apiData && apiData.heat_content) {
+                        return apiData.heat_content;
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractOceanTempValue(apiData) {
+                try {
+                    if (apiData && apiData.anomaly) {
+                        return apiData.anomaly;
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSurfaceTempValue(apiData) {
+                try {
+                    if (apiData && apiData.data) {
+                        return apiData.data[0]?.anomaly;
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractCo2Value(apiData) {
+                try {
+                    if (apiData && apiData.data && Array.isArray(apiData.data)) {
+                        return parseFloat(apiData.data[0]?.co2);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSunspotValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseInt(apiData[apiData.length - 1][1]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSolarFluxValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseFloat(apiData[apiData.length - 1][1]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSolarWindSpeedValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseFloat(apiData[apiData.length - 1][1]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSolarWindDensityValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseFloat(apiData[apiData.length - 1][2]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            function extractSolarWindTempValue(apiData) {
+                try {
+                    if (Array.isArray(apiData) && apiData.length > 0) {
+                        return parseFloat(apiData[apiData.length - 1][3]);
+                    }
+                    return null;
+                } catch { return null; }
+            }
+
+            // ==================== جلب البيانات من API ====================
+            async function fetchFromAPI(apiConfig) {
+                try {
+                    const response = await fetch(apiConfig.primary);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return { success: true, data: await response.json() };
+                    } else {
+                        return { success: true, data: await response.text() };
+                    }
+                } catch (error) {
+                    console.warn(`Primary API failed: ${apiConfig.primary}`);
+                    if (apiConfig.backup) {
+                        try {
+                            const response = await fetch(apiConfig.backup);
+                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                            
+                            const contentType = response.headers.get('content-type');
+                            if (contentType && contentType.includes('application/json')) {
+                                return { success: true, data: await response.json(), backup: true };
+                            } else {
+                                return { success: true, data: await response.text(), backup: true };
+                            }
+                        } catch (backupError) {
+                            return { success: false, error: backupError };
+                        }
+                    }
+                    return { success: false, error };
+                }
+            }
+
+            // ==================== تحديث مؤشر واحد ====================
+            async function updateIndicator(key, config) {
+                const result = await fetchFromAPI(config.api);
+                
+                if (result.success) {
+                    let value = null;
+                    
+                    // استخراج القيمة حسب المفتاح
+                    switch(key) {
+                        case 'bz': value = extractBzValue(result.data); break;
+                        case 'proton': value = extractProtonValue(result.data); break;
+                        case 'auroraProb': value = extractAuroraProbValue(result.data); break;
+                        case 'kp': value = extractKpValue(result.data); break;
+                        case 'dst': value = extractDstValue(result.data); break;
+                        case 'ice': value = extractIceValue(result.data); break;
+                        case 'seaLevel': value = extractSeaLevelValue(result.data); break;
+                        case 'oceanHeat': value = extractOceanHeatValue(result.data); break;
+                        case 'oceanTemp': value = extractOceanTempValue(result.data); break;
+                        case 'surfaceTemp': value = extractSurfaceTempValue(result.data); break;
+                        case 'co2': value = extractCo2Value(result.data); break;
+                        case 'sunspot': value = extractSunspotValue(result.data); break;
+                        case 'solarFlux': value = extractSolarFluxValue(result.data); break;
+                        case 'swSpeed': value = extractSolarWindSpeedValue(result.data); break;
+                        case 'swDensity': value = extractSolarWindDensityValue(result.data); break;
+                        case 'swTemp': value = extractSolarWindTempValue(result.data); break;
+                    }
+                    
+                    if (value !== null) {
+                        const thresholdClass = getThresholdClass(value, config.thresholds);
+                        updateValue(key + '-value', value, config.unit, thresholdClass);
+                        updateGauge(key + '-gauge', value, config.maxValue, thresholdClass);
+                        updateStatus(key + '-status', result.backup ? 'Backup' : 'Live');
+                    } else {
+                        updateValue(key + '-value', null);
+                        updateStatus(key + '-status', 'Offline');
+                    }
+                } else {
+                    updateValue(key + '-value', null);
+                    updateStatus(key + '-status', 'Offline');
+                }
+            }
+
+            // ==================== تحديث جميع المؤشرات ====================
+            async function updateAllIndicators() {
+                for (const [key, config] of Object.entries(indicators)) {
+                    updateIndicator(key, config);
                 }
                 
                 const now = new Date();
-                const diffMs = now - time;
-                const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-                const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-                
-                let magColor = '#4ade80';
-                if (mag >= 6) magColor = '#ef4444';
-                else if (mag >= 4.5) magColor = '#f97316';
-                
-                html += `
-                    <div class="quake-item" style="border-left-color: ${magColor};">
-                        <div class="quake-magnitude" style="color: ${magColor};">${mag.toFixed(1)}</div>
-                        <div class="quake-details">
-                            <div class="quake-location">
-                                ${countryFlag} ${place}
-                            </div>
-                            <div class="quake-meta">
-                                <span>${countryFlag} ${countryName}</span>
-                                <span>•</span>
-                                <span>⚡ ${diffHrs}h ${diffMins}m ago</span>
-                                <span>•</span>
-                                <span>📏 Depth ${depth.toFixed(1)} km</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById(`quake-list-${target}`).innerHTML = html;
-        }
+                if (elements.lastUpdate) {
+                    elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
+                }
+            }
 
-        document.addEventListener('click', function(e) {
-            if (e.target.id === 'show-more-btn' || e.target.closest('#show-more-btn')) {
-                document.getElementById('quake-list-limited').style.display = 'none';
-                document.getElementById('quake-list-full').style.display = 'block';
-                displayQuakes(allEarthquakes, 'full');
-                
-                document.getElementById('show-more-container').style.display = 'none';
-                document.getElementById('show-less-container').style.display = 'block';
-            }
-            
-            if (e.target.id === 'show-less-btn' || e.target.closest('#show-less-btn')) {
-                document.getElementById('quake-list-limited').style.display = 'block';
-                document.getElementById('quake-list-full').style.display = 'none';
-                
-                document.getElementById('show-more-container').style.display = 'block';
-                document.getElementById('show-less-container').style.display = 'none';
-            }
-        });
+            // ==================== تحميل الصور ====================
+            function loadImage(containerId, url) {
+                const container = elements.images[containerId];
+                if (!container) return;
 
-        window.downloadEarthquakeData = function(format) {
-            if (!allEarthquakes || allEarthquakes.length === 0) {
-                alert('No data available');
-                return;
+                // Skeleton placeholder
+                container.innerHTML = '<div class="image-skeleton">جاري تحميل الصورة...</div>';
+                
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    container.innerHTML = '';
+                    img.classList.add('image-loaded');
+                    container.appendChild(img);
+                };
+                img.onerror = () => {
+                    container.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
+                };
             }
-            
-            const dataForExport = allEarthquakes.map(quake => ({
-                time: new Date(quake.properties.time).toLocaleString(),
-                magnitude: quake.properties.mag || 0,
-                place: quake.properties.place || 'Unknown',
-                country: quake.properties.place?.split(',').pop()?.trim() || 'Unknown',
-                depth_km: quake.geometry.coordinates[2] || 0,
-                latitude: quake.geometry.coordinates[1],
-                longitude: quake.geometry.coordinates[0],
-                tsunami: quake.properties.tsunami === 1 ? 'Yes' : 'No',
-                alert: quake.properties.alert || 'None'
-            }));
-            
-            if (format === 'csv') {
-                const headers = ['Time', 'Magnitude', 'Location', 'Country', 'Depth (km)', 'Latitude', 'Longitude', 'Tsunami', 'Alert'];
-                const csvRows = [headers.join(',')];
-                
-                dataForExport.forEach(row => {
-                    const values = [
-                        `"${row.time}"`,
-                        row.magnitude,
-                        `"${row.place}"`,
-                        `"${row.country}"`,
-                        row.depth_km,
-                        row.latitude,
-                        row.longitude,
-                        `"${row.tsunami}"`,
-                        `"${row.alert}"`
-                    ];
-                    csvRows.push(values.join(','));
-                });
-                
-                const csvString = csvRows.join('\n');
-                const blob = new Blob([csvString], { type: 'text/csv' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `earthquakes_${new Date().toISOString().slice(0,10)}.csv`;
-                a.click();
-                
-            } else if (format === 'json') {
-                const jsonString = JSON.stringify(dataForExport, null, 2);
-                const blob = new Blob([jsonString], { type: 'application/json' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `earthquakes_${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
-            }
-        };
 
-        fetchEarthquakes();
-        setInterval(fetchEarthquakes, 300000);
+            function updateImages() {
+                loadImage('sdo', 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_4096_0171.jpg');
+                
+                // Earth image from EPIC API
+                fetch('https://epic.gsfc.nasa.gov/api/natural')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data[0]) {
+                            const date = data[0].date.split(' ')[0].replace(/-/g, '/');
+                            const imageUrl = `https://epic.gsfc.nasa.gov/archive/natural/${date}/png/${data[0].image}.png`;
+                            loadImage('earth', imageUrl);
+                        }
+                    })
+                    .catch(() => {
+                        const container = elements.images.earth;
+                        if (container) {
+                            container.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
+                        }
+                    });
+                
+                loadImage('auroraMap', 'https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg');
+            }
+
+            // ==================== بدء التشغيل ====================
+            function startObservatory() {
+                // تحديث فوري
+                updateAllIndicators();
+                updateImages();
+                
+                // تحديث المؤشرات كل 30 ثانية
+                setInterval(updateAllIndicators, 30000);
+                
+                // تحديث الصور كل 5 دقائق
+                setInterval(updateImages, 300000);
+                
+                // تحديث التوقيت كل ثانية
+                setInterval(() => {
+                    if (elements.timestamp) {
+                        elements.timestamp.textContent = new Date().toLocaleString('ar-SA');
+                    }
+                }, 1000);
+                
+                console.log('✅ المرصد الفلكي بدأ العمل');
+            }
+
+            // بدء التشغيل
+            startObservatory();
+        })();
     </script>
 </body>
 </html>
