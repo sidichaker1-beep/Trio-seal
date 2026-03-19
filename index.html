@@ -306,7 +306,7 @@
     <div class="container">
         <h1>
             🌌 TRIO SEAL · المرصد الفلكي الشامل
-            <span>v2.0.0</span>
+            <span>v3.0.0</span>
         </h1>
         <div class="subtitle">
             <span class="live-badge">⚡ رصد حي</span>
@@ -679,7 +679,7 @@
                 return { success: false, fallback: true };
             }
 
-            // ==================== دوال استخراج القيم (مبسطة) ====================
+            // ==================== دوال استخراج القيم (محدثة لجميع المؤشرات) ====================
             function extractValue(key, apiData) {
                 try {
                     switch(key) {
@@ -687,6 +687,29 @@
                         case 'proton': return apiData?.[0]?.flux;
                         case 'auroraProb': return apiData?.probability;
                         case 'kp': return apiData?.[apiData.length-1]?.[1];
+                        case 'dst': 
+                            if (typeof apiData === 'string') {
+                                const lines = apiData.split('\n');
+                                for (let line of lines) {
+                                    if (line.includes('DST')) {
+                                        const parts = line.split(/\s+/);
+                                        return parts[parts.length-1];
+                                    }
+                                }
+                            }
+                            return null;
+                        case 'ice': return apiData?.data?.[0]?.extent;
+                        case 'seaLevel': return apiData?.data?.global_average;
+                        case 'oceanHeat': return apiData?.heat_content;
+                        case 'oceanTemp': return apiData?.anomaly;
+                        case 'surfaceTemp': return apiData?.data?.[0]?.anomaly;
+                        case 'co2': 
+                            if (typeof apiData === 'string') {
+                                const lines = apiData.split('\n');
+                                const lastLine = lines[lines.length-1]?.split(',');
+                                return lastLine?.[1];
+                            }
+                            return null;
                         case 'sunspot': return apiData?.[apiData.length-1]?.[1];
                         case 'solarFlux': return apiData?.[apiData.length-1]?.[1];
                         case 'swSpeed': return apiData?.[apiData.length-1]?.[1];
@@ -741,12 +764,12 @@
                     value = extractValue(key, result.data);
                 }
                 
-                if (value === null) {
+                if (value === null || value === undefined) {
                     const fallback = generateFallbackData();
                     value = fallback[key];
                 }
                 
-                if (value !== null) {
+                if (value !== null && value !== undefined) {
                     const thresholdClass = getThresholdClass(parseFloat(value), config.thresholds);
                     updateValue(key + '-value', parseFloat(value), config.unit, thresholdClass);
                     updateGauge(key + '-gauge', parseFloat(value), config.maxValue, thresholdClass);
@@ -818,6 +841,7 @@
                         elements.timestamp.textContent = new Date().toLocaleString('ar-SA');
                     }
                 }, 1000);
+                console.log('✅ المرصد الفلكي بدأ العمل');
             }
 
             startObservatory();
