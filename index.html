@@ -47,6 +47,29 @@
             color: #334155;
         }
         
+        /* شريط الزمن الكوني */
+        #cosmic-time-bar {
+            background: #0f2b4f;
+            color: #fbbf24;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-around;
+            border-radius: 60px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border: 1px solid #fbbf24;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        #cosmic-time-bar span {
+            color: white;
+        }
+        
+        #cosmic-time-bar #utc-clock { color: #4ade80; }
+        #cosmic-time-bar #mecca-clock { color: #fbbf24; }
+        #cosmic-time-bar #julian-date { color: #94a3b8; }
+        
         .subtitle {
             color: #475569;
             margin-bottom: 2rem;
@@ -306,6 +329,15 @@
             🌌 TRIO SEAL · المرصد الفلكي الشامل
             <span>v3.0.0</span>
         </h1>
+
+        <!-- ===== شريط الزمن الكوني ===== -->
+        <div id="cosmic-time-bar">
+            <div>📅 <span id="current-date">--/--/----</span></div>
+            <div>🌐 UTC: <span id="utc-clock">00:00:00</span></div>
+            <div>🕋 مكة: <span id="mecca-clock">00:00:00</span></div>
+            <div>🔢 JD: <span id="julian-date">0000000.00</span></div>
+        </div>
+
         <div class="subtitle">
             <span class="live-badge">⚡ رصد حي</span>
             21 مؤشر + 3 صور · تحديث تلقائي
@@ -428,9 +460,33 @@
     <script>
         (function() {
             const PROXY = "https://cors-anywhere.herokuapp.com/";
-            const FALLBACK_VALUE = "0.0057"; // قيمة ميزان الملكوت الاحتياطية
+            const FALLBACK_VALUE = "0.0057";
 
-            // إعدادات المؤشرات
+            // ===== ساعة الزمن الكوني =====
+            function updateCosmicClock() {
+                const now = new Date();
+                
+                document.getElementById('current-date').innerText = now.toLocaleDateString('ar-SA', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                document.getElementById('utc-clock').innerText = 
+                    now.getUTCHours().toString().padStart(2, '0') + ":" + 
+                    now.getUTCMinutes().toString().padStart(2, '0') + ":" + 
+                    now.getUTCSeconds().toString().padStart(2, '0');
+
+                const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+                document.getElementById('mecca-clock').innerText = 
+                    meccaTime.getUTCHours().toString().padStart(2, '0') + ":" + 
+                    meccaTime.getUTCMinutes().toString().padStart(2, '0') + ":" + 
+                    meccaTime.getUTCSeconds().toString().padStart(2, '0');
+
+                const jd = (now.getTime() / 86400000) + 2440587.5;
+                document.getElementById('julian-date').innerText = jd.toFixed(2);
+            }
+            setInterval(updateCosmicClock, 1000);
+
+            // ===== إعدادات المؤشرات =====
             const indicators = {
                 bz: { api: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", thresholds: { low: 3, medium: 5, high: 8 }, unit: 'nT', maxValue: 10, category: 'aurora' },
                 proton: { api: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", thresholds: { low: 1, medium: 10, high: 100 }, unit: 'pfu', maxValue: 100, category: 'aurora' },
@@ -450,7 +506,7 @@
                 swTemp: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 100000, medium: 200000, high: 300000 }, unit: 'K', maxValue: 500000, category: 'solar', type: 'solar' }
             };
 
-            // عناصر HTML
+            // ===== عناصر HTML =====
             const elements = {
                 bz: { value: document.getElementById('bz-value'), status: document.getElementById('bz-status'), gauge: document.getElementById('bz-gauge') },
                 proton: { value: document.getElementById('proton-value'), status: document.getElementById('proton-status'), gauge: document.getElementById('proton-gauge') },
@@ -473,7 +529,7 @@
                 images: { sdo: document.getElementById('sdo-image'), earth: document.getElementById('earth-image'), auroraMap: document.getElementById('aurora-map') }
             };
 
-            // دالة معالجة CSV والنصوص
+            // ===== دوال مساعدة =====
             async function fetchSmartData(url, type) {
                 try {
                     const response = await fetch(PROXY + url);
@@ -509,7 +565,6 @@
                 }
             }
 
-            // دوال مساعدة
             function getThresholdClass(value, thresholds) {
                 if (value < thresholds.low) return 'low';
                 if (value < thresholds.medium) return 'medium';
@@ -544,7 +599,7 @@
                 else el.classList.add('offline');
             }
 
-            // تحديث مؤشر واحد
+            // ===== تحديث مؤشر واحد =====
             async function updateIndicator(key, config) {
                 let value = null;
                 let success = false;
@@ -553,7 +608,6 @@
                     value = await fetchSmartData(config.api, config.type);
                     success = (value !== FALLBACK_VALUE);
                     if (config.type === 'solar' && value !== FALLBACK_VALUE) {
-                        // تحديث سرعة وكثافة وحرارة الرياح الشمسية
                         updateValue('sw-speed-value', value.speed, 'km/s', getThresholdClass(value.speed, indicators.swSpeed.thresholds));
                         updateGauge('sw-speed-gauge', value.speed, indicators.swSpeed.maxValue, getThresholdClass(value.speed, indicators.swSpeed.thresholds));
                         updateStatus('sw-speed-status', 'Live');
@@ -598,7 +652,7 @@
                 }
             }
 
-            // تحديث الصور الحية
+            // ===== تحديث الصور الحية =====
             function updateLiveImages() {
                 const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
                 const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
@@ -627,10 +681,10 @@
                 });
             }
 
-            // تحديث جميع المؤشرات
+            // ===== تحديث جميع المؤشرات =====
             async function refreshAllIndicators() {
                 await Promise.all(Object.keys(indicators).map(key => {
-                    if (key === 'swSpeed' || key === 'swDensity' || key === 'swTemp') return; // تُحدث مع solar
+                    if (key === 'swSpeed' || key === 'swDensity' || key === 'swTemp') return;
                     return updateIndicator(key, indicators[key]);
                 }));
                 
@@ -639,7 +693,7 @@
                 if (elements.lastUpdate) elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
             }
 
-            // بدء التشغيل
+            // ===== بدء التشغيل =====
             function startObservatory() {
                 refreshAllIndicators();
                 updateLiveImages();
