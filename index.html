@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · المرصد الفلكي الشامل</title>
+    <title>TRIO SEAL · المرصد الكوني</title>
     <style>
         * {
             margin: 0;
@@ -62,10 +62,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
-        #cosmic-time-bar span {
-            color: white;
-        }
-        
+        #cosmic-time-bar span { color: white; }
         #cosmic-time-bar #utc-clock { color: #4ade80; }
         #cosmic-time-bar #mecca-clock { color: #fbbf24; }
         #cosmic-time-bar #julian-date { color: #94a3b8; }
@@ -76,6 +73,26 @@
             font-size: 1.1rem;
             border-right: 4px solid #f0b37b;
             padding-right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .about-btn {
+            background: #0f2b4f;
+            color: #fbbf24;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid #fbbf24;
+            transition: all 0.3s;
+        }
+        
+        .about-btn:hover {
+            background: #fbbf24;
+            color: #0f2b4f;
         }
         
         .section-title {
@@ -168,21 +185,8 @@
             transition: all 0.3s ease;
         }
         
-        .card-value.low {
-            color: #16a34a;
-            border-color: #16a34a;
-        }
-        
-        .card-value.medium {
-            color: #ca8a04;
-            border-color: #ca8a04;
-        }
-        
-        .card-value.high {
-            color: #dc2626;
-            border-color: #dc2626;
-        }
-        
+        .card-value.live { color: #4ade80; border-color: #4ade80; }
+        .card-value.mizan { color: #fbbf24; border-color: #fbbf24; font-weight: bold; }
         .card-value.loading {
             background: linear-gradient(90deg, white 25%, #f1f5f9 50%, white 75%);
             background-size: 200% 100%;
@@ -208,12 +212,11 @@
             height: 100%;
             width: 0%;
             border-radius: 10px;
-            transition: width 0.5s ease, background-color 0.3s ease;
+            transition: width 0.5s ease;
         }
         
-        .gauge-fill.low { background: #22c55e; }
-        .gauge-fill.medium { background: #facc15; }
-        .gauge-fill.high { background: #ef4444; }
+        .gauge-fill.live { background: #4ade80; }
+        .gauge-fill.mizan { background: #fbbf24; }
         
         .status {
             font-size: 0.8rem;
@@ -229,28 +232,23 @@
             background: #e2e8f0;
             color: #334155;
             font-size: 0.7rem;
-            transition: background-color 0.3s;
         }
         
-        .status-badge.live { background: #22c55e; color: white; }
-        .status-badge.backup { background: #f97316; color: white; }
+        .status-badge.live { background: #4ade80; color: white; }
+        .status-badge.mizan { background: #fbbf24; color: #0f2b4f; font-weight: bold; }
         .status-badge.offline { background: #94a3b8; color: white; }
         
-        .aurora .gauge-fill.low { background: #a855f7; }
-        .aurora .gauge-fill.medium { background: #d946ef; }
-        .aurora .gauge-fill.high { background: #ec4899; }
+        .aurora .gauge-fill.live { background: #a855f7; }
+        .aurora .gauge-fill.mizan { background: #fbbf24; }
         
-        .cryo .gauge-fill.low { background: #3b82f6; }
-        .cryo .gauge-fill.medium { background: #2563eb; }
-        .cryo .gauge-fill.high { background: #1d4ed8; }
+        .cryo .gauge-fill.live { background: #3b82f6; }
+        .cryo .gauge-fill.mizan { background: #fbbf24; }
         
-        .temp .gauge-fill.low { background: #22c55e; }
-        .temp .gauge-fill.medium { background: #eab308; }
-        .temp .gauge-fill.high { background: #ef4444; }
+        .temp .gauge-fill.live { background: #22c55e; }
+        .temp .gauge-fill.mizan { background: #fbbf24; }
         
-        .solar .gauge-fill.low { background: #fbbf24; }
-        .solar .gauge-fill.medium { background: #f59e0b; }
-        .solar .gauge-fill.high { background: #d97706; }
+        .solar .gauge-fill.live { background: #fbbf24; }
+        .solar .gauge-fill.mizan { background: #f59e0b; }
         
         .images-grid {
             display: grid;
@@ -286,12 +284,6 @@
             font-size: 1.2rem;
         }
         
-        .image-skeleton.error {
-            background: #fee2e2;
-            color: #dc2626;
-            animation: none;
-        }
-        
         .image-loaded {
             width: 100%;
             height: 200px;
@@ -310,7 +302,7 @@
         }
         
         .live-badge {
-            background: #22c55e;
+            background: #4ade80;
             color: white;
             padding: 0.2rem 0.8rem;
             border-radius: 20px;
@@ -318,7 +310,41 @@
             display: inline-block;
         }
         
+        .mizan-badge {
+            background: #fbbf24;
+            color: #0f2b4f;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
         .hash {
+            color: #334155;
+        }
+        
+        /* صفحة About (مخفية افتراضياً) */
+        .about-page {
+            display: none;
+            background: #f8fafc;
+            border-radius: 30px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 2px solid #fbbf24;
+        }
+        
+        .about-page.active {
+            display: block;
+        }
+        
+        .about-page h2 {
+            color: #0f2b4f;
+            margin-bottom: 1rem;
+        }
+        
+        .about-page p {
+            line-height: 1.8;
             color: #334155;
         }
     </style>
@@ -326,11 +352,11 @@
 <body>
     <div class="container">
         <h1>
-            🌌 TRIO SEAL · المرصد الفلكي الشامل
-            <span>v3.0.0</span>
+            🌌 TRIO SEAL · المرصد الكوني
+            <span>v7.3</span>
         </h1>
 
-        <!-- ===== شريط الزمن الكوني ===== -->
+        <!-- شريط الزمن الكوني -->
         <div id="cosmic-time-bar">
             <div>📅 <span id="current-date">--/--/----</span></div>
             <div>🌐 UTC: <span id="utc-clock">00:00:00</span></div>
@@ -340,33 +366,51 @@
 
         <div class="subtitle">
             <span class="live-badge">⚡ رصد حي</span>
-            21 مؤشر + 3 صور · تحديث تلقائي
+            <span class="mizan-badge">⚖️ ميزان الملكوت v7.3</span>
+            21 مؤشر · تحديث تلقائي
+            <a href="#" onclick="toggleAbout(); return false;" class="about-btn">📜 بيان المرصد</a>
+        </div>
+
+        <!-- صفحة About (مخفية) -->
+        <div id="about-page" class="about-page">
+            <h2>🌌 بيان المرصد الكوني TRIO SEAL</h2>
+            <p>بسم الله الرحمن الرحيم</p>
+            <p>هذا المرصد مبني على أسس بحث "ميزان الملكوت" (Mīzān al-Malakūt) في نسخته v7.3، الذي يربط الرنين الزلزالي بالنظام الشمسي-الأرضي-القمري. يعرض المرصد 21 مؤشراً حياً من مصادر عالمية (NOAA، NASA، NSIDC) معتمدة.</p>
+            <p>عند تعذر جلب البيانات الحية، تظهر قيم "الميزان" الذهبية المستمدة من البحث المنشور على Zenodo:</p>
+            <ul style="margin-right: 2rem; margin-top: 0.5rem;">
+                <li>DOI: 10.5281/zenodo.19076840</li>
+                <li>التردد الأساسي: ℱ₀ = 8,782,511,093 Hz</li>
+                <li>النقطة الحرجة 2027: RS = 0.0057</li>
+            </ul>
+            <p>المرصد معاير من قبل: Gemini · DeepSeek · GPT</p>
+            <p style="margin-top: 1rem;">شيكر هشام · Hicham Chigar</p>
+            <a href="#" onclick="toggleAbout(); return false;" style="display: inline-block; margin-top: 1rem; background: #0f2b4f; color: #fbbf24; padding: 0.5rem 1.5rem; border-radius: 30px; text-decoration: none;">🔽 العودة للمرصد</a>
         </div>
 
         <!-- ========== 1. الشفق القطبي والمجال المغناطيسي ========== -->
         <h2 class="section-title">🌌 1. الشفق القطبي والمجال المغناطيسي</h2>
         <div class="indicators-grid">
-            <div class="card aurora" data-tooltip="Bz: المركبة العمودية للمجال المغناطيسي بين الكواكب">
+            <div class="card aurora" data-tooltip="Bz: المركبة العمودية للمجال المغناطيسي">
                 <div class="card-header"><span class="card-title">🧲 Bz</span><span class="card-value loading" id="bz-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="bz-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="bz-status">Loading</span><span>nT</span></div>
             </div>
-            <div class="card aurora" data-tooltip="Proton Flux: تدفق البروتونات عالية الطاقة">
+            <div class="card aurora" data-tooltip="Proton Flux: تدفق البروتونات">
                 <div class="card-header"><span class="card-title">⚡ Proton</span><span class="card-value loading" id="proton-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="proton-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="proton-status">Loading</span><span>pfu</span></div>
             </div>
-            <div class="card aurora" data-tooltip="Aurora Probability: احتمال رؤية الشفق القطبي">
+            <div class="card aurora" data-tooltip="Aurora Probability: احتمال الشفق">
                 <div class="card-header"><span class="card-title">🌌 Aurora</span><span class="card-value loading" id="aurora-prob-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="aurora-prob-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="aurora-prob-status">Loading</span><span>%</span></div>
             </div>
-            <div class="card aurora" data-tooltip="Kp Index: مؤشر الاضطراب المغناطيسي العالمي">
+            <div class="card aurora" data-tooltip="Kp Index: الاضطراب المغناطيسي">
                 <div class="card-header"><span class="card-title">📊 Kp</span><span class="card-value loading" id="kp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="kp-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="kp-status">Loading</span><span>0-9</span></div>
             </div>
-            <div class="card aurora" data-tooltip="DST Index: مؤشر شدة العاصفة المغناطيسية">
+            <div class="card aurora" data-tooltip="DST Index: شدة العاصفة">
                 <div class="card-header"><span class="card-title">🧭 DST</span><span class="card-value loading" id="dst-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="dst-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="dst-status">Loading</span><span>nT</span></div>
@@ -376,22 +420,22 @@
         <!-- ========== 2. الجليد والمحيطات ========== -->
         <h2 class="section-title">🧊 2. الجليد والمحيطات</h2>
         <div class="indicators-grid">
-            <div class="card cryo" data-tooltip="Arctic Ice Extent: مساحة الجليد في القطب الشمالي">
+            <div class="card cryo" data-tooltip="Arctic Ice Extent: مساحة الجليد">
                 <div class="card-header"><span class="card-title">🧊 Ice</span><span class="card-value loading" id="ice-extent-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="ice-extent-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="ice-extent-status">Loading</span><span>M km²</span></div>
             </div>
-            <div class="card cryo" data-tooltip="Sea Level Rise: ارتفاع منسوب سطح البحر">
+            <div class="card cryo" data-tooltip="Sea Level Rise: ارتفاع البحر">
                 <div class="card-header"><span class="card-title">🌊 Sea Level</span><span class="card-value loading" id="sea-level-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="sea-level-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="sea-level-status">Loading</span><span>mm</span></div>
             </div>
-            <div class="card cryo" data-tooltip="Ocean Heat Content: المحتوى الحراري للمحيطات">
+            <div class="card cryo" data-tooltip="Ocean Heat Content: حرارة المحيطات">
                 <div class="card-header"><span class="card-title">🔥 Ocean Heat</span><span class="card-value loading" id="ocean-heat-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="ocean-heat-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="ocean-heat-status">Loading</span><span>10²² J</span></div>
             </div>
-            <div class="card cryo" data-tooltip="Ocean Temperature Anomaly: شذوذ درجة حرارة المحيطات">
+            <div class="card cryo" data-tooltip="Ocean Temperature Anomaly: شذوذ حرارة المحيطات">
                 <div class="card-header"><span class="card-title">🌡️ Ocean Temp</span><span class="card-value loading" id="ocean-temp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="ocean-temp-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="ocean-temp-status">Loading</span><span>°C</span></div>
@@ -401,7 +445,7 @@
         <!-- ========== 3. حرارة الأرض والغلاف الجوي ========== -->
         <h2 class="section-title">🌡️ 3. حرارة الأرض والغلاف الجوي</h2>
         <div class="indicators-grid">
-            <div class="card temp" data-tooltip="Surface Temperature Anomaly: شذوذ درجة حرارة سطح الأرض">
+            <div class="card temp" data-tooltip="Surface Temperature Anomaly: شذوذ حرارة السطح">
                 <div class="card-header"><span class="card-title">🌡️ Surface</span><span class="card-value loading" id="surface-temp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="surface-temp-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="surface-temp-status">Loading</span><span>°C</span></div>
@@ -421,7 +465,7 @@
                 <div class="gauge"><div class="gauge-fill" id="sunspot-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="sunspot-status">Loading</span><span>عدد</span></div>
             </div>
-            <div class="card solar" data-tooltip="Solar Flux (F10.7): التدفق الراديوي الشمسي">
+            <div class="card solar" data-tooltip="Solar Flux (F10.7): التدفق الراديوي">
                 <div class="card-header"><span class="card-title">📡 Solar Flux</span><span class="card-value loading" id="solar-flux-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="solar-flux-gauge"></div></div>
                 <div class="status"><span class="status-badge" id="solar-flux-status">Loading</span><span>sfu</span></div>
@@ -452,7 +496,7 @@
         </div>
 
         <div class="footer">
-            <span id="timestamp">جاري التحميل...</span> · 21 مؤشر حي · آخر تحديث: <span id="last-update">--</span>
+            <span id="timestamp">جاري التحميل...</span> · 21 مؤشر · آخر تحديث: <span id="last-update">--</span>
         </div>
         <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
     </div>
@@ -460,53 +504,28 @@
     <script>
         (function() {
             const PROXY = "https://cors-anywhere.herokuapp.com/";
-            const FALLBACK_VALUE = "0.0057";
-
-            // ===== ساعة الزمن الكوني =====
-            function updateCosmicClock() {
-                const now = new Date();
-                
-                document.getElementById('current-date').innerText = now.toLocaleDateString('ar-SA', {
-                    year: 'numeric', month: 'long', day: 'numeric'
-                });
-
-                document.getElementById('utc-clock').innerText = 
-                    now.getUTCHours().toString().padStart(2, '0') + ":" + 
-                    now.getUTCMinutes().toString().padStart(2, '0') + ":" + 
-                    now.getUTCSeconds().toString().padStart(2, '0');
-
-                const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
-                document.getElementById('mecca-clock').innerText = 
-                    meccaTime.getUTCHours().toString().padStart(2, '0') + ":" + 
-                    meccaTime.getUTCMinutes().toString().padStart(2, '0') + ":" + 
-                    meccaTime.getUTCSeconds().toString().padStart(2, '0');
-
-                const jd = (now.getTime() / 86400000) + 2440587.5;
-                document.getElementById('julian-date').innerText = jd.toFixed(2);
-            }
-            setInterval(updateCosmicClock, 1000);
-
-            // ===== إعدادات المؤشرات =====
-            const indicators = {
-                bz: { api: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", thresholds: { low: 3, medium: 5, high: 8 }, unit: 'nT', maxValue: 10, category: 'aurora' },
-                proton: { api: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", thresholds: { low: 1, medium: 10, high: 100 }, unit: 'pfu', maxValue: 100, category: 'aurora' },
-                auroraProb: { api: "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json", thresholds: { low: 30, medium: 60, high: 90 }, unit: '%', maxValue: 100, category: 'aurora', type: 'aurora' },
-                kp: { api: "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json", thresholds: { low: 3, medium: 5, high: 7 }, unit: '', maxValue: 9, category: 'aurora' },
-                dst: { api: "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst", thresholds: { low: -30, medium: -50, high: -100 }, unit: 'nT', maxValue: 100, category: 'aurora', type: 'text' },
-                iceExtent: { api: "https://nsidc.org/api/seaice/extent/north/latest.csv", thresholds: { low: 14, medium: 13, high: 12 }, unit: 'M km²', maxValue: 15, category: 'cryo', type: 'csv' },
-                seaLevel: { api: "https://climate.nasa.gov/system/internal_resources/details/original/2158_Global_Mean_Sea_Level_Trend.csv", thresholds: { low: 2, medium: 4, high: 6 }, unit: 'mm', maxValue: 10, category: 'cryo', type: 'csv' },
-                oceanHeat: { api: "https://www.ncei.noaa.gov/access/services/", thresholds: { low: 1, medium: 2, high: 3 }, unit: '10²² J', maxValue: 5, category: 'cryo' },
-                oceanTemp: { api: "https://www.ncei.noaa.gov/access/services/", thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'cryo' },
-                surfaceTemp: { api: "https://data.giss.nasa.gov/gistemp/", thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'temp' },
-                co2: { api: "https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv", thresholds: { low: 400, medium: 420, high: 440 }, unit: 'ppm', maxValue: 500, category: 'temp', type: 'csv' },
-                sunspot: { api: "https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json", thresholds: { low: 50, medium: 100, high: 150 }, unit: '', maxValue: 200, category: 'solar' },
-                solarFlux: { api: "https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json", thresholds: { low: 70, medium: 100, high: 130 }, unit: 'sfu', maxValue: 200, category: 'solar' },
-                swSpeed: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 400, medium: 600, high: 800 }, unit: 'km/s', maxValue: 1000, category: 'solar', type: 'solar' },
-                swDensity: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 5, medium: 10, high: 15 }, unit: 'p/cm³', maxValue: 20, category: 'solar', type: 'solar' },
-                swTemp: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 100000, medium: 200000, high: 300000 }, unit: 'K', maxValue: 500000, category: 'solar', type: 'solar' }
+            
+            // قيم الميزان الذهبية من بحث v7.3
+            const MIZAN = {
+                bz: "-1.2",
+                proton: "0.8",
+                auroraProb: "65",
+                kp: "3.3",
+                dst: "-27",
+                iceExtent: "14.20",
+                seaLevel: "3.40",
+                oceanHeat: "2.10",
+                oceanTemp: "0.80",
+                surfaceTemp: "1.20",
+                co2: "417.0",
+                sunspot: "78",
+                solarFlux: "125",
+                swSpeed: "420",
+                swDensity: "8.5",
+                swTemp: "120"
             };
 
-            // ===== عناصر HTML =====
+            // عناصر HTML
             const elements = {
                 bz: { value: document.getElementById('bz-value'), status: document.getElementById('bz-status'), gauge: document.getElementById('bz-gauge') },
                 proton: { value: document.getElementById('proton-value'), status: document.getElementById('proton-status'), gauge: document.getElementById('proton-gauge') },
@@ -529,130 +548,83 @@
                 images: { sdo: document.getElementById('sdo-image'), earth: document.getElementById('earth-image'), auroraMap: document.getElementById('aurora-map') }
             };
 
-            // ===== دوال مساعدة =====
-            async function fetchSmartData(url, type) {
+            // دالة التحديث الذكية مع Fallback
+            async function updateIndicator(key, url, type, unit = '') {
+                const element = elements[key]?.value;
+                const statusEl = elements[key]?.status;
+                const gaugeEl = elements[key]?.gauge;
+                
+                if (!element) return;
+                
                 try {
-                    const response = await fetch(PROXY + url);
-                    if (!response.ok) throw new Error("Network issues");
-                    const text = await response.text();
-
-                    switch(type) {
-                        case 'csv':
-                            const lines = text.trim().split('\n');
-                            const lastLine = lines[lines.length - 1].split(',');
-                            return parseFloat(lastLine[lastLine.length - 1]).toFixed(2);
-                        case 'aurora':
-                            const auroraData = JSON.parse(text);
-                            return auroraData.coordinates?.[0]?.[2] || 50;
-                        case 'solar':
-                            const solarData = JSON.parse(text);
-                            const latest = solarData[solarData.length - 1];
-                            return { speed: latest[1], density: latest[2], temp: latest[3] };
-                        case 'text':
-                            const dstLines = text.split('\n');
-                            for (let line of dstLines) {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
+                    
+                    const response = await fetch(PROXY + url, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        const data = await response.text();
+                        let value = null;
+                        
+                        // استخراج القيمة حسب النوع
+                        if (type === 'json') {
+                            const json = JSON.parse(data);
+                            if (key === 'bz') value = json?.[json.length-1]?.[3];
+                            else if (key === 'proton') value = json?.[0]?.flux;
+                            else if (key === 'kp') value = json?.[json.length-1]?.[1];
+                            else if (key === 'sunspot') value = json?.[json.length-1]?.[1];
+                            else if (key === 'solarFlux') value = json?.[json.length-1]?.[1];
+                            else if (key === 'auroraProb') value = json?.coordinates?.[0]?.[2];
+                        } else if (type === 'csv') {
+                            const lines = data.trim().split('\n');
+                            const lastLine = lines[lines.length-1].split(',');
+                            value = lastLine[lastLine.length-1];
+                        } else if (type === 'text' && key === 'dst') {
+                            const lines = data.split('\n');
+                            for (let line of lines) {
                                 if (line.includes('DST')) {
                                     const parts = line.split(/\s+/);
-                                    return parts[parts.length-1];
+                                    value = parts[parts.length-1];
+                                    break;
                                 }
                             }
-                            return FALLBACK_VALUE;
-                        default:
-                            return JSON.parse(text);
-                    }
-                } catch {
-                    return FALLBACK_VALUE;
-                }
-            }
-
-            function getThresholdClass(value, thresholds) {
-                if (value < thresholds.low) return 'low';
-                if (value < thresholds.medium) return 'medium';
-                return 'high';
-            }
-
-            function updateGauge(elementId, value, maxValue, thresholdClass) {
-                const gauge = document.getElementById(elementId);
-                if (gauge) {
-                    gauge.style.width = Math.min(100, (value / maxValue) * 100) + '%';
-                    gauge.className = 'gauge-fill ' + thresholdClass;
-                }
-            }
-
-            function updateValue(elementId, value, unit = '', thresholdClass = null) {
-                const el = document.getElementById(elementId);
-                if (!el) return;
-                el.classList.remove('loading', 'low', 'medium', 'high');
-                if (value !== null && value !== undefined) {
-                    el.textContent = parseFloat(value).toFixed(1) + (unit ? ' ' + unit : '');
-                    if (thresholdClass) el.classList.add(thresholdClass);
-                } else el.textContent = '--';
-            }
-
-            function updateStatus(elementId, status) {
-                const el = document.getElementById(elementId);
-                if (!el) return;
-                el.textContent = status;
-                el.className = 'status-badge';
-                if (status === 'Live') el.classList.add('live');
-                else if (status === 'Backup') el.classList.add('backup');
-                else el.classList.add('offline');
-            }
-
-            // ===== تحديث مؤشر واحد =====
-            async function updateIndicator(key, config) {
-                let value = null;
-                let success = false;
-
-                if (config.type === 'csv' || config.type === 'aurora' || config.type === 'solar' || config.type === 'text') {
-                    value = await fetchSmartData(config.api, config.type);
-                    success = (value !== FALLBACK_VALUE);
-                    if (config.type === 'solar' && value !== FALLBACK_VALUE) {
-                        updateValue('sw-speed-value', value.speed, 'km/s', getThresholdClass(value.speed, indicators.swSpeed.thresholds));
-                        updateGauge('sw-speed-gauge', value.speed, indicators.swSpeed.maxValue, getThresholdClass(value.speed, indicators.swSpeed.thresholds));
-                        updateStatus('sw-speed-status', 'Live');
-                        
-                        updateValue('sw-density-value', value.density, 'p/cm³', getThresholdClass(value.density, indicators.swDensity.thresholds));
-                        updateGauge('sw-density-gauge', value.density, indicators.swDensity.maxValue, getThresholdClass(value.density, indicators.swDensity.thresholds));
-                        updateStatus('sw-density-status', 'Live');
-                        
-                        updateValue('sw-temp-value', value.temp, 'K', getThresholdClass(value.temp, indicators.swTemp.thresholds));
-                        updateGauge('sw-temp-gauge', value.temp, indicators.swTemp.maxValue, getThresholdClass(value.temp, indicators.swTemp.thresholds));
-                        updateStatus('sw-temp-status', 'Live');
-                        return;
-                    }
-                } else {
-                    try {
-                        const response = await fetch(PROXY + config.api);
-                        if (response.ok) {
-                            const data = await response.json();
-                            switch(key) {
-                                case 'bz': value = data?.[data.length-1]?.[3]; break;
-                                case 'proton': value = data?.[0]?.flux; break;
-                                case 'kp': value = data?.[data.length-1]?.[1]; break;
-                                case 'sunspot': value = data?.[data.length-1]?.[1]; break;
-                                case 'solarFlux': value = data?.[data.length-1]?.[1]; break;
-                                default: value = null;
-                            }
-                            success = true;
                         }
-                    } catch { value = FALLBACK_VALUE; }
-                }
-
-                if (value === null || value === undefined) {
-                    value = FALLBACK_VALUE;
-                }
-
-                const numValue = parseFloat(value);
-                if (!isNaN(numValue)) {
-                    const thresholdClass = getThresholdClass(numValue, config.thresholds);
-                    updateValue(key + '-value', numValue, config.unit, thresholdClass);
-                    updateGauge(key + '-gauge', numValue, config.maxValue, thresholdClass);
-                    updateStatus(key + '-status', success ? 'Live' : 'Backup');
+                        
+                        if (value) {
+                            element.textContent = parseFloat(value).toFixed(1) + (unit ? ' ' + unit : '');
+                            element.className = 'card-value live';
+                            if (gaugeEl) {
+                                gaugeEl.className = 'gauge-fill live';
+                                gaugeEl.style.width = Math.min(100, parseFloat(value)) + '%';
+                            }
+                            if (statusEl) {
+                                statusEl.textContent = 'Live';
+                                statusEl.className = 'status-badge live';
+                            }
+                            return;
+                        }
+                    }
+                    throw new Error();
+                } catch {
+                    // استخدام قيمة الميزان الذهبية
+                    const mizanValue = MIZAN[key];
+                    if (mizanValue) {
+                        element.textContent = mizanValue + (unit ? ' ' + unit : '');
+                        element.className = 'card-value mizan';
+                        if (gaugeEl) {
+                            gaugeEl.className = 'gauge-fill mizan';
+                            gaugeEl.style.width = (parseFloat(mizanValue) / 100 * 100) + '%';
+                        }
+                        if (statusEl) {
+                            statusEl.textContent = 'MIZAN';
+                            statusEl.className = 'status-badge mizan';
+                        }
+                    }
                 }
             }
 
-            // ===== تحديث الصور الحية =====
+            // تحديث الصور الحية
             function updateLiveImages() {
                 const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
                 const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
@@ -681,28 +653,76 @@
                 });
             }
 
-            // ===== تحديث جميع المؤشرات =====
-            async function refreshAllIndicators() {
-                await Promise.all(Object.keys(indicators).map(key => {
-                    if (key === 'swSpeed' || key === 'swDensity' || key === 'swTemp') return;
-                    return updateIndicator(key, indicators[key]);
-                }));
+            // تحديث جميع المؤشرات
+            function refreshAllIndicators() {
+                // الشفق القطبي
+                updateIndicator('bz', 'https://services.swpc.noaa.gov/products/solar-wind/mag-field.json', 'json', 'nT');
+                updateIndicator('proton', 'https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json', 'json', 'pfu');
+                updateIndicator('auroraProb', 'https://services.swpc.noaa.gov/json/ovation_aurora_latest.json', 'json', '%');
+                updateIndicator('kp', 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json', 'json', '');
+                updateIndicator('dst', 'https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst', 'text', 'nT');
+                
+                // الجليد والمحيطات
+                updateIndicator('iceExtent', 'https://nsidc.org/api/seaice/extent/north/latest.csv', 'csv', 'M km²');
+                updateIndicator('seaLevel', 'https://climate.nasa.gov/system/internal_resources/details/original/2158_Global_Mean_Sea_Level_Trend.csv', 'csv', 'mm');
+                updateIndicator('oceanHeat', 'https://www.ncei.noaa.gov/access/services/', 'json', '10²² J');
+                updateIndicator('oceanTemp', 'https://www.ncei.noaa.gov/access/services/', 'json', '°C');
+                
+                // حرارة الأرض
+                updateIndicator('surfaceTemp', 'https://data.giss.nasa.gov/gistemp/', 'json', '°C');
+                updateIndicator('co2', 'https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv', 'csv', 'ppm');
+                
+                // النشاط الشمسي
+                updateIndicator('sunspot', 'https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json', 'json', '');
+                updateIndicator('solarFlux', 'https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json', 'json', 'sfu');
+                updateIndicator('swSpeed', 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', 'json', 'km/s');
+                updateIndicator('swDensity', 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', 'json', 'p/cm³');
+                updateIndicator('swTemp', 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', 'json', 'K');
                 
                 const now = new Date();
                 if (elements.timestamp) elements.timestamp.textContent = now.toLocaleString('ar-SA');
                 if (elements.lastUpdate) elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
             }
 
-            // ===== بدء التشغيل =====
+            // ساعة الزمن الكوني
+            function updateCosmicClock() {
+                const now = new Date();
+                document.getElementById('current-date').innerText = now.toLocaleDateString('ar-SA', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                document.getElementById('utc-clock').innerText = 
+                    now.getUTCHours().toString().padStart(2,'0') + ":" + 
+                    now.getUTCMinutes().toString().padStart(2,'0') + ":" + 
+                    now.getUTCSeconds().toString().padStart(2,'0');
+                const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+                document.getElementById('mecca-clock').innerText = 
+                    meccaTime.getUTCHours().toString().padStart(2,'0') + ":" + 
+                    meccaTime.getUTCMinutes().toString().padStart(2,'0') + ":" + 
+                    meccaTime.getUTCSeconds().toString().padStart(2,'0');
+                const jd = (now.getTime() / 86400000) + 2440587.5;
+                document.getElementById('julian-date').innerText = jd.toFixed(2);
+            }
+
+            // بدء التشغيل
             function startObservatory() {
+                updateCosmicClock();
+                setInterval(updateCosmicClock, 1000);
+                
                 refreshAllIndicators();
                 updateLiveImages();
+                
                 setInterval(refreshAllIndicators, 30000);
                 setInterval(updateLiveImages, 300000);
             }
 
             startObservatory();
         })();
+
+        // دالة إظهار/إخفاء صفحة About
+        function toggleAbout() {
+            const about = document.getElementById('about-page');
+            about.classList.toggle('active');
+        }
     </script>
 </body>
 </html>
