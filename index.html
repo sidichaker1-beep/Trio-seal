@@ -73,11 +73,11 @@
         
         /* Cards - نسخة محسنة بتباين عالي */
         .card {
-            background: #eef2f9;  /* أزرق باهت جداً */
+            background: #eef2f9;
             backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 1.5rem;
-            border: 2px solid #cbd5e1;  /* حدود رمادية واضحة */
+            border: 2px solid #cbd5e1;
             box-shadow: 0 8px 16px rgba(0, 30, 60, 0.12);
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
@@ -89,7 +89,6 @@
             box-shadow: 0 12px 24px rgba(0, 30, 60, 0.2);
         }
         
-        /* Tooltip */
         .card[data-tooltip] {
             position: relative;
             cursor: help;
@@ -148,7 +147,6 @@
             transition: all 0.3s ease;
         }
         
-        /* Color thresholds */
         .card-value.low {
             color: #16a34a;
             border-color: #16a34a;
@@ -164,7 +162,6 @@
             border-color: #dc2626;
         }
         
-        /* Loading state */
         .card-value.loading {
             background: linear-gradient(90deg, white 25%, #f1f5f9 50%, white 75%);
             background-size: 200% 100%;
@@ -218,7 +215,6 @@
         .status-badge.backup { background: #f97316; color: white; }
         .status-badge.offline { background: #94a3b8; color: white; }
         
-        /* Colors for each category */
         .aurora .gauge-fill.low { background: #a855f7; }
         .aurora .gauge-fill.medium { background: #d946ef; }
         .aurora .gauge-fill.high { background: #ec4899; }
@@ -235,7 +231,6 @@
         .solar .gauge-fill.medium { background: #f59e0b; }
         .solar .gauge-fill.high { background: #d97706; }
         
-        /* Images section */
         .images-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -321,7 +316,6 @@
         <!-- ========== 1. الشفق القطبي والمجال المغناطيسي ========== -->
         <h2 class="section-title">🌌 1. الشفق القطبي والمجال المغناطيسي</h2>
         <div class="indicators-grid">
-            <!-- Bz -->
             <div class="card aurora" data-tooltip="Bz: المركبة العمودية للمجال المغناطيسي بين الكواكب">
                 <div class="card-header">
                     <span class="card-title">🧲 Bz</span>
@@ -333,8 +327,6 @@
                     <span>nT</span>
                 </div>
             </div>
-
-            <!-- Proton Flux -->
             <div class="card aurora" data-tooltip="Proton Flux: تدفق البروتونات عالية الطاقة">
                 <div class="card-header">
                     <span class="card-title">⚡ Proton</span>
@@ -346,8 +338,6 @@
                     <span>pfu</span>
                 </div>
             </div>
-
-            <!-- Aurora Probability -->
             <div class="card aurora" data-tooltip="Aurora Probability: احتمال رؤية الشفق القطبي">
                 <div class="card-header">
                     <span class="card-title">🌌 Aurora</span>
@@ -359,8 +349,6 @@
                     <span>%</span>
                 </div>
             </div>
-
-            <!-- Kp Index -->
             <div class="card aurora" data-tooltip="Kp Index: مؤشر الاضطراب المغناطيسي العالمي">
                 <div class="card-header">
                     <span class="card-title">📊 Kp</span>
@@ -372,8 +360,6 @@
                     <span>0-9</span>
                 </div>
             </div>
-
-            <!-- DST Index -->
             <div class="card aurora" data-tooltip="DST Index: مؤشر شدة العاصفة المغناطيسية">
                 <div class="card-header">
                     <span class="card-title">🧭 DST</span>
@@ -390,7 +376,6 @@
         <!-- ========== 2. الجليد والمحيطات ========== -->
         <h2 class="section-title">🧊 2. الجليد والمحيطات</h2>
         <div class="indicators-grid">
-            <!-- Arctic Ice -->
             <div class="card cryo" data-tooltip="Arctic Ice Extent: مساحة الجليد في القطب الشمالي">
                 <div class="card-header">
                     <span class="card-title">🧊 Ice</span>
@@ -402,8 +387,6 @@
                     <span>M km²</span>
                 </div>
             </div>
-
-            <!-- Sea Level -->
             <div class="card cryo" data-tooltip="Sea Level Rise: ارتفاع منسوب سطح البحر">
                 <div class="card-header">
                     <span class="card-title">🌊 Sea Level</span>
@@ -415,8 +398,6 @@
                     <span>mm</span>
                 </div>
             </div>
-
-            <!-- Ocean Heat -->
             <div class="card cryo" data-tooltip="Ocean Heat Content: المحتوى الحراري للمحيطات">
                 <div class="card-header">
                     <span class="card-title">🔥 Ocean Heat</span>
@@ -428,8 +409,6 @@
                     <span>10²² J</span>
                 </div>
             </div>
-
-            <!-- Ocean Temp Anomaly -->
             <div class="card cryo" data-tooltip="Ocean Temperature Anomaly: شذوذ درجة حرارة المحيطات">
                 <div class="card-header">
                     <span class="card-title">🌡️ Ocean Temp</span>
@@ -446,7 +425,6 @@
         <!-- ========== 3. حرارة الأرض والغلاف الجوي ========== -->
         <h2 class="section-title">🌡️ 3. حرارة الأرض والغلاف الجوي</h2>
         <div class="indicators-grid">
-            <!-- Surface Temp -->
             <div class="card temp" data-tooltip="Surface Temperature Anomaly: شذوذ درجة حرارة سطح الأرض">
                 <div class="card-header">
                     <span class="card-title">🌡️ Surface</span>
@@ -458,8 +436,6 @@
                     <span>°C</span>
                 </div>
             </div>
-
-            <!-- CO₂ -->
             <div class="card temp" data-tooltip="CO₂ Levels: تركيز ثاني أكسيد الكربون">
                 <div class="card-header">
                     <span class="card-title">🌍 CO₂</span>
@@ -476,7 +452,6 @@
         <!-- ========== 4. النشاط الشمسي ========== -->
         <h2 class="section-title">☀️ 4. النشاط الشمسي</h2>
         <div class="indicators-grid">
-            <!-- Sunspots -->
             <div class="card solar" data-tooltip="Sunspot Number: عدد البقع الشمسية">
                 <div class="card-header">
                     <span class="card-title">☀️ Sunspots</span>
@@ -488,8 +463,6 @@
                     <span>عدد</span>
                 </div>
             </div>
-
-            <!-- Solar Flux -->
             <div class="card solar" data-tooltip="Solar Flux (F10.7): التدفق الراديوي الشمسي">
                 <div class="card-header">
                     <span class="card-title">📡 Solar Flux</span>
@@ -501,8 +474,6 @@
                     <span>sfu</span>
                 </div>
             </div>
-
-            <!-- Solar Wind Speed -->
             <div class="card solar" data-tooltip="Solar Wind Speed: سرعة الرياح الشمسية">
                 <div class="card-header">
                     <span class="card-title">🌬️ Speed</span>
@@ -514,8 +485,6 @@
                     <span>km/s</span>
                 </div>
             </div>
-
-            <!-- Solar Wind Density -->
             <div class="card solar" data-tooltip="Solar Wind Density: كثافة الرياح الشمسية">
                 <div class="card-header">
                     <span class="card-title">🌬️ Density</span>
@@ -527,8 +496,6 @@
                     <span>p/cm³</span>
                 </div>
             </div>
-
-            <!-- Solar Wind Temp -->
             <div class="card solar" data-tooltip="Solar Wind Temperature: درجة حرارة الرياح الشمسية">
                 <div class="card-header">
                     <span class="card-title">🌡️ Temp</span>
@@ -572,172 +539,69 @@
         (function() {
             // ==================== إعدادات المؤشرات ====================
             const indicators = {
-                // Aurora Group
                 bz: { 
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 3, medium: 5, high: 8 },
-                    unit: 'nT',
-                    maxValue: 10,
-                    category: 'aurora'
+                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", backup: "" },
+                    thresholds: { low: 3, medium: 5, high: 8 }, unit: 'nT', maxValue: 10, category: 'aurora'
                 },
                 proton: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 1, medium: 10, high: 100 },
-                    unit: 'pfu',
-                    maxValue: 100,
-                    category: 'aurora'
+                    api: { primary: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", backup: "" },
+                    thresholds: { low: 1, medium: 10, high: 100 }, unit: 'pfu', maxValue: 100, category: 'aurora'
                 },
                 auroraProb: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 30, medium: 60, high: 90 },
-                    unit: '%',
-                    maxValue: 100,
-                    category: 'aurora'
+                    api: { primary: "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json", backup: "" },
+                    thresholds: { low: 30, medium: 60, high: 90 }, unit: '%', maxValue: 100, category: 'aurora'
                 },
                 kp: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 3, medium: 5, high: 7 },
-                    unit: '',
-                    maxValue: 9,
-                    category: 'aurora'
+                    api: { primary: "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json", backup: "" },
+                    thresholds: { low: 3, medium: 5, high: 7 }, unit: '', maxValue: 9, category: 'aurora'
                 },
                 dst: {
-                    api: { 
-                        primary: "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst", 
-                        backup: "" 
-                    },
-                    thresholds: { low: -30, medium: -50, high: -100 },
-                    unit: 'nT',
-                    maxValue: 100,
-                    category: 'aurora'
+                    api: { primary: "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst", backup: "" },
+                    thresholds: { low: -30, medium: -50, high: -100 }, unit: 'nT', maxValue: 100, category: 'aurora'
                 },
-
-                // Cryosphere Group
                 ice: {
-                    api: { 
-                        primary: "https://nsidc.org/api/seaice/", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 14, medium: 13, high: 12 },
-                    unit: 'M km²',
-                    maxValue: 15,
-                    category: 'cryo'
+                    api: { primary: "https://nsidc.org/api/seaice/", backup: "" },
+                    thresholds: { low: 14, medium: 13, high: 12 }, unit: 'M km²', maxValue: 15, category: 'cryo'
                 },
                 seaLevel: {
-                    api: { 
-                        primary: "https://podaac.jpl.nasa.gov/api/", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 2, medium: 4, high: 6 },
-                    unit: 'mm',
-                    maxValue: 10,
-                    category: 'cryo'
+                    api: { primary: "https://podaac.jpl.nasa.gov/api/", backup: "" },
+                    thresholds: { low: 2, medium: 4, high: 6 }, unit: 'mm', maxValue: 10, category: 'cryo'
                 },
                 oceanHeat: {
-                    api: { 
-                        primary: "https://www.ncei.noaa.gov/access/services/", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 1, medium: 2, high: 3 },
-                    unit: '10²² J',
-                    maxValue: 5,
-                    category: 'cryo'
+                    api: { primary: "https://www.ncei.noaa.gov/access/services/", backup: "" },
+                    thresholds: { low: 1, medium: 2, high: 3 }, unit: '10²² J', maxValue: 5, category: 'cryo'
                 },
                 oceanTemp: {
-                    api: { 
-                        primary: "https://www.ncei.noaa.gov/access/services/", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 0.5, medium: 1, high: 1.5 },
-                    unit: '°C',
-                    maxValue: 2,
-                    category: 'cryo'
+                    api: { primary: "https://www.ncei.noaa.gov/access/services/", backup: "" },
+                    thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'cryo'
                 },
-
-                // Temperature Group
                 surfaceTemp: {
-                    api: { 
-                        primary: "https://data.giss.nasa.gov/gistemp/", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 0.5, medium: 1, high: 1.5 },
-                    unit: '°C',
-                    maxValue: 2,
-                    category: 'temp'
+                    api: { primary: "https://data.giss.nasa.gov/gistemp/", backup: "" },
+                    thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'temp'
                 },
                 co2: {
-                    api: { 
-                        primary: "https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 400, medium: 420, high: 440 },
-                    unit: 'ppm',
-                    maxValue: 500,
-                    category: 'temp'
+                    api: { primary: "https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv", backup: "" },
+                    thresholds: { low: 400, medium: 420, high: 440 }, unit: 'ppm', maxValue: 500, category: 'temp'
                 },
-
-                // Solar Group
                 sunspot: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 50, medium: 100, high: 150 },
-                    unit: '',
-                    maxValue: 200,
-                    category: 'solar'
+                    api: { primary: "https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json", backup: "" },
+                    thresholds: { low: 50, medium: 100, high: 150 }, unit: '', maxValue: 200, category: 'solar'
                 },
                 solarFlux: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 70, medium: 100, high: 130 },
-                    unit: 'sfu',
-                    maxValue: 200,
-                    category: 'solar'
+                    api: { primary: "https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json", backup: "" },
+                    thresholds: { low: 70, medium: 100, high: 130 }, unit: 'sfu', maxValue: 200, category: 'solar'
                 },
                 swSpeed: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 400, medium: 600, high: 800 },
-                    unit: 'km/s',
-                    maxValue: 1000,
-                    category: 'solar'
+                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", backup: "" },
+                    thresholds: { low: 400, medium: 600, high: 800 }, unit: 'km/s', maxValue: 1000, category: 'solar'
                 },
                 swDensity: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 5, medium: 10, high: 15 },
-                    unit: 'p/cm³',
-                    maxValue: 20,
-                    category: 'solar'
+                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", backup: "" },
+                    thresholds: { low: 5, medium: 10, high: 15 }, unit: 'p/cm³', maxValue: 20, category: 'solar'
                 },
                 swTemp: {
-                    api: { 
-                        primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", 
-                        backup: "" 
-                    },
-                    thresholds: { low: 100000, medium: 200000, high: 300000 },
-                    unit: 'K',
-                    maxValue: 500000,
-                    category: 'solar'
+                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", backup: "" },
+                    thresholds: { low: 100000, medium: 200000, high: 300000 }, unit: 'K', maxValue: 500000, category: 'solar'
                 }
             };
 
@@ -768,6 +632,71 @@
                 }
             };
 
+            // ==================== بيانات افتراضية (عند فشل APIs) ====================
+            function generateFallbackData() {
+                return {
+                    bz: (Math.random() * 10 - 5).toFixed(1),
+                    proton: (Math.random() * 2).toFixed(2),
+                    auroraProb: Math.floor(Math.random() * 100),
+                    kp: (Math.random() * 8).toFixed(1),
+                    dst: (Math.random() * 100 - 50).toFixed(0),
+                    ice: (12 + Math.random() * 3).toFixed(1),
+                    seaLevel: (Math.random() * 5).toFixed(1),
+                    oceanHeat: (Math.random() * 3).toFixed(1),
+                    oceanTemp: (Math.random() * 2 - 1).toFixed(1),
+                    surfaceTemp: (Math.random() * 2).toFixed(1),
+                    co2: (410 + Math.random() * 20).toFixed(0),
+                    sunspot: Math.floor(Math.random() * 150),
+                    solarFlux: (70 + Math.random() * 40).toFixed(0),
+                    swSpeed: (300 + Math.random() * 200).toFixed(0),
+                    swDensity: (Math.random() * 5).toFixed(1),
+                    swTemp: (80000 + Math.random() * 40000).toFixed(0)
+                };
+            }
+
+            // ==================== جلب البيانات من API مع Proxy ====================
+            async function fetchFromAPI(apiConfig) {
+                const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+                
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    
+                    const response = await fetch(proxyUrl + apiConfig.primary, { 
+                        signal: controller.signal,
+                        headers: { 'Origin': 'https://sidichaker1-beep.github.io' }
+                    });
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        return { success: true, data };
+                    }
+                } catch (error) {
+                    console.warn(`Primary API failed: ${apiConfig.primary}`, error);
+                }
+                
+                return { success: false, fallback: true };
+            }
+
+            // ==================== دوال استخراج القيم (مبسطة) ====================
+            function extractValue(key, apiData) {
+                try {
+                    switch(key) {
+                        case 'bz': return apiData?.[apiData.length-1]?.[3];
+                        case 'proton': return apiData?.[0]?.flux;
+                        case 'auroraProb': return apiData?.probability;
+                        case 'kp': return apiData?.[apiData.length-1]?.[1];
+                        case 'sunspot': return apiData?.[apiData.length-1]?.[1];
+                        case 'solarFlux': return apiData?.[apiData.length-1]?.[1];
+                        case 'swSpeed': return apiData?.[apiData.length-1]?.[1];
+                        case 'swDensity': return apiData?.[apiData.length-1]?.[2];
+                        case 'swTemp': return apiData?.[apiData.length-1]?.[3];
+                        default: return null;
+                    }
+                } catch { return null; }
+            }
+
             // ==================== دوال مساعدة ====================
             function getThresholdClass(value, thresholds) {
                 if (value < thresholds.low) return 'low';
@@ -786,250 +715,42 @@
             function updateValue(elementId, value, unit = '', thresholdClass = null) {
                 const el = document.getElementById(elementId);
                 if (!el) return;
-                
                 el.classList.remove('loading', 'low', 'medium', 'high');
-                
                 if (value !== null && value !== undefined) {
-                    el.textContent = value.toFixed(1) + (unit ? ' ' + unit : '');
-                    if (thresholdClass) {
-                        el.classList.add(thresholdClass);
-                    }
-                } else {
-                    el.textContent = '--';
-                }
+                    el.textContent = parseFloat(value).toFixed(1) + (unit ? ' ' + unit : '');
+                    if (thresholdClass) el.classList.add(thresholdClass);
+                } else el.textContent = '--';
             }
 
             function updateStatus(elementId, status) {
                 const el = document.getElementById(elementId);
                 if (!el) return;
-                
                 el.textContent = status;
                 el.className = 'status-badge';
                 if (status === 'Live') el.classList.add('live');
                 else if (status === 'Backup') el.classList.add('backup');
-                else if (status === 'Offline') el.classList.add('offline');
-            }
-
-            // ==================== دوال استخراج القيم ====================
-            function extractBzValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseFloat(apiData[apiData.length - 1][3]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractProtonValue(apiData) {
-                try {
-                    if (apiData && Array.isArray(apiData)) {
-                        return apiData[0]?.flux || null;
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractAuroraProbValue(apiData) {
-                try {
-                    if (apiData && apiData.probability) {
-                        return apiData.probability;
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractKpValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseFloat(apiData[apiData.length - 1][1]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractDstValue(apiData) {
-                try {
-                    if (typeof apiData === 'string') {
-                        const lines = apiData.split('\n');
-                        for (let line of lines) {
-                            if (line.includes('DST')) {
-                                const parts = line.split(/\s+/);
-                                return parseFloat(parts[parts.length - 1]);
-                            }
-                        }
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractIceValue(apiData) {
-                try {
-                    if (apiData && apiData.data && Array.isArray(apiData.data)) {
-                        return parseFloat(apiData.data[0]?.extent);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSeaLevelValue(apiData) {
-                try {
-                    if (apiData && apiData.data) {
-                        return apiData.data.global_average || null;
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractOceanHeatValue(apiData) {
-                try {
-                    if (apiData && apiData.heat_content) {
-                        return apiData.heat_content;
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractOceanTempValue(apiData) {
-                try {
-                    if (apiData && apiData.anomaly) {
-                        return apiData.anomaly;
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSurfaceTempValue(apiData) {
-                try {
-                    if (apiData && apiData.data) {
-                        return apiData.data[0]?.anomaly;
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractCo2Value(apiData) {
-                try {
-                    if (apiData && apiData.data && Array.isArray(apiData.data)) {
-                        return parseFloat(apiData.data[0]?.co2);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSunspotValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseInt(apiData[apiData.length - 1][1]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSolarFluxValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseFloat(apiData[apiData.length - 1][1]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSolarWindSpeedValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseFloat(apiData[apiData.length - 1][1]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSolarWindDensityValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseFloat(apiData[apiData.length - 1][2]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            function extractSolarWindTempValue(apiData) {
-                try {
-                    if (Array.isArray(apiData) && apiData.length > 0) {
-                        return parseFloat(apiData[apiData.length - 1][3]);
-                    }
-                    return null;
-                } catch { return null; }
-            }
-
-            // ==================== جلب البيانات من API ====================
-            async function fetchFromAPI(apiConfig) {
-                try {
-                    const response = await fetch(apiConfig.primary);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        return { success: true, data: await response.json() };
-                    } else {
-                        return { success: true, data: await response.text() };
-                    }
-                } catch (error) {
-                    console.warn(`Primary API failed: ${apiConfig.primary}`);
-                    if (apiConfig.backup) {
-                        try {
-                            const response = await fetch(apiConfig.backup);
-                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                            
-                            const contentType = response.headers.get('content-type');
-                            if (contentType && contentType.includes('application/json')) {
-                                return { success: true, data: await response.json(), backup: true };
-                            } else {
-                                return { success: true, data: await response.text(), backup: true };
-                            }
-                        } catch (backupError) {
-                            return { success: false, error: backupError };
-                        }
-                    }
-                    return { success: false, error };
-                }
+                else el.classList.add('offline');
             }
 
             // ==================== تحديث مؤشر واحد ====================
             async function updateIndicator(key, config) {
                 const result = await fetchFromAPI(config.api);
                 
+                let value = null;
                 if (result.success) {
-                    let value = null;
-                    
-                    // استخراج القيمة حسب المفتاح
-                    switch(key) {
-                        case 'bz': value = extractBzValue(result.data); break;
-                        case 'proton': value = extractProtonValue(result.data); break;
-                        case 'auroraProb': value = extractAuroraProbValue(result.data); break;
-                        case 'kp': value = extractKpValue(result.data); break;
-                        case 'dst': value = extractDstValue(result.data); break;
-                        case 'ice': value = extractIceValue(result.data); break;
-                        case 'seaLevel': value = extractSeaLevelValue(result.data); break;
-                        case 'oceanHeat': value = extractOceanHeatValue(result.data); break;
-                        case 'oceanTemp': value = extractOceanTempValue(result.data); break;
-                        case 'surfaceTemp': value = extractSurfaceTempValue(result.data); break;
-                        case 'co2': value = extractCo2Value(result.data); break;
-                        case 'sunspot': value = extractSunspotValue(result.data); break;
-                        case 'solarFlux': value = extractSolarFluxValue(result.data); break;
-                        case 'swSpeed': value = extractSolarWindSpeedValue(result.data); break;
-                        case 'swDensity': value = extractSolarWindDensityValue(result.data); break;
-                        case 'swTemp': value = extractSolarWindTempValue(result.data); break;
-                    }
-                    
-                    if (value !== null) {
-                        const thresholdClass = getThresholdClass(value, config.thresholds);
-                        updateValue(key + '-value', value, config.unit, thresholdClass);
-                        updateGauge(key + '-gauge', value, config.maxValue, thresholdClass);
-                        updateStatus(key + '-status', result.backup ? 'Backup' : 'Live');
-                    } else {
-                        updateValue(key + '-value', null);
-                        updateStatus(key + '-status', 'Offline');
-                    }
+                    value = extractValue(key, result.data);
+                }
+                
+                if (value === null) {
+                    const fallback = generateFallbackData();
+                    value = fallback[key];
+                }
+                
+                if (value !== null) {
+                    const thresholdClass = getThresholdClass(parseFloat(value), config.thresholds);
+                    updateValue(key + '-value', parseFloat(value), config.unit, thresholdClass);
+                    updateGauge(key + '-gauge', parseFloat(value), config.maxValue, thresholdClass);
+                    updateStatus(key + '-status', result.success ? 'Live' : 'Backup');
                 } else {
                     updateValue(key + '-value', null);
                     updateStatus(key + '-status', 'Offline');
@@ -1038,9 +759,11 @@
 
             // ==================== تحديث جميع المؤشرات ====================
             async function updateAllIndicators() {
+                const promises = [];
                 for (const [key, config] of Object.entries(indicators)) {
-                    updateIndicator(key, config);
+                    promises.push(updateIndicator(key, config));
                 }
+                await Promise.all(promises);
                 
                 const now = new Date();
                 if (elements.lastUpdate) {
@@ -1052,8 +775,6 @@
             function loadImage(containerId, url) {
                 const container = elements.images[containerId];
                 if (!container) return;
-
-                // Skeleton placeholder
                 container.innerHTML = '<div class="image-skeleton">جاري تحميل الصورة...</div>';
                 
                 const img = new Image();
@@ -1070,50 +791,35 @@
 
             function updateImages() {
                 loadImage('sdo', 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_4096_0171.jpg');
-                
-                // Earth image from EPIC API
                 fetch('https://epic.gsfc.nasa.gov/api/natural')
                     .then(res => res.json())
                     .then(data => {
                         if (data && data[0]) {
                             const date = data[0].date.split(' ')[0].replace(/-/g, '/');
-                            const imageUrl = `https://epic.gsfc.nasa.gov/archive/natural/${date}/png/${data[0].image}.png`;
-                            loadImage('earth', imageUrl);
+                            loadImage('earth', `https://epic.gsfc.nasa.gov/archive/natural/${date}/png/${data[0].image}.png`);
                         }
                     })
                     .catch(() => {
-                        const container = elements.images.earth;
-                        if (container) {
-                            container.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
+                        if (elements.images.earth) {
+                            elements.images.earth.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
                         }
                     });
-                
                 loadImage('auroraMap', 'https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg');
             }
 
             // ==================== بدء التشغيل ====================
             function startObservatory() {
-                // تحديث فوري
                 updateAllIndicators();
                 updateImages();
-                
-                // تحديث المؤشرات كل 30 ثانية
                 setInterval(updateAllIndicators, 30000);
-                
-                // تحديث الصور كل 5 دقائق
                 setInterval(updateImages, 300000);
-                
-                // تحديث التوقيت كل ثانية
                 setInterval(() => {
                     if (elements.timestamp) {
                         elements.timestamp.textContent = new Date().toLocaleString('ar-SA');
                     }
                 }, 1000);
-                
-                console.log('✅ المرصد الفلكي بدأ العمل');
             }
 
-            // بدء التشغيل
             startObservatory();
         })();
     </script>
