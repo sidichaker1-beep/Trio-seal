@@ -446,6 +446,68 @@
             color: #4ade80;
         }
         
+        /* Quick Links Menu */
+        .quick-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .quick-link {
+            background: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #334155;
+            font-size: 0.9rem;
+            border: 1px solid #cbd5e1;
+            transition: all 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: #fbbf24;
+            color: #0f2b4f;
+            transform: translateY(-2px);
+        }
+        
+        /* Source Cards */
+        .source-card {
+            background: #E3E9F2;
+            border: 1px solid #BDC7D4;
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .source-card:hover {
+            background: #D1D9E6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .source-card .value {
+            color: #1A5FB4;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .source-card .label {
+            font-size: 0.8rem;
+            color: #64748B;
+            text-transform: uppercase;
+        }
+        
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0 2rem;
+        }
+        
         /* Earthquake Section */
         .earthquake-section {
             background: #f8fafc;
@@ -608,6 +670,9 @@
             <span data-key="indicators">21 Indicators · Auto Update</span>
         </div>
 
+        <!-- Quick Links Menu -->
+        <div id="quick-links-container" class="quick-links"></div>
+
         <!-- Core Indicators (3) -->
         <div class="core-grid">
             <div class="core-card" data-tooltip="Taqābul: Angular alignment with Mecca">
@@ -661,6 +726,57 @@
                 <div><span id="moon-phase-name">New Moon</span> · <span class="moon-percent" id="moon-illumination">0%</span></div>
                 <div style="margin-top:0.5rem; color:#94a3b8;" id="moon-age">Age: 0 days</div>
             </div>
+        </div>
+
+        <!-- Gemini Source Cards -->
+        <h2 class="section-title">🔭 Live Sources (Click to open)</h2>
+        <div class="source-grid" id="source-grid">
+            <!-- Aurora Oval -->
+            <div class="source-card" id="aurora-oval-card">
+                <div class="value">🌌 Aurora Oval</div>
+                <div class="label">Click for 30-min forecast</div>
+            </div>
+            
+            <!-- Kp Index -->
+            <div class="source-card" id="kp-index-card">
+                <div class="value">📊 Kp Index</div>
+                <div class="label">Current geomagnetic activity</div>
+            </div>
+            
+            <!-- Coronal Holes -->
+            <div class="source-card" id="coronal-holes-card">
+                <div class="value">🕳️ Coronal Holes</div>
+                <div class="label">Solar wind sources</div>
+            </div>
+            
+            <!-- X-Ray Flux -->
+            <div class="source-card" id="xray-flux-card">
+                <div class="value">📡 X-Ray Flux</div>
+                <div class="label">GOES satellite data</div>
+            </div>
+            
+            <!-- CME Tracking -->
+            <div class="source-card" id="cme-tracking-card">
+                <div class="value">🌊 CME Tracking</div>
+                <div class="label">Coronal mass ejections</div>
+            </div>
+            
+            <!-- Far Side -->
+            <div class="source-card" id="farside-card">
+                <div class="value">🌞 Far Side</div>
+                <div class="label">Hidden sun activity</div>
+            </div>
+            
+            <!-- Daily Solar Image -->
+            <div class="source-card" id="daily-solar-card">
+                <div class="value">🖼️ Daily Solar</div>
+                <div class="label">Today's sun image</div>
+            </div>
+        </div>
+
+        <!-- Daily Solar Image Container -->
+        <div id="daily-solar-img" class="image-card" style="margin: 1rem 0;">
+            <h3>☀️ Today's Sun</h3>
         </div>
 
         <!-- Aurora & Magnetosphere -->
@@ -1420,6 +1536,70 @@
             }
         }
 
+        // ========================================== //
+        // TRIO SEAL - LIVE SOURCES ENGINE v7.3
+        // ========================================== //
+
+        // 1. دالة تحديث بيانات المصادر الخارجية (Dynamic Data Mapping)
+        function updateLiveSourceLinks() {
+            const sourceLinks = {
+                'aurora-oval-card': 'https://solarham.com/oval.htm',
+                'kp-index-card': 'https://solarham.com/kp.htm',
+                'coronal-holes-card': 'https://solarham.com/coronalholes.htm',
+                'xray-flux-card': 'https://www.swpc.noaa.gov/products/goes-x-ray-flux',
+                'cme-tracking-card': 'https://solarham.com/cmetracking.htm',
+                'farside-card': 'https://solarham.com/farside.htm',
+                'daily-solar-card': 'https://solarham.com/pictures/2026/mar18_2026_e.jpg'
+            };
+
+            for (const [id, url] of Object.entries(sourceLinks)) {
+                const card = document.getElementById(id);
+                if (card) {
+                    card.style.cursor = 'pointer';
+                    card.title = "Click to open live source";
+                    card.onclick = function() {
+                        window.open(url, '_blank');
+                    };
+                }
+            }
+        }
+
+        // 2. دالة جلب صورة الشمس اليومية (Daily Solar Image Fetcher)
+        function updateDailySolarImage() {
+            const solarImgContainer = document.getElementById('daily-solar-img');
+            const solarUrl = "https://solarham.com/pictures/2026/mar18_2026_e.jpg";
+            if (solarImgContainer) {
+                const img = new Image();
+                img.src = solarUrl + "?t=" + Date.now();
+                img.className = "image-loaded";
+                img.style.width = "100%";
+                img.onload = () => {
+                    solarImgContainer.innerHTML = '';
+                    solarImgContainer.appendChild(img);
+                };
+                img.onerror = () => {
+                    solarImgContainer.innerHTML = '<div class="image-skeleton error">Failed to load solar image</div>';
+                };
+            }
+        }
+
+        // 3. دالة دمج الروابط في القائمة الجانبية أو شريط الأدوات (Quick Access)
+        function createQuickLinksMenu() {
+            const menuContainer = document.getElementById('quick-links-container');
+            const links = [
+                { name: "🌌 Aurora Oval", url: "https://solarham.com/oval.htm" },
+                { name: "📡 X-Ray Flux", url: "https://www.swpc.noaa.gov/products/goes-x-ray-flux" },
+                { name: "🌊 CME News", url: "https://solarham.com/cmetracking.htm" },
+                { name: "🕳️ Coronal Holes", url: "https://solarham.com/coronalholes.htm" },
+                { name: "🌞 Far Side", url: "https://solarham.com/farside.htm" }
+            ];
+            if (menuContainer) {
+                menuContainer.innerHTML = links.map(link => 
+                    `<a href="${link.url}" target="_blank" class="quick-link">${link.name}</a>`
+                ).join('');
+            }
+        }
+
         // Start everything
         function startObservatory() {
             updateCosmicTime();
@@ -1432,6 +1612,9 @@
             fetchSunspotDetails();
             fetchHistoricalEvents();
             updateNewsTicker();
+            updateLiveSourceLinks();
+            updateDailySolarImage();
+            createQuickLinksMenu();
             
             setInterval(updateCosmicTime, 1000);
             setInterval(updateMoonPhase, 60000);
@@ -1443,6 +1626,7 @@
             setInterval(fetchSunspotDetails, 3600000);
             setInterval(fetchHistoricalEvents, 86400000);
             setInterval(updateNewsTicker, 60000);
+            setInterval(updateDailySolarImage, 3600000);
         }
 
         startObservatory();
