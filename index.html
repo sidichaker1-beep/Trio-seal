@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · المرصد الكوني</title>
+    <title>TRIO SEAL · Cosmic Observatory</title>
     <style>
         * {
             margin: 0;
@@ -28,26 +28,80 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
+        /* ===== Navigation Bar ===== */
+        .navbar {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-radius: 60px;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
             color: #0f2b4f;
         }
         
-        h1 span {
-            background: #e2e8f0;
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-size: 1rem;
-            color: #334155;
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
         }
         
-        /* شريط الزمن الكوني */
+        .nav-links a {
+            color: #334155;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: #fbbf24;
+        }
+        
+        .language-selector {
+            position: relative;
+        }
+        
+        .lang-btn {
+            background: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .lang-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 100;
+            min-width: 150px;
+        }
+        
+        .lang-option {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .lang-option:hover {
+            background: #fbbf24;
+            color: #0f2b4f;
+        }
+        
+        /* ===== Cosmic Time Bar ===== */
         #cosmic-time-bar {
             background: #0f2b4f;
             color: #fbbf24;
@@ -59,28 +113,85 @@
             font-family: 'Courier New', monospace;
             font-weight: bold;
             border: 1px solid #fbbf24;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             flex-wrap: wrap;
             gap: 10px;
         }
         
         #cosmic-time-bar span { color: white; }
-        #cosmic-time-bar #utc-clock { color: #4ade80; }
-        #cosmic-time-bar #mecca-clock { color: #fbbf24; }
-        #cosmic-time-bar #hijri-date { color: #94a3b8; }
+        #cosmic-time-bar .utc-clock { color: #4ade80; }
+        #cosmic-time-bar .mecca-clock { color: #fbbf24; }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: #0f2b4f;
+        }
         
         .subtitle {
             color: #475569;
             margin-bottom: 2rem;
             font-size: 1.1rem;
-            border-right: 4px solid #f0b37b;
-            padding-right: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
+            border-left: 4px solid #f0b37b;
+            padding-left: 1rem;
         }
         
+        /* ===== Core Indicators (3) ===== */
+        .core-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .core-card {
+            background: #0f2b4f;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .core-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .core-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            background: rgba(255,255,255,0.1);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+        }
+        
+        .core-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+        }
+        
+        .core-gauge {
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .core-gauge-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        /* ===== Indicators Grid ===== */
         .section-title {
             color: #0f2b4f;
             font-size: 1.8rem;
@@ -98,19 +209,16 @@
         
         .card {
             background: #eef2f9;
-            backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 1.5rem;
             border: 2px solid #cbd5e1;
-            box-shadow: 0 8px 16px rgba(0, 30, 60, 0.12);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+            transition: transform 0.2s;
             position: relative;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            border-color: #94a3b8;
-            box-shadow: 0 12px 24px rgba(0, 30, 60, 0.2);
         }
         
         .card[data-tooltip] {
@@ -134,7 +242,6 @@
             pointer-events: none;
             transition: opacity 0.2s;
             z-index: 10;
-            border: 1px solid #475569;
         }
         
         .card[data-tooltip]:hover:before {
@@ -168,23 +275,10 @@
             border: 2px solid #cbd5e1;
             min-width: 80px;
             text-align: center;
-            transition: all 0.3s ease;
         }
         
         .card-value.live { color: #4ade80; border-color: #4ade80; }
         .card-value.mizan { color: #fbbf24; border-color: #fbbf24; font-weight: bold; }
-        .card-value.loading {
-            background: linear-gradient(90deg, white 25%, #f1f5f9 50%, white 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            color: transparent;
-            border-color: #cbd5e1;
-        }
-        
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
         
         .gauge {
             height: 8px;
@@ -222,17 +316,14 @@
         
         .status-badge.live { background: #4ade80; color: white; }
         .status-badge.mizan { background: #fbbf24; color: #0f2b4f; font-weight: bold; }
-        .status-badge.offline { background: #94a3b8; color: white; }
         
+        /* Category colors */
         .aurora .gauge-fill.live { background: #a855f7; }
-        .aurora .gauge-fill.mizan { background: #fbbf24; }
         .cryo .gauge-fill.live { background: #3b82f6; }
-        .cryo .gauge-fill.mizan { background: #fbbf24; }
         .temp .gauge-fill.live { background: #22c55e; }
-        .temp .gauge-fill.mizan { background: #fbbf24; }
         .solar .gauge-fill.live { background: #fbbf24; }
-        .solar .gauge-fill.mizan { background: #f59e0b; }
         
+        /* Images */
         .images-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -250,7 +341,6 @@
         .image-card h3 {
             color: #0f2b4f;
             margin-bottom: 1rem;
-            font-size: 1.2rem;
         }
         
         .image-skeleton {
@@ -264,7 +354,6 @@
             align-items: center;
             justify-content: center;
             color: #64748b;
-            font-size: 1.2rem;
         }
         
         .image-loaded {
@@ -275,11 +364,15 @@
             display: block;
         }
         
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
         .footer {
             margin-top: 3rem;
             text-align: center;
             color: #64748b;
-            font-size: 0.9rem;
             padding: 1rem;
             border-top: 1px solid #e2e8f0;
         }
@@ -302,136 +395,115 @@
             display: inline-block;
             font-weight: bold;
         }
-        
-        .hash {
-            color: #334155;
-        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Navigation Bar with Language Selector -->
+        <nav class="navbar">
+            <div class="logo">🌌 TRIO SEAL</div>
+            <ul class="nav-links">
+                <li><a href="#" data-key="home">Home</a></li>
+                <li><a href="#" data-key="observatory">Observatory</a></li>
+                <li><a href="#" data-key="research">Research</a></li>
+                <li><a href="#" data-key="about">About</a></li>
+            </ul>
+            <div class="language-selector">
+                <button class="lang-btn" onclick="toggleLanguageMenu()">
+                    🌐 <span data-key="language">English</span> <span style="font-size:0.8rem;">▼</span>
+                </button>
+                <div id="language-menu" class="lang-menu">
+                    <div class="lang-option" onclick="setLanguage('en')">🇬🇧 English</div>
+                    <div class="lang-option" onclick="setLanguage('ar')">🇸🇦 العربية</div>
+                    <div class="lang-option" onclick="setLanguage('fr')">🇫🇷 Français</div>
+                    <div class="lang-option" onclick="setLanguage('es')">🇪🇸 Español</div>
+                    <div class="lang-option" onclick="setLanguage('zh')">🇨🇳 中文</div>
+                    <div class="lang-option" onclick="setLanguage('hi')">🇮🇳 हिन्दी</div>
+                    <div class="lang-option" onclick="setLanguage('ru')">🇷🇺 Русский</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Cosmic Time Bar -->
+        <div id="cosmic-time-bar">
+            <div>📅 <span id="gregorian-date">--</span> · <span id="hijri-date">--</span></div>
+            <div>🌐 UTC: <span class="utc-clock" id="utc-clock">00:00:00</span></div>
+            <div>🕋 Mecca: <span class="mecca-clock" id="mecca-clock">00:00:00</span></div>
+        </div>
+
         <h1>
-            🌌 TRIO SEAL · المرصد الكوني
-            <span>v7.3</span>
+            TRIO SEAL · Cosmic Observatory
+            <span style="font-size:1rem; background:#e2e8f0; padding:0.3rem 1rem; border-radius:40px;">v7.3</span>
         </h1>
 
-        <!-- شريط الزمن الكوني (محدث مع التاريخ الهجري) -->
-        <div id="cosmic-time-bar">
-            <div>📅 <span id="gregorian-date">--/--/----</span></div>
-            <div>🕋 <span id="hijri-date">--</span></div>
-            <div>🌐 UTC: <span id="utc-clock">00:00:00</span></div>
-            <div>🕋 مكة: <span id="mecca-clock">00:00:00</span></div>
-        </div>
-
         <div class="subtitle">
-            <span class="live-badge">⚡ رصد حي</span>
-            <span class="mizan-badge">⚖️ ميزان الملكوت v7.3</span>
-            21 مؤشر · تحديث تلقائي
+            <span class="live-badge">⚡ Live</span>
+            <span class="mizan-badge">⚖️ Mizan al-Malakut v7.3</span>
+            <span data-key="indicators">21 Indicators · Auto Update</span>
         </div>
 
-        <!-- ========== المؤشرات الثلاثة الأساسية (سنضيفها لاحقاً) ========== -->
-        <!-- ========== 1. الشفق القطبي والمجال المغناطيسي ========== -->
-        <h2 class="section-title">🌌 1. الشفق القطبي والمجال المغناطيسي</h2>
-        <div class="indicators-grid">
-            <div class="card aurora" data-tooltip="Bz: المركبة العمودية للمجال المغناطيسي">
-                <div class="card-header"><span class="card-title">🧲 Bz</span><span class="card-value loading" id="bz-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="bz-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="bz-status">Loading</span><span>nT</span></div>
+        <!-- Core Indicators (3) -->
+        <div class="core-grid">
+            <!-- Taqābul -->
+            <div class="core-card" style="border-color: #fbbf24;" data-tooltip="Taqābul: Angular alignment with Mecca">
+                <div class="core-header">
+                    <span class="core-title" style="color:#fbbf24;">🕋 Taqābul</span>
+                    <span class="core-value" id="taqabul-value" style="color:#fbbf24; border-color:#fbbf24;">--°</span>
+                </div>
+                <div class="core-gauge"><div class="core-gauge-fill" id="taqabul-gauge" style="background:#fbbf24; width:0%"></div></div>
+                <div class="status">
+                    <span class="status-badge mizan">MIZAN</span>
+                    <span data-key="absolute-angle">Absolute Angle</span>
+                </div>
             </div>
-            <div class="card aurora" data-tooltip="Proton Flux: تدفق البروتونات">
-                <div class="card-header"><span class="card-title">⚡ Proton</span><span class="card-value loading" id="proton-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="proton-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="proton-status">Loading</span><span>pfu</span></div>
-            </div>
-            <div class="card aurora" data-tooltip="Aurora Probability: احتمال الشفق">
-                <div class="card-header"><span class="card-title">🌌 Aurora</span><span class="card-value loading" id="aurora-prob-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="aurora-prob-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="aurora-prob-status">Loading</span><span>%</span></div>
-            </div>
-            <div class="card aurora" data-tooltip="Kp Index: الاضطراب المغناطيسي">
-                <div class="card-header"><span class="card-title">📊 Kp</span><span class="card-value loading" id="kp-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="kp-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="kp-status">Loading</span><span>0-9</span></div>
-            </div>
-            <div class="card aurora" data-tooltip="DST Index: شدة العاصفة">
-                <div class="card-header"><span class="card-title">🧭 DST</span><span class="card-value loading" id="dst-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="dst-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="dst-status">Loading</span><span>nT</span></div>
-            </div>
-        </div>
 
-        <!-- ========== 2. الجليد والمحيطات ========== -->
-        <h2 class="section-title">🧊 2. الجليد والمحيطات</h2>
-        <div class="indicators-grid">
-            <div class="card cryo" data-tooltip="Arctic Ice Extent: مساحة الجليد">
-                <div class="card-header"><span class="card-title">🧊 Ice</span><span class="card-value loading" id="ice-extent-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="ice-extent-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="ice-extent-status">Loading</span><span>M km²</span></div>
+            <!-- Closure -->
+            <div class="core-card" style="border-color: #4ade80;" data-tooltip="Closure: Seismic cycle index (RS)">
+                <div class="core-header">
+                    <span class="core-title" style="color:#4ade80;">🌀 Closure</span>
+                    <span class="core-value" id="closure-value" style="color:#4ade80; border-color:#4ade80;">--</span>
+                </div>
+                <div class="core-gauge"><div class="core-gauge-fill" id="closure-gauge" style="background:#4ade80; width:0%"></div></div>
+                <div class="status">
+                    <span class="status-badge mizan">MIZAN</span>
+                    <span>RS</span>
+                </div>
             </div>
-            <div class="card cryo" data-tooltip="Sea Level Rise: ارتفاع البحر">
-                <div class="card-header"><span class="card-title">🌊 Sea Level</span><span class="card-value loading" id="sea-level-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="sea-level-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="sea-level-status">Loading</span><span>mm</span></div>
-            </div>
-            <div class="card cryo" data-tooltip="Ocean Heat Content: حرارة المحيطات">
-                <div class="card-header"><span class="card-title">🔥 Ocean Heat</span><span class="card-value loading" id="ocean-heat-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="ocean-heat-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="ocean-heat-status">Loading</span><span>10²² J</span></div>
-            </div>
-            <div class="card cryo" data-tooltip="Ocean Temperature Anomaly: شذوذ حرارة المحيطات">
-                <div class="card-header"><span class="card-title">🌡️ Ocean Temp</span><span class="card-value loading" id="ocean-temp-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="ocean-temp-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="ocean-temp-status">Loading</span><span>°C</span></div>
+
+            <!-- Balance -->
+            <div class="core-card" style="border-color: #a855f7;" data-tooltip="Balance: Stability index (α_stab = 7.850)">
+                <div class="core-header">
+                    <span class="core-title" style="color:#a855f7;">⚖️ Balance</span>
+                    <span class="core-value" id="balance-value" style="color:#a855f7; border-color:#a855f7;">--</span>
+                </div>
+                <div class="core-gauge"><div class="core-gauge-fill" id="balance-gauge" style="background:#a855f7; width:0%"></div></div>
+                <div class="status">
+                    <span class="status-badge mizan">MIZAN</span>
+                    <span>α_stab</span>
+                </div>
             </div>
         </div>
 
-        <!-- ========== 3. حرارة الأرض والغلاف الجوي ========== -->
-        <h2 class="section-title">🌡️ 3. حرارة الأرض والغلاف الجوي</h2>
-        <div class="indicators-grid">
-            <div class="card temp" data-tooltip="Surface Temperature Anomaly: شذوذ حرارة السطح">
-                <div class="card-header"><span class="card-title">🌡️ Surface</span><span class="card-value loading" id="surface-temp-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="surface-temp-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="surface-temp-status">Loading</span><span>°C</span></div>
-            </div>
-            <div class="card temp" data-tooltip="CO₂ Levels: تركيز ثاني أكسيد الكربون">
-                <div class="card-header"><span class="card-title">🌍 CO₂</span><span class="card-value loading" id="co2-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="co2-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="co2-status">Loading</span><span>ppm</span></div>
-            </div>
+        <!-- ===== 1. Aurora & Magnetosphere ===== -->
+        <h2 class="section-title" data-key="aurora-title">🌌 1. Aurora & Magnetosphere</h2>
+        <div class="indicators-grid" id="aurora-grid">
+            <!-- Will be populated by JS -->
         </div>
 
-        <!-- ========== 4. النشاط الشمسي ========== -->
-        <h2 class="section-title">☀️ 4. النشاط الشمسي</h2>
-        <div class="indicators-grid">
-            <div class="card solar" data-tooltip="Sunspot Number: عدد البقع الشمسية">
-                <div class="card-header"><span class="card-title">☀️ Sunspots</span><span class="card-value loading" id="sunspot-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="sunspot-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="sunspot-status">Loading</span><span>عدد</span></div>
-            </div>
-            <div class="card solar" data-tooltip="Solar Flux (F10.7): التدفق الراديوي">
-                <div class="card-header"><span class="card-title">📡 Solar Flux</span><span class="card-value loading" id="solar-flux-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="solar-flux-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="solar-flux-status">Loading</span><span>sfu</span></div>
-            </div>
-            <div class="card solar" data-tooltip="Solar Wind Speed: سرعة الرياح الشمسية">
-                <div class="card-header"><span class="card-title">🌬️ Speed</span><span class="card-value loading" id="sw-speed-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="sw-speed-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="sw-speed-status">Loading</span><span>km/s</span></div>
-            </div>
-            <div class="card solar" data-tooltip="Solar Wind Density: كثافة الرياح الشمسية">
-                <div class="card-header"><span class="card-title">🌬️ Density</span><span class="card-value loading" id="sw-density-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="sw-density-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="sw-density-status">Loading</span><span>p/cm³</span></div>
-            </div>
-            <div class="card solar" data-tooltip="Solar Wind Temperature: درجة حرارة الرياح الشمسية">
-                <div class="card-header"><span class="card-title">🌡️ Temp</span><span class="card-value loading" id="sw-temp-value">--</span></div>
-                <div class="gauge"><div class="gauge-fill" id="sw-temp-gauge"></div></div>
-                <div class="status"><span class="status-badge" id="sw-temp-status">Loading</span><span>K</span></div>
-            </div>
-        </div>
+        <!-- ===== 2. Cryosphere & Oceans ===== -->
+        <h2 class="section-title" data-key="cryo-title">🧊 2. Cryosphere & Oceans</h2>
+        <div class="indicators-grid" id="cryo-grid"></div>
 
-        <!-- ========== 5. الصور الحية ========== -->
-        <h2 class="section-title">🛰️ 5. الصور الحية</h2>
+        <!-- ===== 3. Temperature & Atmosphere ===== -->
+        <h2 class="section-title" data-key="temp-title">🌡️ 3. Temperature & Atmosphere</h2>
+        <div class="indicators-grid" id="temp-grid"></div>
+
+        <!-- ===== 4. Solar Activity ===== -->
+        <h2 class="section-title" data-key="solar-title">☀️ 4. Solar Activity</h2>
+        <div class="indicators-grid" id="solar-grid"></div>
+
+        <!-- ===== 5. Live Images ===== -->
+        <h2 class="section-title" data-key="images-title">🛰️ 5. Live Images</h2>
         <div class="images-grid">
             <div class="image-card"><h3>☀️ SDO Solar</h3><div id="sdo-image"></div></div>
             <div class="image-card"><h3>🌍 Earth</h3><div id="earth-image"></div></div>
@@ -439,299 +511,472 @@
         </div>
 
         <div class="footer">
-            <span id="timestamp">جاري التحميل...</span> · 21 مؤشر · آخر تحديث: <span id="last-update">--</span>
+            <span id="timestamp">Loading...</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
         </div>
-        <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
         <div style="text-align: center; margin-top: 1rem; color: #0f2b4f;">Hicham Chigar · هشام شيكر</div>
     </div>
 
     <script>
-        (function() {
-            const PROXY = "https://cors-anywhere.herokuapp.com/";
+        // ==================== TRANSLATION SYSTEM ====================
+        const translations = {
+            en: {
+                home: "Home",
+                observatory: "Observatory",
+                research: "Research",
+                about: "About",
+                language: "English",
+                indicators: "21 Indicators · Auto Update",
+                "aurora-title": "🌌 1. Aurora & Magnetosphere",
+                "cryo-title": "🧊 2. Cryosphere & Oceans",
+                "temp-title": "🌡️ 3. Temperature & Atmosphere",
+                "solar-title": "☀️ 4. Solar Activity",
+                "images-title": "🛰️ 5. Live Images",
+                "absolute-angle": "Absolute Angle",
+                "last-update": "Last update"
+            },
+            ar: {
+                home: "الرئيسية",
+                observatory: "المرصد",
+                research: "البحث",
+                about: "عن المشروع",
+                language: "العربية",
+                indicators: "٢١ مؤشر · تحديث تلقائي",
+                "aurora-title": "🌌 ١. الشفق القطبي والمجال المغناطيسي",
+                "cryo-title": "🧊 ٢. الجليد والمحيطات",
+                "temp-title": "🌡️ ٣. حرارة الأرض والغلاف الجوي",
+                "solar-title": "☀️ ٤. النشاط الشمسي",
+                "images-title": "🛰️ ٥. الصور الحية",
+                "absolute-angle": "زاوية مطلقة",
+                "last-update": "آخر تحديث"
+            },
+            fr: {
+                home: "Accueil",
+                observatory: "Observatoire",
+                research: "Recherche",
+                about: "À propos",
+                language: "Français",
+                indicators: "21 indicateurs · Mise à jour auto",
+                "aurora-title": "🌌 1. Aurore et Magnétosphère",
+                "cryo-title": "🧊 2. Cryosphère et Océans",
+                "temp-title": "🌡️ 3. Température et Atmosphère",
+                "solar-title": "☀️ 4. Activité Solaire",
+                "images-title": "🛰️ 5. Images en direct",
+                "absolute-angle": "Angle absolu",
+                "last-update": "Dernière mise à jour"
+            },
+            es: {
+                home: "Inicio",
+                observatory: "Observatorio",
+                research: "Investigación",
+                about: "Acerca de",
+                language: "Español",
+                indicators: "21 indicadores · Auto actualización",
+                "aurora-title": "🌌 1. Aurora y Magnetosfera",
+                "cryo-title": "🧊 2. Criósfera y Océanos",
+                "temp-title": "🌡️ 3. Temperatura y Atmósfera",
+                "solar-title": "☀️ 4. Actividad Solar",
+                "images-title": "🛰️ 5. Imágenes en vivo",
+                "absolute-angle": "Ángulo absoluto",
+                "last-update": "Última actualización"
+            },
+            zh: {
+                home: "首页",
+                observatory: "天文台",
+                research: "研究",
+                about: "关于",
+                language: "中文",
+                indicators: "21个指标 · 自动更新",
+                "aurora-title": "🌌 1. 极光和磁层",
+                "cryo-title": "🧊 2. 冰冻圈和海洋",
+                "temp-title": "🌡️ 3. 温度和大气",
+                "solar-title": "☀️ 4. 太阳活动",
+                "images-title": "🛰️ 5. 实时图像",
+                "absolute-angle": "绝对角度",
+                "last-update": "最后更新"
+            },
+            hi: {
+                home: "होम",
+                observatory: "वेधशाला",
+                research: "शोध",
+                about: "परिचय",
+                language: "हिन्दी",
+                indicators: "21 संकेतक · स्वचालित अद्यतन",
+                "aurora-title": "🌌 1. औरोरा और मैग्नेटोस्फीयर",
+                "cryo-title": "🧊 2. क्रायोस्फीयर और महासागर",
+                "temp-title": "🌡️ 3. तापमान और वायुमंडल",
+                "solar-title": "☀️ 4. सौर गतिविधि",
+                "images-title": "🛰️ 5. लाइव छवियाँ",
+                "absolute-angle": "निरपेक्ष कोण",
+                "last-update": "अंतिम अद्यतन"
+            },
+            ru: {
+                home: "Главная",
+                observatory: "Обсерватория",
+                research: "Исследования",
+                about: "О проекте",
+                language: "Русский",
+                indicators: "21 индикатор · Автообновление",
+                "aurora-title": "🌌 1. Полярное сияние и магнитосфера",
+                "cryo-title": "🧊 2. Криосфера и океаны",
+                "temp-title": "🌡️ 3. Температура и атмосфера",
+                "solar-title": "☀️ 4. Солнечная активность",
+                "images-title": "🛰️ 5. Прямые изображения",
+                "absolute-angle": "Абсолютный угол",
+                "last-update": "Последнее обновление"
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function toggleLanguageMenu() {
+            const menu = document.getElementById('language-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('language-menu');
+            const btn = document.querySelector('.lang-btn');
+            if (!btn.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
             
-            // قيم الميزان الذهبية من بحث v7.3
-            const MIZAN = {
-                bz: "-1.2",
-                proton: "0.8",
-                auroraProb: "65",
-                kp: "3.3",
-                dst: "-27",
-                iceExtent: "14.20",
-                seaLevel: "3.40",
-                oceanHeat: "2.10",
-                oceanTemp: "0.80",
-                surfaceTemp: "1.20",
-                co2: "417.0",
-                sunspot: "78",
-                solarFlux: "125",
-                swSpeed: "420",
-                swDensity: "8.5",
-                swTemp: "120"
-            };
-
-            // عناصر HTML
-            const elements = {
-                bz: { value: document.getElementById('bz-value'), status: document.getElementById('bz-status'), gauge: document.getElementById('bz-gauge') },
-                proton: { value: document.getElementById('proton-value'), status: document.getElementById('proton-status'), gauge: document.getElementById('proton-gauge') },
-                auroraProb: { value: document.getElementById('aurora-prob-value'), status: document.getElementById('aurora-prob-status'), gauge: document.getElementById('aurora-prob-gauge') },
-                kp: { value: document.getElementById('kp-value'), status: document.getElementById('kp-status'), gauge: document.getElementById('kp-gauge') },
-                dst: { value: document.getElementById('dst-value'), status: document.getElementById('dst-status'), gauge: document.getElementById('dst-gauge') },
-                iceExtent: { value: document.getElementById('ice-extent-value'), status: document.getElementById('ice-extent-status'), gauge: document.getElementById('ice-extent-gauge') },
-                seaLevel: { value: document.getElementById('sea-level-value'), status: document.getElementById('sea-level-status'), gauge: document.getElementById('sea-level-gauge') },
-                oceanHeat: { value: document.getElementById('ocean-heat-value'), status: document.getElementById('ocean-heat-status'), gauge: document.getElementById('ocean-heat-gauge') },
-                oceanTemp: { value: document.getElementById('ocean-temp-value'), status: document.getElementById('ocean-temp-status'), gauge: document.getElementById('ocean-temp-gauge') },
-                surfaceTemp: { value: document.getElementById('surface-temp-value'), status: document.getElementById('surface-temp-status'), gauge: document.getElementById('surface-temp-gauge') },
-                co2: { value: document.getElementById('co2-value'), status: document.getElementById('co2-status'), gauge: document.getElementById('co2-gauge') },
-                sunspot: { value: document.getElementById('sunspot-value'), status: document.getElementById('sunspot-status'), gauge: document.getElementById('sunspot-gauge') },
-                solarFlux: { value: document.getElementById('solar-flux-value'), status: document.getElementById('solar-flux-status'), gauge: document.getElementById('solar-flux-gauge') },
-                swSpeed: { value: document.getElementById('sw-speed-value'), status: document.getElementById('sw-speed-status'), gauge: document.getElementById('sw-speed-gauge') },
-                swDensity: { value: document.getElementById('sw-density-value'), status: document.getElementById('sw-density-status'), gauge: document.getElementById('sw-density-gauge') },
-                swTemp: { value: document.getElementById('sw-temp-value'), status: document.getElementById('sw-temp-status'), gauge: document.getElementById('sw-temp-gauge') },
-                timestamp: document.getElementById('timestamp'),
-                lastUpdate: document.getElementById('last-update'),
-                images: { sdo: document.getElementById('sdo-image'), earth: document.getElementById('earth-image'), auroraMap: document.getElementById('aurora-map') }
-            };
-
-            // دالة التحديث الذكية مع Fallback
-            async function updateIndicator(key, url, type, unit = '') {
-                const element = elements[key]?.value;
-                const statusEl = elements[key]?.status;
-                const gaugeEl = elements[key]?.gauge;
-                
-                if (!element) return;
-                
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 3000);
-                    
-                    const response = await fetch(PROXY + url, { signal: controller.signal });
-                    clearTimeout(timeoutId);
-                    
-                    if (response.ok) {
-                        const data = await response.text();
-                        let value = null;
-                        
-                        if (type === 'json') {
-                            const json = JSON.parse(data);
-                            if (key === 'bz') value = json?.[json.length-1]?.[3];
-                            else if (key === 'proton') value = json?.[0]?.flux;
-                            else if (key === 'kp') value = json?.[json.length-1]?.[1];
-                            else if (key === 'sunspot') value = json?.[json.length-1]?.[1];
-                            else if (key === 'solarFlux') value = json?.[json.length-1]?.[1];
-                            else if (key === 'auroraProb') value = json?.coordinates?.[0]?.[2];
-                            else if (key === 'swSpeed' || key === 'swDensity' || key === 'swTemp') {
-                                const solarData = json;
-                                if (key === 'swSpeed') value = solarData?.[solarData.length-1]?.[1];
-                                if (key === 'swDensity') value = solarData?.[solarData.length-1]?.[2];
-                                if (key === 'swTemp') value = solarData?.[solarData.length-1]?.[3];
-                            }
-                        } else if (type === 'csv') {
-                            const lines = data.trim().split('\n');
-                            const lastLine = lines[lines.length-1].split(',');
-                            value = lastLine[lastLine.length-1];
-                        } else if (type === 'text' && key === 'dst') {
-                            const lines = data.split('\n');
-                            for (let line of lines) {
-                                if (line.includes('DST')) {
-                                    const parts = line.split(/\s+/);
-                                    value = parts[parts.length-1];
-                                    break;
-                                }
-                            }
-                        }
-                        
-                        if (value && !isNaN(parseFloat(value))) {
-                            element.textContent = parseFloat(value).toFixed(1) + (unit ? ' ' + unit : '');
-                            element.className = 'card-value live';
-                            if (gaugeEl) {
-                                gaugeEl.className = 'gauge-fill live';
-                                gaugeEl.style.width = Math.min(100, parseFloat(value)) + '%';
-                            }
-                            if (statusEl) {
-                                statusEl.textContent = 'Live';
-                                statusEl.className = 'status-badge live';
-                            }
-                            return;
-                        }
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+            
+            // Update numbers to Arabic numerals when Arabic is selected
+            if (lang === 'ar') {
+                document.querySelectorAll('.card-value, .core-value, .status-badge').forEach(el => {
+                    if (el.innerText && !el.innerText.includes('--')) {
+                        el.innerText = el.innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
                     }
-                    throw new Error();
-                } catch {
-                    const mizanValue = MIZAN[key];
-                    if (mizanValue) {
-                        element.textContent = mizanValue + (unit ? ' ' + unit : '');
-                        element.className = 'card-value mizan';
-                        if (gaugeEl) {
-                            gaugeEl.className = 'gauge-fill mizan';
-                            gaugeEl.style.width = (parseFloat(mizanValue) / 100 * 100) + '%';
-                        }
-                        if (statusEl) {
-                            statusEl.textContent = 'MIZAN';
-                            statusEl.className = 'status-badge mizan';
-                        }
-                    }
-                }
-            }
-
-            // تحديث الصور الحية (نسخة محسّنة)
-            function updateLiveImages() {
-                // 1. صورة الشمس (SDO)
-                const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
-                
-                // 2. خريطة الشفق القطبي
-                const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
-                
-                // 3. صورة الأرض - نحاول اليوم، فإن فشل جربنا أمس
-                const today = new Date();
-                const yesterday = new Date(today);
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
-                const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
-
-                // تحميل صورة الشمس
-                const sdoContainer = elements.images.sdo;
-                if (sdoContainer) {
-                    sdoContainer.innerHTML = '<div class="image-skeleton">جاري تحميل الشمس...</div>';
-                    const sdoImg = new Image();
-                    sdoImg.src = sdoUrl + "?t=" + Date.now();
-                    sdoImg.onload = () => {
-                        sdoContainer.innerHTML = '';
-                        sdoImg.classList.add('image-loaded');
-                        sdoContainer.appendChild(sdoImg);
-                    };
-                    sdoImg.onerror = () => {
-                        sdoContainer.innerHTML = '<div class="image-skeleton error">الشمس غير متوفرة</div>';
-                    };
-                }
-
-                // تحميل خريطة الشفق
-                const auroraContainer = elements.images.auroraMap;
-                if (auroraContainer) {
-                    auroraContainer.innerHTML = '<div class="image-skeleton">جاري تحميل خريطة الشفق...</div>';
-                    const auroraImg = new Image();
-                    auroraImg.src = auroraUrl + "?t=" + Date.now();
-                    auroraImg.onload = () => {
-                        auroraContainer.innerHTML = '';
-                        auroraImg.classList.add('image-loaded');
-                        auroraContainer.appendChild(auroraImg);
-                    };
-                    auroraImg.onerror = () => {
-                        auroraContainer.innerHTML = '<div class="image-skeleton error">الشفق غير متوفر</div>';
-                    };
-                }
-
-                // تحميل صورة الأرض
-                const earthContainer = elements.images.earth;
-                if (earthContainer) {
-                    earthContainer.innerHTML = '<div class="image-skeleton">جاري تحميل الأرض...</div>';
-                    const earthImg = new Image();
-                    earthImg.src = earthUrl + "?t=" + Date.now();
-                    earthImg.onload = () => {
-                        earthContainer.innerHTML = '';
-                        earthImg.classList.add('image-loaded');
-                        earthContainer.appendChild(earthImg);
-                    };
-                    earthImg.onerror = () => {
-                        // جرب تاريخ أمس
-                        const yesterdayYear = yesterday.getFullYear();
-                        const yesterdayMonth = String(yesterday.getMonth() + 1).padStart(2, '0');
-                        const yesterdayDay = String(yesterday.getDate()).padStart(2, '0');
-                        const yesterdayUrl = `https://epic.gsfc.nasa.gov/archive/natural/${yesterdayYear}/${yesterdayMonth}/${yesterdayDay}/png/epic_1b_${yesterdayYear}${yesterdayMonth}${yesterdayDay}000000.png`;
-                        
-                        const fallbackImg = new Image();
-                        fallbackImg.src = yesterdayUrl + "?t=" + Date.now();
-                        fallbackImg.onload = () => {
-                            earthContainer.innerHTML = '';
-                            fallbackImg.classList.add('image-loaded');
-                            earthContainer.appendChild(fallbackImg);
-                        };
-                        fallbackImg.onerror = () => {
-                            earthContainer.innerHTML = '<div class="image-skeleton error">الأرض غير متوفرة</div>';
-                        };
-                    };
-                }
-            }
-
-            // تحديث جميع المؤشرات
-            function refreshAllIndicators() {
-                // الشفق القطبي
-                updateIndicator('bz', 'https://services.swpc.noaa.gov/products/solar-wind/mag-field.json', 'json', 'nT');
-                updateIndicator('proton', 'https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json', 'json', 'pfu');
-                updateIndicator('auroraProb', 'https://services.swpc.noaa.gov/json/ovation_aurora_latest.json', 'json', '%');
-                updateIndicator('kp', 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json', 'json', '');
-                updateIndicator('dst', 'https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst', 'text', 'nT');
-                
-                // الجليد والمحيطات
-                updateIndicator('iceExtent', 'https://nsidc.org/api/seaice/extent/north/latest.csv', 'csv', 'M km²');
-                updateIndicator('seaLevel', 'https://climate.nasa.gov/system/internal_resources/details/original/2158_Global_Mean_Sea_Level_Trend.csv', 'csv', 'mm');
-                updateIndicator('oceanHeat', 'https://www.ncei.noaa.gov/access/services/', 'json', '10²² J');
-                updateIndicator('oceanTemp', 'https://www.ncei.noaa.gov/access/services/', 'json', '°C');
-                
-                // حرارة الأرض
-                updateIndicator('surfaceTemp', 'https://data.giss.nasa.gov/gistemp/', 'json', '°C');
-                updateIndicator('co2', 'https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv', 'csv', 'ppm');
-                
-                // النشاط الشمسي
-                updateIndicator('sunspot', 'https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json', 'json', '');
-                updateIndicator('solarFlux', 'https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json', 'json', 'sfu');
-                updateIndicator('swSpeed', 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', 'json', 'km/s');
-                updateIndicator('swDensity', 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', 'json', 'p/cm³');
-                updateIndicator('swTemp', 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', 'json', 'K');
-                
-                const now = new Date();
-                if (elements.timestamp) elements.timestamp.textContent = now.toLocaleString('ar-SA');
-                if (elements.lastUpdate) elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
-            }
-
-            // ساعة الزمن الكوني مع التاريخ الهجري
-            function updateCosmicClock() {
-                const now = new Date();
-                
-                // التاريخ الميلادي
-                document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-SA', {
-                    year: 'numeric', month: 'long', day: 'numeric'
                 });
+            }
+            
+            document.getElementById('language-menu').style.display = 'none';
+        }
+
+        // ==================== OBSERVATORY ENGINE ====================
+        const PROXY = "https://cors-anywhere.herokuapp.com/";
+        
+        const MIZAN = {
+            bz: "-1.2", proton: "0.8", auroraProb: "65", kp: "3.3", dst: "-27",
+            iceExtent: "14.20", seaLevel: "3.40", oceanHeat: "2.10", oceanTemp: "0.80",
+            surfaceTemp: "1.20", co2: "417.0", sunspot: "78", solarFlux: "125",
+            swSpeed: "420", swDensity: "8.5", swTemp: "120"
+        };
+
+        // Define indicators
+        const indicators = {
+            aurora: [
+                { key: 'bz', name: 'Bz', unit: 'nT', url: 'https://services.swpc.noaa.gov/products/solar-wind/mag-field.json', type: 'json', field: 'bz' },
+                { key: 'proton', name: 'Proton Flux', unit: 'pfu', url: 'https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json', type: 'json', field: 'proton' },
+                { key: 'auroraProb', name: 'Aurora Prob', unit: '%', url: 'https://services.swpc.noaa.gov/json/ovation_aurora_latest.json', type: 'aurora' },
+                { key: 'kp', name: 'Kp', unit: '', url: 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json', type: 'json', field: 'kp' },
+                { key: 'dst', name: 'DST', unit: 'nT', url: 'https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst', type: 'text' }
+            ],
+            cryo: [
+                { key: 'iceExtent', name: 'Ice Extent', unit: 'M km²', url: 'https://nsidc.org/api/seaice/extent/north/latest.csv', type: 'csv' },
+                { key: 'seaLevel', name: 'Sea Level', unit: 'mm', url: 'https://climate.nasa.gov/system/internal_resources/details/original/2158_Global_Mean_Sea_Level_Trend.csv', type: 'csv' },
+                { key: 'oceanHeat', name: 'Ocean Heat', unit: '10²² J', url: 'https://www.ncei.noaa.gov/access/services/', type: 'json' },
+                { key: 'oceanTemp', name: 'Ocean Temp', unit: '°C', url: 'https://www.ncei.noaa.gov/access/services/', type: 'json' }
+            ],
+            temp: [
+                { key: 'surfaceTemp', name: 'Surface Temp', unit: '°C', url: 'https://data.giss.nasa.gov/gistemp/', type: 'json' },
+                { key: 'co2', name: 'CO₂', unit: 'ppm', url: 'https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv', type: 'csv' }
+            ],
+            solar: [
+                { key: 'sunspot', name: 'Sunspots', unit: '', url: 'https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json', type: 'json', field: 'sunspot' },
+                { key: 'solarFlux', name: 'Solar Flux', unit: 'sfu', url: 'https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json', type: 'json', field: 'solarFlux' },
+                { key: 'swSpeed', name: 'Wind Speed', unit: 'km/s', url: 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', type: 'solar', sub: 'speed' },
+                { key: 'swDensity', name: 'Wind Density', unit: 'p/cm³', url: 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', type: 'solar', sub: 'density' },
+                { key: 'swTemp', name: 'Wind Temp', unit: 'K', url: 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', type: 'solar', sub: 'temp' }
+            ]
+        };
+
+        // Build HTML for indicators
+        function buildIndicators() {
+            for (let category in indicators) {
+                const grid = document.getElementById(category + '-grid');
+                if (!grid) continue;
                 
-                // التاريخ الهجري
-                try {
-                    const hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
-                        year: 'numeric', month: 'long', day: 'numeric'
-                    }).format(now);
-                    document.getElementById('hijri-date').innerText = hijri;
-                } catch {
-                    document.getElementById('hijri-date').innerText = '--';
+                indicators[category].forEach(ind => {
+                    const card = document.createElement('div');
+                    card.className = 'card ' + (category === 'aurora' ? 'aurora' : category === 'cryo' ? 'cryo' : category === 'temp' ? 'temp' : 'solar');
+                    card.setAttribute('data-tooltip', ind.name);
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span class="card-title">${ind.name}</span>
+                            <span class="card-value loading" id="${ind.key}-value">--</span>
+                        </div>
+                        <div class="gauge"><div class="gauge-fill" id="${ind.key}-gauge"></div></div>
+                        <div class="status">
+                            <span class="status-badge" id="${ind.key}-status">Loading</span>
+                            <span>${ind.unit}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+        buildIndicators();
+
+        // Helper functions
+        function updateValue(id, value, unit, isLive = false) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('loading', 'live', 'mizan');
+            if (value !== null && value !== undefined) {
+                el.textContent = parseFloat(value).toFixed(1) + (unit ? ' ' + unit : '');
+                el.classList.add(isLive ? 'live' : 'mizan');
+            } else {
+                el.textContent = '--';
+            }
+            
+            // Convert to Arabic numerals if needed
+            if (currentLanguage === 'ar' && el.textContent !== '--') {
+                el.textContent = el.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+            }
+        }
+
+        function updateGauge(id, value, maxValue, isLive = false) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const percent = Math.min(100, (value / maxValue) * 100);
+            el.style.width = percent + '%';
+            el.className = 'gauge-fill ' + (isLive ? 'live' : 'mizan');
+        }
+
+        function updateStatus(id, isLive) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = isLive ? 'Live' : 'MIZAN';
+            el.className = 'status-badge ' + (isLive ? 'live' : 'mizan');
+        }
+
+        async function fetchIndicator(ind) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
+                const response = await fetch(PROXY + ind.url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) throw new Error();
+                const data = await response.text();
+                let value = null;
+                
+                if (ind.type === 'json') {
+                    const json = JSON.parse(data);
+                    if (ind.field === 'bz') value = json?.[json.length-1]?.[3];
+                    else if (ind.field === 'proton') value = json?.[0]?.flux;
+                    else if (ind.field === 'kp') value = json?.[json.length-1]?.[1];
+                    else if (ind.field === 'sunspot') value = json?.[json.length-1]?.[1];
+                    else if (ind.field === 'solarFlux') value = json?.[json.length-1]?.[1];
+                } else if (ind.type === 'aurora') {
+                    const json = JSON.parse(data);
+                    value = json?.coordinates?.[0]?.[2];
+                } else if (ind.type === 'solar') {
+                    const json = JSON.parse(data);
+                    const latest = json?.[json.length-1];
+                    if (ind.sub === 'speed') value = latest?.[1];
+                    else if (ind.sub === 'density') value = latest?.[2];
+                    else if (ind.sub === 'temp') value = latest?.[3];
+                } else if (ind.type === 'csv') {
+                    const lines = data.trim().split('\n');
+                    const lastLine = lines[lines.length-1].split(',');
+                    value = lastLine[lastLine.length-1];
+                } else if (ind.type === 'text' && ind.key === 'dst') {
+                    const lines = data.split('\n');
+                    for (let line of lines) {
+                        if (line.includes('DST')) {
+                            const parts = line.split(/\s+/);
+                            value = parts[parts.length-1];
+                            break;
+                        }
+                    }
                 }
                 
-                // توقيت UTC
-                document.getElementById('utc-clock').innerText = 
-                    now.getUTCHours().toString().padStart(2,'0') + ":" + 
-                    now.getUTCMinutes().toString().padStart(2,'0') + ":" + 
-                    now.getUTCSeconds().toString().padStart(2,'0');
-                
-                // توقيت مكة (UTC+3)
-                const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
-                document.getElementById('mecca-clock').innerText = 
-                    meccaTime.getUTCHours().toString().padStart(2,'0') + ":" + 
-                    meccaTime.getUTCMinutes().toString().padStart(2,'0') + ":" + 
-                    meccaTime.getUTCSeconds().toString().padStart(2,'0');
+                if (value && !isNaN(parseFloat(value))) {
+                    updateValue(ind.key + '-value', parseFloat(value), ind.unit, true);
+                    updateGauge(ind.key + '-gauge', parseFloat(value), 
+                        ind.key.includes('ice') ? 15 : ind.key.includes('kp') ? 9 : 100, true);
+                    updateStatus(ind.key + '-status', true);
+                    return;
+                }
+                throw new Error();
+            } catch {
+                const mizanVal = MIZAN[ind.key];
+                if (mizanVal) {
+                    updateValue(ind.key + '-value', parseFloat(mizanVal), ind.unit, false);
+                    updateGauge(ind.key + '-gauge', parseFloat(mizanVal), 
+                        ind.key.includes('ice') ? 15 : ind.key.includes('kp') ? 9 : 100, false);
+                    updateStatus(ind.key + '-status', false);
+                }
             }
+        }
 
-            // بدء التشغيل
-            function startObservatory() {
-                updateCosmicClock();
-                setInterval(updateCosmicClock, 1000);
-                
-                refreshAllIndicators();
-                updateLiveImages();
-                
-                setInterval(refreshAllIndicators, 30000);
-                setInterval(updateLiveImages, 300000);
+        // Core indicators
+        function updateCoreIndicators() {
+            const now = new Date();
+            
+            // Taqābul
+            const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+            const seconds = meccaTime.getUTCSeconds() + 60 * (meccaTime.getUTCMinutes() + 60 * meccaTime.getUTCHours());
+            const taqabulAngle = (seconds / 86400) * 360;
+            
+            const taqabulEl = document.getElementById('taqabul-value');
+            if (taqabulEl) {
+                let val = taqabulAngle.toFixed(2) + '°';
+                if (currentLanguage === 'ar') {
+                    val = val.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                }
+                taqabulEl.textContent = val;
             }
+            document.getElementById('taqabul-gauge').style.width = (taqabulAngle / 360 * 100) + '%';
 
-            startObservatory();
-        })();
+            // Closure
+            const closureVal = 0.0057;
+            const closureEl = document.getElementById('closure-value');
+            if (closureEl) {
+                let val = closureVal.toFixed(4);
+                if (currentLanguage === 'ar') {
+                    val = val.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                }
+                closureEl.textContent = val;
+            }
+            document.getElementById('closure-gauge').style.width = (closureVal * 10000) + '%';
+
+            // Balance
+            const balanceVal = 7.850;
+            const balanceEl = document.getElementById('balance-value');
+            if (balanceEl) {
+                let val = balanceVal.toFixed(3);
+                if (currentLanguage === 'ar') {
+                    val = val.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                }
+                balanceEl.textContent = val;
+            }
+            document.getElementById('balance-gauge').style.width = (balanceVal / 10 * 100) + '%';
+        }
+
+        // Time functions
+        function updateCosmicTime() {
+            const now = new Date();
+            
+            // Gregorian
+            document.getElementById('gregorian-date').innerText = now.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric'
+            });
+            
+            // Hijri
+            try {
+                const hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+                    year: 'numeric', month: 'short', day: 'numeric'
+                }).format(now);
+                document.getElementById('hijri-date').innerText = hijri;
+            } catch {
+                document.getElementById('hijri-date').innerText = '--';
+            }
+            
+            // UTC
+            document.getElementById('utc-clock').innerText = 
+                now.getUTCHours().toString().padStart(2,'0') + ':' +
+                now.getUTCMinutes().toString().padStart(2,'0') + ':' +
+                now.getUTCSeconds().toString().padStart(2,'0');
+            
+            // Mecca (UTC+3)
+            const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+            document.getElementById('mecca-clock').innerText = 
+                meccaTime.getUTCHours().toString().padStart(2,'0') + ':' +
+                meccaTime.getUTCMinutes().toString().padStart(2,'0') + ':' +
+                meccaTime.getUTCSeconds().toString().padStart(2,'0');
+        }
+
+        // Images
+        function updateLiveImages() {
+            const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
+            const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
+            
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
+
+            const loadImage = (id, url) => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                container.innerHTML = '<div class="image-skeleton">Loading...</div>';
+                const img = new Image();
+                img.src = url + "?t=" + Date.now();
+                img.onload = () => {
+                    container.innerHTML = '';
+                    img.classList.add('image-loaded');
+                    container.appendChild(img);
+                };
+                img.onerror = () => {
+                    container.innerHTML = '<div class="image-skeleton error">Failed to load</div>';
+                };
+            };
+
+            loadImage('sdo-image', sdoUrl);
+            loadImage('aurora-map', auroraUrl);
+            
+            const earthContainer = document.getElementById('earth-image');
+            if (earthContainer) {
+                earthContainer.innerHTML = '<div class="image-skeleton">Loading Earth...</div>';
+                const img = new Image();
+                img.src = earthUrl + "?t=" + Date.now();
+                img.onload = () => {
+                    earthContainer.innerHTML = '';
+                    img.classList.add('image-loaded');
+                    earthContainer.appendChild(img);
+                };
+                img.onerror = () => {
+                    earthContainer.innerHTML = '<div class="image-skeleton error">Earth unavailable</div>';
+                };
+            }
+        }
+
+        // Refresh all indicators
+        async function refreshAllIndicators() {
+            const allIndicators = [...indicators.aurora, ...indicators.cryo, ...indicators.temp, ...indicators.solar];
+            await Promise.all(allIndicators.map(ind => fetchIndicator(ind)));
+            
+            const now = new Date();
+            document.getElementById('timestamp').innerText = now.toLocaleString('en-US');
+            document.getElementById('last-update').innerText = now.toLocaleTimeString('en-US');
+            
+            if (currentLanguage === 'ar') {
+                document.getElementById('timestamp').innerText = 
+                    document.getElementById('timestamp').innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                document.getElementById('last-update').innerText = 
+                    document.getElementById('last-update').innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+            }
+        }
+
+        // Start everything
+        function startObservatory() {
+            updateCosmicTime();
+            updateCoreIndicators();
+            refreshAllIndicators();
+            updateLiveImages();
+            
+            setInterval(updateCosmicTime, 1000);
+            setInterval(updateCoreIndicators, 1000);
+            setInterval(refreshAllIndicators, 30000);
+            setInterval(updateLiveImages, 300000);
+        }
+
+        startObservatory();
     </script>
 </body>
 </html>
