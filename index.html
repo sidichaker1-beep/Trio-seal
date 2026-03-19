@@ -28,7 +28,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         
-        /* ===== Navigation Bar ===== */
+        /* Navigation Bar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -101,7 +101,7 @@
             color: #0f2b4f;
         }
         
-        /* ===== Cosmic Time Bar ===== */
+        /* Cosmic Time Bar */
         #cosmic-time-bar {
             background: #0f2b4f;
             color: #fbbf24;
@@ -136,7 +136,7 @@
             padding-left: 1rem;
         }
         
-        /* ===== Core Indicators (3) ===== */
+        /* Core Indicators (3) - Blue background, green text */
         .core-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -145,10 +145,10 @@
         }
         
         .core-card {
-            background: #0f2b4f;
+            background: #0f2b4f;  /* Dark blue background */
             border-radius: 20px;
             padding: 1.5rem;
-            border: 1px solid;
+            border: 1px solid #fbbf24;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
         
@@ -165,6 +165,7 @@
             background: rgba(255,255,255,0.1);
             padding: 0.3rem 1rem;
             border-radius: 30px;
+            color: #fbbf24;
         }
         
         .core-value {
@@ -174,6 +175,14 @@
             background: rgba(0,0,0,0.3);
             padding: 0.2rem 0.8rem;
             border-radius: 12px;
+            color: #4ade80 !important;  /* Green text */
+            border: 2px solid #4ade80 !important;
+        }
+        
+        /* Taqābul special red */
+        #taqabul-value {
+            color: #ef4444 !important;
+            border-color: #ef4444 !important;
         }
         
         .core-gauge {
@@ -191,7 +200,15 @@
             transition: width 0.5s ease;
         }
         
-        /* ===== Indicators Grid ===== */
+        #taqabul-gauge {
+            background: #ef4444 !important;
+        }
+        
+        #closure-gauge, #balance-gauge {
+            background: #4ade80 !important;
+        }
+        
+        /* Indicators Grid */
         .section-title {
             color: #0f2b4f;
             font-size: 1.8rem;
@@ -364,6 +381,99 @@
             display: block;
         }
         
+        /* Earthquake Section */
+        .earthquake-section {
+            background: #f8fafc;
+            border-radius: 30px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .earthquake-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quake-stat {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .quake-stat .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0f2b4f;
+        }
+        
+        .quake-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .quake-item {
+            background: white;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 5px solid;
+        }
+        
+        .quake-magnitude {
+            font-size: 1.4rem;
+            font-weight: bold;
+            min-width: 60px;
+        }
+        
+        .quake-location {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .quake-time {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        /* Moon Phase */
+        .moon-phase {
+            background: #0f2b4f;
+            border-radius: 30px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: white;
+        }
+        
+        .moon-icon {
+            font-size: 4rem;
+        }
+        
+        .moon-info {
+            flex: 1;
+        }
+        
+        .moon-info h3 {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        
+        .moon-percent {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        
         @keyframes loading {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
@@ -399,7 +509,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Navigation Bar with Language Selector -->
+        <!-- Navigation Bar -->
         <nav class="navbar">
             <div class="logo">🌌 TRIO SEAL</div>
             <ul class="nav-links">
@@ -442,41 +552,41 @@
             <span data-key="indicators">21 Indicators · Auto Update</span>
         </div>
 
-        <!-- Core Indicators (3) -->
+        <!-- Core Indicators (3) - Blue background, green text, Taqābul red -->
         <div class="core-grid">
-            <!-- Taqābul -->
-            <div class="core-card" style="border-color: #fbbf24;" data-tooltip="Taqābul: Angular alignment with Mecca">
+            <!-- Taqābul (Red) -->
+            <div class="core-card" data-tooltip="Taqābul: Angular alignment with Mecca">
                 <div class="core-header">
-                    <span class="core-title" style="color:#fbbf24;">🕋 Taqābul</span>
-                    <span class="core-value" id="taqabul-value" style="color:#fbbf24; border-color:#fbbf24;">--°</span>
+                    <span class="core-title">🕋 Taqābul</span>
+                    <span class="core-value" id="taqabul-value">--°</span>
                 </div>
-                <div class="core-gauge"><div class="core-gauge-fill" id="taqabul-gauge" style="background:#fbbf24; width:0%"></div></div>
+                <div class="core-gauge"><div class="core-gauge-fill" id="taqabul-gauge" style="width:0%"></div></div>
                 <div class="status">
                     <span class="status-badge mizan">MIZAN</span>
                     <span data-key="absolute-angle">Absolute Angle</span>
                 </div>
             </div>
 
-            <!-- Closure -->
-            <div class="core-card" style="border-color: #4ade80;" data-tooltip="Closure: Seismic cycle index (RS)">
+            <!-- Closure (Green) -->
+            <div class="core-card" data-tooltip="Closure: Seismic cycle index (RS)">
                 <div class="core-header">
-                    <span class="core-title" style="color:#4ade80;">🌀 Closure</span>
-                    <span class="core-value" id="closure-value" style="color:#4ade80; border-color:#4ade80;">--</span>
+                    <span class="core-title">🌀 Closure</span>
+                    <span class="core-value" id="closure-value">--</span>
                 </div>
-                <div class="core-gauge"><div class="core-gauge-fill" id="closure-gauge" style="background:#4ade80; width:0%"></div></div>
+                <div class="core-gauge"><div class="core-gauge-fill" id="closure-gauge" style="width:0%"></div></div>
                 <div class="status">
                     <span class="status-badge mizan">MIZAN</span>
                     <span>RS</span>
                 </div>
             </div>
 
-            <!-- Balance -->
-            <div class="core-card" style="border-color: #a855f7;" data-tooltip="Balance: Stability index (α_stab = 7.850)">
+            <!-- Balance (Green) -->
+            <div class="core-card" data-tooltip="Balance: Stability index (α_stab = 7.850)">
                 <div class="core-header">
-                    <span class="core-title" style="color:#a855f7;">⚖️ Balance</span>
-                    <span class="core-value" id="balance-value" style="color:#a855f7; border-color:#a855f7;">--</span>
+                    <span class="core-title">⚖️ Balance</span>
+                    <span class="core-value" id="balance-value">--</span>
                 </div>
-                <div class="core-gauge"><div class="core-gauge-fill" id="balance-gauge" style="background:#a855f7; width:0%"></div></div>
+                <div class="core-gauge"><div class="core-gauge-fill" id="balance-gauge" style="width:0%"></div></div>
                 <div class="status">
                     <span class="status-badge mizan">MIZAN</span>
                     <span>α_stab</span>
@@ -484,30 +594,60 @@
             </div>
         </div>
 
-        <!-- ===== 1. Aurora & Magnetosphere ===== -->
-        <h2 class="section-title" data-key="aurora-title">🌌 1. Aurora & Magnetosphere</h2>
-        <div class="indicators-grid" id="aurora-grid">
-            <!-- Will be populated by JS -->
+        <!-- Moon Phase -->
+        <div class="moon-phase">
+            <div class="moon-icon" id="moon-icon">🌑</div>
+            <div class="moon-info">
+                <h3 data-key="moon-phase">Moon Phase</h3>
+                <div><span id="moon-phase-name">New Moon</span> · <span class="moon-percent" id="moon-illumination">0%</span></div>
+                <div style="margin-top:0.5rem; color:#94a3b8;" id="moon-age">Age: 0 days</div>
+            </div>
         </div>
 
-        <!-- ===== 2. Cryosphere & Oceans ===== -->
+        <!-- Aurora & Magnetosphere -->
+        <h2 class="section-title" data-key="aurora-title">🌌 1. Aurora & Magnetosphere</h2>
+        <div class="indicators-grid" id="aurora-grid"></div>
+
+        <!-- Cryosphere & Oceans -->
         <h2 class="section-title" data-key="cryo-title">🧊 2. Cryosphere & Oceans</h2>
         <div class="indicators-grid" id="cryo-grid"></div>
 
-        <!-- ===== 3. Temperature & Atmosphere ===== -->
+        <!-- Temperature & Atmosphere -->
         <h2 class="section-title" data-key="temp-title">🌡️ 3. Temperature & Atmosphere</h2>
         <div class="indicators-grid" id="temp-grid"></div>
 
-        <!-- ===== 4. Solar Activity ===== -->
+        <!-- Solar Activity -->
         <h2 class="section-title" data-key="solar-title">☀️ 4. Solar Activity</h2>
         <div class="indicators-grid" id="solar-grid"></div>
 
-        <!-- ===== 5. Live Images ===== -->
+        <!-- Live Images -->
         <h2 class="section-title" data-key="images-title">🛰️ 5. Live Images</h2>
         <div class="images-grid">
             <div class="image-card"><h3>☀️ SDO Solar</h3><div id="sdo-image"></div></div>
             <div class="image-card"><h3>🌍 Earth</h3><div id="earth-image"></div></div>
             <div class="image-card"><h3>🌌 Aurora Map</h3><div id="aurora-map"></div></div>
+        </div>
+
+        <!-- Earthquake Observatory -->
+        <h2 class="section-title" data-key="earthquake-title">🌋 6. Live Earthquake Observatory</h2>
+        <div class="earthquake-section">
+            <div class="earthquake-stats">
+                <div class="quake-stat">
+                    <div class="number" id="quake-total">--</div>
+                    <div data-key="last-24h">Last 24h</div>
+                </div>
+                <div class="quake-stat">
+                    <div class="number" id="quake-strongest">--</div>
+                    <div data-key="strongest">Strongest</div>
+                </div>
+                <div class="quake-stat">
+                    <div class="number" id="quake-latest">--</div>
+                    <div data-key="latest">Latest</div>
+                </div>
+            </div>
+            <div id="quake-list" class="quake-list">
+                <!-- Populated by JS -->
+            </div>
         </div>
 
         <div class="footer">
@@ -517,7 +657,7 @@
     </div>
 
     <script>
-        // ==================== TRANSLATION SYSTEM ====================
+        // Translation System
         const translations = {
             en: {
                 home: "Home",
@@ -531,8 +671,13 @@
                 "temp-title": "🌡️ 3. Temperature & Atmosphere",
                 "solar-title": "☀️ 4. Solar Activity",
                 "images-title": "🛰️ 5. Live Images",
+                "earthquake-title": "🌋 6. Live Earthquake Observatory",
                 "absolute-angle": "Absolute Angle",
-                "last-update": "Last update"
+                "last-update": "Last update",
+                "last-24h": "Last 24h",
+                "strongest": "Strongest",
+                "latest": "Latest",
+                "moon-phase": "Moon Phase"
             },
             ar: {
                 home: "الرئيسية",
@@ -546,8 +691,13 @@
                 "temp-title": "🌡️ ٣. حرارة الأرض والغلاف الجوي",
                 "solar-title": "☀️ ٤. النشاط الشمسي",
                 "images-title": "🛰️ ٥. الصور الحية",
+                "earthquake-title": "🌋 ٦. مرصد الزلازل المباشر",
                 "absolute-angle": "زاوية مطلقة",
-                "last-update": "آخر تحديث"
+                "last-update": "آخر تحديث",
+                "last-24h": "آخر ٢٤ ساعة",
+                "strongest": "الأقوى",
+                "latest": "الأحدث",
+                "moon-phase": "طور القمر"
             },
             fr: {
                 home: "Accueil",
@@ -561,8 +711,13 @@
                 "temp-title": "🌡️ 3. Température et Atmosphère",
                 "solar-title": "☀️ 4. Activité Solaire",
                 "images-title": "🛰️ 5. Images en direct",
+                "earthquake-title": "🌋 6. Observatoire sismique",
                 "absolute-angle": "Angle absolu",
-                "last-update": "Dernière mise à jour"
+                "last-update": "Dernière mise à jour",
+                "last-24h": "Dernières 24h",
+                "strongest": "Le plus fort",
+                "latest": "Dernier",
+                "moon-phase": "Phase lunaire"
             },
             es: {
                 home: "Inicio",
@@ -576,8 +731,13 @@
                 "temp-title": "🌡️ 3. Temperatura y Atmósfera",
                 "solar-title": "☀️ 4. Actividad Solar",
                 "images-title": "🛰️ 5. Imágenes en vivo",
+                "earthquake-title": "🌋 6. Observatorio de terremotos",
                 "absolute-angle": "Ángulo absoluto",
-                "last-update": "Última actualización"
+                "last-update": "Última actualización",
+                "last-24h": "Últimas 24h",
+                "strongest": "Más fuerte",
+                "latest": "Último",
+                "moon-phase": "Fase lunar"
             },
             zh: {
                 home: "首页",
@@ -591,8 +751,13 @@
                 "temp-title": "🌡️ 3. 温度和大气",
                 "solar-title": "☀️ 4. 太阳活动",
                 "images-title": "🛰️ 5. 实时图像",
+                "earthquake-title": "🌋 6. 实时地震台",
                 "absolute-angle": "绝对角度",
-                "last-update": "最后更新"
+                "last-update": "最后更新",
+                "last-24h": "最近24小时",
+                "strongest": "最强",
+                "latest": "最新",
+                "moon-phase": "月相"
             },
             hi: {
                 home: "होम",
@@ -606,8 +771,13 @@
                 "temp-title": "🌡️ 3. तापमान और वायुमंडल",
                 "solar-title": "☀️ 4. सौर गतिविधि",
                 "images-title": "🛰️ 5. लाइव छवियाँ",
+                "earthquake-title": "🌋 6. लाइव भूकंप वेधशाला",
                 "absolute-angle": "निरपेक्ष कोण",
-                "last-update": "अंतिम अद्यतन"
+                "last-update": "अंतिम अद्यतन",
+                "last-24h": "पिछले 24 घंटे",
+                "strongest": "सबसे मजबूत",
+                "latest": "नवीनतम",
+                "moon-phase": "चंद्र कला"
             },
             ru: {
                 home: "Главная",
@@ -621,8 +791,13 @@
                 "temp-title": "🌡️ 3. Температура и атмосфера",
                 "solar-title": "☀️ 4. Солнечная активность",
                 "images-title": "🛰️ 5. Прямые изображения",
+                "earthquake-title": "🌋 6. Прямая сейсмическая обсерватория",
                 "absolute-angle": "Абсолютный угол",
-                "last-update": "Последнее обновление"
+                "last-update": "Последнее обновление",
+                "last-24h": "Последние 24ч",
+                "strongest": "Сильнейшее",
+                "latest": "Последнее",
+                "moon-phase": "Фаза луны"
             }
         };
 
@@ -654,8 +829,8 @@
             
             // Update numbers to Arabic numerals when Arabic is selected
             if (lang === 'ar') {
-                document.querySelectorAll('.card-value, .core-value, .status-badge').forEach(el => {
-                    if (el.innerText && !el.innerText.includes('--')) {
+                document.querySelectorAll('.card-value, .core-value, .status-badge, .quake-stat .number').forEach(el => {
+                    if (el.innerText && !el.innerText.includes('--') && !el.innerText.includes('°')) {
                         el.innerText = el.innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
                     }
                 });
@@ -664,9 +839,8 @@
             document.getElementById('language-menu').style.display = 'none';
         }
 
-        // ==================== OBSERVATORY ENGINE ====================
+        // Constants
         const PROXY = "https://cors-anywhere.herokuapp.com/";
-        
         const MIZAN = {
             bz: "-1.2", proton: "0.8", auroraProb: "65", kp: "3.3", dst: "-27",
             iceExtent: "14.20", seaLevel: "3.40", oceanHeat: "2.10", oceanTemp: "0.80",
@@ -741,8 +915,7 @@
                 el.textContent = '--';
             }
             
-            // Convert to Arabic numerals if needed
-            if (currentLanguage === 'ar' && el.textContent !== '--') {
+            if (currentLanguage === 'ar' && el.textContent !== '--' && !el.textContent.includes('°')) {
                 el.textContent = el.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
             }
         }
@@ -760,6 +933,10 @@
             if (!el) return;
             el.textContent = isLive ? 'Live' : 'MIZAN';
             el.className = 'status-badge ' + (isLive ? 'live' : 'mizan');
+            
+            if (currentLanguage === 'ar') {
+                el.textContent = el.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+            }
         }
 
         async function fetchIndicator(ind) {
@@ -805,9 +982,9 @@
                 }
                 
                 if (value && !isNaN(parseFloat(value))) {
+                    const maxVal = ind.key.includes('ice') ? 15 : ind.key.includes('kp') ? 9 : 100;
                     updateValue(ind.key + '-value', parseFloat(value), ind.unit, true);
-                    updateGauge(ind.key + '-gauge', parseFloat(value), 
-                        ind.key.includes('ice') ? 15 : ind.key.includes('kp') ? 9 : 100, true);
+                    updateGauge(ind.key + '-gauge', parseFloat(value), maxVal, true);
                     updateStatus(ind.key + '-status', true);
                     return;
                 }
@@ -815,15 +992,15 @@
             } catch {
                 const mizanVal = MIZAN[ind.key];
                 if (mizanVal) {
+                    const maxVal = ind.key.includes('ice') ? 15 : ind.key.includes('kp') ? 9 : 100;
                     updateValue(ind.key + '-value', parseFloat(mizanVal), ind.unit, false);
-                    updateGauge(ind.key + '-gauge', parseFloat(mizanVal), 
-                        ind.key.includes('ice') ? 15 : ind.key.includes('kp') ? 9 : 100, false);
+                    updateGauge(ind.key + '-gauge', parseFloat(mizanVal), maxVal, false);
                     updateStatus(ind.key + '-status', false);
                 }
             }
         }
 
-        // Core indicators
+        // Core indicators - FIXED VERSION
         function updateCoreIndicators() {
             const now = new Date();
             
@@ -834,11 +1011,10 @@
             
             const taqabulEl = document.getElementById('taqabul-value');
             if (taqabulEl) {
-                let val = taqabulAngle.toFixed(2) + '°';
+                taqabulEl.textContent = taqabulAngle.toFixed(2) + '°';
                 if (currentLanguage === 'ar') {
-                    val = val.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                    taqabulEl.textContent = taqabulEl.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
                 }
-                taqabulEl.textContent = val;
             }
             document.getElementById('taqabul-gauge').style.width = (taqabulAngle / 360 * 100) + '%';
 
@@ -846,11 +1022,10 @@
             const closureVal = 0.0057;
             const closureEl = document.getElementById('closure-value');
             if (closureEl) {
-                let val = closureVal.toFixed(4);
+                closureEl.textContent = closureVal.toFixed(4);
                 if (currentLanguage === 'ar') {
-                    val = val.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                    closureEl.textContent = closureEl.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
                 }
-                closureEl.textContent = val;
             }
             document.getElementById('closure-gauge').style.width = (closureVal * 10000) + '%';
 
@@ -858,11 +1033,10 @@
             const balanceVal = 7.850;
             const balanceEl = document.getElementById('balance-value');
             if (balanceEl) {
-                let val = balanceVal.toFixed(3);
+                balanceEl.textContent = balanceVal.toFixed(3);
                 if (currentLanguage === 'ar') {
-                    val = val.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                    balanceEl.textContent = balanceEl.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
                 }
-                balanceEl.textContent = val;
             }
             document.getElementById('balance-gauge').style.width = (balanceVal / 10 * 100) + '%';
         }
@@ -871,12 +1045,10 @@
         function updateCosmicTime() {
             const now = new Date();
             
-            // Gregorian
             document.getElementById('gregorian-date').innerText = now.toLocaleDateString('en-US', {
                 year: 'numeric', month: 'short', day: 'numeric'
             });
             
-            // Hijri
             try {
                 const hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
                     year: 'numeric', month: 'short', day: 'numeric'
@@ -886,18 +1058,88 @@
                 document.getElementById('hijri-date').innerText = '--';
             }
             
-            // UTC
             document.getElementById('utc-clock').innerText = 
                 now.getUTCHours().toString().padStart(2,'0') + ':' +
                 now.getUTCMinutes().toString().padStart(2,'0') + ':' +
                 now.getUTCSeconds().toString().padStart(2,'0');
             
-            // Mecca (UTC+3)
             const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
             document.getElementById('mecca-clock').innerText = 
                 meccaTime.getUTCHours().toString().padStart(2,'0') + ':' +
                 meccaTime.getUTCMinutes().toString().padStart(2,'0') + ':' +
                 meccaTime.getUTCSeconds().toString().padStart(2,'0');
+        }
+
+        // Moon Phase
+        function updateMoonPhase() {
+            const now = new Date();
+            
+            // Simple moon phase calculation (based on days since known new moon)
+            const knownNewMoon = new Date('2024-04-08');
+            const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
+            const phase = (daysSince % 29.53) / 29.53;
+            
+            const phases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+            const phaseIndex = Math.floor(phase * 8) % 8;
+            const illumination = Math.round(Math.sin(phase * Math.PI) * 100);
+            
+            const icons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+            
+            document.getElementById('moon-icon').textContent = icons[phaseIndex];
+            document.getElementById('moon-phase-name').textContent = phases[phaseIndex];
+            document.getElementById('moon-illumination').textContent = illumination + '%';
+            document.getElementById('moon-age').textContent = `Age: ${Math.round(daysSince % 29.53)} days`;
+        }
+
+        // Earthquake data
+        async function fetchEarthquakes() {
+            try {
+                const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson');
+                const data = await response.json();
+                
+                const quakes = data.features
+                    .filter(q => q.properties.mag >= 2.5)
+                    .sort((a, b) => b.properties.mag - a.properties.mag)
+                    .slice(0, 10);
+                
+                document.getElementById('quake-total').textContent = data.features.length;
+                document.getElementById('quake-strongest').textContent = quakes[0]?.properties.mag.toFixed(1) + ' M';
+                
+                const latest = new Date(quakes[0]?.properties.time).toLocaleTimeString();
+                document.getElementById('quake-latest').textContent = latest;
+                
+                const list = document.getElementById('quake-list');
+                list.innerHTML = '';
+                
+                quakes.forEach(q => {
+                    const mag = q.properties.mag;
+                    const place = q.properties.place || 'Unknown';
+                    const time = new Date(q.properties.time).toLocaleString();
+                    
+                    let magColor = '#4ade80';
+                    if (mag >= 6) magColor = '#ef4444';
+                    else if (mag >= 4.5) magColor = '#f97316';
+                    
+                    const item = document.createElement('div');
+                    item.className = 'quake-item';
+                    item.style.borderLeftColor = magColor;
+                    item.innerHTML = `
+                        <div class="quake-magnitude" style="color:${magColor};">${mag.toFixed(1)}</div>
+                        <div class="quake-location">${place}</div>
+                        <div class="quake-time">${time}</div>
+                    `;
+                    list.appendChild(item);
+                });
+                
+                if (currentLanguage === 'ar') {
+                    document.getElementById('quake-total').textContent = 
+                        document.getElementById('quake-total').textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                    document.getElementById('quake-strongest').textContent = 
+                        document.getElementById('quake-strongest').textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                }
+            } catch (error) {
+                console.error('Earthquake fetch failed:', error);
+            }
         }
 
         // Images
@@ -969,11 +1211,15 @@
             updateCoreIndicators();
             refreshAllIndicators();
             updateLiveImages();
+            updateMoonPhase();
+            fetchEarthquakes();
             
             setInterval(updateCosmicTime, 1000);
             setInterval(updateCoreIndicators, 1000);
             setInterval(refreshAllIndicators, 30000);
             setInterval(updateLiveImages, 300000);
+            setInterval(updateMoonPhase, 3600000); // Update moon phase every hour
+            setInterval(fetchEarthquakes, 60000); // Update earthquakes every minute
         }
 
         startObservatory();
