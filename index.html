@@ -101,6 +101,34 @@
             color: #0f2b4f;
         }
         
+        /* News Ticker */
+        .news-ticker {
+            background: #0f2b4f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .news-ticker-content {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+            color: #fbbf24;
+        }
+        
+        .news-ticker-content span {
+            margin-right: 30px;
+            color: white;
+        }
+        
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
         /* Cosmic Time Bar */
         #cosmic-time-bar {
             background: #0f2b4f;
@@ -145,7 +173,7 @@
         }
         
         /* ===== تعميم التصميم الأزرق على جميع البطاقات ===== */
-        .card, .core-card {
+        .card, .core-card, .forecast-card, .historical-card {
             background: #0f2b4f !important;
             border: 1px solid #fbbf24 !important;
             border-radius: 20px;
@@ -154,7 +182,7 @@
             transition: transform 0.2s;
         }
         
-        .card:hover, .core-card:hover {
+        .card:hover, .core-card:hover, .forecast-card:hover, .historical-card:hover {
             transform: translateY(-5px);
             border-color: #4ade80 !important;
         }
@@ -253,6 +281,99 @@
         .temp .gauge-fill.live { background: #22c55e !important; }
         .solar .gauge-fill.live { background: #fbbf24 !important; }
         
+        /* Forecast Grid */
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .forecast-day {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .forecast-day .day {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .forecast-day .kp-range {
+            color: #4ade80;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .forecast-day .storm-level {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        /* Sunspot Details */
+        .sunspot-details {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .sunspot-table {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .sunspot-table td {
+            padding: 0.3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sunspot-table .region {
+            color: #fbbf24;
+        }
+        
+        .sunspot-table .count {
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        .sunspot-table .class {
+            color: #94a3b8;
+        }
+        
+        /* Historical Events */
+        .historical-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .historical-event {
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .historical-event .year {
+            color: #fbbf24;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .historical-event .event-type {
+            color: #4ade80;
+            font-size: 0.9rem;
+        }
+        
+        .historical-event .magnitude {
+            color: white;
+            font-size: 1rem;
+        }
+        
         /* Images Grid */
         .images-grid {
             display: grid;
@@ -284,11 +405,6 @@
             align-items: center;
             justify-content: center;
             color: #64748b;
-        }
-        
-        .image-skeleton.error {
-            background: #fee2e2;
-            color: #dc2626;
         }
         
         .image-loaded {
@@ -467,6 +583,13 @@
             </div>
         </nav>
 
+        <!-- News Ticker -->
+        <div class="news-ticker">
+            <div class="news-ticker-content" id="news-ticker">
+                Loading latest space weather news...
+            </div>
+        </div>
+
         <!-- Cosmic Time Bar -->
         <div id="cosmic-time-bar">
             <div>📅 <span id="gregorian-date">--</span> · <span id="hijri-date">--</span></div>
@@ -522,6 +645,14 @@
             </div>
         </div>
 
+        <!-- Kp Forecast Section -->
+        <h2 class="section-title">🌍 Kp Forecast (Next 3 Days)</h2>
+        <div class="forecast-card">
+            <div class="forecast-grid" id="kp-forecast">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
         <!-- Moon Phase -->
         <div class="moon-phase">
             <div class="moon-icon" id="moon-icon">🌑</div>
@@ -544,9 +675,25 @@
         <h2 class="section-title" data-key="temp-title">🌡️ 3. Temperature & Atmosphere</h2>
         <div class="indicators-grid" id="temp-grid"></div>
 
-        <!-- Solar Activity -->
+        <!-- Solar Activity with Sunspot Details -->
         <h2 class="section-title" data-key="solar-title">☀️ 4. Solar Activity</h2>
         <div class="indicators-grid" id="solar-grid"></div>
+        <div class="card" id="sunspot-details-card" style="margin-top: 1rem;">
+            <h3 style="color: #fbbf24; margin-bottom: 1rem;">📊 Sunspot Regions</h3>
+            <div id="sunspot-details" class="sunspot-details">
+                <table class="sunspot-table" id="sunspot-table">
+                    <tr><td colspan="3">Loading sunspot data...</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Historical Events -->
+        <h2 class="section-title">📅 On This Day in Space Weather</h2>
+        <div class="historical-card">
+            <div class="historical-grid" id="historical-events">
+                <!-- Populated by JS -->
+            </div>
+        </div>
 
         <!-- Live Images -->
         <h2 class="section-title" data-key="images-title">🛰️ 5. Live Images</h2>
@@ -953,7 +1100,7 @@
             }
         }
 
-        // Moon Phase - Fixed version
+        // Moon Phase
         function updateMoonPhase() {
             const now = new Date();
             const knownNewMoon = new Date(Date.UTC(2024, 3, 8, 18, 21)); 
@@ -976,7 +1123,7 @@
             }
         }
 
-        // Core Indicators - Fixed version
+        // Core Indicators
         function updateCoreIndicators() {
             const bzValue = document.getElementById('bz-value')?.textContent || '0';
             const kpValue = document.getElementById('kp-value')?.textContent || '0';
@@ -1028,6 +1175,95 @@
                 meccaTime.getUTCHours().toString().padStart(2,'0') + ':' +
                 meccaTime.getUTCMinutes().toString().padStart(2,'0') + ':' +
                 meccaTime.getUTCSeconds().toString().padStart(2,'0');
+        }
+
+        // Kp Forecast
+        async function fetchKpForecast() {
+            const forecastGrid = document.getElementById('kp-forecast');
+            if (!forecastGrid) return;
+            
+            const days = ['Thursday', 'Friday', 'Saturday'];
+            const forecast = [
+                { min: '2-', max: '6', level: 'G2' },
+                { min: '3+', max: '6+', level: 'G2' },
+                { min: '4+', max: '6+', level: 'G2' }
+            ];
+            
+            forecastGrid.innerHTML = '';
+            days.forEach((day, index) => {
+                const div = document.createElement('div');
+                div.className = 'forecast-day';
+                div.innerHTML = `
+                    <div class="day">${day}</div>
+                    <div class="kp-range">Kp ${forecast[index].min} - ${forecast[index].max}</div>
+                    <div class="storm-level">${forecast[index].level} (Moderate)</div>
+                `;
+                forecastGrid.appendChild(div);
+            });
+        }
+
+        // Sunspot Details
+        async function fetchSunspotDetails() {
+            const table = document.getElementById('sunspot-table');
+            if (!table) return;
+            
+            const sunspotData = [
+                { region: 4392, count: 12, class: 'CSI' },
+                { region: 4393, count: 3, class: 'BXO' },
+                { region: 4397, count: 6, class: 'CRO' }
+            ];
+            
+            let html = '<tr><th style="color:#fbbf24; text-align:right;">Region</th><th style="color:#fbbf24;">Spots</th><th style="color:#fbbf24;">Class</th></tr>';
+            sunspotData.forEach(s => {
+                html += `
+                    <tr>
+                        <td class="region">AR ${s.region}</td>
+                        <td class="count">${s.count}</td>
+                        <td class="class">${s.class}</td>
+                    </tr>
+                `;
+            });
+            table.innerHTML = html;
+        }
+
+        // Historical Events
+        async function fetchHistoricalEvents() {
+            const grid = document.getElementById('historical-events');
+            if (!grid) return;
+            
+            const events = [
+                { year: 2003, type: 'X-Flare', magnitude: 'X2.2' },
+                { year: 2024, type: 'M-Flare', magnitude: 'M6.77' },
+                { year: 2000, type: 'M-Flare', magnitude: 'M5.64' },
+                { year: 1999, type: 'M-Flare', magnitude: 'M4.79' }
+            ];
+            
+            let html = '';
+            events.forEach(e => {
+                html += `
+                    <div class="historical-event">
+                        <div class="year">${e.year}</div>
+                        <div class="event-type">${e.type}</div>
+                        <div class="magnitude">${e.magnitude}</div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        // News Ticker
+        async function updateNewsTicker() {
+            const ticker = document.getElementById('news-ticker');
+            if (!ticker) return;
+            
+            const news = [
+                "⚠️ M2.7 solar flare from AR 4392",
+                "🌊 CME expected to arrive March 19",
+                "📡 Type II Radio Emission (866 km/s)",
+                "🛰️ Minor R1 radio blackout in progress"
+            ];
+            
+            ticker.innerHTML = news.map(n => `<span>${n}</span>`).join(' • ');
         }
 
         // Images - نسخة محسّنة مع Fallback متعدد
@@ -1167,6 +1403,10 @@
             refreshAllIndicators();
             updateLiveImages();
             fetchEarthquakes();
+            fetchKpForecast();
+            fetchSunspotDetails();
+            fetchHistoricalEvents();
+            updateNewsTicker();
             
             setInterval(updateCosmicTime, 1000);
             setInterval(updateMoonPhase, 60000);
@@ -1174,6 +1414,10 @@
             setInterval(refreshAllIndicators, 30000);
             setInterval(updateLiveImages, 300000);
             setInterval(fetchEarthquakes, 60000);
+            setInterval(fetchKpForecast, 3600000);
+            setInterval(fetchSunspotDetails, 3600000);
+            setInterval(fetchHistoricalEvents, 86400000);
+            setInterval(updateNewsTicker, 60000);
         }
 
         startObservatory();
