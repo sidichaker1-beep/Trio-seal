@@ -286,6 +286,11 @@
             color: #64748b;
         }
         
+        .image-skeleton.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
         .image-loaded {
             width: 100%;
             height: 200px;
@@ -797,6 +802,33 @@
             ]
         };
 
+        // عناصر HTML
+        const elements = {
+            bz: { value: document.getElementById('bz-value'), status: document.getElementById('bz-status'), gauge: document.getElementById('bz-gauge') },
+            proton: { value: document.getElementById('proton-value'), status: document.getElementById('proton-status'), gauge: document.getElementById('proton-gauge') },
+            auroraProb: { value: document.getElementById('aurora-prob-value'), status: document.getElementById('aurora-prob-status'), gauge: document.getElementById('aurora-prob-gauge') },
+            kp: { value: document.getElementById('kp-value'), status: document.getElementById('kp-status'), gauge: document.getElementById('kp-gauge') },
+            dst: { value: document.getElementById('dst-value'), status: document.getElementById('dst-status'), gauge: document.getElementById('dst-gauge') },
+            iceExtent: { value: document.getElementById('ice-extent-value'), status: document.getElementById('ice-extent-status'), gauge: document.getElementById('ice-extent-gauge') },
+            seaLevel: { value: document.getElementById('sea-level-value'), status: document.getElementById('sea-level-status'), gauge: document.getElementById('sea-level-gauge') },
+            oceanHeat: { value: document.getElementById('ocean-heat-value'), status: document.getElementById('ocean-heat-status'), gauge: document.getElementById('ocean-heat-gauge') },
+            oceanTemp: { value: document.getElementById('ocean-temp-value'), status: document.getElementById('ocean-temp-status'), gauge: document.getElementById('ocean-temp-gauge') },
+            surfaceTemp: { value: document.getElementById('surface-temp-value'), status: document.getElementById('surface-temp-status'), gauge: document.getElementById('surface-temp-gauge') },
+            co2: { value: document.getElementById('co2-value'), status: document.getElementById('co2-status'), gauge: document.getElementById('co2-gauge') },
+            sunspot: { value: document.getElementById('sunspot-value'), status: document.getElementById('sunspot-status'), gauge: document.getElementById('sunspot-gauge') },
+            solarFlux: { value: document.getElementById('solar-flux-value'), status: document.getElementById('solar-flux-status'), gauge: document.getElementById('solar-flux-gauge') },
+            swSpeed: { value: document.getElementById('sw-speed-value'), status: document.getElementById('sw-speed-status'), gauge: document.getElementById('sw-speed-gauge') },
+            swDensity: { value: document.getElementById('sw-density-value'), status: document.getElementById('sw-density-status'), gauge: document.getElementById('sw-density-gauge') },
+            swTemp: { value: document.getElementById('sw-temp-value'), status: document.getElementById('sw-temp-status'), gauge: document.getElementById('sw-temp-gauge') },
+            timestamp: document.getElementById('timestamp'),
+            lastUpdate: document.getElementById('last-update'),
+            images: {
+                sdo: document.getElementById('sdo-image'),
+                earth: document.getElementById('earth-image'),
+                auroraMap: document.getElementById('aurora-map')
+            }
+        };
+
         // Build HTML for indicators
         function buildIndicators() {
             for (let category in indicators) {
@@ -998,49 +1030,64 @@
                 meccaTime.getUTCSeconds().toString().padStart(2,'0');
         }
 
-        // Images
+        // Images - نسخة محسّنة مع Fallback متعدد
         function updateLiveImages() {
             const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
             const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
             
             const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today);
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return { year, month, day };
+            };
+            
+            const t = formatDate(today);
+            const y = formatDate(yesterday);
+            const td = formatDate(twoDaysAgo);
+            
+            const earthUrls = [
+                `https://epic.gsfc.nasa.gov/archive/natural/${t.year}/${t.month}/${t.day}/png/epic_1b_${t.year}${t.month}${t.day}000000.png`,
+                `https://epic.gsfc.nasa.gov/archive/natural/${y.year}/${y.month}/${y.day}/png/epic_1b_${y.year}${y.month}${y.day}000000.png`,
+                `https://epic.gsfc.nasa.gov/archive/natural/${td.year}/${td.month}/${td.day}/png/epic_1b_${td.year}${td.month}${td.day}000000.png`
+            ];
 
-            const loadImage = (id, url) => {
-                const container = document.getElementById(id);
+            const loadImage = (container, urls, index = 0) => {
                 if (!container) return;
-                container.innerHTML = '<div class="image-skeleton">Loading...</div>';
+                
+                if (index === 0) {
+                    container.innerHTML = '<div class="image-skeleton">جاري تحميل الصورة...</div>';
+                }
+                
+                if (index >= urls.length) {
+                    container.innerHTML = '<div class="image-skeleton error">الصورة غير متوفرة</div>';
+                    return;
+                }
+                
                 const img = new Image();
-                img.src = url + "?t=" + Date.now();
+                img.src = urls[index] + "?t=" + Date.now();
+                
                 img.onload = () => {
                     container.innerHTML = '';
                     img.classList.add('image-loaded');
                     container.appendChild(img);
                 };
+                
                 img.onerror = () => {
-                    container.innerHTML = '<div class="image-skeleton error">Failed to load</div>';
+                    loadImage(container, urls, index + 1);
                 };
             };
 
-            loadImage('sdo-image', sdoUrl);
-            loadImage('aurora-map', auroraUrl);
-            
-            const earthContainer = document.getElementById('earth-image');
-            if (earthContainer) {
-                earthContainer.innerHTML = '<div class="image-skeleton">Loading Earth...</div>';
-                const img = new Image();
-                img.src = earthUrl + "?t=" + Date.now();
-                img.onload = () => {
-                    earthContainer.innerHTML = '';
-                    img.classList.add('image-loaded');
-                    earthContainer.appendChild(img);
-                };
-                img.onerror = () => {
-                    earthContainer.innerHTML = '<div class="image-skeleton error">Earth unavailable</div>';
-                };
+            if (elements.images) {
+                loadImage(elements.images.sdo, [sdoUrl]);
+                loadImage(elements.images.auroraMap, [auroraUrl]);
+                loadImage(elements.images.earth, earthUrls);
             }
         }
 
