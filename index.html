@@ -145,7 +145,7 @@
         }
         
         .core-card {
-            background: #0f2b4f;  /* Dark blue background */
+            background: #0f2b4f;
             border-radius: 20px;
             padding: 1.5rem;
             border: 1px solid #fbbf24;
@@ -175,11 +175,10 @@
             background: rgba(0,0,0,0.3);
             padding: 0.2rem 0.8rem;
             border-radius: 12px;
-            color: #4ade80 !important;  /* Green text */
+            color: #4ade80 !important;
             border: 2px solid #4ade80 !important;
         }
         
-        /* Taqābul special red */
         #taqabul-value {
             color: #ef4444 !important;
             border-color: #ef4444 !important;
@@ -381,6 +380,37 @@
             display: block;
         }
         
+        /* Moon Phase */
+        .moon-phase {
+            background: #0f2b4f;
+            border-radius: 30px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: white;
+        }
+        
+        .moon-icon {
+            font-size: 4rem;
+        }
+        
+        .moon-info {
+            flex: 1;
+        }
+        
+        .moon-info h3 {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        
+        .moon-percent {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        
         /* Earthquake Section */
         .earthquake-section {
             background: #f8fafc;
@@ -441,37 +471,6 @@
         .quake-time {
             color: #64748b;
             font-size: 0.9rem;
-        }
-        
-        /* Moon Phase */
-        .moon-phase {
-            background: #0f2b4f;
-            border-radius: 30px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            color: white;
-        }
-        
-        .moon-icon {
-            font-size: 4rem;
-        }
-        
-        .moon-info {
-            flex: 1;
-        }
-        
-        .moon-info h3 {
-            color: #fbbf24;
-            margin-bottom: 0.5rem;
-        }
-        
-        .moon-percent {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #4ade80;
         }
         
         @keyframes loading {
@@ -552,9 +551,8 @@
             <span data-key="indicators">21 Indicators · Auto Update</span>
         </div>
 
-        <!-- Core Indicators (3) - Blue background, green text, Taqābul red -->
+        <!-- Core Indicators (3) -->
         <div class="core-grid">
-            <!-- Taqābul (Red) -->
             <div class="core-card" data-tooltip="Taqābul: Angular alignment with Mecca">
                 <div class="core-header">
                     <span class="core-title">🕋 Taqābul</span>
@@ -566,8 +564,6 @@
                     <span data-key="absolute-angle">Absolute Angle</span>
                 </div>
             </div>
-
-            <!-- Closure (Green) -->
             <div class="core-card" data-tooltip="Closure: Seismic cycle index (RS)">
                 <div class="core-header">
                     <span class="core-title">🌀 Closure</span>
@@ -579,8 +575,6 @@
                     <span>RS</span>
                 </div>
             </div>
-
-            <!-- Balance (Green) -->
             <div class="core-card" data-tooltip="Balance: Stability index (α_stab = 7.850)">
                 <div class="core-header">
                     <span class="core-title">⚖️ Balance</span>
@@ -645,9 +639,7 @@
                     <div data-key="latest">Latest</div>
                 </div>
             </div>
-            <div id="quake-list" class="quake-list">
-                <!-- Populated by JS -->
-            </div>
+            <div id="quake-list" class="quake-list"></div>
         </div>
 
         <div class="footer">
@@ -827,7 +819,6 @@
                 }
             });
             
-            // Update numbers to Arabic numerals when Arabic is selected
             if (lang === 'ar') {
                 document.querySelectorAll('.card-value, .core-value, .status-badge, .quake-stat .number').forEach(el => {
                     if (el.innerText && !el.innerText.includes('--') && !el.innerText.includes('°')) {
@@ -841,6 +832,7 @@
 
         // Constants
         const PROXY = "https://cors-anywhere.herokuapp.com/";
+        const NOAA_BASE = "https://services.swpc.noaa.gov";
         const MIZAN = {
             bz: "-1.2", proton: "0.8", auroraProb: "65", kp: "3.3", dst: "-27",
             iceExtent: "14.20", seaLevel: "3.40", oceanHeat: "2.10", oceanTemp: "0.80",
@@ -848,13 +840,13 @@
             swSpeed: "420", swDensity: "8.5", swTemp: "120"
         };
 
-        // Define indicators
+        // Define indicators with official NOAA URLs
         const indicators = {
             aurora: [
-                { key: 'bz', name: 'Bz', unit: 'nT', url: 'https://services.swpc.noaa.gov/products/solar-wind/mag-field.json', type: 'json', field: 'bz' },
-                { key: 'proton', name: 'Proton Flux', unit: 'pfu', url: 'https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json', type: 'json', field: 'proton' },
-                { key: 'auroraProb', name: 'Aurora Prob', unit: '%', url: 'https://services.swpc.noaa.gov/json/ovation_aurora_latest.json', type: 'aurora' },
-                { key: 'kp', name: 'Kp', unit: '', url: 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json', type: 'json', field: 'kp' },
+                { key: 'bz', name: 'Bz', unit: 'nT', url: `${NOAA_BASE}/products/solar-wind/mag-field-7-day.json`, type: 'json', field: 'bz' },
+                { key: 'proton', name: 'Proton Flux', unit: 'pfu', url: `${NOAA_BASE}/json/goes/primary/proton-flux-1-day.json`, type: 'json', field: 'proton' },
+                { key: 'auroraProb', name: 'Aurora Prob', unit: '%', url: `${NOAA_BASE}/json/ovation_aurora_latest.json`, type: 'aurora' },
+                { key: 'kp', name: 'Kp', unit: '', url: `${NOAA_BASE}/products/noaa-planetary-k-index.json`, type: 'json', field: 'kp' },
                 { key: 'dst', name: 'DST', unit: 'nT', url: 'https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst', type: 'text' }
             ],
             cryo: [
@@ -868,11 +860,11 @@
                 { key: 'co2', name: 'CO₂', unit: 'ppm', url: 'https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv', type: 'csv' }
             ],
             solar: [
-                { key: 'sunspot', name: 'Sunspots', unit: '', url: 'https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json', type: 'json', field: 'sunspot' },
-                { key: 'solarFlux', name: 'Solar Flux', unit: 'sfu', url: 'https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json', type: 'json', field: 'solarFlux' },
-                { key: 'swSpeed', name: 'Wind Speed', unit: 'km/s', url: 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', type: 'solar', sub: 'speed' },
-                { key: 'swDensity', name: 'Wind Density', unit: 'p/cm³', url: 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', type: 'solar', sub: 'density' },
-                { key: 'swTemp', name: 'Wind Temp', unit: 'K', url: 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json', type: 'solar', sub: 'temp' }
+                { key: 'sunspot', name: 'Sunspots', unit: '', url: `${NOAA_BASE}/json/solar-cycle/sunspot.json`, type: 'json', field: 'sunspot' },
+                { key: 'solarFlux', name: 'Solar Flux', unit: 'sfu', url: `${NOAA_BASE}/json/solar-cycle/solar-radio-flux.json`, type: 'json', field: 'solarFlux' },
+                { key: 'swSpeed', name: 'Wind Speed', unit: 'km/s', url: `${NOAA_BASE}/products/solar-wind/plasma-7-day.json`, type: 'solar', sub: 'speed' },
+                { key: 'swDensity', name: 'Wind Density', unit: 'p/cm³', url: `${NOAA_BASE}/products/solar-wind/plasma-7-day.json`, type: 'solar', sub: 'density' },
+                { key: 'swTemp', name: 'Wind Temp', unit: 'K', url: `${NOAA_BASE}/products/solar-wind/plasma-7-day.json`, type: 'solar', sub: 'temp' }
             ]
         };
 
@@ -1000,7 +992,7 @@
             }
         }
 
-        // Core indicators - FIXED VERSION
+        // Core indicators
         function updateCoreIndicators() {
             const now = new Date();
             
@@ -1072,22 +1064,17 @@
 
         // Moon Phase
         function updateMoonPhase() {
-            const now = new Date();
-            
-            // Simple moon phase calculation (based on days since known new moon)
-            const knownNewMoon = new Date('2024-04-08');
+            const now = Date.now();
+            const knownNewMoon = Date.UTC(2024, 3, 8); // April 8, 2024
             const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
             const phase = (daysSince % 29.53) / 29.53;
-            
-            const phases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
             const phaseIndex = Math.floor(phase * 8) % 8;
-            const illumination = Math.round(Math.sin(phase * Math.PI) * 100);
-            
             const icons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+            const phaseNames = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
             
             document.getElementById('moon-icon').textContent = icons[phaseIndex];
-            document.getElementById('moon-phase-name').textContent = phases[phaseIndex];
-            document.getElementById('moon-illumination').textContent = illumination + '%';
+            document.getElementById('moon-phase-name').textContent = phaseNames[phaseIndex];
+            document.getElementById('moon-illumination').textContent = Math.round(Math.abs(Math.sin(phase * Math.PI) * 100)) + '%';
             document.getElementById('moon-age').textContent = `Age: ${Math.round(daysSince % 29.53)} days`;
         }
 
@@ -1218,8 +1205,8 @@
             setInterval(updateCoreIndicators, 1000);
             setInterval(refreshAllIndicators, 30000);
             setInterval(updateLiveImages, 300000);
-            setInterval(updateMoonPhase, 3600000); // Update moon phase every hour
-            setInterval(fetchEarthquakes, 60000); // Update earthquakes every minute
+            setInterval(updateMoonPhase, 3600000);
+            setInterval(fetchEarthquakes, 60000);
         }
 
         startObservatory();
