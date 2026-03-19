@@ -136,7 +136,7 @@
             padding-left: 1rem;
         }
         
-        /* Core Indicators (3) - Blue background, green text */
+        /* Core Indicators Grid */
         .core-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -144,202 +144,116 @@
             margin-bottom: 2rem;
         }
         
-        .core-card {
-            background: #0f2b4f;
+        /* ===== تعميم التصميم الأزرق على جميع البطاقات ===== */
+        .card, .core-card {
+            background: #0f2b4f !important;
+            border: 1px solid #fbbf24 !important;
             border-radius: 20px;
             padding: 1.5rem;
-            border: 1px solid #fbbf24;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
         }
         
-        .core-header {
+        .card:hover, .core-card:hover {
+            transform: translateY(-5px);
+            border-color: #4ade80 !important;
+        }
+        
+        .card-header, .core-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
         
-        .core-title {
-            font-size: 1.2rem;
-            font-weight: 500;
-            background: rgba(255,255,255,0.1);
+        .card-title, .core-title {
+            color: #fbbf24 !important;
+            background: rgba(255,255,255,0.1) !important;
+            border: 1px solid #fbbf24 !important;
             padding: 0.3rem 1rem;
             border-radius: 30px;
-            color: #fbbf24;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
         
-        .core-value {
-            font-family: 'Courier New', monospace;
-            font-size: 1.8rem;
-            font-weight: 600;
-            background: rgba(0,0,0,0.3);
-            padding: 0.2rem 0.8rem;
-            border-radius: 12px;
+        .card-value, .core-value {
+            background: rgba(0,0,0,0.3) !important;
             color: #4ade80 !important;
             border: 2px solid #4ade80 !important;
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
         }
         
+        /* Taqābul باللون الأحمر */
         #taqabul-value {
             color: #ef4444 !important;
             border-color: #ef4444 !important;
         }
         
-        .core-gauge {
+        /* المؤشرات الحية */
+        .card-value.live {
+            color: #4ade80 !important;
+            border-color: #4ade80 !important;
+        }
+        
+        /* المؤشرات الاحتياطية */
+        .card-value.mizan {
+            color: #fbbf24 !important;
+            border-color: #fbbf24 !important;
+        }
+        
+        /* مقاييس القياس */
+        .gauge, .core-gauge {
+            background: rgba(255,255,255,0.2) !important;
             height: 8px;
-            background: rgba(255,255,255,0.2);
             border-radius: 10px;
             margin: 1rem 0;
             overflow: hidden;
         }
         
-        .core-gauge-fill {
+        .gauge-fill, .core-gauge-fill {
             height: 100%;
-            width: 0%;
             border-radius: 10px;
             transition: width 0.5s ease;
         }
         
-        #taqabul-gauge {
-            background: #ef4444 !important;
-        }
+        .gauge-fill.live { background: #4ade80 !important; }
+        .gauge-fill.mizan { background: #fbbf24 !important; }
+        #taqabul-gauge { background: #ef4444 !important; }
+        #closure-gauge, #balance-gauge { background: #4ade80 !important; }
         
-        #closure-gauge, #balance-gauge {
-            background: #4ade80 !important;
-        }
-        
-        /* Indicators Grid */
-        .section-title {
-            color: #0f2b4f;
-            font-size: 1.8rem;
-            margin: 2rem 0 1rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 0.5rem;
-        }
-        
-        .indicators-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .card {
-            background: #eef2f9;
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 2px solid #cbd5e1;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-            transition: transform 0.2s;
-            position: relative;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card[data-tooltip] {
-            position: relative;
-            cursor: help;
-        }
-        
-        .card[data-tooltip]:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #334155;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            z-index: 10;
-        }
-        
-        .card[data-tooltip]:hover:before {
-            opacity: 1;
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #1e293b;
-            background: rgba(255,255,255,0.7);
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            border: 1px solid #cbd5e1;
-        }
-        
-        .card-value {
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: white;
-            padding: 0.2rem 0.8rem;
-            border-radius: 12px;
-            border: 2px solid #cbd5e1;
-            min-width: 80px;
-            text-align: center;
-        }
-        
-        .card-value.live { color: #4ade80; border-color: #4ade80; }
-        .card-value.mizan { color: #fbbf24; border-color: #fbbf24; font-weight: bold; }
-        
-        .gauge {
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-        
-        .gauge-fill {
-            height: 100%;
-            width: 0%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-        
-        .gauge-fill.live { background: #4ade80; }
-        .gauge-fill.mizan { background: #fbbf24; }
-        
+        /* شريط الحالة */
         .status {
+            color: #94a3b8 !important;
             font-size: 0.8rem;
-            color: #64748b;
             margin-top: 0.5rem;
             display: flex;
             justify-content: space-between;
         }
         
         .status-badge {
+            background: rgba(255,255,255,0.1) !important;
+            color: #fbbf24 !important;
             padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            background: #e2e8f0;
-            color: #334155;
             font-size: 0.7rem;
         }
         
-        .status-badge.live { background: #4ade80; color: white; }
-        .status-badge.mizan { background: #fbbf24; color: #0f2b4f; font-weight: bold; }
+        .status-badge.live { background: #4ade80 !important; color: white !important; }
+        .status-badge.mizan { background: #fbbf24 !important; color: #0f2b4f !important; }
         
-        /* Category colors */
-        .aurora .gauge-fill.live { background: #a855f7; }
-        .cryo .gauge-fill.live { background: #3b82f6; }
-        .temp .gauge-fill.live { background: #22c55e; }
-        .solar .gauge-fill.live { background: #fbbf24; }
+        /* ألوان الفئات للتمييز */
+        .aurora .gauge-fill.live { background: #a855f7 !important; }
+        .cryo .gauge-fill.live { background: #3b82f6 !important; }
+        .temp .gauge-fill.live { background: #22c55e !important; }
+        .solar .gauge-fill.live { background: #fbbf24 !important; }
         
-        /* Images */
+        /* Images Grid */
         .images-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -504,6 +418,21 @@
             display: inline-block;
             font-weight: bold;
         }
+        
+        .section-title {
+            color: #0f2b4f;
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -556,12 +485,12 @@
             <div class="core-card" data-tooltip="Taqābul: Angular alignment with Mecca">
                 <div class="core-header">
                     <span class="core-title">🕋 Taqābul</span>
-                    <span class="core-value" id="taqabul-value">--°</span>
+                    <span class="core-value" id="taqabul-value">--</span>
                 </div>
                 <div class="core-gauge"><div class="core-gauge-fill" id="taqabul-gauge" style="width:0%"></div></div>
                 <div class="status">
-                    <span class="status-badge mizan">MIZAN</span>
-                    <span data-key="absolute-angle">Absolute Angle</span>
+                    <span class="status-badge" id="taqabul-status">MIZAN</span>
+                    <span data-key="absolute-angle">Angle</span>
                 </div>
             </div>
             <div class="core-card" data-tooltip="Closure: Seismic cycle index (RS)">
@@ -571,7 +500,7 @@
                 </div>
                 <div class="core-gauge"><div class="core-gauge-fill" id="closure-gauge" style="width:0%"></div></div>
                 <div class="status">
-                    <span class="status-badge mizan">MIZAN</span>
+                    <span class="status-badge" id="closure-status">MIZAN</span>
                     <span>RS</span>
                 </div>
             </div>
@@ -582,7 +511,7 @@
                 </div>
                 <div class="core-gauge"><div class="core-gauge-fill" id="balance-gauge" style="width:0%"></div></div>
                 <div class="status">
-                    <span class="status-badge mizan">MIZAN</span>
+                    <span class="status-badge" id="balance-status">MIZAN</span>
                     <span>α_stab</span>
                 </div>
             </div>
@@ -664,7 +593,7 @@
                 "solar-title": "☀️ 4. Solar Activity",
                 "images-title": "🛰️ 5. Live Images",
                 "earthquake-title": "🌋 6. Live Earthquake Observatory",
-                "absolute-angle": "Absolute Angle",
+                "absolute-angle": "Angle",
                 "last-update": "Last update",
                 "last-24h": "Last 24h",
                 "strongest": "Strongest",
@@ -684,7 +613,7 @@
                 "solar-title": "☀️ ٤. النشاط الشمسي",
                 "images-title": "🛰️ ٥. الصور الحية",
                 "earthquake-title": "🌋 ٦. مرصد الزلازل المباشر",
-                "absolute-angle": "زاوية مطلقة",
+                "absolute-angle": "زاوية",
                 "last-update": "آخر تحديث",
                 "last-24h": "آخر ٢٤ ساعة",
                 "strongest": "الأقوى",
@@ -704,7 +633,7 @@
                 "solar-title": "☀️ 4. Activité Solaire",
                 "images-title": "🛰️ 5. Images en direct",
                 "earthquake-title": "🌋 6. Observatoire sismique",
-                "absolute-angle": "Angle absolu",
+                "absolute-angle": "Angle",
                 "last-update": "Dernière mise à jour",
                 "last-24h": "Dernières 24h",
                 "strongest": "Le plus fort",
@@ -724,7 +653,7 @@
                 "solar-title": "☀️ 4. Actividad Solar",
                 "images-title": "🛰️ 5. Imágenes en vivo",
                 "earthquake-title": "🌋 6. Observatorio de terremotos",
-                "absolute-angle": "Ángulo absoluto",
+                "absolute-angle": "Ángulo",
                 "last-update": "Última actualización",
                 "last-24h": "Últimas 24h",
                 "strongest": "Más fuerte",
@@ -744,7 +673,7 @@
                 "solar-title": "☀️ 4. 太阳活动",
                 "images-title": "🛰️ 5. 实时图像",
                 "earthquake-title": "🌋 6. 实时地震台",
-                "absolute-angle": "绝对角度",
+                "absolute-angle": "角度",
                 "last-update": "最后更新",
                 "last-24h": "最近24小时",
                 "strongest": "最强",
@@ -764,7 +693,7 @@
                 "solar-title": "☀️ 4. सौर गतिविधि",
                 "images-title": "🛰️ 5. लाइव छवियाँ",
                 "earthquake-title": "🌋 6. लाइव भूकंप वेधशाला",
-                "absolute-angle": "निरपेक्ष कोण",
+                "absolute-angle": "कोण",
                 "last-update": "अंतिम अद्यतन",
                 "last-24h": "पिछले 24 घंटे",
                 "strongest": "सबसे मजबूत",
@@ -784,7 +713,7 @@
                 "solar-title": "☀️ 4. Солнечная активность",
                 "images-title": "🛰️ 5. Прямые изображения",
                 "earthquake-title": "🌋 6. Прямая сейсмическая обсерватория",
-                "absolute-angle": "Абсолютный угол",
+                "absolute-angle": "Угол",
                 "last-update": "Последнее обновление",
                 "last-24h": "Последние 24ч",
                 "strongest": "Сильнейшее",
@@ -992,45 +921,52 @@
             }
         }
 
-        // Core indicators
-        function updateCoreIndicators() {
+        // Moon Phase - Fixed version
+        function updateMoonPhase() {
             const now = new Date();
-            
-            // Taqābul
-            const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
-            const seconds = meccaTime.getUTCSeconds() + 60 * (meccaTime.getUTCMinutes() + 60 * meccaTime.getUTCHours());
-            const taqabulAngle = (seconds / 86400) * 360;
-            
-            const taqabulEl = document.getElementById('taqabul-value');
-            if (taqabulEl) {
-                taqabulEl.textContent = taqabulAngle.toFixed(2) + '°';
-                if (currentLanguage === 'ar') {
-                    taqabulEl.textContent = taqabulEl.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-                }
-            }
-            document.getElementById('taqabul-gauge').style.width = (taqabulAngle / 360 * 100) + '%';
+            const knownNewMoon = new Date(Date.UTC(2024, 3, 8, 18, 21)); 
+            const synodicMonth = 29.53058867;
+            const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
+            const age = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
+            const phase = age / synodicMonth;
+            const icons = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+            const names = ['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
+            const index = Math.floor(phase * 8);
+            const illumination = (1 - Math.cos(2 * Math.PI * phase)) / 2;
 
-            // Closure
-            const closureVal = 0.0057;
-            const closureEl = document.getElementById('closure-value');
-            if (closureEl) {
-                closureEl.textContent = closureVal.toFixed(4);
-                if (currentLanguage === 'ar') {
-                    closureEl.textContent = closureEl.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-                }
+            document.getElementById('moon-icon').textContent = icons[index];
+            document.getElementById('moon-phase-name').textContent = names[index];
+            document.getElementById('moon-illumination').textContent = Math.round(illumination * 100) + '%';
+            document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
+            
+            if (currentLanguage === 'ar') {
+                document.getElementById('moon-age').textContent = document.getElementById('moon-age').textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
             }
-            document.getElementById('closure-gauge').style.width = (closureVal * 10000) + '%';
+        }
 
-            // Balance
-            const balanceVal = 7.850;
-            const balanceEl = document.getElementById('balance-value');
-            if (balanceEl) {
-                balanceEl.textContent = balanceVal.toFixed(3);
-                if (currentLanguage === 'ar') {
-                    balanceEl.textContent = balanceEl.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-                }
+        // Core Indicators - Fixed version
+        function updateCoreIndicators() {
+            const bzValue = document.getElementById('bz-value')?.textContent || '0';
+            const kpValue = document.getElementById('kp-value')?.textContent || '0';
+            const dstValue = document.getElementById('dst-value')?.textContent || '0';
+            
+            const bz = parseFloat(bzValue) || 0;
+            const kp = parseFloat(kpValue) || 0;
+            const dst = parseFloat(dstValue) || 0;
+
+            const taqabul = (Math.abs(bz) + kp).toFixed(2);
+            const closure = (Math.abs(dst) / 50).toFixed(2);
+            const balance = ((taqabul * closure) / 10).toFixed(3);
+
+            document.getElementById('taqabul-value').textContent = taqabul;
+            document.getElementById('closure-value').textContent = closure;
+            document.getElementById('balance-value').textContent = balance;
+            
+            if (currentLanguage === 'ar') {
+                document.querySelectorAll('#taqabul-value, #closure-value, #balance-value').forEach(el => {
+                    el.textContent = el.textContent.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                });
             }
-            document.getElementById('balance-gauge').style.width = (balanceVal / 10 * 100) + '%';
         }
 
         // Time functions
@@ -1062,20 +998,50 @@
                 meccaTime.getUTCSeconds().toString().padStart(2,'0');
         }
 
-        // Moon Phase
-        function updateMoonPhase() {
-            const now = Date.now();
-            const knownNewMoon = Date.UTC(2024, 3, 8); // April 8, 2024
-            const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
-            const phase = (daysSince % 29.53) / 29.53;
-            const phaseIndex = Math.floor(phase * 8) % 8;
-            const icons = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
-            const phaseNames = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+        // Images
+        function updateLiveImages() {
+            const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
+            const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
             
-            document.getElementById('moon-icon').textContent = icons[phaseIndex];
-            document.getElementById('moon-phase-name').textContent = phaseNames[phaseIndex];
-            document.getElementById('moon-illumination').textContent = Math.round(Math.abs(Math.sin(phase * Math.PI) * 100)) + '%';
-            document.getElementById('moon-age').textContent = `Age: ${Math.round(daysSince % 29.53)} days`;
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
+
+            const loadImage = (id, url) => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                container.innerHTML = '<div class="image-skeleton">Loading...</div>';
+                const img = new Image();
+                img.src = url + "?t=" + Date.now();
+                img.onload = () => {
+                    container.innerHTML = '';
+                    img.classList.add('image-loaded');
+                    container.appendChild(img);
+                };
+                img.onerror = () => {
+                    container.innerHTML = '<div class="image-skeleton error">Failed to load</div>';
+                };
+            };
+
+            loadImage('sdo-image', sdoUrl);
+            loadImage('aurora-map', auroraUrl);
+            
+            const earthContainer = document.getElementById('earth-image');
+            if (earthContainer) {
+                earthContainer.innerHTML = '<div class="image-skeleton">Loading Earth...</div>';
+                const img = new Image();
+                img.src = earthUrl + "?t=" + Date.now();
+                img.onload = () => {
+                    earthContainer.innerHTML = '';
+                    img.classList.add('image-loaded');
+                    earthContainer.appendChild(img);
+                };
+                img.onerror = () => {
+                    earthContainer.innerHTML = '<div class="image-skeleton error">Earth unavailable</div>';
+                };
+            }
         }
 
         // Earthquake data
@@ -1129,52 +1095,6 @@
             }
         }
 
-        // Images
-        function updateLiveImages() {
-            const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
-            const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
-            
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
-
-            const loadImage = (id, url) => {
-                const container = document.getElementById(id);
-                if (!container) return;
-                container.innerHTML = '<div class="image-skeleton">Loading...</div>';
-                const img = new Image();
-                img.src = url + "?t=" + Date.now();
-                img.onload = () => {
-                    container.innerHTML = '';
-                    img.classList.add('image-loaded');
-                    container.appendChild(img);
-                };
-                img.onerror = () => {
-                    container.innerHTML = '<div class="image-skeleton error">Failed to load</div>';
-                };
-            };
-
-            loadImage('sdo-image', sdoUrl);
-            loadImage('aurora-map', auroraUrl);
-            
-            const earthContainer = document.getElementById('earth-image');
-            if (earthContainer) {
-                earthContainer.innerHTML = '<div class="image-skeleton">Loading Earth...</div>';
-                const img = new Image();
-                img.src = earthUrl + "?t=" + Date.now();
-                img.onload = () => {
-                    earthContainer.innerHTML = '';
-                    img.classList.add('image-loaded');
-                    earthContainer.appendChild(img);
-                };
-                img.onerror = () => {
-                    earthContainer.innerHTML = '<div class="image-skeleton error">Earth unavailable</div>';
-                };
-            }
-        }
-
         // Refresh all indicators
         async function refreshAllIndicators() {
             const allIndicators = [...indicators.aurora, ...indicators.cryo, ...indicators.temp, ...indicators.solar];
@@ -1195,21 +1115,21 @@
         // Start everything
         function startObservatory() {
             updateCosmicTime();
+            updateMoonPhase();
             updateCoreIndicators();
             refreshAllIndicators();
             updateLiveImages();
-            updateMoonPhase();
             fetchEarthquakes();
             
             setInterval(updateCosmicTime, 1000);
-            setInterval(updateCoreIndicators, 1000);
+            setInterval(updateMoonPhase, 60000);
+            setInterval(updateCoreIndicators, 30000);
             setInterval(refreshAllIndicators, 30000);
             setInterval(updateLiveImages, 300000);
-            setInterval(updateMoonPhase, 3600000);
             setInterval(fetchEarthquakes, 60000);
         }
 
         startObservatory();
     </script>
 </body>
-    </html>
+</html>
