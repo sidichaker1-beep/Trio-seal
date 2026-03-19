@@ -63,7 +63,6 @@
             padding-bottom: 0.5rem;
         }
         
-        /* Grid system */
         .indicators-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -71,7 +70,6 @@
             margin-bottom: 2rem;
         }
         
-        /* Cards - نسخة محسنة بتباين عالي */
         .card {
             background: #eef2f9;
             backdrop-filter: blur(8px);
@@ -317,59 +315,29 @@
         <h2 class="section-title">🌌 1. الشفق القطبي والمجال المغناطيسي</h2>
         <div class="indicators-grid">
             <div class="card aurora" data-tooltip="Bz: المركبة العمودية للمجال المغناطيسي بين الكواكب">
-                <div class="card-header">
-                    <span class="card-title">🧲 Bz</span>
-                    <span class="card-value loading" id="bz-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🧲 Bz</span><span class="card-value loading" id="bz-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="bz-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="bz-status">Loading</span>
-                    <span>nT</span>
-                </div>
+                <div class="status"><span class="status-badge" id="bz-status">Loading</span><span>nT</span></div>
             </div>
             <div class="card aurora" data-tooltip="Proton Flux: تدفق البروتونات عالية الطاقة">
-                <div class="card-header">
-                    <span class="card-title">⚡ Proton</span>
-                    <span class="card-value loading" id="proton-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">⚡ Proton</span><span class="card-value loading" id="proton-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="proton-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="proton-status">Loading</span>
-                    <span>pfu</span>
-                </div>
+                <div class="status"><span class="status-badge" id="proton-status">Loading</span><span>pfu</span></div>
             </div>
             <div class="card aurora" data-tooltip="Aurora Probability: احتمال رؤية الشفق القطبي">
-                <div class="card-header">
-                    <span class="card-title">🌌 Aurora</span>
-                    <span class="card-value loading" id="aurora-prob-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌌 Aurora</span><span class="card-value loading" id="aurora-prob-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="aurora-prob-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="aurora-prob-status">Loading</span>
-                    <span>%</span>
-                </div>
+                <div class="status"><span class="status-badge" id="aurora-prob-status">Loading</span><span>%</span></div>
             </div>
             <div class="card aurora" data-tooltip="Kp Index: مؤشر الاضطراب المغناطيسي العالمي">
-                <div class="card-header">
-                    <span class="card-title">📊 Kp</span>
-                    <span class="card-value loading" id="kp-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">📊 Kp</span><span class="card-value loading" id="kp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="kp-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="kp-status">Loading</span>
-                    <span>0-9</span>
-                </div>
+                <div class="status"><span class="status-badge" id="kp-status">Loading</span><span>0-9</span></div>
             </div>
             <div class="card aurora" data-tooltip="DST Index: مؤشر شدة العاصفة المغناطيسية">
-                <div class="card-header">
-                    <span class="card-title">🧭 DST</span>
-                    <span class="card-value loading" id="dst-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🧭 DST</span><span class="card-value loading" id="dst-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="dst-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="dst-status">Loading</span>
-                    <span>nT</span>
-                </div>
+                <div class="status"><span class="status-badge" id="dst-status">Loading</span><span>nT</span></div>
             </div>
         </div>
 
@@ -377,48 +345,24 @@
         <h2 class="section-title">🧊 2. الجليد والمحيطات</h2>
         <div class="indicators-grid">
             <div class="card cryo" data-tooltip="Arctic Ice Extent: مساحة الجليد في القطب الشمالي">
-                <div class="card-header">
-                    <span class="card-title">🧊 Ice</span>
-                    <span class="card-value loading" id="ice-extent-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🧊 Ice</span><span class="card-value loading" id="ice-extent-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="ice-extent-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="ice-extent-status">Loading</span>
-                    <span>M km²</span>
-                </div>
+                <div class="status"><span class="status-badge" id="ice-extent-status">Loading</span><span>M km²</span></div>
             </div>
             <div class="card cryo" data-tooltip="Sea Level Rise: ارتفاع منسوب سطح البحر">
-                <div class="card-header">
-                    <span class="card-title">🌊 Sea Level</span>
-                    <span class="card-value loading" id="sea-level-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌊 Sea Level</span><span class="card-value loading" id="sea-level-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="sea-level-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="sea-level-status">Loading</span>
-                    <span>mm</span>
-                </div>
+                <div class="status"><span class="status-badge" id="sea-level-status">Loading</span><span>mm</span></div>
             </div>
             <div class="card cryo" data-tooltip="Ocean Heat Content: المحتوى الحراري للمحيطات">
-                <div class="card-header">
-                    <span class="card-title">🔥 Ocean Heat</span>
-                    <span class="card-value loading" id="ocean-heat-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🔥 Ocean Heat</span><span class="card-value loading" id="ocean-heat-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="ocean-heat-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="ocean-heat-status">Loading</span>
-                    <span>10²² J</span>
-                </div>
+                <div class="status"><span class="status-badge" id="ocean-heat-status">Loading</span><span>10²² J</span></div>
             </div>
             <div class="card cryo" data-tooltip="Ocean Temperature Anomaly: شذوذ درجة حرارة المحيطات">
-                <div class="card-header">
-                    <span class="card-title">🌡️ Ocean Temp</span>
-                    <span class="card-value loading" id="ocean-temp-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌡️ Ocean Temp</span><span class="card-value loading" id="ocean-temp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="ocean-temp-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="ocean-temp-status">Loading</span>
-                    <span>°C</span>
-                </div>
+                <div class="status"><span class="status-badge" id="ocean-temp-status">Loading</span><span>°C</span></div>
             </div>
         </div>
 
@@ -426,26 +370,14 @@
         <h2 class="section-title">🌡️ 3. حرارة الأرض والغلاف الجوي</h2>
         <div class="indicators-grid">
             <div class="card temp" data-tooltip="Surface Temperature Anomaly: شذوذ درجة حرارة سطح الأرض">
-                <div class="card-header">
-                    <span class="card-title">🌡️ Surface</span>
-                    <span class="card-value loading" id="surface-temp-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌡️ Surface</span><span class="card-value loading" id="surface-temp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="surface-temp-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="surface-temp-status">Loading</span>
-                    <span>°C</span>
-                </div>
+                <div class="status"><span class="status-badge" id="surface-temp-status">Loading</span><span>°C</span></div>
             </div>
             <div class="card temp" data-tooltip="CO₂ Levels: تركيز ثاني أكسيد الكربون">
-                <div class="card-header">
-                    <span class="card-title">🌍 CO₂</span>
-                    <span class="card-value loading" id="co2-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌍 CO₂</span><span class="card-value loading" id="co2-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="co2-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="co2-status">Loading</span>
-                    <span>ppm</span>
-                </div>
+                <div class="status"><span class="status-badge" id="co2-status">Loading</span><span>ppm</span></div>
             </div>
         </div>
 
@@ -453,166 +385,79 @@
         <h2 class="section-title">☀️ 4. النشاط الشمسي</h2>
         <div class="indicators-grid">
             <div class="card solar" data-tooltip="Sunspot Number: عدد البقع الشمسية">
-                <div class="card-header">
-                    <span class="card-title">☀️ Sunspots</span>
-                    <span class="card-value loading" id="sunspot-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">☀️ Sunspots</span><span class="card-value loading" id="sunspot-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="sunspot-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="sunspot-status">Loading</span>
-                    <span>عدد</span>
-                </div>
+                <div class="status"><span class="status-badge" id="sunspot-status">Loading</span><span>عدد</span></div>
             </div>
             <div class="card solar" data-tooltip="Solar Flux (F10.7): التدفق الراديوي الشمسي">
-                <div class="card-header">
-                    <span class="card-title">📡 Solar Flux</span>
-                    <span class="card-value loading" id="solar-flux-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">📡 Solar Flux</span><span class="card-value loading" id="solar-flux-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="solar-flux-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="solar-flux-status">Loading</span>
-                    <span>sfu</span>
-                </div>
+                <div class="status"><span class="status-badge" id="solar-flux-status">Loading</span><span>sfu</span></div>
             </div>
             <div class="card solar" data-tooltip="Solar Wind Speed: سرعة الرياح الشمسية">
-                <div class="card-header">
-                    <span class="card-title">🌬️ Speed</span>
-                    <span class="card-value loading" id="sw-speed-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌬️ Speed</span><span class="card-value loading" id="sw-speed-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="sw-speed-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="sw-speed-status">Loading</span>
-                    <span>km/s</span>
-                </div>
+                <div class="status"><span class="status-badge" id="sw-speed-status">Loading</span><span>km/s</span></div>
             </div>
             <div class="card solar" data-tooltip="Solar Wind Density: كثافة الرياح الشمسية">
-                <div class="card-header">
-                    <span class="card-title">🌬️ Density</span>
-                    <span class="card-value loading" id="sw-density-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌬️ Density</span><span class="card-value loading" id="sw-density-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="sw-density-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="sw-density-status">Loading</span>
-                    <span>p/cm³</span>
-                </div>
+                <div class="status"><span class="status-badge" id="sw-density-status">Loading</span><span>p/cm³</span></div>
             </div>
             <div class="card solar" data-tooltip="Solar Wind Temperature: درجة حرارة الرياح الشمسية">
-                <div class="card-header">
-                    <span class="card-title">🌡️ Temp</span>
-                    <span class="card-value loading" id="sw-temp-value">--</span>
-                </div>
+                <div class="card-header"><span class="card-title">🌡️ Temp</span><span class="card-value loading" id="sw-temp-value">--</span></div>
                 <div class="gauge"><div class="gauge-fill" id="sw-temp-gauge"></div></div>
-                <div class="status">
-                    <span class="status-badge" id="sw-temp-status">Loading</span>
-                    <span>K</span>
-                </div>
+                <div class="status"><span class="status-badge" id="sw-temp-status">Loading</span><span>K</span></div>
             </div>
         </div>
 
         <!-- ========== 5. الصور الحية ========== -->
         <h2 class="section-title">🛰️ 5. الصور الحية</h2>
         <div class="images-grid">
-            <div class="image-card">
-                <h3>☀️ SDO Solar</h3>
-                <div id="sdo-image"></div>
-            </div>
-            <div class="image-card">
-                <h3>🌍 Earth</h3>
-                <div id="earth-image"></div>
-            </div>
-            <div class="image-card">
-                <h3>🌌 Aurora Map</h3>
-                <div id="aurora-map"></div>
-            </div>
+            <div class="image-card"><h3>☀️ SDO Solar</h3><div id="sdo-image"></div></div>
+            <div class="image-card"><h3>🌍 Earth</h3><div id="earth-image"></div></div>
+            <div class="image-card"><h3>🌌 Aurora Map</h3><div id="aurora-map"></div></div>
         </div>
 
-        <!-- ========== Footer ========== -->
         <div class="footer">
-            <span id="timestamp">جاري التحميل...</span> · 
-            <span>21 مؤشر حي · 3 صور مباشرة</span> · 
-            <span>آخر تحديث: <span id="last-update">--</span></span>
+            <span id="timestamp">جاري التحميل...</span> · 21 مؤشر حي · آخر تحديث: <span id="last-update">--</span>
         </div>
         <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
     </div>
 
     <script>
         (function() {
-            // ==================== إعدادات المؤشرات ====================
+            const PROXY = "https://cors-anywhere.herokuapp.com/";
+            const FALLBACK_VALUE = "0.0057"; // قيمة ميزان الملكوت الاحتياطية
+
+            // إعدادات المؤشرات
             const indicators = {
-                bz: { 
-                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", backup: "" },
-                    thresholds: { low: 3, medium: 5, high: 8 }, unit: 'nT', maxValue: 10, category: 'aurora'
-                },
-                proton: {
-                    api: { primary: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", backup: "" },
-                    thresholds: { low: 1, medium: 10, high: 100 }, unit: 'pfu', maxValue: 100, category: 'aurora'
-                },
-                auroraProb: {
-                    api: { primary: "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json", backup: "" },
-                    thresholds: { low: 30, medium: 60, high: 90 }, unit: '%', maxValue: 100, category: 'aurora'
-                },
-                kp: {
-                    api: { primary: "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json", backup: "" },
-                    thresholds: { low: 3, medium: 5, high: 7 }, unit: '', maxValue: 9, category: 'aurora'
-                },
-                dst: {
-                    api: { primary: "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst", backup: "" },
-                    thresholds: { low: -30, medium: -50, high: -100 }, unit: 'nT', maxValue: 100, category: 'aurora'
-                },
-                ice: {
-                    api: { primary: "https://nsidc.org/api/seaice/", backup: "" },
-                    thresholds: { low: 14, medium: 13, high: 12 }, unit: 'M km²', maxValue: 15, category: 'cryo'
-                },
-                seaLevel: {
-                    api: { primary: "https://podaac.jpl.nasa.gov/api/", backup: "" },
-                    thresholds: { low: 2, medium: 4, high: 6 }, unit: 'mm', maxValue: 10, category: 'cryo'
-                },
-                oceanHeat: {
-                    api: { primary: "https://www.ncei.noaa.gov/access/services/", backup: "" },
-                    thresholds: { low: 1, medium: 2, high: 3 }, unit: '10²² J', maxValue: 5, category: 'cryo'
-                },
-                oceanTemp: {
-                    api: { primary: "https://www.ncei.noaa.gov/access/services/", backup: "" },
-                    thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'cryo'
-                },
-                surfaceTemp: {
-                    api: { primary: "https://data.giss.nasa.gov/gistemp/", backup: "" },
-                    thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'temp'
-                },
-                co2: {
-                    api: { primary: "https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv", backup: "" },
-                    thresholds: { low: 400, medium: 420, high: 440 }, unit: 'ppm', maxValue: 500, category: 'temp'
-                },
-                sunspot: {
-                    api: { primary: "https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json", backup: "" },
-                    thresholds: { low: 50, medium: 100, high: 150 }, unit: '', maxValue: 200, category: 'solar'
-                },
-                solarFlux: {
-                    api: { primary: "https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json", backup: "" },
-                    thresholds: { low: 70, medium: 100, high: 130 }, unit: 'sfu', maxValue: 200, category: 'solar'
-                },
-                swSpeed: {
-                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", backup: "" },
-                    thresholds: { low: 400, medium: 600, high: 800 }, unit: 'km/s', maxValue: 1000, category: 'solar'
-                },
-                swDensity: {
-                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", backup: "" },
-                    thresholds: { low: 5, medium: 10, high: 15 }, unit: 'p/cm³', maxValue: 20, category: 'solar'
-                },
-                swTemp: {
-                    api: { primary: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", backup: "" },
-                    thresholds: { low: 100000, medium: 200000, high: 300000 }, unit: 'K', maxValue: 500000, category: 'solar'
-                }
+                bz: { api: "https://services.swpc.noaa.gov/products/solar-wind/mag-field.json", thresholds: { low: 3, medium: 5, high: 8 }, unit: 'nT', maxValue: 10, category: 'aurora' },
+                proton: { api: "https://services.swpc.noaa.gov/json/goes/primary/proton-flux-1-day.json", thresholds: { low: 1, medium: 10, high: 100 }, unit: 'pfu', maxValue: 100, category: 'aurora' },
+                auroraProb: { api: "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json", thresholds: { low: 30, medium: 60, high: 90 }, unit: '%', maxValue: 100, category: 'aurora', type: 'aurora' },
+                kp: { api: "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json", thresholds: { low: 3, medium: 5, high: 7 }, unit: '', maxValue: 9, category: 'aurora' },
+                dst: { api: "https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst", thresholds: { low: -30, medium: -50, high: -100 }, unit: 'nT', maxValue: 100, category: 'aurora', type: 'text' },
+                iceExtent: { api: "https://nsidc.org/api/seaice/extent/north/latest.csv", thresholds: { low: 14, medium: 13, high: 12 }, unit: 'M km²', maxValue: 15, category: 'cryo', type: 'csv' },
+                seaLevel: { api: "https://climate.nasa.gov/system/internal_resources/details/original/2158_Global_Mean_Sea_Level_Trend.csv", thresholds: { low: 2, medium: 4, high: 6 }, unit: 'mm', maxValue: 10, category: 'cryo', type: 'csv' },
+                oceanHeat: { api: "https://www.ncei.noaa.gov/access/services/", thresholds: { low: 1, medium: 2, high: 3 }, unit: '10²² J', maxValue: 5, category: 'cryo' },
+                oceanTemp: { api: "https://www.ncei.noaa.gov/access/services/", thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'cryo' },
+                surfaceTemp: { api: "https://data.giss.nasa.gov/gistemp/", thresholds: { low: 0.5, medium: 1, high: 1.5 }, unit: '°C', maxValue: 2, category: 'temp' },
+                co2: { api: "https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv", thresholds: { low: 400, medium: 420, high: 440 }, unit: 'ppm', maxValue: 500, category: 'temp', type: 'csv' },
+                sunspot: { api: "https://services.swpc.noaa.gov/json/solar-cycle/sunspot.json", thresholds: { low: 50, medium: 100, high: 150 }, unit: '', maxValue: 200, category: 'solar' },
+                solarFlux: { api: "https://services.swpc.noaa.gov/json/solar-cycle/solar-radio-flux.json", thresholds: { low: 70, medium: 100, high: 130 }, unit: 'sfu', maxValue: 200, category: 'solar' },
+                swSpeed: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 400, medium: 600, high: 800 }, unit: 'km/s', maxValue: 1000, category: 'solar', type: 'solar' },
+                swDensity: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 5, medium: 10, high: 15 }, unit: 'p/cm³', maxValue: 20, category: 'solar', type: 'solar' },
+                swTemp: { api: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", thresholds: { low: 100000, medium: 200000, high: 300000 }, unit: 'K', maxValue: 500000, category: 'solar', type: 'solar' }
             };
 
-            // ==================== عناصر HTML ====================
+            // عناصر HTML
             const elements = {
                 bz: { value: document.getElementById('bz-value'), status: document.getElementById('bz-status'), gauge: document.getElementById('bz-gauge') },
                 proton: { value: document.getElementById('proton-value'), status: document.getElementById('proton-status'), gauge: document.getElementById('proton-gauge') },
                 auroraProb: { value: document.getElementById('aurora-prob-value'), status: document.getElementById('aurora-prob-status'), gauge: document.getElementById('aurora-prob-gauge') },
                 kp: { value: document.getElementById('kp-value'), status: document.getElementById('kp-status'), gauge: document.getElementById('kp-gauge') },
                 dst: { value: document.getElementById('dst-value'), status: document.getElementById('dst-status'), gauge: document.getElementById('dst-gauge') },
-                ice: { value: document.getElementById('ice-extent-value'), status: document.getElementById('ice-extent-status'), gauge: document.getElementById('ice-extent-gauge') },
+                iceExtent: { value: document.getElementById('ice-extent-value'), status: document.getElementById('ice-extent-status'), gauge: document.getElementById('ice-extent-gauge') },
                 seaLevel: { value: document.getElementById('sea-level-value'), status: document.getElementById('sea-level-status'), gauge: document.getElementById('sea-level-gauge') },
                 oceanHeat: { value: document.getElementById('ocean-heat-value'), status: document.getElementById('ocean-heat-status'), gauge: document.getElementById('ocean-heat-gauge') },
                 oceanTemp: { value: document.getElementById('ocean-temp-value'), status: document.getElementById('ocean-temp-status'), gauge: document.getElementById('ocean-temp-gauge') },
@@ -625,102 +470,46 @@
                 swTemp: { value: document.getElementById('sw-temp-value'), status: document.getElementById('sw-temp-status'), gauge: document.getElementById('sw-temp-gauge') },
                 timestamp: document.getElementById('timestamp'),
                 lastUpdate: document.getElementById('last-update'),
-                images: {
-                    sdo: document.getElementById('sdo-image'),
-                    earth: document.getElementById('earth-image'),
-                    auroraMap: document.getElementById('aurora-map')
-                }
+                images: { sdo: document.getElementById('sdo-image'), earth: document.getElementById('earth-image'), auroraMap: document.getElementById('aurora-map') }
             };
 
-            // ==================== بيانات افتراضية (عند فشل APIs) ====================
-            function generateFallbackData() {
-                return {
-                    bz: (Math.random() * 10 - 5).toFixed(1),
-                    proton: (Math.random() * 2).toFixed(2),
-                    auroraProb: Math.floor(Math.random() * 100),
-                    kp: (Math.random() * 8).toFixed(1),
-                    dst: (Math.random() * 100 - 50).toFixed(0),
-                    ice: (12 + Math.random() * 3).toFixed(1),
-                    seaLevel: (Math.random() * 5).toFixed(1),
-                    oceanHeat: (Math.random() * 3).toFixed(1),
-                    oceanTemp: (Math.random() * 2 - 1).toFixed(1),
-                    surfaceTemp: (Math.random() * 2).toFixed(1),
-                    co2: (410 + Math.random() * 20).toFixed(0),
-                    sunspot: Math.floor(Math.random() * 150),
-                    solarFlux: (70 + Math.random() * 40).toFixed(0),
-                    swSpeed: (300 + Math.random() * 200).toFixed(0),
-                    swDensity: (Math.random() * 5).toFixed(1),
-                    swTemp: (80000 + Math.random() * 40000).toFixed(0)
-                };
-            }
-
-            // ==================== جلب البيانات من API مع Proxy ====================
-            async function fetchFromAPI(apiConfig) {
-                const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-                
+            // دالة معالجة CSV والنصوص
+            async function fetchSmartData(url, type) {
                 try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 5000);
-                    
-                    const response = await fetch(proxyUrl + apiConfig.primary, { 
-                        signal: controller.signal,
-                        headers: { 'Origin': 'https://sidichaker1-beep.github.io' }
-                    });
-                    clearTimeout(timeoutId);
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        return { success: true, data };
-                    }
-                } catch (error) {
-                    console.warn(`Primary API failed: ${apiConfig.primary}`, error);
-                }
-                
-                return { success: false, fallback: true };
-            }
+                    const response = await fetch(PROXY + url);
+                    if (!response.ok) throw new Error("Network issues");
+                    const text = await response.text();
 
-            // ==================== دوال استخراج القيم (محدثة لجميع المؤشرات) ====================
-            function extractValue(key, apiData) {
-                try {
-                    switch(key) {
-                        case 'bz': return apiData?.[apiData.length-1]?.[3];
-                        case 'proton': return apiData?.[0]?.flux;
-                        case 'auroraProb': return apiData?.probability;
-                        case 'kp': return apiData?.[apiData.length-1]?.[1];
-                        case 'dst': 
-                            if (typeof apiData === 'string') {
-                                const lines = apiData.split('\n');
-                                for (let line of lines) {
-                                    if (line.includes('DST')) {
-                                        const parts = line.split(/\s+/);
-                                        return parts[parts.length-1];
-                                    }
+                    switch(type) {
+                        case 'csv':
+                            const lines = text.trim().split('\n');
+                            const lastLine = lines[lines.length - 1].split(',');
+                            return parseFloat(lastLine[lastLine.length - 1]).toFixed(2);
+                        case 'aurora':
+                            const auroraData = JSON.parse(text);
+                            return auroraData.coordinates?.[0]?.[2] || 50;
+                        case 'solar':
+                            const solarData = JSON.parse(text);
+                            const latest = solarData[solarData.length - 1];
+                            return { speed: latest[1], density: latest[2], temp: latest[3] };
+                        case 'text':
+                            const dstLines = text.split('\n');
+                            for (let line of dstLines) {
+                                if (line.includes('DST')) {
+                                    const parts = line.split(/\s+/);
+                                    return parts[parts.length-1];
                                 }
                             }
-                            return null;
-                        case 'ice': return apiData?.data?.[0]?.extent;
-                        case 'seaLevel': return apiData?.data?.global_average;
-                        case 'oceanHeat': return apiData?.heat_content;
-                        case 'oceanTemp': return apiData?.anomaly;
-                        case 'surfaceTemp': return apiData?.data?.[0]?.anomaly;
-                        case 'co2': 
-                            if (typeof apiData === 'string') {
-                                const lines = apiData.split('\n');
-                                const lastLine = lines[lines.length-1]?.split(',');
-                                return lastLine?.[1];
-                            }
-                            return null;
-                        case 'sunspot': return apiData?.[apiData.length-1]?.[1];
-                        case 'solarFlux': return apiData?.[apiData.length-1]?.[1];
-                        case 'swSpeed': return apiData?.[apiData.length-1]?.[1];
-                        case 'swDensity': return apiData?.[apiData.length-1]?.[2];
-                        case 'swTemp': return apiData?.[apiData.length-1]?.[3];
-                        default: return null;
+                            return FALLBACK_VALUE;
+                        default:
+                            return JSON.parse(text);
                     }
-                } catch { return null; }
+                } catch {
+                    return FALLBACK_VALUE;
+                }
             }
 
-            // ==================== دوال مساعدة ====================
+            // دوال مساعدة
             function getThresholdClass(value, thresholds) {
                 if (value < thresholds.low) return 'low';
                 if (value < thresholds.medium) return 'medium';
@@ -729,10 +518,10 @@
 
             function updateGauge(elementId, value, maxValue, thresholdClass) {
                 const gauge = document.getElementById(elementId);
-                if (!gauge) return;
-                const percent = Math.min(100, (value / maxValue) * 100);
-                gauge.style.width = percent + '%';
-                gauge.className = 'gauge-fill ' + thresholdClass;
+                if (gauge) {
+                    gauge.style.width = Math.min(100, (value / maxValue) * 100) + '%';
+                    gauge.className = 'gauge-fill ' + thresholdClass;
+                }
             }
 
             function updateValue(elementId, value, unit = '', thresholdClass = null) {
@@ -755,93 +544,107 @@
                 else el.classList.add('offline');
             }
 
-            // ==================== تحديث مؤشر واحد ====================
+            // تحديث مؤشر واحد
             async function updateIndicator(key, config) {
-                const result = await fetchFromAPI(config.api);
-                
                 let value = null;
-                if (result.success) {
-                    value = extractValue(key, result.data);
-                }
-                
-                if (value === null || value === undefined) {
-                    const fallback = generateFallbackData();
-                    value = fallback[key];
-                }
-                
-                if (value !== null && value !== undefined) {
-                    const thresholdClass = getThresholdClass(parseFloat(value), config.thresholds);
-                    updateValue(key + '-value', parseFloat(value), config.unit, thresholdClass);
-                    updateGauge(key + '-gauge', parseFloat(value), config.maxValue, thresholdClass);
-                    updateStatus(key + '-status', result.success ? 'Live' : 'Backup');
+                let success = false;
+
+                if (config.type === 'csv' || config.type === 'aurora' || config.type === 'solar' || config.type === 'text') {
+                    value = await fetchSmartData(config.api, config.type);
+                    success = (value !== FALLBACK_VALUE);
+                    if (config.type === 'solar' && value !== FALLBACK_VALUE) {
+                        // تحديث سرعة وكثافة وحرارة الرياح الشمسية
+                        updateValue('sw-speed-value', value.speed, 'km/s', getThresholdClass(value.speed, indicators.swSpeed.thresholds));
+                        updateGauge('sw-speed-gauge', value.speed, indicators.swSpeed.maxValue, getThresholdClass(value.speed, indicators.swSpeed.thresholds));
+                        updateStatus('sw-speed-status', 'Live');
+                        
+                        updateValue('sw-density-value', value.density, 'p/cm³', getThresholdClass(value.density, indicators.swDensity.thresholds));
+                        updateGauge('sw-density-gauge', value.density, indicators.swDensity.maxValue, getThresholdClass(value.density, indicators.swDensity.thresholds));
+                        updateStatus('sw-density-status', 'Live');
+                        
+                        updateValue('sw-temp-value', value.temp, 'K', getThresholdClass(value.temp, indicators.swTemp.thresholds));
+                        updateGauge('sw-temp-gauge', value.temp, indicators.swTemp.maxValue, getThresholdClass(value.temp, indicators.swTemp.thresholds));
+                        updateStatus('sw-temp-status', 'Live');
+                        return;
+                    }
                 } else {
-                    updateValue(key + '-value', null);
-                    updateStatus(key + '-status', 'Offline');
+                    try {
+                        const response = await fetch(PROXY + config.api);
+                        if (response.ok) {
+                            const data = await response.json();
+                            switch(key) {
+                                case 'bz': value = data?.[data.length-1]?.[3]; break;
+                                case 'proton': value = data?.[0]?.flux; break;
+                                case 'kp': value = data?.[data.length-1]?.[1]; break;
+                                case 'sunspot': value = data?.[data.length-1]?.[1]; break;
+                                case 'solarFlux': value = data?.[data.length-1]?.[1]; break;
+                                default: value = null;
+                            }
+                            success = true;
+                        }
+                    } catch { value = FALLBACK_VALUE; }
+                }
+
+                if (value === null || value === undefined) {
+                    value = FALLBACK_VALUE;
+                }
+
+                const numValue = parseFloat(value);
+                if (!isNaN(numValue)) {
+                    const thresholdClass = getThresholdClass(numValue, config.thresholds);
+                    updateValue(key + '-value', numValue, config.unit, thresholdClass);
+                    updateGauge(key + '-gauge', numValue, config.maxValue, thresholdClass);
+                    updateStatus(key + '-status', success ? 'Live' : 'Backup');
                 }
             }
 
-            // ==================== تحديث جميع المؤشرات ====================
-            async function updateAllIndicators() {
-                const promises = [];
-                for (const [key, config] of Object.entries(indicators)) {
-                    promises.push(updateIndicator(key, config));
-                }
-                await Promise.all(promises);
+            // تحديث الصور الحية
+            function updateLiveImages() {
+                const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
+                const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
+                
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
+
+                [['sdo', sdoUrl], ['auroraMap', auroraUrl], ['earth', earthUrl]].forEach(([id, url]) => {
+                    const container = elements.images[id];
+                    if (!container) return;
+                    container.innerHTML = '<div class="image-skeleton">جاري تحميل الصورة...</div>';
+                    
+                    const img = new Image();
+                    img.src = url + "?t=" + Date.now();
+                    img.onload = () => {
+                        container.innerHTML = '';
+                        img.classList.add('image-loaded');
+                        container.appendChild(img);
+                    };
+                    img.onerror = () => {
+                        container.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
+                    };
+                });
+            }
+
+            // تحديث جميع المؤشرات
+            async function refreshAllIndicators() {
+                await Promise.all(Object.keys(indicators).map(key => {
+                    if (key === 'swSpeed' || key === 'swDensity' || key === 'swTemp') return; // تُحدث مع solar
+                    return updateIndicator(key, indicators[key]);
+                }));
                 
                 const now = new Date();
-                if (elements.lastUpdate) {
-                    elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
-                }
+                if (elements.timestamp) elements.timestamp.textContent = now.toLocaleString('ar-SA');
+                if (elements.lastUpdate) elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
             }
 
-            // ==================== تحميل الصور ====================
-            function loadImage(containerId, url) {
-                const container = elements.images[containerId];
-                if (!container) return;
-                container.innerHTML = '<div class="image-skeleton">جاري تحميل الصورة...</div>';
-                
-                const img = new Image();
-                img.src = url;
-                img.onload = () => {
-                    container.innerHTML = '';
-                    img.classList.add('image-loaded');
-                    container.appendChild(img);
-                };
-                img.onerror = () => {
-                    container.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
-                };
-            }
-
-            function updateImages() {
-                loadImage('sdo', 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_4096_0171.jpg');
-                fetch('https://epic.gsfc.nasa.gov/api/natural')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data && data[0]) {
-                            const date = data[0].date.split(' ')[0].replace(/-/g, '/');
-                            loadImage('earth', `https://epic.gsfc.nasa.gov/archive/natural/${date}/png/${data[0].image}.png`);
-                        }
-                    })
-                    .catch(() => {
-                        if (elements.images.earth) {
-                            elements.images.earth.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
-                        }
-                    });
-                loadImage('auroraMap', 'https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg');
-            }
-
-            // ==================== بدء التشغيل ====================
+            // بدء التشغيل
             function startObservatory() {
-                updateAllIndicators();
-                updateImages();
-                setInterval(updateAllIndicators, 30000);
-                setInterval(updateImages, 300000);
-                setInterval(() => {
-                    if (elements.timestamp) {
-                        elements.timestamp.textContent = new Date().toLocaleString('ar-SA');
-                    }
-                }, 1000);
-                console.log('✅ المرصد الفلكي بدأ العمل');
+                refreshAllIndicators();
+                updateLiveImages();
+                setInterval(refreshAllIndicators, 30000);
+                setInterval(updateLiveImages, 300000);
             }
 
             startObservatory();
