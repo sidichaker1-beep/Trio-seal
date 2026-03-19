@@ -60,12 +60,14 @@
             font-weight: bold;
             border: 1px solid #fbbf24;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         #cosmic-time-bar span { color: white; }
         #cosmic-time-bar #utc-clock { color: #4ade80; }
         #cosmic-time-bar #mecca-clock { color: #fbbf24; }
-        #cosmic-time-bar #julian-date { color: #94a3b8; }
+        #cosmic-time-bar #hijri-date { color: #94a3b8; }
         
         .subtitle {
             color: #475569;
@@ -77,22 +79,6 @@
             align-items: center;
             gap: 1rem;
             flex-wrap: wrap;
-        }
-        
-        .about-btn {
-            background: #0f2b4f;
-            color: #fbbf24;
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            border: 1px solid #fbbf24;
-            transition: all 0.3s;
-        }
-        
-        .about-btn:hover {
-            background: #fbbf24;
-            color: #0f2b4f;
         }
         
         .section-title {
@@ -240,13 +226,10 @@
         
         .aurora .gauge-fill.live { background: #a855f7; }
         .aurora .gauge-fill.mizan { background: #fbbf24; }
-        
         .cryo .gauge-fill.live { background: #3b82f6; }
         .cryo .gauge-fill.mizan { background: #fbbf24; }
-        
         .temp .gauge-fill.live { background: #22c55e; }
         .temp .gauge-fill.mizan { background: #fbbf24; }
-        
         .solar .gauge-fill.live { background: #fbbf24; }
         .solar .gauge-fill.mizan { background: #f59e0b; }
         
@@ -323,30 +306,6 @@
         .hash {
             color: #334155;
         }
-        
-        /* صفحة About (مخفية افتراضياً) */
-        .about-page {
-            display: none;
-            background: #f8fafc;
-            border-radius: 30px;
-            padding: 2rem;
-            margin-top: 2rem;
-            border: 2px solid #fbbf24;
-        }
-        
-        .about-page.active {
-            display: block;
-        }
-        
-        .about-page h2 {
-            color: #0f2b4f;
-            margin-bottom: 1rem;
-        }
-        
-        .about-page p {
-            line-height: 1.8;
-            color: #334155;
-        }
     </style>
 </head>
 <body>
@@ -356,37 +315,21 @@
             <span>v7.3</span>
         </h1>
 
-        <!-- شريط الزمن الكوني -->
+        <!-- شريط الزمن الكوني (محدث مع التاريخ الهجري) -->
         <div id="cosmic-time-bar">
-            <div>📅 <span id="current-date">--/--/----</span></div>
+            <div>📅 <span id="gregorian-date">--/--/----</span></div>
+            <div>🕋 <span id="hijri-date">--</span></div>
             <div>🌐 UTC: <span id="utc-clock">00:00:00</span></div>
             <div>🕋 مكة: <span id="mecca-clock">00:00:00</span></div>
-            <div>🔢 JD: <span id="julian-date">0000000.00</span></div>
         </div>
 
         <div class="subtitle">
             <span class="live-badge">⚡ رصد حي</span>
             <span class="mizan-badge">⚖️ ميزان الملكوت v7.3</span>
             21 مؤشر · تحديث تلقائي
-            <a href="#" onclick="toggleAbout(); return false;" class="about-btn">📜 بيان المرصد</a>
         </div>
 
-        <!-- صفحة About (مخفية) -->
-        <div id="about-page" class="about-page">
-            <h2>🌌 بيان المرصد الكوني TRIO SEAL</h2>
-            <p>بسم الله الرحمن الرحيم</p>
-            <p>هذا المرصد مبني على أسس بحث "ميزان الملكوت" (Mīzān al-Malakūt) في نسخته v7.3، الذي يربط الرنين الزلزالي بالنظام الشمسي-الأرضي-القمري. يعرض المرصد 21 مؤشراً حياً من مصادر عالمية (NOAA، NASA، NSIDC) معتمدة.</p>
-            <p>عند تعذر جلب البيانات الحية، تظهر قيم "الميزان" الذهبية المستمدة من البحث المنشور على Zenodo:</p>
-            <ul style="margin-right: 2rem; margin-top: 0.5rem;">
-                <li>DOI: 10.5281/zenodo.19076840</li>
-                <li>التردد الأساسي: ℱ₀ = 8,782,511,093 Hz</li>
-                <li>النقطة الحرجة 2027: RS = 0.0057</li>
-            </ul>
-            <p>المرصد معاير من قبل: Gemini · DeepSeek · GPT</p>
-            <p style="margin-top: 1rem;">شيكر هشام · Hicham Chigar</p>
-            <a href="#" onclick="toggleAbout(); return false;" style="display: inline-block; margin-top: 1rem; background: #0f2b4f; color: #fbbf24; padding: 0.5rem 1.5rem; border-radius: 30px; text-decoration: none;">🔽 العودة للمرصد</a>
-        </div>
-
+        <!-- ========== المؤشرات الثلاثة الأساسية (سنضيفها لاحقاً) ========== -->
         <!-- ========== 1. الشفق القطبي والمجال المغناطيسي ========== -->
         <h2 class="section-title">🌌 1. الشفق القطبي والمجال المغناطيسي</h2>
         <div class="indicators-grid">
@@ -499,6 +442,7 @@
             <span id="timestamp">جاري التحميل...</span> · 21 مؤشر · آخر تحديث: <span id="last-update">--</span>
         </div>
         <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
+        <div style="text-align: center; margin-top: 1rem; color: #0f2b4f;">Hicham Chigar · هشام شيكر</div>
     </div>
 
     <script>
@@ -567,7 +511,6 @@
                         const data = await response.text();
                         let value = null;
                         
-                        // استخراج القيمة حسب النوع
                         if (type === 'json') {
                             const json = JSON.parse(data);
                             if (key === 'bz') value = json?.[json.length-1]?.[3];
@@ -576,6 +519,12 @@
                             else if (key === 'sunspot') value = json?.[json.length-1]?.[1];
                             else if (key === 'solarFlux') value = json?.[json.length-1]?.[1];
                             else if (key === 'auroraProb') value = json?.coordinates?.[0]?.[2];
+                            else if (key === 'swSpeed' || key === 'swDensity' || key === 'swTemp') {
+                                const solarData = json;
+                                if (key === 'swSpeed') value = solarData?.[solarData.length-1]?.[1];
+                                if (key === 'swDensity') value = solarData?.[solarData.length-1]?.[2];
+                                if (key === 'swTemp') value = solarData?.[solarData.length-1]?.[3];
+                            }
                         } else if (type === 'csv') {
                             const lines = data.trim().split('\n');
                             const lastLine = lines[lines.length-1].split(',');
@@ -591,7 +540,7 @@
                             }
                         }
                         
-                        if (value) {
+                        if (value && !isNaN(parseFloat(value))) {
                             element.textContent = parseFloat(value).toFixed(1) + (unit ? ' ' + unit : '');
                             element.className = 'card-value live';
                             if (gaugeEl) {
@@ -607,7 +556,6 @@
                     }
                     throw new Error();
                 } catch {
-                    // استخدام قيمة الميزان الذهبية
                     const mizanValue = MIZAN[key];
                     if (mizanValue) {
                         element.textContent = mizanValue + (unit ? ' ' + unit : '');
@@ -624,33 +572,86 @@
                 }
             }
 
-            // تحديث الصور الحية
+            // تحديث الصور الحية (نسخة محسّنة)
             function updateLiveImages() {
+                // 1. صورة الشمس (SDO)
                 const sdoUrl = "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg";
+                
+                // 2. خريطة الشفق القطبي
                 const auroraUrl = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg";
                 
+                // 3. صورة الأرض - نحاول اليوم، فإن فشل جربنا أمس
                 const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
                 const year = today.getFullYear();
                 const month = String(today.getMonth() + 1).padStart(2, '0');
                 const day = String(today.getDate()).padStart(2, '0');
                 const earthUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/epic_1b_${year}${month}${day}000000.png`;
 
-                [['sdo', sdoUrl], ['auroraMap', auroraUrl], ['earth', earthUrl]].forEach(([id, url]) => {
-                    const container = elements.images[id];
-                    if (!container) return;
-                    container.innerHTML = '<div class="image-skeleton">جاري تحميل الصورة...</div>';
-                    
-                    const img = new Image();
-                    img.src = url + "?t=" + Date.now();
-                    img.onload = () => {
-                        container.innerHTML = '';
-                        img.classList.add('image-loaded');
-                        container.appendChild(img);
+                // تحميل صورة الشمس
+                const sdoContainer = elements.images.sdo;
+                if (sdoContainer) {
+                    sdoContainer.innerHTML = '<div class="image-skeleton">جاري تحميل الشمس...</div>';
+                    const sdoImg = new Image();
+                    sdoImg.src = sdoUrl + "?t=" + Date.now();
+                    sdoImg.onload = () => {
+                        sdoContainer.innerHTML = '';
+                        sdoImg.classList.add('image-loaded');
+                        sdoContainer.appendChild(sdoImg);
                     };
-                    img.onerror = () => {
-                        container.innerHTML = '<div class="image-skeleton error">فشل التحميل</div>';
+                    sdoImg.onerror = () => {
+                        sdoContainer.innerHTML = '<div class="image-skeleton error">الشمس غير متوفرة</div>';
                     };
-                });
+                }
+
+                // تحميل خريطة الشفق
+                const auroraContainer = elements.images.auroraMap;
+                if (auroraContainer) {
+                    auroraContainer.innerHTML = '<div class="image-skeleton">جاري تحميل خريطة الشفق...</div>';
+                    const auroraImg = new Image();
+                    auroraImg.src = auroraUrl + "?t=" + Date.now();
+                    auroraImg.onload = () => {
+                        auroraContainer.innerHTML = '';
+                        auroraImg.classList.add('image-loaded');
+                        auroraContainer.appendChild(auroraImg);
+                    };
+                    auroraImg.onerror = () => {
+                        auroraContainer.innerHTML = '<div class="image-skeleton error">الشفق غير متوفر</div>';
+                    };
+                }
+
+                // تحميل صورة الأرض
+                const earthContainer = elements.images.earth;
+                if (earthContainer) {
+                    earthContainer.innerHTML = '<div class="image-skeleton">جاري تحميل الأرض...</div>';
+                    const earthImg = new Image();
+                    earthImg.src = earthUrl + "?t=" + Date.now();
+                    earthImg.onload = () => {
+                        earthContainer.innerHTML = '';
+                        earthImg.classList.add('image-loaded');
+                        earthContainer.appendChild(earthImg);
+                    };
+                    earthImg.onerror = () => {
+                        // جرب تاريخ أمس
+                        const yesterdayYear = yesterday.getFullYear();
+                        const yesterdayMonth = String(yesterday.getMonth() + 1).padStart(2, '0');
+                        const yesterdayDay = String(yesterday.getDate()).padStart(2, '0');
+                        const yesterdayUrl = `https://epic.gsfc.nasa.gov/archive/natural/${yesterdayYear}/${yesterdayMonth}/${yesterdayDay}/png/epic_1b_${yesterdayYear}${yesterdayMonth}${yesterdayDay}000000.png`;
+                        
+                        const fallbackImg = new Image();
+                        fallbackImg.src = yesterdayUrl + "?t=" + Date.now();
+                        fallbackImg.onload = () => {
+                            earthContainer.innerHTML = '';
+                            fallbackImg.classList.add('image-loaded');
+                            earthContainer.appendChild(fallbackImg);
+                        };
+                        fallbackImg.onerror = () => {
+                            earthContainer.innerHTML = '<div class="image-skeleton error">الأرض غير متوفرة</div>';
+                        };
+                    };
+                }
             }
 
             // تحديث جميع المؤشرات
@@ -684,23 +685,37 @@
                 if (elements.lastUpdate) elements.lastUpdate.textContent = now.toLocaleTimeString('ar-SA');
             }
 
-            // ساعة الزمن الكوني
+            // ساعة الزمن الكوني مع التاريخ الهجري
             function updateCosmicClock() {
                 const now = new Date();
-                document.getElementById('current-date').innerText = now.toLocaleDateString('ar-SA', {
+                
+                // التاريخ الميلادي
+                document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-SA', {
                     year: 'numeric', month: 'long', day: 'numeric'
                 });
+                
+                // التاريخ الهجري
+                try {
+                    const hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    }).format(now);
+                    document.getElementById('hijri-date').innerText = hijri;
+                } catch {
+                    document.getElementById('hijri-date').innerText = '--';
+                }
+                
+                // توقيت UTC
                 document.getElementById('utc-clock').innerText = 
                     now.getUTCHours().toString().padStart(2,'0') + ":" + 
                     now.getUTCMinutes().toString().padStart(2,'0') + ":" + 
                     now.getUTCSeconds().toString().padStart(2,'0');
+                
+                // توقيت مكة (UTC+3)
                 const meccaTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
                 document.getElementById('mecca-clock').innerText = 
                     meccaTime.getUTCHours().toString().padStart(2,'0') + ":" + 
                     meccaTime.getUTCMinutes().toString().padStart(2,'0') + ":" + 
                     meccaTime.getUTCSeconds().toString().padStart(2,'0');
-                const jd = (now.getTime() / 86400000) + 2440587.5;
-                document.getElementById('julian-date').innerText = jd.toFixed(2);
             }
 
             // بدء التشغيل
@@ -717,12 +732,6 @@
 
             startObservatory();
         })();
-
-        // دالة إظهار/إخفاء صفحة About
-        function toggleAbout() {
-            const about = document.getElementById('about-page');
-            about.classList.toggle('active');
-        }
     </script>
 </body>
 </html>
