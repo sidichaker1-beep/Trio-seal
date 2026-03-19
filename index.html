@@ -13,15 +13,19 @@
         }
         
         body {
-            background: linear-gradient(145deg, #0a0f1e 0%, #141b2b 100%);
+            background: #f5f7fa;
+            color: #1e293b;
             min-height: 100vh;
             padding: 2rem;
-            color: #e0e7ff;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         
         h1 {
@@ -32,19 +36,19 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: #ffd700;
+            color: #0f2b4f;
         }
         
         h1 span {
-            background: #2a3a5e;
+            background: #e2e8f0;
             padding: 0.3rem 1rem;
             border-radius: 40px;
             font-size: 1rem;
-            color: #aad0ff;
+            color: #334155;
         }
         
         .subtitle {
-            color: #8b9bb8;
+            color: #475569;
             margin-bottom: 2rem;
             font-size: 1.1rem;
             border-right: 4px solid #f0b37b;
@@ -52,10 +56,10 @@
         }
         
         .section-title {
-            color: #ffd700;
+            color: #0f2b4f;
             font-size: 1.8rem;
             margin: 2rem 0 1rem;
-            border-bottom: 2px solid #3e506e;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 0.5rem;
         }
         
@@ -69,19 +73,19 @@
         
         /* Cards */
         .card {
-            background: rgba(18, 25, 40, 0.85);
+            background: #f8fafc;
             backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 1.5rem;
-            border: 1px solid rgba(255, 215, 140, 0.15);
-            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             transition: transform 0.2s;
             position: relative;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            border-color: rgba(255, 215, 140, 0.3);
+            border-color: #cbd5e1;
         }
         
         /* Tooltip */
@@ -96,7 +100,7 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: #2a3a5e;
+            background: #334155;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 8px;
@@ -106,7 +110,7 @@
             pointer-events: none;
             transition: opacity 0.2s;
             z-index: 10;
-            border: 1px solid #4d6188;
+            border: 1px solid #475569;
         }
         
         .card[data-tooltip]:hover:before {
@@ -123,17 +127,17 @@
         .card-title {
             font-size: 1.1rem;
             font-weight: 500;
-            color: #b0c4e0;
+            color: #334155;
         }
         
         .card-value {
             font-family: 'Courier New', monospace;
             font-size: 1.5rem;
             font-weight: 600;
-            background: #0b111e;
+            background: white;
             padding: 0.2rem 0.8rem;
             border-radius: 12px;
-            border: 1px solid #4d6188;
+            border: 1px solid #cbd5e1;
             min-width: 80px;
             text-align: center;
             transition: all 0.3s ease;
@@ -141,27 +145,27 @@
         
         /* Color thresholds */
         .card-value.low {
-            color: #22c55e;
-            border-color: #22c55e;
+            color: #16a34a;
+            border-color: #16a34a;
         }
         
         .card-value.medium {
-            color: #facc15;
-            border-color: #facc15;
+            color: #ca8a04;
+            border-color: #ca8a04;
         }
         
         .card-value.high {
-            color: #ef4444;
-            border-color: #ef4444;
+            color: #dc2626;
+            border-color: #dc2626;
         }
         
         /* Loading state */
         .card-value.loading {
-            background: linear-gradient(90deg, #0b111e 25%, #1e2a3a 50%, #0b111e 75%);
+            background: linear-gradient(90deg, white 25%, #f1f5f9 50%, white 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
             color: transparent;
-            border-color: #4d6188;
+            border-color: #cbd5e1;
         }
         
         @keyframes loading {
@@ -171,7 +175,7 @@
         
         .gauge {
             height: 8px;
-            background: #20293b;
+            background: #e2e8f0;
             border-radius: 10px;
             margin: 1rem 0;
             overflow: hidden;
@@ -190,7 +194,7 @@
         
         .status {
             font-size: 0.8rem;
-            color: #9babc5;
+            color: #64748b;
             margin-top: 0.5rem;
             display: flex;
             justify-content: space-between;
@@ -199,14 +203,15 @@
         .status-badge {
             padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            background: #26334d;
+            background: #e2e8f0;
+            color: #334155;
             font-size: 0.7rem;
             transition: background-color 0.3s;
         }
         
-        .status-badge.live { background: #1f8b4c; }
-        .status-badge.backup { background: #b45309; }
-        .status-badge.offline { background: #6b7280; }
+        .status-badge.live { background: #22c55e; color: white; }
+        .status-badge.backup { background: #f97316; color: white; }
+        .status-badge.offline { background: #94a3b8; color: white; }
         
         /* Colors for each category */
         .aurora .gauge-fill.low { background: #a855f7; }
@@ -234,14 +239,14 @@
         }
         
         .image-card {
-            background: rgba(18, 25, 40, 0.85);
+            background: #f8fafc;
             border-radius: 20px;
             padding: 1rem;
-            border: 1px solid rgba(255, 215, 140, 0.15);
+            border: 1px solid #e2e8f0;
         }
         
         .image-card h3 {
-            color: #ffd700;
+            color: #0f2b4f;
             margin-bottom: 1rem;
             font-size: 1.2rem;
         }
@@ -249,20 +254,20 @@
         .image-skeleton {
             width: 100%;
             height: 200px;
-            background: linear-gradient(90deg, #1e2a3a 25%, #2a3a5e 50%, #1e2a3a 75%);
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6b7c9b;
+            color: #64748b;
             font-size: 1.2rem;
         }
         
         .image-skeleton.error {
-            background: #2a3a5e;
-            color: #ef4444;
+            background: #fee2e2;
+            color: #dc2626;
             animation: none;
         }
         
@@ -277,19 +282,23 @@
         .footer {
             margin-top: 3rem;
             text-align: center;
-            color: #6b7c9b;
+            color: #64748b;
             font-size: 0.9rem;
             padding: 1rem;
-            border-top: 1px solid #334155;
+            border-top: 1px solid #e2e8f0;
         }
         
         .live-badge {
-            background: #1f8b4c;
+            background: #22c55e;
             color: white;
             padding: 0.2rem 0.8rem;
             border-radius: 20px;
             font-size: 0.7rem;
             display: inline-block;
+        }
+        
+        .hash {
+            color: #334155;
         }
     </style>
 </head>
@@ -551,6 +560,7 @@
             <span>21 مؤشر حي · 3 صور مباشرة</span> · 
             <span>آخر تحديث: <span id="last-update">--</span></span>
         </div>
+        <div class="hash">18K-432-7.83-2027-ALPHA-OMEGA</div>
     </div>
 
     <script>
