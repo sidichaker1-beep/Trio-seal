@@ -223,16 +223,16 @@
             border-color: #ef4444 !important;
         }
         
-        /* المؤشرات الحية */
+        /* المؤشرات الحية - تبقى خضراء */
         .card-value.live {
             color: #4ade80 !important;
             border-color: #4ade80 !important;
         }
         
-        /* المؤشرات الاحتياطية */
+        /* المؤشرات الاحتياطية - من ذهبي إلى أخضر */
         .card-value.mizan {
-            color: #fbbf24 !important;
-            border-color: #fbbf24 !important;
+            color: #4ade80 !important;  /* كان #fbbf24 */
+            border-color: #4ade80 !important;
         }
         
         /* مقاييس القياس */
@@ -251,7 +251,7 @@
         }
         
         .gauge-fill.live { background: #4ade80 !important; }
-        .gauge-fill.mizan { background: #fbbf24 !important; }
+        .gauge-fill.mizan { background: #4ade80 !important; }  /* كان #fbbf24 */
         #taqabul-gauge { background: #ef4444 !important; }
         #closure-gauge, #balance-gauge { background: #4ade80 !important; }
         
@@ -273,7 +273,7 @@
         }
         
         .status-badge.live { background: #4ade80 !important; color: white !important; }
-        .status-badge.mizan { background: #fbbf24 !important; color: #0f2b4f !important; }
+        .status-badge.mizan { background: #4ade80 !important; color: #0f2b4f !important; }  /* كان #fbbf24 */
         
         /* ألوان الفئات للتمييز */
         .aurora .gauge-fill.live { background: #a855f7 !important; }
@@ -446,6 +446,11 @@
             color: #4ade80;
         }
         
+        .moon-thickness {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
         /* Quick Links Menu */
         .quick-links {
             display: flex;
@@ -593,7 +598,7 @@
         }
         
         .mizan-badge {
-            background: #fbbf24;
+            background: #4ade80;  /* كان #fbbf24 */
             color: #0f2b4f;
             padding: 0.2rem 0.8rem;
             border-radius: 20px;
@@ -718,12 +723,13 @@
             </div>
         </div>
 
-        <!-- Moon Phase (مصحح) -->
+        <!-- Moon Phase (مع السُمك) -->
         <div class="moon-phase">
             <div class="moon-icon" id="moon-icon">🌑</div>
             <div class="moon-info">
                 <h3 data-key="moon-phase">Moon Phase</h3>
                 <div><span id="moon-phase-name">New Moon</span> · <span class="moon-percent" id="moon-illumination">0%</span></div>
+                <div class="moon-thickness" id="moon-thickness">Thickness: 0'</div>
                 <div style="margin-top:0.5rem; color:#94a3b8;" id="moon-age">Age: 0 days</div>
             </div>
         </div>
@@ -1216,51 +1222,84 @@
             }
         }
 
-        // ================== 🌙 MOON PHASE (FIXED) ==================
-        function updateMoonPhase() {
+        // ================== 🌙 MOON PHASE - MEEUS ALGORITHM ==================
+        function calculateLunarMeeus() {
             const now = Date.now();
-
-            const knownNewMoon = Date.UTC(2024, 3, 8, 18, 20);
+            
+            // نقطة المرجع: New Moon (8 April 2024, 18:20 UTC)
+            const refNewMoon = Date.UTC(2024, 3, 8, 18, 20, 0);
             const synodicMonth = 29.530588853;
-
-            const daysSince = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
-            const ageInDays = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
-            const phase = ageInDays / synodicMonth;
-
+            
+            const daysSince = (now - refNewMoon) / (1000 * 60 * 60 * 24);
+            const phase = (daysSince % synodicMonth) / synodicMonth;
+            
+            // حساب زاوية الاستطالة (Elongation)
+            const angle = phase * 2 * Math.PI;
+            
+            // قانون جيب التمام لحساب نسبة الإضاءة (Illumination)
+            const illumination = (1 - Math.cos(angle)) / 2;
+            
+            // تحويل الإضاءة إلى سُمك قوسي (Arcminutes) - القطر الكامل 31'
+            const thicknessArcMin = illumination * 31;
+            
+            // تحديد أيقونة واسم الطور
             let icon, phaseName;
-
-            if (ageInDays < 1) {
+            if (phase < 0.025) {
                 icon = '🌑'; phaseName = 'New Moon';
-            } else if (ageInDays < 7.4) {
+            } else if (phase < 0.225) {
                 icon = '🌒'; phaseName = 'Waxing Crescent';
-            } else if (ageInDays < 14.8) {
+            } else if (phase < 0.275) {
                 icon = '🌓'; phaseName = 'First Quarter';
-            } else if (ageInDays < 22.1) {
+            } else if (phase < 0.475) {
                 icon = '🌔'; phaseName = 'Waxing Gibbous';
-            } else if (ageInDays < 29.5) {
+            } else if (phase < 0.525) {
                 icon = '🌕'; phaseName = 'Full Moon';
-            } else {
+            } else if (phase < 0.725) {
+                icon = '🌖'; phaseName = 'Waning Gibbous';
+            } else if (phase < 0.775) {
+                icon = '🌗'; phaseName = 'Last Quarter';
+            } else if (phase < 0.975) {
                 icon = '🌘'; phaseName = 'Waning Crescent';
-            }
-
-            let illumination = 0;
-            if (phase <= 0.5) {
-                illumination = phase * 2 * 100;
             } else {
-                illumination = (1 - phase) * 2 * 100;
+                icon = '🌑'; phaseName = 'New Moon';
             }
+            
+            return {
+                age: (daysSince % synodicMonth).toFixed(2),
+                percent: (illumination * 100).toFixed(2),
+                thickness: thicknessArcMin.toFixed(2),
+                isEdrak: (illumination * 100) < 0.5,
+                icon: icon,
+                phaseName: phaseName
+            };
+        }
 
-            document.getElementById('moon-icon').innerText = icon;
-            document.getElementById('moon-phase-name').innerText = phaseName;
-            document.getElementById('moon-illumination').innerText = Math.round(illumination) + '%';
-            document.getElementById('moon-age').innerText = `Age: ${Math.round(ageInDays)} days`;
-
+        function updateMoonPhase() {
+            const moonData = calculateLunarMeeus();
+            
+            document.getElementById('moon-icon').innerText = moonData.icon;
+            document.getElementById('moon-phase-name').innerText = moonData.phaseName;
+            document.getElementById('moon-illumination').innerText = moonData.percent + '%';
+            document.getElementById('moon-thickness').innerText = `Thickness: ${moonData.thickness}'`;
+            document.getElementById('moon-age').innerText = `Age: ${moonData.age} days`;
+            
+            // حالة الإدراك - توهج أحمر
+            if (moonData.isEdrak) {
+                document.getElementById('moon-icon').style.color = '#ef4444';
+                document.getElementById('moon-icon').style.textShadow = '0 0 10px #ef4444';
+            } else {
+                document.getElementById('moon-icon').style.color = 'white';
+                document.getElementById('moon-icon').style.textShadow = 'none';
+            }
+            
+            // تحويل الأرقام للعربية إذا لزم الأمر
             if (currentLanguage === 'ar') {
-                document.getElementById('moon-age').innerText =
+                document.getElementById('moon-age').innerText = 
                     document.getElementById('moon-age').innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-
-                document.getElementById('moon-illumination').innerText =
+                document.getElementById('moon-illumination').innerText = 
                     document.getElementById('moon-illumination').innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+                document.getElementById('moon-thickness').innerText = 
+                    document.getElementById('moon-thickness').innerText.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
             }
         }
 
