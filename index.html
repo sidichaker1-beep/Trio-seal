@@ -71,21 +71,22 @@
             margin-bottom: 2rem;
         }
         
-        /* Cards */
+        /* Cards - نسخة محسنة بتباين عالي */
         .card {
-            background: #f8fafc;
+            background: #eef2f9;  /* أزرق باهت جداً */
             backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 1.5rem;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            transition: transform 0.2s;
+            border: 2px solid #cbd5e1;  /* حدود رمادية واضحة */
+            box-shadow: 0 8px 16px rgba(0, 30, 60, 0.12);
+            transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            border-color: #cbd5e1;
+            border-color: #94a3b8;
+            box-shadow: 0 12px 24px rgba(0, 30, 60, 0.2);
         }
         
         /* Tooltip */
@@ -127,7 +128,11 @@
         .card-title {
             font-size: 1.1rem;
             font-weight: 500;
-            color: #334155;
+            color: #1e293b;
+            background: rgba(255,255,255,0.7);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
         }
         
         .card-value {
@@ -137,7 +142,7 @@
             background: white;
             padding: 0.2rem 0.8rem;
             border-radius: 12px;
-            border: 1px solid #cbd5e1;
+            border: 2px solid #cbd5e1;
             min-width: 80px;
             text-align: center;
             transition: all 0.3s ease;
