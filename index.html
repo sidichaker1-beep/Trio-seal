@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · Cosmic Observatory v8.0 · Integrated Platform</title>
+    <title>TRIO SEAL · Cosmic Observatory v8.1 · Light Theme</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         * {
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: #f5f7fa;
+            background: #eef2f5;
             color: #1e293b;
             min-height: 100vh;
             padding: 2rem;
@@ -23,10 +23,10 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: #ffffff;
             border-radius: 40px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
         
         /* Navigation Bar */
@@ -35,10 +35,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            background: #f8fafc;
+            background: #ffffff;
             border-radius: 60px;
             margin-bottom: 2rem;
             border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
         
         .logo {
@@ -55,7 +56,7 @@
         }
         
         .nav-links a {
-            color: #334155;
+            color: #475569;
             text-decoration: none;
             font-weight: 500;
         }
@@ -69,7 +70,7 @@
         }
         
         .lang-btn {
-            background: #e2e8f0;
+            background: #f1f5f9;
             border: 1px solid #cbd5e1;
             padding: 0.5rem 1rem;
             border-radius: 30px;
@@ -77,6 +78,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: #334155;
         }
         
         .lang-menu {
@@ -96,6 +98,7 @@
             padding: 0.7rem 1rem;
             cursor: pointer;
             border-bottom: 1px solid #e2e8f0;
+            color: #334155;
         }
         
         .lang-option:hover {
@@ -133,8 +136,8 @@
         
         /* Cosmic Time Bar */
         #cosmic-time-bar {
-            background: #0f2b4f;
-            color: #fbbf24;
+            background: #f1f5f9;
+            color: #0f2b4f;
             padding: 12px 20px;
             display: flex;
             justify-content: space-around;
@@ -142,14 +145,14 @@
             margin-bottom: 20px;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            border: 1px solid #fbbf24;
+            border: 1px solid #cbd5e1;
             flex-wrap: wrap;
             gap: 10px;
         }
         
-        #cosmic-time-bar span { color: white; }
-        #cosmic-time-bar .utc-clock { color: #4ade80; }
-        #cosmic-time-bar .mecca-clock { color: #fbbf24; }
+        #cosmic-time-bar span { color: #334155; }
+        #cosmic-time-bar .utc-clock { color: #10b981; }
+        #cosmic-time-bar .mecca-clock { color: #f59e0b; }
         
         h1 {
             font-size: 2.5rem;
@@ -162,7 +165,7 @@
             color: #475569;
             margin-bottom: 2rem;
             font-size: 1.1rem;
-            border-left: 4px solid #f0b37b;
+            border-left: 4px solid #f59e0b;
             padding-left: 1rem;
         }
         
@@ -174,20 +177,20 @@
             margin-bottom: 2rem;
         }
         
-        /* Unified Card Style */
+        /* Unified Card Style - WHITE BACKGROUND */
         .card, .core-card, .forecast-card, .historical-card, .panel, .obs-card {
-            background: #0f2b4f !important;
-            border: 1px solid #fbbf24 !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
             border-radius: 20px;
             padding: 1.5rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
         .card:hover, .core-card:hover, .forecast-card:hover, .historical-card:hover, .panel:hover, .obs-card:hover {
             transform: translateY(-5px);
-            border-color: #4ade80 !important;
-            box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+            border-color: #fbbf24 !important;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
         }
         
         /* Data Link System */
@@ -207,19 +210,19 @@
         }
         
         .card-title, .core-title {
-            color: #fbbf24 !important;
-            background: rgba(255,255,255,0.1) !important;
-            border: 1px solid #fbbf24 !important;
+            color: #0f2b4f !important;
+            background: #f1f5f9 !important;
+            border: 1px solid #e2e8f0 !important;
             padding: 0.3rem 1rem;
             border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
         }
         
         .card-value, .core-value {
-            background: rgba(0,0,0,0.3) !important;
-            color: #4ade80 !important;
-            border: 2px solid #4ade80 !important;
+            background: #f8fafc !important;
+            color: #10b981 !important;
+            border: 2px solid #10b981 !important;
             padding: 0.2rem 0.8rem;
             border-radius: 12px;
             font-family: 'Courier New', monospace;
@@ -235,7 +238,7 @@
         }
         
         .gauge, .core-gauge {
-            background: rgba(255,255,255,0.2) !important;
+            background: #e2e8f0 !important;
             height: 8px;
             border-radius: 10px;
             margin: 1rem 0;
@@ -248,13 +251,13 @@
             transition: width 0.5s ease;
         }
         
-        .gauge-fill.live { background: #4ade80 !important; }
-        .gauge-fill.mizan { background: #4ade80 !important; }
+        .gauge-fill.live { background: #10b981 !important; }
+        .gauge-fill.mizan { background: #10b981 !important; }
         #taqabul-gauge { background: #ef4444 !important; }
-        #closure-gauge, #balance-gauge { background: #4ade80 !important; }
+        #closure-gauge, #balance-gauge { background: #10b981 !important; }
         
         .status {
-            color: #94a3b8 !important;
+            color: #64748b !important;
             font-size: 0.8rem;
             margin-top: 0.5rem;
             display: flex;
@@ -262,15 +265,15 @@
         }
         
         .status-badge {
-            background: rgba(255,255,255,0.1) !important;
-            color: #fbbf24 !important;
+            background: #f1f5f9 !important;
+            color: #0f2b4f !important;
             padding: 0.2rem 0.6rem;
             border-radius: 20px;
             font-size: 0.7rem;
         }
         
-        .status-badge.live { background: #4ade80 !important; color: white !important; }
-        .status-badge.mizan { background: #4ade80 !important; color: #0f2b4f !important; }
+        .status-badge.live { background: #10b981 !important; color: white !important; }
+        .status-badge.mizan { background: #10b981 !important; color: white !important; }
         
         /* Forecast Grid */
         .forecast-grid {
@@ -283,15 +286,15 @@
         .forecast-day {
             text-align: center;
             padding: 1rem;
-            background: rgba(255,255,255,0.1);
+            background: #f8fafc;
             border-radius: 15px;
         }
         
-        .forecast-day .day { color: #fbbf24; font-weight: bold; margin-bottom: 0.5rem; }
-        .forecast-day .kp-range { color: #4ade80; font-size: 1.2rem; font-weight: bold; }
-        .forecast-day .storm-level { color: #94a3b8; font-size: 0.8rem; }
+        .forecast-day .day { color: #0f2b4f; font-weight: bold; margin-bottom: 0.5rem; }
+        .forecast-day .kp-range { color: #10b981; font-size: 1.2rem; font-weight: bold; }
+        .forecast-day .storm-level { color: #64748b; font-size: 0.8rem; }
         
-        /* VOLCANO SECTION (NEW) */
+        /* VOLCANO SECTION */
         .vol-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -299,15 +302,16 @@
             margin-bottom: 16px;
         }
         .vol-stat-box {
-            background: rgba(0,0,0,0.3);
+            background: #f8fafc;
             border-radius: 12px;
             padding: 12px;
             text-align: center;
+            border: 1px solid #e2e8f0;
         }
         .vol-stat-box .num {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #fbbf24;
+            color: #0f2b4f;
             font-family: 'Courier New', monospace;
         }
         .vol-list {
@@ -315,7 +319,7 @@
             overflow-y: auto;
         }
         .vol-item {
-            background: rgba(0,0,0,0.2);
+            background: #f8fafc;
             border-radius: 10px;
             padding: 10px 12px;
             margin-bottom: 8px;
@@ -328,7 +332,7 @@
         }
         .vol-item:hover {
             transform: translateX(5px);
-            background: rgba(255,215,0,0.15);
+            background: #fef9e3;
         }
         .pulse-dot {
             width: 10px;
@@ -341,18 +345,18 @@
             0%,100%{ transform: scale(1); opacity: 1; }
             50%{ transform: scale(1.4); opacity: .7; }
         }
-        .vol-name { flex: 1; font-size: 0.85rem; }
+        .vol-name { flex: 1; font-size: 0.85rem; color: #1e293b; }
         .vol-badge {
             font-size: 0.7rem;
             padding: 2px 8px;
             border-radius: 20px;
-            background: rgba(0,0,0,0.4);
+            background: #e2e8f0;
         }
         
         /* OFFline Badge + Visit Button */
         .offline-badge {
-            background: rgba(100,100,100,0.3);
-            color: #94a3b8;
+            background: #fee2e2;
+            color: #dc2626;
             font-size: 0.7rem;
             padding: 4px 8px;
             border-radius: 20px;
@@ -360,9 +364,9 @@
             margin-bottom: 8px;
         }
         .visit-btn {
-            background: rgba(0,180,255,0.2);
-            border: 1px solid #00d4ff;
-            color: #00d4ff;
+            background: #eef2ff;
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.7rem;
@@ -372,27 +376,29 @@
             transition: all 0.2s;
         }
         .visit-btn:hover {
-            background: rgba(0,180,255,0.4);
+            background: #3b82f6;
+            color: white;
             transform: scale(1.02);
         }
         
         /* Moon Phase */
         .moon-phase {
-            background: #0f2b4f;
+            background: #f8fafc;
             border-radius: 30px;
             padding: 1.5rem;
             margin: 2rem 0;
             display: flex;
             align-items: center;
             gap: 2rem;
-            color: white;
+            color: #1e293b;
             cursor: pointer;
+            border: 1px solid #e2e8f0;
         }
         .moon-icon { font-size: 4rem; }
         .moon-info { flex: 1; }
-        .moon-info h3 { color: #fbbf24; margin-bottom: 0.5rem; }
-        .moon-percent { font-size: 1.5rem; font-weight: bold; color: #4ade80; }
-        .moon-thickness { font-size: 0.9rem; color: #94a3b8; }
+        .moon-info h3 { color: #0f2b4f; margin-bottom: 0.5rem; }
+        .moon-percent { font-size: 1.5rem; font-weight: bold; color: #10b981; }
+        .moon-thickness { font-size: 0.9rem; color: #64748b; }
         
         /* Moon Canvas */
         .moon-canvas {
@@ -409,7 +415,7 @@
             margin: 1rem 0;
         }
         .quick-link {
-            background: #e2e8f0;
+            background: #f1f5f9;
             padding: 0.5rem 1rem;
             border-radius: 30px;
             text-decoration: none;
@@ -427,8 +433,8 @@
         
         /* Source Cards */
         .source-card {
-            background: #E3E9F2;
-            border: 1px solid #BDC7D4;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 15px;
             padding: 1rem;
             cursor: pointer;
@@ -436,24 +442,24 @@
             height: 100%;
         }
         .source-card:hover {
-            background: #D1D9E6;
+            background: #fef9e3;
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
         }
         .source-card .value {
-            color: #1A5FB4;
+            color: #0f2b4f;
             font-family: 'Courier New', monospace;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
         }
         .source-card .label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #64748B;
             text-transform: uppercase;
         }
         .source-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
             margin: 1rem 0 2rem;
         }
@@ -470,7 +476,7 @@
         .sunspot-details {
             margin-top: 1rem;
             padding: 1rem;
-            background: rgba(255,255,255,0.1);
+            background: #f8fafc;
             border-radius: 15px;
         }
         .sunspot-table {
@@ -479,11 +485,11 @@
         }
         .sunspot-table td {
             padding: 0.3rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid #e2e8f0;
         }
-        .sunspot-table .region { color: #fbbf24; }
-        .sunspot-table .count { color: #4ade80; font-weight: bold; }
-        .sunspot-table .class { color: #94a3b8; }
+        .sunspot-table .region { color: #0f2b4f; font-weight: bold; }
+        .sunspot-table .count { color: #10b981; font-weight: bold; }
+        .sunspot-table .class { color: #64748b; }
         
         /* Historical Events */
         .historical-grid {
@@ -494,12 +500,12 @@
         }
         .historical-event {
             padding: 1rem;
-            background: rgba(255,255,255,0.1);
+            background: #f8fafc;
             border-radius: 15px;
         }
-        .historical-event .year { color: #fbbf24; font-size: 1.2rem; font-weight: bold; }
-        .historical-event .event-type { color: #4ade80; font-size: 0.9rem; }
-        .historical-event .magnitude { color: white; font-size: 1rem; }
+        .historical-event .year { color: #0f2b4f; font-size: 1.2rem; font-weight: bold; }
+        .historical-event .event-type { color: #10b981; font-size: 0.9rem; }
+        .historical-event .magnitude { color: #1e293b; font-size: 1rem; }
         
         /* Images Grid */
         .images-grid {
@@ -509,7 +515,7 @@
             margin: 2rem 0;
         }
         .image-card {
-            background: #f8fafc;
+            background: #ffffff;
             border-radius: 20px;
             padding: 1rem;
             border: 1px solid #e2e8f0;
@@ -541,11 +547,11 @@
         
         /* Earthquake Section */
         .earthquake-section {
-            background: #f8fafc;
+            background: #ffffff;
             border-radius: 30px;
             padding: 1.5rem;
             margin: 2rem 0;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #e2e8f0;
         }
         .earthquake-stats {
             display: grid;
@@ -554,11 +560,11 @@
             margin-bottom: 1.5rem;
         }
         .quake-stat {
-            background: white;
+            background: #f8fafc;
             border-radius: 15px;
             padding: 1rem;
             text-align: center;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #e2e8f0;
         }
         .quake-stat .number {
             font-size: 2rem;
@@ -571,7 +577,7 @@
             gap: 0.8rem;
         }
         .quake-item {
-            background: white;
+            background: #f8fafc;
             border-radius: 12px;
             padding: 0.8rem 1rem;
             display: flex;
@@ -581,16 +587,16 @@
             cursor: pointer;
         }
         .quake-magnitude {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            min-width: 60px;
+            min-width: 55px;
         }
-        .quake-location { flex: 1; font-weight: 500; }
-        .quake-time { color: #64748b; font-size: 0.9rem; }
+        .quake-location { flex: 1; font-weight: 500; color: #1e293b; }
+        .quake-time { color: #64748b; font-size: 0.8rem; }
         
         /* Live Badges */
         .live-badge {
-            background: #4ade80;
+            background: #10b981;
             color: white;
             padding: 0.2rem 0.8rem;
             border-radius: 20px;
@@ -598,8 +604,8 @@
             display: inline-block;
         }
         .mizan-badge {
-            background: #4ade80;
-            color: #0f2b4f;
+            background: #10b981;
+            color: white;
             padding: 0.2rem 0.8rem;
             border-radius: 20px;
             font-size: 0.7rem;
@@ -609,35 +615,37 @@
         
         .section-title {
             color: #0f2b4f;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             margin: 2rem 0 1rem;
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 0.5rem;
         }
         
-        /* Red Mode (Emergency) */
+        /* Red Mode (Emergency) - Still dramatic but readable */
         body.red-mode {
             background: #330000;
         }
         body.red-mode .container {
-            background: #220000;
-            box-shadow: 0 0 30px rgba(255,0,0,0.3);
+            background: #2a1a1a;
         }
         body.red-mode .card, body.red-mode .core-card, body.red-mode .panel {
-            border-color: #ff5555 !important;
-            box-shadow: 0 0 15px rgba(255,0,0,0.5);
+            background: #3a2a2a !important;
+            border-color: #ff8888 !important;
+        }
+        body.red-mode .card-title, body.red-mode .core-title {
+            color: #ffaaaa !important;
         }
         .red-mode-overlay {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(255,0,0,0.15), transparent 70%);
+            background: radial-gradient(circle at center, rgba(255,0,0,0.1), transparent 70%);
             pointer-events: none;
             z-index: 999;
             animation: pulse-red 2s infinite;
         }
         @keyframes pulse-red {
-            0%,100%{ opacity: 0.3; }
-            50%{ opacity: 0.8; }
+            0%,100%{ opacity: 0.2; }
+            50%{ opacity: 0.5; }
         }
         
         /* Notification Toast */
@@ -645,13 +653,14 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #0f2b4f;
-            border-left: 4px solid #fbbf24;
+            background: #ffffff;
+            border-left: 4px solid #f59e0b;
             padding: 12px 20px;
             border-radius: 12px;
             z-index: 2000;
             animation: slideIn 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            color: #1e293b;
         }
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
@@ -672,8 +681,8 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #0f2b4f;
-            border-top: 1px solid #fbbf24;
+            background: #ffffff;
+            border-top: 2px solid #fbbf24;
             padding: 10px;
             display: flex;
             justify-content: center;
@@ -681,14 +690,15 @@
             flex-wrap: wrap;
             font-size: 0.8rem;
             z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
-        .bticker span { color: #4ade80; font-weight: 600; }
+        .bticker span { color: #10b981; font-weight: 600; }
         .live-dot {
             display: inline-block;
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #4ade80;
+            background: #10b981;
             animation: pulse 1.5s infinite;
             margin-right: 5px;
         }
@@ -729,7 +739,7 @@
             <span>🌋 Fuego Volcano — WARNING level active</span>
             <span>🌊 CME expected · Low Impact</span>
             <span>📡 Type II Radio Emission 866 km/s</span>
-            <span>🕋 Mizan al-Malakut v8.0 · Integrated Platform</span>
+            <span>🕋 Mizan al-Malakut v8.1 · Light Theme</span>
             <span>⚡ All observatory systems nominal</span>
         </div>
     </div>
@@ -743,12 +753,12 @@
 
     <h1>
         TRIO SEAL · Cosmic Observatory
-        <span style="font-size:1rem; background:#e2e8f0; padding:0.3rem 1rem; border-radius:40px;">v8.0</span>
+        <span style="font-size:1rem; background:#f1f5f9; padding:0.3rem 1rem; border-radius:40px; color:#0f2b4f;">v8.1</span>
     </h1>
 
     <div class="subtitle">
         <span class="live-badge">⚡ Live</span>
-        <span class="mizan-badge">⚖️ Mizan al-Malakut v8.0</span>
+        <span class="mizan-badge">⚖️ Mizan al-Malakut v8.1</span>
         <span data-key="indicators">21 Indicators · Auto Update</span>
     </div>
 
@@ -798,7 +808,7 @@
         <div class="forecast-grid" id="kp-forecast"></div>
     </div>
 
-    <!-- SOLAR OBSERVATORY (4 Cards with OFFLINE + Visit) -->
+    <!-- SOLAR OBSERVATORY (Cards with OFFLINE + Visit) -->
     <h2 class="section-title">☀️ Solar Observatory</h2>
     <div class="source-grid">
         <div class="source-card" data-link="aurora">
@@ -818,13 +828,13 @@
         </div>
         <div class="source-card" data-link="xray">
             <div class="value">📡 X-Ray Flux</div>
-            <div id="xray-val" style="font-size:1rem; color:#4ade80;">C1.2</div>
+            <div id="xray-val" style="font-size:1rem; color:#10b981;">C1.2</div>
             <div class="offline-badge">⚠️ OFFLINE</div>
             <div class="visit-btn" onclick="event.stopPropagation(); window.open(LINKS.xray, '_blank')">Visit Observatory →</div>
         </div>
         <div class="source-card" data-link="cme">
             <div class="value">🌊 CME Tracking</div>
-            <div style="font-size:0.8rem; color:#ffcc00;">⚠ Minor CME Observed</div>
+            <div style="font-size:0.8rem; color:#f59e0b;">⚠ Minor CME Observed</div>
             <div class="visit-btn" onclick="event.stopPropagation(); window.open(LINKS.cme, '_blank')">Visit Observatory →</div>
         </div>
         <div class="source-card" data-link="farside">
@@ -844,13 +854,13 @@
         <canvas id="moonCanvas" class="moon-canvas" width="80" height="80"></canvas>
         <div class="moon-info">
             <h3 data-key="moon-phase">Moon Phase</h3>
-            <div><span id="moon-phase-name">New Moon</span> · <span class="moon-percent" id="moon-illumination">0%</span></div>
-            <div class="moon-thickness" id="moon-thickness">Thickness: 0'</div>
-            <div style="margin-top:0.5rem; color:#94a3b8;" id="moon-age">Age: 0 days</div>
+            <div><span id="moon-phase-name">Waning Crescent</span> · <span class="moon-percent" id="moon-illumination">6.5%</span></div>
+            <div class="moon-thickness" id="moon-thickness">Thickness: 2.0'</div>
+            <div style="margin-top:0.5rem; color:#64748b;" id="moon-age">Age: 2.4 days</div>
         </div>
     </div>
 
-    <!-- VOLCANO OBSERVATORY (NEW) -->
+    <!-- VOLCANO OBSERVATORY -->
     <h2 class="section-title">🌋 Live Volcano Observatory</h2>
     <div class="card" data-link="volcano" style="padding: 1.5rem;">
         <div class="vol-stats">
@@ -883,7 +893,7 @@
     <h2 class="section-title" data-key="solar-title">☀️ 4. Solar Activity</h2>
     <div class="indicators-grid" id="solar-grid"></div>
     <div class="card" id="sunspot-details-card" style="margin-top: 1rem;">
-        <h3 style="color: #fbbf24; margin-bottom: 1rem;">📊 Sunspot Regions</h3>
+        <h3 style="color: #0f2b4f; margin-bottom: 1rem;">📊 Sunspot Regions</h3>
         <div id="sunspot-details" class="sunspot-details">
             <table class="sunspot-table" id="sunspot-table">
                 <tr><td colspan="3">Loading sunspot data...</td></tr>
@@ -919,7 +929,7 @@
     <div class="footer">
         <span id="timestamp">Loading...</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
     </div>
-    <div style="text-align: center; margin-top: 1rem; color: #0f2b4f;">Hicham Chigar · هشام شيكر</div>
+    <div style="text-align: center; margin-top: 1rem; color: #64748b;">Hicham Chigar · هشام شيكر</div>
 </div>
 
 <!-- Bottom Ticker -->
@@ -1027,14 +1037,14 @@ function renderVolcanoes() {
     container.innerHTML = '';
     let high = 0;
     GOLDEN_VOLCANOES.forEach(v => {
-        const colors = { red: '#ff3333', orange: '#ff7700', yellow: '#ffcc00' };
-        const col = colors[v.alert] || '#6888aa';
+        const colors = { red: '#ef4444', orange: '#f97316', yellow: '#fbbf24' };
+        const col = colors[v.alert] || '#94a3b8';
         if (v.alert === 'red' || v.alert === 'orange') high++;
         const div = document.createElement('div');
         div.className = 'vol-item';
         div.style.borderLeftColor = col;
         div.setAttribute('data-link', 'volcano');
-        div.innerHTML = `<span class="pulse-dot" style="background:${col}"></span><span class="vol-name">🌋 ${v.name} <span style="color:#94a3b8; font-size:0.7rem;">(${v.country})</span></span><span class="vol-badge" style="background:${col}22; color:${col};">${v.status}</span>`;
+        div.innerHTML = `<span class="pulse-dot" style="background:${col}"></span><span class="vol-name">🌋 ${v.name} <span style="color:#64748b; font-size:0.7rem;">(${v.country})</span></span><span class="vol-badge" style="background:${col}20; color:${col};">${v.status}</span>`;
         container.appendChild(div);
     });
     document.getElementById('vol-total').textContent = GOLDEN_VOLCANOES.length;
@@ -1043,7 +1053,7 @@ function renderVolcanoes() {
     if (high > lastHighCount && high > 0) {
         const toast = document.createElement('div');
         toast.className = 'notification-toast';
-        toast.style.borderLeftColor = '#ff7700';
+        toast.style.borderLeftColor = '#f97316';
         toast.innerHTML = `<strong>🌋 Volcano Alert</strong><br>${high - lastHighCount} new volcano(es) reached HIGH alert level`;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 5000);
@@ -1061,7 +1071,7 @@ function drawMoonCanvas(illum) {
     const ctx = canvas.getContext('2d');
     const w = 80, h = 80;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#1e293b';
     ctx.beginPath();
     ctx.arc(40, 40, 38, 0, 2 * Math.PI);
     ctx.fill();
@@ -1135,7 +1145,7 @@ async function fetchEarthquakes() {
                 const mag = q.properties.mag || 0;
                 const loc = q.properties.place || 'Unknown';
                 const time = new Date(q.properties.time).toLocaleTimeString();
-                const col = mag >= 6 ? '#ff3333' : mag >= 4.5 ? '#ff7700' : '#4ade80';
+                const col = mag >= 6 ? '#ef4444' : mag >= 4.5 ? '#f97316' : '#10b981';
                 const div = document.createElement('div');
                 div.className = 'quake-item';
                 div.style.borderLeftColor = col;
@@ -1209,7 +1219,7 @@ function fetchKpForecast() {
     const fg = document.getElementById('kp-forecast');
     if (!fg) return;
     const days = ['Friday', 'Saturday', 'Sunday'];
-    const fc = [{min:'2-',max:'6',level:'G2'},{min:'3+',max:'6+',level:'G2'},{min:'4+',max:'6+',level:'G2'}];
+    const fc = [{min:'2-',max:'5',level:'G2'},{min:'3+',max:'6+',level:'G2'},{min:'4+',max:'5+',level:'G2'}];
     fg.innerHTML = '';
     days.forEach((day,i) => {
         const d = document.createElement('div');
@@ -1284,7 +1294,7 @@ function buildIndicators() {
 buildIndicators();
 
 /* ==================== TRANSLATION ==================== */
-const translations = window.translations || {
+const translations = {
     en: { home: "Home", observatory: "Observatory", research: "Research", about: "About", language: "English", indicators: "21 Indicators · Auto Update", "absolute-angle": "Angle", "last-update": "Last update", "last-24h": "Last 24h", "strongest": "Strongest", "latest": "Latest", "moon-phase": "Moon Phase" },
     ar: { home: "الرئيسية", observatory: "المرصد", research: "البحث", about: "عن المشروع", language: "العربية", indicators: "٢١ مؤشر · تحديث تلقائي", "absolute-angle": "زاوية", "last-update": "آخر تحديث", "last-24h": "آخر ٢٤ ساعة", "strongest": "الأقوى", "latest": "الأحدث", "moon-phase": "طور القمر" }
 };
@@ -1315,7 +1325,7 @@ setLanguage('en');
 
 /* ==================== INIT ==================== */
 window.addEventListener('load', () => {
-    console.log('🚀 TRIO SEAL v8.0 — Integrated Cosmic Platform Ready');
+    console.log('🚀 TRIO SEAL v8.1 — Light Theme · Integrated Cosmic Platform Ready');
     console.log('💡 Type debugClicks() to see analytics');
     renderVolcanoes();
     updateTime();
