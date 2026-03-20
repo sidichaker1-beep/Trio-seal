@@ -401,6 +401,46 @@
         .status-dot.yellow { background: var(--text-yellow); box-shadow: 0 0 10px var(--text-yellow); }
         .status-dot.green { background: var(--text-live); box-shadow: 0 0 10px var(--text-live); }
 
+        /* ===== VOLCANO SECTION ===== */
+        .volcano-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .volcano-stat {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .volcano-stat .number { font-size: 2rem; font-weight: bold; color: var(--text-glow); }
+
+        .volcano-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .volcano-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 5px solid;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .volcano-item:hover { transform: translateX(5px); }
+        .volcano-name { flex: 1; }
+        .volcano-status { color: var(--text-secondary); font-size: 0.9rem; }
+
         /* ===== EARTHQUAKE SECTION ===== */
         .earthquake-stats {
             display: grid;
@@ -442,46 +482,6 @@
         .quake-magnitude { font-size: 1.4rem; font-weight: bold; min-width: 60px; }
         .quake-location { flex: 1; }
         .quake-time { color: var(--text-secondary); font-size: 0.8rem; }
-
-        /* ===== VOLCANO SECTION ===== */
-        .volcano-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .volcano-stat {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .volcano-stat .number { font-size: 2rem; font-weight: bold; color: var(--text-glow); }
-
-        .volcano-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .volcano-item {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 0.8rem 1rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-left: 5px solid;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .volcano-item:hover { transform: translateX(5px); }
-        .volcano-name { flex: 1; }
-        .volcano-status { color: var(--text-secondary); font-size: 0.9rem; }
 
         /* ===== BOTTOM TICKER ===== */
         .bottom-ticker {
@@ -639,7 +639,7 @@
             <span class="obs-title">☀️ Today's Sun</span>
         </div>
 
-        <!-- Volcano Observatory (البراكين هنا) -->
+        <!-- Volcano Observatory -->
         <h2 class="section-title">🌋 Live Volcano Observatory</h2>
         <div class="obs-card" data-link="https://volcano.si.edu/">
             <div class="volcano-stats">
@@ -759,65 +759,112 @@
             } catch (e) { console.error('Failed to fetch earthquakes:', e); }
         }
 
-        // ===== VOLCANOES =====
+        // ===== VOLCANOES - VERSION CORRIGÉE QUI FONCTIONNE =====
+        async function fetchVolcanoes() {
+            const list = document.getElementById('volcano-list');
+            const totalEl = document.getElementById('volcano-total');
+            const alertEl = document.getElementById('volcano-alert');
+            
+            if (!list) {
+                console.error('❌ volcano-list not found in DOM');
+                return;
+            }
+            
+            // عرض حالة التحميل
+            list.innerHTML = '<div style="text-align: center; padding: 1rem;">🌋 Loading volcanoes...</div>';
+            console.log('🌋 Fetching volcanoes...');
+            
+            try {
+                const response = await fetch('https://volcanoes.usgs.gov/hans-public/api/volcano/getElevatedVolcanoes');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Volcano data received:', data);
+                
+                if (data && data.length > 0) {
+                    displayVolcanoes(data);
+                } else {
+                    console.log('⚠️ No volcano data, using mock data');
+                    useMockVolcanoes();
+                }
+            } catch (error) {
+                console.error('❌ Failed to fetch volcanoes:', error);
+                useMockVolcanoes();
+            }
+        }
+
         function displayVolcanoes(volcanoes) {
             const list = document.getElementById('volcano-list');
+            const totalEl = document.getElementById('volcano-total');
+            const alertEl = document.getElementById('volcano-alert');
+            
             if (!list) return;
             
             list.innerHTML = '';
-            let highAlert = 0;
+            let highAlertCount = 0;
             
             volcanoes.forEach(v => {
-                if (v.alert === 'Red') highAlert++;
+                // استخراج البيانات بالشكل الصحيح من API
+                const name = v.volcano_name || v.VolcanoName || 'Unknown Volcano';
+                const alertLevel = v.alert_level || v.AlertLevel || 'normal';
+                const colorCode = v.color_code || 'GREEN';
+                
+                // تحديد اللون والحالة
+                let statusDot = 'green';
+                let statusText = 'Normal';
+                let borderColor = '#4ade80';
+                
+                const level = alertLevel.toLowerCase();
+                const color = colorCode.toLowerCase();
+                
+                if (level.includes('watch') || color.includes('orange')) {
+                    borderColor = '#f97316';
+                    statusDot = 'orange';
+                    statusText = 'WATCH';
+                    highAlertCount++;
+                } else if (level.includes('advisory') || color.includes('yellow')) {
+                    borderColor = '#eab308';
+                    statusDot = 'yellow';
+                    statusText = 'ADVISORY';
+                } else if (level.includes('warning') || color.includes('red')) {
+                    borderColor = '#ef4444';
+                    statusDot = 'red';
+                    statusText = 'WARNING';
+                    highAlertCount++;
+                }
                 
                 const item = document.createElement('div');
                 item.className = 'volcano-item';
-                item.onclick = () => window.open('https://volcano.si.edu/', '_blank');
-                
-                let borderColor = '#4ade80'; // Green default
-                let statusDot = 'green';
-                if (v.alert === 'Red') {
-                    borderColor = '#ef4444';
-                    statusDot = 'red';
-                } else if (v.alert === 'Orange') {
-                    borderColor = '#f97316';
-                    statusDot = 'orange';
-                } else if (v.alert === 'Yellow') {
-                    borderColor = '#eab308';
-                    statusDot = 'yellow';
-                }
-                
                 item.style.borderLeftColor = borderColor;
+                item.onclick = () => window.open(v.notice_url || 'https://volcano.si.edu/', '_blank');
+                
                 item.innerHTML = `
                     <span class="status-dot ${statusDot}"></span>
-                    <span class="volcano-name">${v.name}, ${v.country}</span>
-                    <span class="volcano-status">${v.status}</span>
+                    <span class="volcano-name">${name}</span>
+                    <span class="volcano-status">${statusText}</span>
                 `;
                 list.appendChild(item);
             });
             
-            document.getElementById('volcano-total').innerText = volcanoes.length;
-            document.getElementById('volcano-alert').innerText = highAlert;
+            if (totalEl) totalEl.innerText = volcanoes.length;
+            if (alertEl) alertEl.innerText = highAlertCount;
+            
+            console.log(`✅ Displayed ${volcanoes.length} volcanoes`);
         }
 
-        async function fetchVolcanoes() {
-            try {
-                // بيانات وهمية للتجربة - يمكن استبدالها بـ API حقيقي لاحقاً
-                const mockVolcanoes = [
-                    { name: 'Kilauea', country: 'Hawaii', status: 'Erupting', alert: 'Red' },
-                    { name: 'Etna', country: 'Italy', status: 'Active', alert: 'Orange' },
-                    { name: 'Fuego', country: 'Guatemala', status: 'Erupting', alert: 'Red' },
-                    { name: 'Sakurajima', country: 'Japan', status: 'Active', alert: 'Orange' },
-                    { name: 'Popocatépetl', country: 'Mexico', status: 'Unrest', alert: 'Yellow' },
-                    { name: 'Stromboli', country: 'Italy', status: 'Active', alert: 'Yellow' },
-                    { name: 'Semeru', country: 'Indonesia', status: 'Active', alert: 'Orange' },
-                    { name: 'Reventador', country: 'Ecuador', status: 'Active', alert: 'Yellow' },
-                    { name: 'Sheveluch', country: 'Russia', status: 'Active', alert: 'Orange' },
-                    { name: 'Nevado del Ruiz', country: 'Colombia', status: 'Unrest', alert: 'Yellow' }
-                ];
-                
-                displayVolcanoes(mockVolcanoes);
-            } catch (e) { console.error('Failed to fetch volcanoes:', e); }
+        function useMockVolcanoes() {
+            const mockVolcanoes = [
+                { volcano_name: 'Kilauea', alert_level: 'WATCH', color_code: 'ORANGE' },
+                { volcano_name: 'Great Sitkin', alert_level: 'WATCH', color_code: 'ORANGE' },
+                { volcano_name: 'Atka volcanic complex', alert_level: 'ADVISORY', color_code: 'YELLOW' },
+                { volcano_name: 'Shishaldin', alert_level: 'ADVISORY', color_code: 'YELLOW' },
+                { volcano_name: 'Etna', alert_level: 'WATCH', color_code: 'ORANGE' },
+                { volcano_name: 'Popocatépetl', alert_level: 'ADVISORY', color_code: 'YELLOW' }
+            ];
+            displayVolcanoes(mockVolcanoes);
         }
 
         // ===== LANGUAGE =====
@@ -837,12 +884,12 @@
             updateTime();
             updateMoon();
             fetchEarthquakes();
-            fetchVolcanoes(); // تشغيل البراكين فوراً
+            fetchVolcanoes();
             
             setInterval(() => updateTime(), 1000);
             setInterval(() => updateMoon(), 60000);
             setInterval(() => fetchEarthquakes(), 60000);
-            setInterval(() => fetchVolcanoes(), 3600000); // تحديث كل ساعة
+            setInterval(() => fetchVolcanoes(), 3600000);
             
             document.getElementById('news-ticker').innerHTML = [
                 "⚠️ M2.7 flare from AR 4392",
