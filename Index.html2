@@ -418,7 +418,11 @@
 
         .quake-stat .number { font-size: 2rem; font-weight: bold; color: var(--text-glow); }
 
-        .quake-list { max-height: 300px; overflow-y: auto; }
+        .quake-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
 
         .quake-item {
             background: rgba(0, 0, 0, 0.3);
@@ -437,6 +441,47 @@
         .quake-magnitude { font-size: 1.4rem; font-weight: bold; min-width: 60px; }
         .quake-location { flex: 1; }
         .quake-time { color: var(--text-secondary); font-size: 0.8rem; }
+
+        /* ===== VOLCANO SECTION ===== */
+        .volcano-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .volcano-stat {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .volcano-stat .number { font-size: 2rem; font-weight: bold; color: var(--text-glow); }
+
+        .volcano-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .volcano-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 5px solid;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .volcano-item:hover { transform: translateX(5px); }
+        .volcano-icon { font-size: 1.4rem; min-width: 60px; color: var(--text-warning); }
+        .volcano-name { flex: 1; }
+        .volcano-desc { color: var(--text-secondary); font-size: 0.8rem; }
 
         /* ===== BOTTOM TICKER ===== */
         .bottom-ticker {
@@ -594,6 +639,16 @@
             <span class="obs-title">☀️ Today's Sun</span>
         </div>
 
+        <!-- Volcano Observatory -->
+        <h2 class="section-title">🌋 Live Volcano Observatory</h2>
+        <div class="obs-card" data-link="https://volcano.si.edu/">
+            <div class="volcano-stats">
+                <div class="volcano-stat"><span class="number" id="volcano-total">0</span><div>Active Volcanoes</div></div>
+                <div class="volcano-stat"><span class="number" id="volcano-alert">0</span><div>High Alert</div></div>
+            </div>
+            <div id="volcano-list" class="volcano-list"></div>
+        </div>
+
         <!-- Earthquake Observatory -->
         <h2 class="section-title">🌋 Live Earthquake Observatory</h2>
         <div class="obs-card" data-link="https://earthquake.usgs.gov/earthquakes/map/">
@@ -703,6 +758,39 @@
             } catch (e) { console.error('Failed to fetch earthquakes:', e); }
         }
 
+        // ===== VOLCANOES =====
+        async function fetchVolcanoes() {
+            try {
+                // Note: This is a mock API - replace with actual Smithsonian API when available
+                const mockVolcanoes = [
+                    { name: 'Kilauea', country: 'Hawaii', status: 'Active', alert: 'Orange' },
+                    { name: 'Etna', country: 'Italy', status: 'Active', alert: 'Yellow' },
+                    { name: 'Fuego', country: 'Guatemala', status: 'Erupting', alert: 'Red' },
+                    { name: 'Sakurajima', country: 'Japan', status: 'Active', alert: 'Orange' },
+                    { name: 'Popocatépetl', country: 'Mexico', status: 'Active', alert: 'Yellow' }
+                ];
+                
+                document.getElementById('volcano-total').innerText = mockVolcanoes.length;
+                document.getElementById('volcano-alert').innerText = mockVolcanoes.filter(v => v.alert === 'Red').length;
+                
+                const list = document.getElementById('volcano-list');
+                list.innerHTML = '';
+                
+                mockVolcanoes.forEach(v => {
+                    const color = v.alert === 'Red' ? '#ef4444' : v.alert === 'Orange' ? '#f97316' : '#4ade80';
+                    
+                    const item = document.createElement('div');
+                    item.className = 'volcano-item';
+                    item.style.borderLeftColor = color;
+                    item.onclick = () => window.open('https://volcano.si.edu/', '_blank');
+                    item.innerHTML = `<span class="volcano-icon">🌋</span>
+                                      <span class="volcano-name">${v.name}, ${v.country}</span>
+                                      <span class="volcano-desc">${v.status}</span>`;
+                    list.appendChild(item);
+                });
+            } catch (e) { console.error('Failed to fetch volcanoes:', e); }
+        }
+
         // ===== LANGUAGE =====
         function setLanguage(lang) {
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -720,10 +808,12 @@
             updateTime();
             updateMoon();
             fetchEarthquakes();
+            fetchVolcanoes();
             
             setInterval(() => updateTime(), 1000);
             setInterval(() => updateMoon(), 60000);
             setInterval(() => fetchEarthquakes(), 60000);
+            setInterval(() => fetchVolcanoes(), 3600000); // تحديث كل ساعة
             
             document.getElementById('news-ticker').innerHTML = [
                 "⚠️ M2.7 flare from AR 4392",
