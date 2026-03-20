@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRIO SEAL · All-in-One Cosmic Platform</title>
+<title>TRIO SEAL · All-in-One Cosmic Platform · Live Feeds</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 /* ==================== DESIGN TOKENS ==================== */
@@ -68,6 +68,14 @@ body::before {
   letter-spacing: 2px;
   color: var(--cyan);
   font-weight: 600;
+}
+.live-badge {
+  background: rgba(0,255,136,.2);
+  color: var(--live);
+  font-size: .6rem;
+  padding: 2px 6px;
+  border-radius: 20px;
+  margin-left: 8px;
 }
 
 /* ==================== RED MODE ==================== */
@@ -164,9 +172,17 @@ body.red-mode {
 .quake-item:hover { transform: translateX(5px); background: rgba(255,215,0,.1); }
 .quake-mag { font-size: 1rem; font-weight: 700; min-width: 48px; font-family: var(--f-mono); }
 
-/* ==================== SOLAR GRID ==================== */
+/* ==================== LIVE IMAGES GRID ==================== */
+.live-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+  background: #030a18;
+  transition: all 0.3s ease;
+}
+.live-img:hover { filter: brightness(1.1); transform: scale(1.02); }
 .solar-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 14px; }
-.solar-tile img { width: 100%; height: 100px; object-fit: cover; display: block; background: #030a18; }
 .main-row { display: grid; grid-template-columns: 290px 1fr 300px; gap: 12px; margin-bottom: 14px; }
 .quick-links { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .quick-link {
@@ -187,6 +203,14 @@ body.red-mode {
 .badge-mizan { background: rgba(255,215,0,.13); color: var(--gold); border: 1px solid rgba(255,215,0,.4); }
 .badge-alert { background: rgba(239,68,68,.14); color: var(--alert); border: 1px solid rgba(239,68,68,.4); }
 .badge-warn { background: rgba(255,119,0,.14); color: var(--warn); border: 1px solid rgba(255,119,0,.4); }
+
+/* ==================== CANVAS MOON ==================== */
+.moon-canvas {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 12px;
+  display: block;
+}
 
 /* ==================== TICKER ==================== */
 .bticker {
@@ -218,7 +242,7 @@ body.red-mode {
 
 <!-- ==================== HEADER ==================== -->
 <div class="panel" style="padding: 12px 20px; margin-bottom: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-  <div style="font-family: var(--f-hud); font-size: 1.4rem; font-weight: 900; color: var(--gold);">🌌 TRIO SEAL · All-in-One Cosmic Platform</div>
+  <div style="font-family: var(--f-hud); font-size: 1.4rem; font-weight: 900; color: var(--gold);">🌌 TRIO SEAL · All-in-One Cosmic Platform <span style="font-size: .7rem;">LIVE FEEDS</span></div>
   <div style="display: flex; gap: 20px; font-family: var(--f-mono);">
     <span>📅 <span id="gregorian-date">--</span> · <span id="hijri-date" style="color: var(--gold);">--</span></span>
     <span>🌐 <span id="utc-clock">--</span></span>
@@ -255,21 +279,21 @@ body.red-mode {
   </div>
 </div>
 
-<!-- ==================== SOLAR OBSERVATORY ==================== -->
-<h2 class="sec-title">☀️ Solar Observatory</h2>
+<!-- ==================== SOLAR OBSERVATORY (LIVE IMAGES) ==================== -->
+<h2 class="sec-title">☀️ Solar Observatory <span class="live-badge">LIVE FEEDS</span></h2>
 <div class="solar-grid">
-  <div class="panel solar-tile" data-link="aurora"><div class="phdr">Aurora Oval</div><img src="https://services.swpc.noaa.gov/images/aurora-forecast/latest.jpg" style="width:100%;height:100px;object-fit:cover" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3C/svg%3E'"></div>
-  <div class="panel solar-tile" data-link="kp"><div class="phdr">Kp Index</div><div style="text-align:center;padding:10px"><span id="kp-num" style="font-size:2rem;font-family:var(--f-mono);color:var(--live)">3</span><div id="kp-label" style="font-size:.7rem">Unsettled</div><span id="kp-badge" class="badge badge-warn">ACTIVE</span></div></div>
-  <div class="panel solar-tile" data-link="coronal"><div class="phdr">Coronal Holes</div><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg" style="width:100%;height:100px;object-fit:cover" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3C/svg%3E'"></div>
-  <div class="panel solar-tile" data-link="xray"><div class="phdr">X-Ray Flux</div><img src="https://services.swpc.noaa.gov/images/goes-xray-flux-latest.png" style="width:100%;height:100px;object-fit:cover" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3C/svg%3E'"><div style="padding:4px"><span id="xray-val">C1.2</span> <span id="xray-badge" class="badge badge-green">LOW</span></div></div>
-  <div class="panel solar-tile" data-link="cme"><div class="phdr">CME Tracking</div><div style="padding:8px;font-size:.7rem;color:var(--yellow)">⚠ Minor CME Observed</div></div>
-  <div class="panel solar-tile" data-link="farside"><div class="phdr">Far Side</div><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg" style="width:100%;height:100px;object-fit:cover" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3C/svg%3E'"></div>
+  <div class="panel" data-link="aurora"><div class="phdr">Aurora Oval</div><img id="img-aurora" class="live-img" src="https://services.swpc.noaa.gov/images/aurora-forecast/latest.jpg" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3Ctext x=%2250%22 y=%2250%22 fill=%22%2388aaff%22 text-anchor=%22middle%22%3EOffline%3C/text%3E%3C/svg%3E'"></div>
+  <div class="panel" data-link="kp"><div class="phdr">Kp Index</div><div style="text-align:center;padding:10px"><span id="kp-num" style="font-size:2rem;font-family:var(--f-mono);color:var(--live)">3</span><div id="kp-label" style="font-size:.7rem">Unsettled</div><span id="kp-badge" class="badge badge-warn">ACTIVE</span></div></div>
+  <div class="panel" data-link="coronal"><div class="phdr">Coronal Holes</div><img id="img-coronal" class="live-img" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3Ctext x=%2250%22 y=%2250%22 fill=%22%2388aaff%22 text-anchor=%22middle%22%3EOffline%3C/text%3E%3C/svg%3E'"></div>
+  <div class="panel" data-link="xray"><div class="phdr">X-Ray Flux</div><img id="img-xray" class="live-img" src="https://services.swpc.noaa.gov/images/goes-xray-flux-estimated.png" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3Ctext x=%2250%22 y=%2250%22 fill=%22%2388aaff%22 text-anchor=%22middle%22%3EOffline%3C/text%3E%3C/svg%3E'"><div style="padding:4px"><span id="xray-val">C1.2</span> <span id="xray-badge" class="badge badge-green">LOW</span></div></div>
+  <div class="panel" data-link="cme"><div class="phdr">CME Tracking</div><div style="padding:8px;font-size:.7rem;color:var(--yellow)">⚠ Minor CME Observed</div><div style="font-size:.65rem;color:var(--muted)">▲ Low Impact Expected</div></div>
+  <div class="panel" data-link="farside"><div class="phdr">Far Side</div><img id="img-farside" class="live-img" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3Ctext x=%2250%22 y=%2250%22 fill=%22%2388aaff%22 text-anchor=%22middle%22%3EOffline%3C/text%3E%3C/svg%3E'"></div>
 </div>
 
 <!-- ==================== MAIN ROW ==================== -->
 <div class="main-row">
-  <div class="panel" data-link="solarImage"><div class="phdr">Daily Solar Image</div><img id="daily-solar-img" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1024.jpg" style="width:100%;aspect-ratio:1;object-fit:cover" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3C/svg%3E'"></div>
-  <div class="panel" data-link="moon" style="text-align:center;padding:18px"><div class="phdr">Lunar Data</div><div id="moonVis" style="width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#1a0000,#000 70%);margin:0 auto"></div><div id="moon-phase-name" style="font-family:var(--f-hud)">Loading...</div><div>Illum: <span id="moon-illumination">--</span> · Age: <span id="moon-age">--</span>d</div></div>
+  <div class="panel" data-link="solarImage"><div class="phdr">Daily Solar Image</div><img id="img-solar" class="live-img" style="height:auto;aspect-ratio:1" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e2a3a%22/%3E%3Ctext x=%2250%22 y=%2250%22 fill=%22%2388aaff%22 text-anchor=%22middle%22%3EOffline%3C/text%3E%3C/svg%3E'"></div>
+  <div class="panel" data-link="moon" style="text-align:center;padding:18px"><div class="phdr">Lunar Data</div><canvas id="moonCanvas" class="moon-canvas" width="100" height="100"></canvas><div id="moon-phase-name" style="font-family:var(--f-hud)">Loading...</div><div>Illum: <span id="moon-illumination">--</span> · Age: <span id="moon-age">--</span>d</div></div>
   <div class="panel"><div class="phdr">Geophysical Alerts</div><div id="geo-list" style="padding:6px"></div></div>
 </div>
 
@@ -379,6 +403,31 @@ function deactivateRedMode() {
   redModeActive = false;
   document.body.classList.remove('red-mode');
   document.querySelector('.red-mode-overlay')?.remove();
+}
+
+/* ==================== LIVE IMAGES REFRESH (AUTO UPDATE) ==================== */
+function refreshLiveImages() {
+  const t = Date.now();
+  const images = [
+    'img-aurora', 'img-coronal', 'img-xray', 'img-farside', 'img-solar'
+  ];
+  const urls = {
+    'img-aurora': 'https://services.swpc.noaa.gov/images/aurora-forecast/latest.jpg',
+    'img-coronal': 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg',
+    'img-xray': 'https://services.swpc.noaa.gov/images/goes-xray-flux-estimated.png',
+    'img-farside': 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg',
+    'img-solar': 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg'
+  };
+  images.forEach(id => {
+    const img = document.getElementById(id);
+    if (img && urls[id]) {
+      const oldSrc = img.src.split('?')[0];
+      if (oldSrc === urls[id] || oldSrc.includes('data:image')) {
+        img.src = urls[id] + '?t=' + t;
+      }
+    }
+  });
+  console.log('[LIVE] Images refreshed at', new Date().toLocaleTimeString());
 }
 
 /* ==================== KP API ==================== */
@@ -511,8 +560,25 @@ function updateTime() {
 }
 setInterval(updateTime, 1000); updateTime();
 
-/* ==================== MOON PHASE ==================== */
+/* ==================== MOON PHASE + CANVAS ==================== */
 const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0), SYNODIC = 29.530588853;
+function drawMoonCanvas(illum) {
+  const canvas = document.getElementById('moonCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = 100, h = 100;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(50, 50, 48, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.globalCompositeOperation = 'lighten';
+  ctx.fillStyle = `rgba(255, 220, 180, ${illum / 100})`;
+  ctx.beginPath();
+  ctx.arc(50, 50, 48, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+}
 function updateMoon() {
   const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
   const illum = (1 - Math.cos((age / SYNODIC) * 2 * Math.PI)) / 2 * 100;
@@ -528,6 +594,7 @@ function updateMoon() {
   document.getElementById('moon-phase-name').textContent = phase;
   document.getElementById('moon-illumination').textContent = illum.toFixed(1) + '%';
   document.getElementById('moon-age').textContent = age.toFixed(1) + 'd';
+  drawMoonCanvas(illum);
 }
 setInterval(updateMoon, 60000); updateMoon();
 
@@ -542,6 +609,21 @@ function updateXray() {
   else badge.innerHTML = 'QUIET';
 }
 setInterval(updateXray, 30000); updateXray();
+
+/* ==================== CORE INDICATORS ==================== */
+function updateCoreIndicators() {
+  const kp = currentKp;
+  const taq = (kp * 1.2 + Math.random() * 0.3).toFixed(2);
+  const clo = (kp * 0.8 + Math.random() * 0.2).toFixed(2);
+  const bal = (kp * 0.5 + Math.random() * 0.15).toFixed(3);
+  document.getElementById('taqabul-value').textContent = taq;
+  document.getElementById('closure-value').textContent = clo;
+  document.getElementById('balance-value').textContent = bal;
+  document.getElementById('taqabul-gauge').style.width = Math.min(100, taq * 8) + '%';
+  document.getElementById('closure-gauge').style.width = Math.min(100, clo * 12) + '%';
+  document.getElementById('balance-gauge').style.width = Math.min(100, bal * 40) + '%';
+}
+setInterval(updateCoreIndicators, 5000);
 
 /* ==================== QUICK LINKS & SOURCE CARDS ==================== */
 const QUICK = [
@@ -619,7 +701,10 @@ setLanguage('en');
 
 /* ==================== INIT ==================== */
 window.addEventListener('load', () => {
-  console.log('🚀 TRIO SEAL · All-in-One Cosmic Platform Ready');
+  console.log('🚀 TRIO SEAL · All-in-One Cosmic Platform with Live Feeds Ready');
+  console.log('💡 Type debugClicks() to see analytics');
+  refreshLiveImages();
+  setInterval(refreshLiveImages, 5 * 60 * 1000); // تحديث كل 5 دقائق
   renderVolcanoes();
   fetchRealKp();
   fetchEarthquakes();
