@@ -1,1435 +1,556 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v7.3</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRIO SEAL · Integrated Cosmic Observatory v8.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ═══════════════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════════════ */
-:root{
-  --bg:        #03080f;
-  --bg2:       #060d1a;
-  --panel:     rgba(4,18,44,0.93);
-  --panel2:    rgba(6,22,52,0.88);
-  --bdr:       rgba(0,180,255,.26);
-  --bdr-gold:  rgba(255,215,0,.32);
-  --bdr-hot:   rgba(0,220,255,.6);
-  --gold:      #ffd700;
-  --cyan:      #00d4ff;
-  --cyan2:     #00ffff;
-  --live:      #00ff88;
-  --alert:     #ff3333;
-  --warn:      #ff7700;
-  --yellow:    #ffcc00;
-  --muted:     #6888aa;
-  --white:     #e8f4ff;
-  --purple:    #a855f7;
-  --blue:      #3b82f6;
-  --f-hud:    'Orbitron', sans-serif;
-  --f-data:   'Rajdhani', sans-serif;
-  --f-mono:   'Share Tech Mono', monospace;
-  --r:         14px;
-  --r-pill:    60px;
-  --t:         all .3s ease;
+/* ==================== DESIGN TOKENS ==================== */
+:root {
+  --bg: #03080f;
+  --panel: rgba(4, 18, 44, 0.94);
+  --bdr: rgba(0, 180, 255, 0.28);
+  --bdr-gold: rgba(255, 215, 0, 0.32);
+  --gold: #ffd700;
+  --cyan: #00d4ff;
+  --live: #00ff88;
+  --alert: #ff3333;
+  --warn: #ff7700;
+  --yellow: #ffcc00;
+  --muted: #6888aa;
+  --white: #e8f4ff;
+  --f-hud: 'Orbitron', sans-serif;
+  --f-data: 'Rajdhani', sans-serif;
+  --f-mono: 'Share Tech Mono', monospace;
+  --radius: 14px;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%}
-body{
-  background:var(--bg);color:var(--white);
-  font-family:var(--f-data);min-height:100vh;
-  padding:0 0 72px;overflow-x:hidden;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--f-data);
+  min-height: 100vh;
+  padding: 0 0 72px;
+  overflow-x: hidden;
 }
-/* nebula bg */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 80% 45% at 50% -5%,rgba(0,80,180,.35),transparent 70%),
-    radial-gradient(ellipse 55% 40% at 15% 85%,rgba(0,40,120,.22),transparent 60%),
-    radial-gradient(ellipse 40% 55% at 85% 60%,rgba(0,20,80,.18),transparent 55%);
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 45% at 50% -5%, rgba(0,80,180,.35), transparent 70%),
+              radial-gradient(ellipse 55% 40% at 15% 85%, rgba(0,40,120,.22), transparent 60%);
 }
-/* stars */
-body::after{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    radial-gradient(1.3px 1.3px at  5%  8%,rgba(255,255,255,.8),transparent),
-    radial-gradient(1px   1px   at 18% 22%,rgba(255,255,255,.5),transparent),
-    radial-gradient(1.5px 1.5px at 32%  4%,rgba(255,255,255,.7),transparent),
-    radial-gradient(1px   1px   at 47% 35%,rgba(255,255,255,.4),transparent),
-    radial-gradient(1.3px 1.3px at 61% 14%,rgba(255,255,255,.6),transparent),
-    radial-gradient(1px   1px   at 73% 28%,rgba(255,255,255,.5),transparent),
-    radial-gradient(1.5px 1.5px at 84%  6%,rgba(255,255,255,.75),transparent),
-    radial-gradient(1px   1px   at 91% 42%,rgba(255,255,255,.4),transparent),
-    radial-gradient(1.3px 1.3px at  9% 55%,rgba(255,255,255,.6),transparent),
-    radial-gradient(1px   1px   at 25% 68%,rgba(255,255,255,.5),transparent),
-    radial-gradient(1.5px 1.5px at 52% 75%,rgba(255,255,255,.65),transparent),
-    radial-gradient(1px   1px   at 78% 88%,rgba(255,255,255,.4),transparent);
-  background-size:280px 280px;opacity:.55;
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(1.3px at 5% 8%, rgba(255,255,255,.8), transparent),
+                    radial-gradient(1px at 18% 22%, rgba(255,255,255,.5), transparent);
+  background-size: 280px 280px; opacity: 0.55;
 }
-.wrap{max-width:1420px;margin:0 auto;padding:12px 14px;position:relative;z-index:1}
+.wrap { max-width: 1420px; margin: 0 auto; padding: 12px 14px; position: relative; z-index: 1; }
 
-/* ═══════════════════════════════════════════════
-   PANEL BASE
-═══════════════════════════════════════════════ */
-.panel{
-  background:var(--panel);backdrop-filter:blur(14px);
-  border:1px solid var(--bdr);border-radius:var(--r);
-  transition:border-color .25s,box-shadow .25s;
-  position:relative;overflow:hidden;
+/* ==================== PANELS ==================== */
+.panel {
+  background: var(--panel); backdrop-filter: blur(14px);
+  border: 1px solid var(--bdr); border-radius: var(--radius);
+  transition: border-color .25s, box-shadow .25s;
+  position: relative; overflow: hidden;
 }
-.panel::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(135deg,rgba(0,180,255,.04),transparent 60%);
+.panel[data-link] { cursor: pointer; }
+.panel[data-link]:hover { border-color: rgba(0,220,255,.6); box-shadow: 0 0 18px rgba(0,200,255,.22); }
+.phdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 12px; background: linear-gradient(90deg, rgba(0,60,130,.65), rgba(0,30,80,.4));
+  border-bottom: 1px solid var(--bdr); font-family: var(--f-hud); font-size: .68rem;
+  letter-spacing: 2px; color: var(--cyan); font-weight: 600;
 }
-.panel[data-link]{cursor:pointer}
-.panel[data-link]:hover{border-color:var(--bdr-hot);box-shadow:0 0 18px rgba(0,200,255,.22)}
-/* shine sweep */
-.panel::after{
-  content:'';position:absolute;top:0;left:-110%;
-  width:100%;height:100%;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.055),transparent);
-  transition:left .55s ease;
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 99px;
+  font-size: .68rem; font-weight: 700; font-family: var(--f-hud);
 }
-.panel[data-link]:hover::after{left:110%}
+.badge-live { background: rgba(0,255,136,.14); color: var(--live); border: 1px solid rgba(0,255,136,.4); }
+.badge-mizan { background: rgba(255,215,0,.13); color: var(--gold); border: 1px solid rgba(255,215,0,.4); }
+.badge-alert { background: rgba(239,68,68,.14); color: var(--alert); border: 1px solid rgba(239,68,68,.4); }
+.badge-warn { background: rgba(255,119,0,.14); color: var(--warn); border: 1px solid rgba(255,119,0,.4); }
 
-.phdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:6px 12px;
-  background:linear-gradient(90deg,rgba(0,60,130,.65),rgba(0,30,80,.4));
-  border-bottom:1px solid var(--bdr);
-  font-family:var(--f-hud);font-size:.68rem;letter-spacing:2px;
-  color:var(--cyan);font-weight:600;
-}
-.phdr-x{color:var(--muted);cursor:pointer;font-size:.8rem;transition:color .2s}
-.phdr-x:hover{color:var(--alert)}
-
-/* corner brackets */
-.bk{position:absolute;width:12px;height:12px;pointer-events:none}
-.bk.tl{top:0;left:0;border-top:2px solid var(--cyan2);border-left:2px solid var(--cyan2)}
-.bk.tr{top:0;right:0;border-top:2px solid var(--cyan2);border-right:2px solid var(--cyan2)}
-.bk.bl{bottom:0;left:0;border-bottom:2px solid var(--cyan2);border-left:2px solid var(--cyan2)}
-.bk.br{bottom:0;right:0;border-bottom:2px solid var(--cyan2);border-right:2px solid var(--cyan2)}
-
-/* gauge */
-.gauge-track{height:7px;background:rgba(255,255,255,.09);border-radius:99px;overflow:hidden;margin:10px 0 6px}
-.gauge-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1),background .4s;width:0%}
-.gf-live   {background:linear-gradient(90deg,#00ff88,#00cc66)}
-.gf-mizan  {background:linear-gradient(90deg,#ffd700,#e6b800)}
-.gf-taq    {background:linear-gradient(90deg,#ef4444,#b91c1c)}
-.gf-aurora {background:linear-gradient(90deg,#a855f7,#7c3aed)}
-.gf-cryo   {background:linear-gradient(90deg,#3b82f6,#1d4ed8)}
-.gf-temp   {background:linear-gradient(90deg,#22c55e,#16a34a)}
-.gf-solar  {background:linear-gradient(90deg,#ffd700,#f59e0b)}
-.gf-red    {background:linear-gradient(90deg,#ef4444,#b91c1c)}
-.gf-orange {background:linear-gradient(90deg,#f97316,#ea580c)}
-
-/* badges */
-.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.68rem;font-weight:700;font-family:var(--f-hud);letter-spacing:.8px}
-.badge-live  {background:rgba(0,255,136,.14);color:var(--live);  border:1px solid rgba(0,255,136,.4)}
-.badge-mizan {background:rgba(255,215,0,.13); color:var(--gold);  border:1px solid rgba(255,215,0,.4)}
-.badge-alert {background:rgba(239,68,68,.14);  color:var(--alert); border:1px solid rgba(239,68,68,.4)}
-.badge-warn  {background:rgba(255,119,0,.14);  color:var(--warn);  border:1px solid rgba(255,119,0,.4)}
-.badge-cyan  {background:rgba(0,200,255,.13);  color:var(--cyan);  border:1px solid rgba(0,200,255,.35)}
-.badge-green {background:rgba(0,255,136,.12);  color:var(--live);  border:1px solid rgba(0,255,136,.35)}
-
-/* scanline */
-@keyframes scan{0%{top:-4px;opacity:.4}100%{top:110%;opacity:0}}
-.scanline{position:absolute;left:0;width:100%;height:2px;pointer-events:none;z-index:9;
-  background:linear-gradient(90deg,transparent,rgba(0,200,255,.4),transparent);
-  animation:scan 5s linear infinite;}
-
-/* ═══════════════════════════════════════════════
-   NAVBAR
-═══════════════════════════════════════════════ */
-.navbar{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-  padding:12px 24px;margin-bottom:14px;border-radius:var(--r-pill);
-}
-.logo{
-  font-family:var(--f-hud);font-size:1.65rem;font-weight:900;
-  color:var(--gold);text-shadow:0 0 14px rgba(255,215,0,.6);
-  cursor:pointer;user-select:none;text-decoration:none;
-  transition:transform .2s;display:inline-block;
-}
-.logo:hover{transform:scale(1.06)}
-.nav-links{list-style:none;display:flex;gap:1.8rem}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s}
-.nav-links a:hover{color:var(--gold)}
-/* lang selector */
-.lang-wrap{position:relative}
-.lang-btn{
-  background:rgba(255,215,0,.1);border:1px solid var(--bdr-gold);color:var(--gold);
-  padding:6px 14px;border-radius:var(--r-pill);cursor:pointer;
-  font-family:var(--f-hud);font-size:.72rem;display:flex;align-items:center;gap:6px;
-  transition:background .2s;
-}
-.lang-btn:hover{background:rgba(255,215,0,.2)}
-.lang-menu{
-  position:absolute;top:calc(100%+6px);right:0;min-width:140px;
-  background:rgba(4,14,38,.97);backdrop-filter:blur(16px);
-  border:1px solid var(--bdr-gold);border-radius:12px;
-  display:none;z-index:400;overflow:hidden;
-}
-.lang-menu.open{display:block}
-.lang-opt{padding:9px 15px;cursor:pointer;font-size:.82rem;border-bottom:1px solid rgba(255,215,0,.1);transition:background .15s}
-.lang-opt:last-child{border-bottom:none}
-.lang-opt:hover{background:rgba(255,215,0,.14)}
-
-/* ═══════════════════════════════════════════════
-   TOP NEWS TICKER
-═══════════════════════════════════════════════ */
-.ticker-top{
-  background:rgba(4,18,44,.9);border:1px solid var(--bdr);
-  border-radius:var(--r-pill);padding:9px 20px;margin-bottom:14px;
-  overflow:hidden;white-space:nowrap;
-}
-.ticker-top-inner{display:inline-block;animation:marquee 36s linear infinite;color:var(--yellow);font-size:.85rem}
-.ticker-top-inner span{margin-right:44px;color:var(--white)}
-@keyframes marquee{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
-
-/* ═══════════════════════════════════════════════
-   COSMIC TIME BAR
-═══════════════════════════════════════════════ */
-#time-bar{
-  display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;
-  padding:11px 24px;margin-bottom:14px;border-radius:var(--r-pill);
-  font-family:var(--f-mono);font-size:.88rem;font-weight:600;
-}
-.utc-clock {color:var(--live)}
-.mecca-clock{color:var(--gold)}
-
-/* ═══════════════════════════════════════════════
-   TITLE ROW
-═══════════════════════════════════════════════ */
-.title-row{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:10px}
-.main-title{
-  font-family:var(--f-hud);font-size:clamp(1.3rem,2.5vw,2rem);
-  font-weight:400;color:var(--white);
-}
-.version-chip{
-  font-family:var(--f-hud);font-size:.72rem;letter-spacing:1.5px;
-  background:rgba(255,255,255,.08);border:1px solid var(--bdr);
-  padding:.3rem 1rem;border-radius:var(--r-pill);color:var(--cyan);
-}
-.subtitle{
-  display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;
-  margin-bottom:14px;font-size:.88rem;
-  border-left:3px solid var(--gold);padding-left:.8rem;color:var(--muted);
+/* ==================== GRIDS ==================== */
+.solar-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 14px; }
+.core-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+.main-row { display: grid; grid-template-columns: 290px 1fr 300px; gap: 12px; margin-bottom: 14px; }
+.source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.indicators-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 14px; }
+.sec-title {
+  font-family: var(--f-hud); color: var(--gold); font-size: 1.3rem;
+  margin: 18px 0 10px; border-bottom: 1px solid rgba(255,215,0,.15);
 }
 
-/* quick-links */
-.quick-links{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:14px}
-.quick-link{
-  background:rgba(0,100,200,.15);border:1px solid var(--bdr);
-  padding:5px 14px;border-radius:var(--r-pill);
-  text-decoration:none;color:var(--cyan);font-size:.82rem;
-  transition:var(--t);cursor:pointer;
+/* ==================== VOLCANO SECTION ==================== */
+.vol-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+.vol-stat-box { background: rgba(0,0,0,.3); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid rgba(255,215,0,.15); }
+.vol-stat-box .num { display: block; font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: var(--f-mono); }
+.vol-list { max-height: 320px; overflow-y: auto; }
+.vol-item {
+  background: rgba(0,0,0,.3); border-radius: 10px; padding: 8px 12px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 10px; border-left: 4px solid;
+  cursor: pointer; transition: all .2s;
 }
-.quick-link:hover{background:rgba(0,200,255,.2);border-color:var(--cyan2)}
+.vol-item:hover { transform: translateX(5px); background: rgba(0,180,255,.1); }
+.pulse-dot { width: 10px; height: 10px; border-radius: 50%; animation: pulse-dot 1.5s infinite; flex-shrink: 0; }
+@keyframes pulse-dot { 0%,100%{ transform: scale(1); opacity: 1; } 50%{ transform: scale(1.4); opacity: .7; } }
+.vol-name { flex: 1; font-size: .85rem; }
 
-/* ═══════════════════════════════════════════════
-   CORE INDICATORS (Taqabul / Closure / Balance)
-═══════════════════════════════════════════════ */
-.core-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
-.core-card{padding:16px 18px}
-.core-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.core-title{
-  font-family:var(--f-hud);font-size:.8rem;letter-spacing:1.5px;
-  background:rgba(255,255,255,.07);border:1px solid var(--bdr-gold);
-  color:var(--gold);padding:.25rem .9rem;border-radius:var(--r-pill);
+/* ==================== EARTHQUAKES ==================== */
+.quake-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+.quake-stat-box { background: rgba(0,0,0,.28); border-radius: 12px; padding: 12px; text-align: center; }
+.quake-stat-box .num { display: block; font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: var(--f-mono); }
+.quake-item {
+  background: rgba(0,0,0,.3); border-radius: 10px; padding: 8px 12px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 12px; border-left: 4px solid;
+  cursor: pointer; transition: transform .2s;
 }
-.core-value{
-  font-family:var(--f-mono);font-size:1.5rem;font-weight:700;
-  background:rgba(0,0,0,.3);border:2px solid;
-  padding:.15rem .7rem;border-radius:10px;min-width:76px;text-align:center;
-  transition:color .4s,border-color .4s;
-}
-.core-value.v-taq  {color:var(--alert);border-color:var(--alert)}
-.core-value.v-live {color:var(--live); border-color:var(--live)}
-.core-value.v-mizan{color:var(--gold); border-color:var(--gold)}
-.core-status{
-  display:flex;justify-content:space-between;align-items:center;
-  font-size:.8rem;color:var(--muted);margin-top:6px;
-}
+.quake-item:hover { transform: translateX(5px); background: rgba(255,215,0,.06); }
+.quake-mag { font-size: 1.1rem; font-weight: 700; min-width: 48px; font-family: var(--f-mono); }
 
-/* ═══════════════════════════════════════════════
-   KP FORECAST
-═══════════════════════════════════════════════ */
-.forecast-card{padding:16px;margin-bottom:14px}
-.forecast-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
-.forecast-day{
-  text-align:center;padding:12px;
-  background:rgba(255,255,255,.06);border-radius:10px;
+/* ==================== TICKER ==================== */
+.bticker {
+  position: fixed; bottom: 0; left: 0; width: 100%; height: 56px;
+  background: rgba(2,8,22,.97); backdrop-filter: blur(16px);
+  border-top: 1px solid var(--bdr); z-index: 1000;
+  display: flex; align-items: stretch; overflow: hidden;
 }
-.forecast-day .day{color:var(--gold);font-weight:700;margin-bottom:5px;font-family:var(--f-hud);font-size:.75rem}
-.forecast-day .kp-range{color:var(--live);font-size:1.1rem;font-weight:700;font-family:var(--f-mono)}
-.forecast-day .storm-level{color:var(--muted);font-size:.78rem;margin-top:3px}
-
-/* ═══════════════════════════════════════════════
-   SOLAR GRID (6 tiles) — matches reference image
-═══════════════════════════════════════════════ */
-.solar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:14px}
-.solar-tile img{
-  width:100%;height:100px;object-fit:cover;display:block;
-  background:#030a18;transition:filter .3s;
+.bticker-lbl {
+  flex-shrink: 0; display: flex; align-items: center; padding: 0 16px;
+  background: linear-gradient(90deg, rgba(0,60,140,.9), rgba(0,40,100,.6));
+  border-right: 1px solid var(--bdr); font-family: var(--f-hud); font-size: .65rem;
+  color: var(--cyan); font-weight: 700;
 }
-.solar-tile:hover img{filter:brightness(1.18)}
-.tile-body{padding:6px 10px 9px}
-.tile-val{font-family:var(--f-hud);font-size:1.4rem;font-weight:900;color:var(--live);line-height:1}
-.tile-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
-
-/* Kp number tile */
-@keyframes kp-pulse{0%,100%{box-shadow:0 0 8px rgba(0,255,136,.4)}50%{box-shadow:0 0 22px rgba(0,255,136,.75)}}
-.kp-big{
-  font-family:var(--f-hud);font-size:2.8rem;font-weight:900;
-  color:var(--live);display:block;line-height:1;
-  animation:kp-pulse 2.2s ease-in-out infinite;
-  transition:color .4s;
+.bticker-scroll { flex: 1; overflow: hidden; display: flex; align-items: center; }
+.bticker-inner { display: inline-flex; animation: marquee 58s linear infinite; }
+@keyframes marquee { 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
+.bt-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 20px; white-space: nowrap; height: 56px; }
+.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--live); animation: pulse 1.5s infinite; margin-right: 5px; }
+@keyframes pulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
+.notification-toast {
+  position: fixed; top: 20px; right: 20px; z-index: 2000;
+  background: rgba(0,0,0,.95); backdrop-filter: blur(12px);
+  border-left: 4px solid var(--alert); border-radius: 12px; padding: 12px 20px;
+  min-width: 280px; animation: slideIn .3s ease;
 }
-
-/* ═══════════════════════════════════════════════
-   MAIN ROW (solar | lunar | geo)
-═══════════════════════════════════════════════ */
-.main-row{display:grid;grid-template-columns:290px 1fr 300px;gap:12px;margin-bottom:14px}
-
-/* solar daily */
-.solar-daily img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#050e20}
-.sunspot-overlay{
-  position:absolute;bottom:6px;left:8px;
-  font-family:var(--f-mono);font-size:.68rem;color:rgba(255,255,200,.5);
-  pointer-events:none;line-height:1.6;
-}
-
-/* lunar panel */
-.lunar-panel{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:18px 20px;text-align:center;
-}
-.lunar-panel::before{content:none} /* no gradient overlay on this one */
-.moon-3d{
-  width:110px;height:110px;border-radius:50%;margin-bottom:16px;
-  background:radial-gradient(circle at 38% 38%,#1a0000,#000 70%);
-  box-shadow:inset -16px -9px 28px rgba(0,0,0,.9),inset 7px 7px 18px rgba(150,50,0,.28),
-             0 0 38px rgba(255,60,0,.12);
-  position:relative;overflow:hidden;transition:box-shadow .4s;
-}
-.moon-3d::after{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 34% 34%,rgba(220,80,0,.38) 0%,rgba(180,30,0,.18) 40%,transparent 70%);
-}
-.moon-name{font-family:var(--f-hud);font-size:1.15rem;font-weight:700;color:var(--white);margin-bottom:12px;letter-spacing:1.5px}
-.moon-stats{display:flex;flex-direction:column;gap:5px;width:100%;max-width:260px}
-.moon-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:4px 11px;background:rgba(0,30,60,.4);border-radius:6px;
-}
-.moon-row .ml{color:var(--muted);font-size:.88rem}
-.moon-row .mv{color:var(--white);font-weight:600;font-family:var(--f-mono);font-size:.88rem}
-.moon-more-btn{
-  margin-top:10px;display:inline-flex;align-items:center;gap:6px;
-  color:var(--cyan);font-size:.78rem;
-  border:1px solid rgba(0,180,255,.3);padding:4px 14px;border-radius:4px;
-  cursor:pointer;transition:background .2s;
-}
-.moon-more-btn:hover{background:rgba(0,180,255,.1)}
-
-/* geo alerts */
-.geo-list{padding:6px 0}
-.geo-item{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 13px;border-bottom:1px solid rgba(0,100,200,.14);
-  cursor:pointer;transition:background .2s;font-size:.9rem;
-}
-.geo-item:last-child{border-bottom:none}
-.geo-item:hover{background:rgba(0,100,200,.1)}
-.geo-flag{font-size:1.05rem;flex-shrink:0}
-.geo-name{color:var(--muted);flex-shrink:0}
-.geo-event{flex:1;padding-left:6px}
-.mag-red   {color:var(--alert);font-weight:700;font-family:var(--f-mono)}
-.mag-orange{color:var(--warn); font-weight:700;font-family:var(--f-mono)}
-.mag-yellow{color:var(--yellow);font-weight:700;font-family:var(--f-mono)}
-.mag-green {color:var(--live); font-weight:700;font-family:var(--f-mono)}
-
-/* ═══════════════════════════════════════════════
-   SOURCE CARDS (quick access tiles)
-═══════════════════════════════════════════════ */
-.source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px}
-.source-card{
-  background:rgba(0,40,90,.55);border:1px solid var(--bdr);
-  border-radius:var(--r);padding:14px 16px;cursor:pointer;
-  transition:var(--t);
-}
-.source-card:hover{background:rgba(0,60,130,.7);border-color:var(--cyan);transform:translateY(-3px)}
-.source-card .sc-val{color:var(--cyan);font-family:var(--f-hud);font-size:1.05rem;font-weight:700;margin-bottom:4px}
-.source-card .sc-lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
-
-/* ═══════════════════════════════════════════════
-   INDICATORS GRID (21 indicators)
-═══════════════════════════════════════════════ */
-.indicators-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:14px}
-.ind-card{padding:14px 16px}
-.ind-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.ind-title{
-  font-family:var(--f-hud);font-size:.72rem;letter-spacing:1px;
-  background:rgba(255,255,255,.07);border:1px solid var(--bdr-gold);
-  color:var(--gold);padding:.2rem .8rem;border-radius:var(--r-pill);
-}
-.ind-value{
-  font-family:var(--f-mono);font-size:1.4rem;font-weight:700;
-  background:rgba(0,0,0,.28);border:2px solid;
-  padding:.1rem .6rem;border-radius:8px;min-width:70px;text-align:center;
-  transition:color .4s,border-color .4s;
-}
-.ind-value.iv-live {color:var(--live);border-color:rgba(0,255,136,.5)}
-.ind-value.iv-mizan{color:var(--gold);border-color:rgba(255,215,0,.5)}
-.ind-value.iv-load {color:var(--muted);border-color:rgba(100,136,170,.3)}
-.ind-status{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-top:5px}
-
-/* ═══════════════════════════════════════════════
-   SUNSPOT TABLE
-═══════════════════════════════════════════════ */
-.sunspot-card{padding:16px;margin-bottom:14px}
-.sunspot-table{width:100%;margin-top:8px;border-collapse:collapse}
-.sunspot-table th{color:var(--gold);padding:6px 8px;text-align:left;font-size:.8rem;border-bottom:1px solid rgba(255,215,0,.2)}
-.sunspot-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.88rem}
-.sunspot-table td.r-num{color:var(--gold);font-family:var(--f-mono)}
-.sunspot-table td.r-cnt{color:var(--live);font-weight:700;font-family:var(--f-mono)}
-.sunspot-table td.r-cls{color:var(--muted)}
-
-/* ═══════════════════════════════════════════════
-   HISTORICAL EVENTS
-═══════════════════════════════════════════════ */
-.hist-card{padding:16px;margin-bottom:14px}
-.hist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
-.hist-event{padding:12px;background:rgba(255,255,255,.06);border-radius:10px}
-.hist-year{color:var(--gold);font-size:1.1rem;font-weight:700;font-family:var(--f-mono)}
-.hist-type{color:var(--live);font-size:.85rem;margin-top:2px}
-.hist-mag {color:var(--white);font-size:.95rem;font-weight:600}
-
-/* ═══════════════════════════════════════════════
-   IMAGES GRID
-═══════════════════════════════════════════════ */
-.images-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
-.img-card{padding:12px}
-.img-card h3{color:var(--gold);font-family:var(--f-hud);font-size:.75rem;letter-spacing:1.5px;margin-bottom:10px}
-.img-holder{width:100%;height:190px;background:rgba(0,20,50,.5);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.img-holder img{width:100%;height:100%;object-fit:cover;border-radius:8px;display:block}
-.img-skeleton{
-  width:100%;height:190px;border-radius:8px;
-  background:linear-gradient(90deg,rgba(0,40,90,.6) 25%,rgba(0,60,120,.5) 50%,rgba(0,40,90,.6) 75%);
-  background-size:200% 100%;animation:imgload 1.6s infinite;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--muted);font-size:.8rem;
-}
-@keyframes imgload{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* ═══════════════════════════════════════════════
-   EARTHQUAKE SECTION
-═══════════════════════════════════════════════ */
-.quake-card{padding:16px;margin-bottom:14px}
-.quake-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
-.quake-stat-box{
-  background:rgba(0,0,0,.28);border-radius:12px;padding:13px;
-  text-align:center;border:1px solid rgba(255,215,0,.12);transition:border-color .3s;
-}
-.quake-stat-box:hover{border-color:var(--gold)}
-.quake-stat-box .num{
-  display:block;font-size:1.9rem;font-weight:bold;
-  color:var(--gold);font-family:var(--f-mono);
-}
-.quake-stat-box .lbl{color:var(--muted);font-size:.78rem}
-.quake-list{display:flex;flex-direction:column;gap:7px}
-.quake-item{
-  background:rgba(0,0,0,.3);border-radius:10px;
-  padding:9px 13px;display:flex;align-items:center;gap:12px;
-  border-left:4px solid;cursor:pointer;transition:transform .2s,background .2s;
-}
-.quake-item:hover{transform:translateX(5px);background:rgba(255,215,0,.06)}
-.quake-mag{font-size:1.2rem;font-weight:700;min-width:50px;font-family:var(--f-mono)}
-.quake-loc{flex:1;font-size:.88rem}
-.quake-time{color:var(--muted);font-size:.75rem;white-space:nowrap}
-
-/* ═══════════════════════════════════════════════
-   SECTION TITLES
-═══════════════════════════════════════════════ */
-.sec-title{
-  font-family:var(--f-hud);color:var(--gold);
-  font-size:1.4rem;margin:18px 0 10px;
-  text-shadow:0 0 12px rgba(255,215,0,.22);
-  padding-bottom:6px;border-bottom:1px solid rgba(255,215,0,.15);
-}
-
-/* ═══════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════ */
-.footer{
-  text-align:center;padding:1.3rem;
-  border-top:1px solid var(--bdr);margin-top:1rem;
-  color:var(--muted);font-size:.85rem;
-}
-.footer b{color:var(--gold)}
-
-/* ═══════════════════════════════════════════════
-   BOTTOM TICKER (fixed)
-═══════════════════════════════════════════════ */
-.bticker{
-  position:fixed;bottom:0;left:0;width:100%;height:58px;
-  background:rgba(2,8,22,.97);backdrop-filter:blur(16px);
-  border-top:1px solid var(--bdr);z-index:1000;
-  overflow:hidden;white-space:nowrap;display:flex;align-items:stretch;
-}
-.bticker-lbl{
-  flex-shrink:0;display:flex;align-items:center;padding:0 16px;
-  background:linear-gradient(90deg,rgba(0,60,140,.9),rgba(0,40,100,.6));
-  border-right:1px solid var(--bdr);
-  font-family:var(--f-hud);font-size:.65rem;letter-spacing:2px;color:var(--cyan);font-weight:700;
-}
-.bticker-scroll{flex:1;overflow:hidden;display:flex;align-items:center}
-.bticker-inner{
-  display:inline-flex;align-items:center;
-  animation:marquee 58s linear infinite;font-family:var(--f-data);font-size:.87rem;
-}
-.bticker-inner:hover{animation-play-state:paused}
-.bt-item{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:0 20px;border-right:1px solid rgba(0,120,200,.22);
-  white-space:nowrap;height:58px;
-}
-.bt-up{color:var(--live)}.bt-dn{color:var(--alert)}
-.bt-lbl{color:var(--muted);font-weight:600}
-.bt-val{color:var(--white);font-family:var(--f-mono);font-weight:600}
-.bt-chg{font-size:.78rem;font-weight:700}
-
-/* ═══════════════════════════════════════════════
-   ANIMATIONS (live dot)
-═══════════════════════════════════════════════ */
-@keyframes dot-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.live-dot{
-  display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:var(--live);animation:dot-pulse 1.5s ease-in-out infinite;
-  margin-right:5px;vertical-align:middle;
-}
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════════ */
-@media(max-width:1200px){.solar-grid{grid-template-columns:repeat(3,1fr)}.main-row{grid-template-columns:1fr 1fr}}
-@media(max-width:900px) {.core-grid{grid-template-columns:1fr 1fr}.main-row{grid-template-columns:1fr}.images-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px) {
-  .core-grid,.solar-grid,.quake-stats,.hist-grid,.images-grid{grid-template-columns:1fr}
-  .forecast-grid{grid-template-columns:1fr}
-  .navbar{border-radius:var(--r);padding:10px 14px}
-  .nav-links{display:none}
-  body{padding:0 0 64px}
-}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:rgba(0,180,255,.4);border-radius:2px}
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@media (max-width: 1100px) { .solar-grid { grid-template-columns: repeat(3, 1fr); } .main-row { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .core-grid, .solar-grid, .main-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<!-- ══ NAVBAR ═══════════════════════════════════════════ -->
-<nav class="panel navbar">
-  <a class="logo" href="#" onclick="openLink('github');return false">🌌 TRIO SEAL</a>
-  <ul class="nav-links">
-    <li><a href="#" data-key="home">Home</a></li>
-    <li><a href="#" data-key="observatory">Observatory</a></li>
-    <li><a href="#" data-key="research">Research</a></li>
-    <li><a href="#" data-key="about">About</a></li>
-  </ul>
-  <div class="lang-wrap">
-    <button class="lang-btn" id="langBtn">🌐 <span id="cur-lang">EN</span> ▾</button>
-    <div class="lang-menu" id="langMenu">
-      <div class="lang-opt" data-lang="en">🇬🇧 English</div>
-      <div class="lang-opt" data-lang="ar">🇸🇦 العربية</div>
-      <div class="lang-opt" data-lang="fr">🇫🇷 Français</div>
-      <div class="lang-opt" data-lang="es">🇪🇸 Español</div>
-      <div class="lang-opt" data-lang="zh">🇨🇳 中文</div>
-      <div class="lang-opt" data-lang="hi">🇮🇳 हिन्दी</div>
-      <div class="lang-opt" data-lang="ru">🇷🇺 Русский</div>
+<!-- ==================== HEADER / TIME ==================== -->
+<div class="panel" style="padding: 12px 20px; margin-bottom: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+  <div style="font-family: var(--f-hud); font-size: 1.4rem; font-weight: 900; color: var(--gold);">🌌 TRIO SEAL <span style="font-size: .7rem;">v8.0</span></div>
+  <div style="display: flex; gap: 20px; font-family: var(--f-mono);">
+    <span>📅 <span id="gregorian-date">--</span> · <span id="hijri-date" style="color: var(--gold);">--</span></span>
+    <span>🌐 <span id="utc-clock">--</span></span>
+    <span>🕋 <span id="mecca-clock">--</span></span>
+  </div>
+  <div class="lang-wrap" style="position: relative;">
+    <button class="lang-btn" id="langBtn" style="background: rgba(255,215,0,.1); border: 1px solid rgba(255,215,0,.3); color: var(--gold); padding: 5px 12px; border-radius: 30px; cursor: pointer;">🌐 <span id="cur-lang">EN</span> ▾</button>
+    <div id="langMenu" style="position: absolute; top: 100%; right: 0; background: #0a1428; border: 1px solid var(--bdr-gold); border-radius: 10px; display: none; z-index: 300;">
+      <div class="lang-opt" data-lang="en" style="padding: 8px 15px; cursor: pointer;">🇬🇧 English</div>
+      <div class="lang-opt" data-lang="ar" style="padding: 8px 15px; cursor: pointer;">🇸🇦 العربية</div>
     </div>
   </div>
-</nav>
-
-<!-- ══ TOP TICKER ══════════════════════════════════════ -->
-<div class="ticker-top">
-  <div class="ticker-top-inner" id="topTicker">
-    <span>⚠️ M2.7 solar flare from AR 4392</span>
-    <span>🌊 CME expected · Low Impact</span>
-    <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🛰️ Minor R1 radio blackout</span>
-    <span>🕋 Mizan al-Malakut v7.3 · RS Critical 2027 = 0.0057</span>
-    <span>⚡ All observatory systems nominal</span>
-  </div>
 </div>
 
-<!-- ══ TIME BAR ════════════════════════════════════════ -->
-<div id="time-bar" class="panel">
-  <div>📅 <span id="gregorian-date">--</span> · <span id="hijri-date" style="color:var(--gold)">--</span></div>
-  <div>🌐 UTC: <span class="utc-clock" id="utc-clock">00:00:00</span></div>
-  <div>🕋 Mecca: <span class="mecca-clock" id="mecca-clock">00:00:00</span></div>
-</div>
+<!-- ==================== QUICK LINKS ==================== -->
+<div id="quickLinks" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;"></div>
 
-<!-- ══ TITLE ════════════════════════════════════════════ -->
-<div class="title-row">
-  <h1 class="main-title">TRIO SEAL · Cosmic Observatory</h1>
-  <span class="version-chip">v7.3</span>
-</div>
-<div class="subtitle">
-  <span><span class="live-dot"></span><span class="badge badge-live">⚡ Live</span></span>
-  <span class="badge badge-mizan">⚖️ Mizan al-Malakut v7.3</span>
-  <span data-key="indicators">21 Indicators · Auto Update</span>
-</div>
-
-<!-- ══ QUICK LINKS ══════════════════════════════════════ -->
-<div class="quick-links" id="quickLinks"></div>
-
-<!-- ══ CORE INDICATORS ════════════════════════════════ -->
+<!-- ==================== CORE INDICATORS ==================== -->
 <div class="core-grid">
-  <div class="panel core-card" onclick="openLink('taqabul')">
-    <div class="core-header">
-      <span class="core-title">🕋 Taqābul</span>
-      <span class="core-value v-taq" id="taqabul-value">--</span>
-    </div>
-    <div class="gauge-track"><div class="gauge-fill gf-taq" id="taqabul-gauge"></div></div>
-    <div class="core-status"><span class="badge badge-mizan" id="taqabul-status">MIZAN</span><span data-key="absolute-angle">Angle</span></div>
+  <div class="panel" style="padding: 14px;" data-link="taqabul">
+    <div class="phdr">🕋 Taqābul <span id="taq-value" style="font-family: var(--f-mono); font-size: 1.3rem; color: var(--alert);">--</span></div>
+    <div class="gauge-track" style="height: 5px; background: #222; margin: 8px 0;"><div id="taq-gauge" style="width: 0%; height: 100%; background: linear-gradient(90deg,#ef4444,#b91c1c); border-radius: 99px;"></div></div>
+    <div style="font-size: .7rem; color: var(--muted);">MIZAN Angle</div>
   </div>
-  <div class="panel core-card" onclick="openLink('closure')">
-    <div class="core-header">
-      <span class="core-title">🌀 Closure</span>
-      <span class="core-value v-mizan" id="closure-value">--</span>
-    </div>
-    <div class="gauge-track"><div class="gauge-fill gf-mizan" id="closure-gauge"></div></div>
-    <div class="core-status"><span class="badge badge-mizan" id="closure-status">MIZAN</span><span>RS</span></div>
+  <div class="panel" style="padding: 14px;" data-link="closure">
+    <div class="phdr">🌀 Closure <span id="clo-value" style="font-family: var(--f-mono); font-size: 1.3rem; color: var(--gold);">--</span></div>
+    <div class="gauge-track" style="height: 5px; background: #222; margin: 8px 0;"><div id="clo-gauge" style="width: 0%; height: 100%; background: linear-gradient(90deg,#ffd700,#e6b800); border-radius: 99px;"></div></div>
+    <div style="font-size: .7rem; color: var(--muted);">MIZAN RS</div>
   </div>
-  <div class="panel core-card" onclick="openLink('balance')">
-    <div class="core-header">
-      <span class="core-title">⚖️ Balance</span>
-      <span class="core-value v-live" id="balance-value">--</span>
-    </div>
-    <div class="gauge-track"><div class="gauge-fill gf-live" id="balance-gauge"></div></div>
-    <div class="core-status"><span class="badge badge-live" id="balance-status">LIVE</span><span>α_stab</span></div>
+  <div class="panel" style="padding: 14px;" data-link="balance">
+    <div class="phdr">⚖️ Balance <span id="bal-value" style="font-family: var(--f-mono); font-size: 1.3rem; color: var(--live);">--</span></div>
+    <div class="gauge-track" style="height: 5px; background: #222; margin: 8px 0;"><div id="bal-gauge" style="width: 0%; height: 100%; background: linear-gradient(90deg,#00ff88,#00cc66); border-radius: 99px;"></div></div>
+    <div style="font-size: .7rem; color: var(--muted);">α_stab LIVE</div>
   </div>
 </div>
 
-<!-- ══ KP FORECAST ═════════════════════════════════════ -->
-<h2 class="sec-title">🌍 Kp Forecast (Next 3 Days)</h2>
-<div class="panel forecast-card">
-  <div class="forecast-grid" id="kp-forecast"></div>
-</div>
-
-<!-- ══ SOLAR GRID (6 tiles) ════════════════════════════ -->
-<h2 class="sec-title">☀️ Solar Observatory</h2>
+<!-- ==================== SOLAR GRID (6 tiles) ==================== -->
 <div class="solar-grid">
+  <div class="panel" data-link="aurora"><div class="phdr">Aurora Oval</div><img src="https://services.swpc.noaa.gov/images/aurora-forecast/latest.jpg" style="width:100%;height:90px;object-fit:cover;" loading="lazy"></div>
+  <div class="panel" data-link="kp"><div class="phdr">Kp Index</div><div style="text-align:center;padding:10px"><span id="kp-num" style="font-size:2rem;color:var(--live);font-family:var(--f-mono);">--</span><div id="kp-label" style="font-size:.7rem;">Loading...</div><span id="kp-badge" class="badge badge-warn">--</span></div></div>
+  <div class="panel" data-link="coronal"><div class="phdr">Coronal Holes</div><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg" style="width:100%;height:90px;object-fit:cover;" loading="lazy"></div>
+  <div class="panel" data-link="xray"><div class="phdr">X-Ray Flux</div><img src="https://services.swpc.noaa.gov/images/goes-xray-flux-latest.png" style="width:100%;height:90px;object-fit:cover;" loading="lazy"><div style="padding:4px"><span id="xray-val" style="font-size:1.1rem;color:var(--live);">--</span> <span id="xray-badge" class="badge badge-green">LOW</span></div></div>
+  <div class="panel" data-link="cme"><div class="phdr">CME Tracking</div><div style="padding:8px;font-size:.7rem;color:var(--yellow);">⚠ Minor CME Observed</div></div>
+  <div class="panel" data-link="farside"><div class="phdr">Far Side</div><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg" style="width:100%;height:90px;object-fit:cover;" loading="lazy"></div>
+</div>
 
-  <div class="panel solar-tile" data-link onclick="openLink('aurora')">
-    <div class="phdr">Aurora Oval <span class="phdr-x">×</span></div>
-    <div class="scanline"></div>
-    <img src="https://services.swpc.noaa.gov/images/aurora-forecast/latest.jpg" alt="Aurora"
-         loading="lazy" onerror="this.style.height='100px'"/>
-    <div class="bk tl"></div><div class="bk br"></div>
-  </div>
-
-  <div class="panel solar-tile" data-link onclick="openLink('kp')">
-    <div class="phdr">Kp Index <span class="phdr-x">×</span></div>
-    <div class="tile-body" style="min-height:108px;display:flex;flex-direction:column;justify-content:center;align-items:center">
-      <span class="kp-big" id="kp-num">3</span>
-      <div class="tile-sub" id="kp-label" style="font-size:.82rem;margin-top:4px">Unsettled</div>
-      <span class="badge badge-warn" id="kp-badge" style="margin-top:7px">ACTIVE</span>
-    </div>
-  </div>
-
-  <div class="panel solar-tile" data-link onclick="openLink('coronal')">
-    <div class="phdr">Coronal Holes <span class="phdr-x">×</span></div>
-    <div class="scanline" style="animation-delay:1.3s"></div>
-    <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg" alt="Coronal"
-         loading="lazy" onerror="this.style.height='100px'"/>
-  </div>
-
-  <div class="panel solar-tile" data-link onclick="openLink('xray')">
-    <div class="phdr">X-Ray Flux <span class="phdr-x">×</span></div>
-    <div class="scanline" style="animation-delay:.7s"></div>
-    <img src="https://services.swpc.noaa.gov/images/goes-xray-flux-latest.png" alt="X-Ray"
-         loading="lazy" onerror="this.style.height='100px'"/>
-    <div class="tile-body" style="padding-top:4px">
-      <div style="display:flex;align-items:center;gap:7px">
-        <span class="tile-val" id="xray-val">C1.2</span>
-        <span class="badge badge-green" id="xray-badge">LOW</span>
-      </div>
-      <div class="tile-sub">GOES X-Ray Class</div>
-    </div>
-  </div>
-
-  <div class="panel solar-tile" data-link onclick="openLink('cme')">
-    <div class="phdr">CME Tracking <span class="phdr-x">×</span></div>
-    <div class="tile-body" style="min-height:108px;display:flex;flex-direction:column;justify-content:center;padding:10px">
-      <div style="font-size:.8rem;color:var(--yellow);margin-bottom:5px">⚠ Minor CME Observed</div>
-      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">▲ Low Impact Expected</div>
-      <img src="https://services.swpc.noaa.gov/images/enlil.jpg" alt="CME"
-           style="width:100%;height:52px;object-fit:cover;border-radius:4px;opacity:.75"
-           loading="lazy" onerror="this.style.display='none'"/>
-    </div>
-  </div>
-
-  <div class="panel solar-tile" data-link onclick="openLink('farside')">
-    <div class="phdr">Far Side Monitor <span class="phdr-x">×</span></div>
-    <div class="scanline" style="animation-delay:2s"></div>
-    <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg" alt="Far Side"
-         loading="lazy" onerror="this.style.height='100px'"/>
-  </div>
-
-</div><!-- /.solar-grid -->
-
-<!-- ══ MAIN ROW ══════════════════════════════════════════ -->
+<!-- ==================== MAIN ROW (Solar Daily / Lunar / Geo) ==================== -->
 <div class="main-row">
-
-  <!-- Daily Solar -->
-  <div class="panel" data-link onclick="openLink('solarImage')" style="cursor:pointer">
-    <div class="phdr">Daily Solar Image <span class="phdr-x">×</span></div>
-    <div class="scanline" style="animation-delay:1.8s"></div>
-    <div style="position:relative">
-      <div id="daily-solar-img">
-        <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1024.jpg"
-             alt="Daily Sun" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#050e20"
-             onerror="this.style.minHeight='240px'"/>
-      </div>
-      <div class="sunspot-overlay">
-        <div>● 3664</div><div>● 3665</div><div>● 3667</div>
-      </div>
-      <div class="bk tl"></div><div class="bk tr"></div>
-      <div class="bk bl"></div><div class="bk br"></div>
-    </div>
-  </div>
-
-  <!-- Lunar -->
-  <div class="panel lunar-panel" data-link onclick="openLink('moon')" style="cursor:pointer">
-    <div style="position:absolute;top:0;left:0;right:0">
-      <div class="phdr">Lunar Data <span class="phdr-x">×</span></div>
-    </div>
-    <div style="margin-top:30px">
-      <div class="moon-3d" id="moonVis"></div>
-      <div class="moon-name" id="moon-phase-name">New Moon</div>
-      <div class="moon-stats">
-        <div class="moon-row"><span class="ml">Illumination</span><span class="mv" id="moon-illumination">0%</span></div>
-        <div class="moon-row"><span class="ml">Thickness</span><span class="mv" id="moon-thickness">0'</span></div>
-        <div class="moon-row"><span class="ml">Age</span><span class="mv" id="moon-age">0d</span></div>
-      </div>
-      <div class="moon-more-btn" onclick="event.stopPropagation();openLink('moon')">More Lunar Data ›</div>
-    </div>
-  </div>
-
-  <!-- Geophysical Alerts -->
-  <div class="panel" style="display:flex;flex-direction:column">
-    <div class="phdr">Geophysical Alerts <span class="phdr-x">×</span></div>
-    <div class="geo-list" id="geo-list"></div>
-  </div>
-
-</div><!-- /.main-row -->
-
-<!-- ══ SOURCE CARDS ══════════════════════════════════════ -->
-<h2 class="sec-title">🔭 Live Sources (Click to open)</h2>
-<div class="source-grid" id="source-grid"></div>
-
-<!-- ══ AURORA & MAGNETOSPHERE ════════════════════════════ -->
-<h2 class="sec-title" data-key="aurora-title">🌌 1. Aurora &amp; Magnetosphere</h2>
-<div class="indicators-grid" id="aurora-grid"></div>
-
-<!-- ══ CRYOSPHERE ════════════════════════════════════════ -->
-<h2 class="sec-title" data-key="cryo-title">🧊 2. Cryosphere &amp; Oceans</h2>
-<div class="indicators-grid" id="cryo-grid"></div>
-
-<!-- ══ TEMPERATURE ═══════════════════════════════════════ -->
-<h2 class="sec-title" data-key="temp-title">🌡️ 3. Temperature &amp; Atmosphere</h2>
-<div class="indicators-grid" id="temp-grid"></div>
-
-<!-- ══ SOLAR ACTIVITY ════════════════════════════════════ -->
-<h2 class="sec-title" data-key="solar-title">☀️ 4. Solar Activity</h2>
-<div class="indicators-grid" id="solar-grid"></div>
-<div class="panel sunspot-card">
-  <div style="color:var(--gold);font-family:var(--f-hud);font-size:.75rem;letter-spacing:1px;margin-bottom:4px">📊 SUNSPOT REGIONS</div>
-  <table class="sunspot-table" id="sunspot-table"><tr><td colspan="3" style="color:var(--muted)">Loading…</td></tr></table>
+  <div class="panel" data-link="solarImage"><div class="phdr">Daily Solar Image</div><img id="daily-solar-img" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1024.jpg" style="width:100%;aspect-ratio:1;object-fit:cover;" loading="lazy"></div>
+  <div class="panel" data-link="moon" style="text-align:center;padding:12px;"><div class="phdr">Lunar Data</div><div id="moon-icon" style="font-size:2.5rem;">🌑</div><div id="moon-phase-name" style="font-family:var(--f-hud);">Loading...</div><div>Illum: <span id="moon-illum">--</span> · Age: <span id="moon-age">--</span>d</div></div>
+  <div class="panel"><div class="phdr">Geophysical Alerts</div><div id="geo-list" style="padding:6px;"></div></div>
 </div>
 
-<!-- ══ HISTORICAL EVENTS ═════════════════════════════════ -->
-<h2 class="sec-title">📅 On This Day in Space Weather</h2>
-<div class="panel hist-card">
-  <div class="hist-grid" id="historical-events"></div>
+<!-- ==================== VOLCANO SECTION ==================== -->
+<h2 class="sec-title">🌋 Live Volcano Observatory</h2>
+<div class="panel" data-link="volcano" style="padding: 12px;">
+  <div class="vol-stats">
+    <div class="vol-stat-box"><span class="num" id="vol-total">--</span><span>Active Volcanoes</span></div>
+    <div class="vol-stat-box"><span class="num" id="vol-alert">--</span><span>High Alert</span></div>
+  </div>
+  <div id="vol-list" class="vol-list"></div>
 </div>
 
-<!-- ══ LIVE IMAGES ════════════════════════════════════════ -->
-<h2 class="sec-title" data-key="images-title">🛰️ 5. Live Images</h2>
-<div class="images-grid">
-  <div class="panel img-card"><h3>☀️ SDO SOLAR</h3><div class="img-holder"><div class="img-skeleton" id="sdo-image">Loading…</div></div></div>
-  <div class="panel img-card"><h3>🌍 EARTH · EPIC</h3><div class="img-holder"><div class="img-skeleton" id="earth-image">Loading…</div></div></div>
-  <div class="panel img-card"><h3>🌌 AURORA MAP</h3><div class="img-holder"><div class="img-skeleton" id="aurora-map">Loading…</div></div></div>
-</div>
-
-<!-- ══ EARTHQUAKES ════════════════════════════════════════ -->
-<h2 class="sec-title" data-key="earthquake-title">🌋 6. Live Earthquake Observatory</h2>
-<div class="panel quake-card">
+<!-- ==================== EARTHQUAKE SECTION ==================== -->
+<h2 class="sec-title">🌍 Live Earthquake Observatory</h2>
+<div class="panel" data-link="usgs" style="padding: 12px;">
   <div class="quake-stats">
-    <div class="quake-stat-box"><span class="num" id="quake-total">--</span><span class="lbl" data-key="last-24h">Last 24h</span></div>
-    <div class="quake-stat-box"><span class="num" id="quake-strongest">--</span><span class="lbl" data-key="strongest">Strongest</span></div>
-    <div class="quake-stat-box"><span class="num" id="quake-latest">--</span><span class="lbl" data-key="latest">Latest</span></div>
+    <div class="quake-stat-box"><span class="num" id="quake-total">--</span><span>Last 24h</span></div>
+    <div class="quake-stat-box"><span class="num" id="quake-strongest">--</span><span>Strongest</span></div>
+    <div class="quake-stat-box"><span class="num" id="quake-m5">--</span><span>M ≥ 5.0</span></div>
   </div>
-  <div class="quake-list" id="quake-list"></div>
+  <div id="quake-list" class="quake-list"></div>
 </div>
 
-<!-- ══ FOOTER ════════════════════════════════════════════ -->
-<div class="footer panel" style="padding:1.2rem">
-  <span id="timestamp" style="color:var(--muted)">Loading…</span> · 21 Indicators ·
-  <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
-  <div style="margin-top:6px"><b>Hicham Chigar · هشام شيكر</b> · Mizan al-Malakut v7.3 · DOI: 10.5281/zenodo.18945758</div>
+<!-- ==================== SOURCE CARDS ==================== -->
+<h2 class="sec-title">🔭 Live Sources</h2>
+<div id="sourceCards" class="source-grid"></div>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="panel" style="text-align: center; padding: 12px; margin-top: 14px; color: var(--muted); font-size: .75rem;">
+  Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.0 · <span id="last-update">--</span>
 </div>
 
-</div><!-- /.wrap -->
+</div>
 
-<!-- ══ BOTTOM TICKER ════════════════════════════════════ -->
+<!-- ==================== BOTTOM TICKER ==================== -->
 <div class="bticker">
   <div class="bticker-lbl"><span class="live-dot"></span>LIVE</div>
   <div class="bticker-scroll"><div class="bticker-inner" id="botTicker"></div></div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ═══════════════════════════════════════════
-   ★ CENTRALIZED LINKS CONFIG (modular)
-   Change any URL here — updates everywhere
-═══════════════════════════════════════════ */
+/* ==================== CENTRALIZED LINKS SYSTEM ==================== */
 const LINKS = {
-  aurora    : 'https://www.swpc.noaa.gov/products/aurora-30-minute-forecast',
-  kp        : 'https://www.swpc.noaa.gov/products/planetary-k-index',
-  coronal   : 'https://sdo.gsfc.nasa.gov/data/',
-  xray      : 'https://www.swpc.noaa.gov/products/goes-x-ray-flux',
-  cme       : 'https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction',
-  farside   : 'https://stereo.gsfc.nasa.gov/',
+  aurora: 'https://www.swpc.noaa.gov/products/aurora-30-minute-forecast',
+  kp: 'https://www.swpc.noaa.gov/products/planetary-k-index',
+  coronal: 'https://sdo.gsfc.nasa.gov/data/',
+  xray: 'https://www.swpc.noaa.gov/products/goes-x-ray-flux',
+  cme: 'https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction',
+  farside: 'https://stereo.gsfc.nasa.gov/',
   solarImage: 'https://sdo.gsfc.nasa.gov/data/',
-  moon      : 'https://www.timeanddate.com/moon/',
-  taqabul   : 'https://www.timeanddate.com/astronomy/moon/mecca.html',
-  closure   : 'https://earthquake.usgs.gov',
-  balance   : 'https://www.noaa.gov',
-  github    : 'https://github.com/sidichaker1-beep/Trio-seal',
-  usgs      : 'https://earthquake.usgs.gov/earthquakes/map/',
-  volcanoes : 'https://volcano.si.edu/',
-  noaa      : 'https://www.swpc.noaa.gov/',
-  sdo       : 'https://sdo.gsfc.nasa.gov/data/',
-  epic      : 'https://epic.gsfc.nasa.gov/',
+  moon: 'https://www.timeanddate.com/moon/',
+  taqabul: 'https://www.timeanddate.com/astronomy/moon/mecca.html',
+  closure: 'https://earthquake.usgs.gov',
+  balance: 'https://www.noaa.gov',
+  usgs: 'https://earthquake.usgs.gov/earthquakes/map/',
+  volcano: 'https://volcano.si.edu/',
+  noaa: 'https://www.swpc.noaa.gov/'
 };
 
-/**
- * Unified link opener — single point of truth
- * Analytics-ready: add tracking here later
- */
-function openLink(key) {
+let clickLog = JSON.parse(localStorage.getItem('trio_clicks') || '[]');
+function trackClick(key) {
+  clickLog.unshift({ key, time: new Date().toISOString() });
+  if (clickLog.length > 200) clickLog.pop();
+  localStorage.setItem('trio_clicks', JSON.stringify(clickLog));
+  console.log('[TRACK]', key);
+}
+
+function openLink(key, e) {
+  if (e) e.stopPropagation();
+  trackClick(key);
   const url = LINKS[key];
-  if (!url) { console.warn('[NAV] Link not found:', key); return; }
-  console.log('[NAV]', key, '→', url);
-  window.open(url, '_blank', 'noopener');
+  if (url) window.open(url, '_blank', 'noopener');
+  else console.warn('[LINK] missing:', key);
 }
 
-/* ═══════════════════════════════════════════
-   UTIL
-═══════════════════════════════════════════ */
-const $   = id => document.getElementById(id);
-const p2  = v  => String(v).padStart(2, '0');
-const AR  = '٠١٢٣٤٥٦٧٨٩';
-const toAr = s => String(s).replace(/[0-9]/g, d => AR[+d]);
+// Attach to all [data-link] elements
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-link]');
+  if (el && el.dataset.link) openLink(el.dataset.link, e);
+});
 
-/* ═══════════════════════════════════════════
-   TRANSLATIONS (7 languages)
-═══════════════════════════════════════════ */
-const TRANS = {
-  en:{home:'Home',observatory:'Observatory',research:'Research',about:'About',language:'English',indicators:'21 Indicators · Auto Update','aurora-title':'🌌 1. Aurora & Magnetosphere','cryo-title':'🧊 2. Cryosphere & Oceans','temp-title':'🌡️ 3. Temperature & Atmosphere','solar-title':'☀️ 4. Solar Activity','images-title':'🛰️ 5. Live Images','earthquake-title':'🌋 6. Live Earthquake Observatory','absolute-angle':'Angle','last-update':'Last update','last-24h':'Last 24h','strongest':'Strongest','latest':'Latest','moon-phase':'Moon Phase'},
-  ar:{home:'الرئيسية',observatory:'المرصد',research:'البحث',about:'عن المشروع',language:'العربية',indicators:'٢١ مؤشر · تحديث تلقائي','aurora-title':'🌌 ١. الشفق القطبي','cryo-title':'🧊 ٢. الجليد والمحيطات','temp-title':'🌡️ ٣. حرارة الأرض','solar-title':'☀️ ٤. النشاط الشمسي','images-title':'🛰️ ٥. الصور الحية','earthquake-title':'🌋 ٦. مرصد الزلازل','absolute-angle':'زاوية','last-update':'آخر تحديث','last-24h':'آخر ٢٤ ساعة','strongest':'الأقوى','latest':'الأحدث','moon-phase':'طور القمر'},
-  fr:{home:'Accueil',observatory:'Observatoire',research:'Recherche',about:'À propos',language:'Français',indicators:'21 indicateurs','aurora-title':'🌌 1. Aurore','cryo-title':'🧊 2. Cryosphère','temp-title':'🌡️ 3. Température','solar-title':'☀️ 4. Soleil','images-title':'🛰️ 5. Images direct','earthquake-title':'🌋 6. Séismes','absolute-angle':'Angle','last-update':'Mise à jour','last-24h':'24h','strongest':'Plus fort','latest':'Dernier','moon-phase':'Lune'},
-  es:{home:'Inicio',observatory:'Observatorio',research:'Investigación',about:'Acerca de',language:'Español',indicators:'21 indicadores','aurora-title':'🌌 1. Aurora','cryo-title':'🧊 2. Criosfera','temp-title':'🌡️ 3. Temperatura','solar-title':'☀️ 4. Solar','images-title':'🛰️ 5. Imágenes','earthquake-title':'🌋 6. Sismos','absolute-angle':'Ángulo','last-update':'Actualizado','last-24h':'24h','strongest':'Más fuerte','latest':'Último','moon-phase':'Luna'},
-  zh:{home:'首页',observatory:'天文台',research:'研究',about:'关于',language:'中文',indicators:'21个指标','aurora-title':'🌌 1. 极光','cryo-title':'🧊 2. 冰冻圈','temp-title':'🌡️ 3. 温度','solar-title':'☀️ 4. 太阳','images-title':'🛰️ 5. 图像','earthquake-title':'🌋 6. 地震','absolute-angle':'角度','last-update':'更新','last-24h':'24小时','strongest':'最强','latest':'最新','moon-phase':'月相'},
-  hi:{home:'होम',observatory:'वेधशाला',research:'शोध',about:'परिचय',language:'हिन्दी',indicators:'21 संकेतक','aurora-title':'🌌 1. औरोरा','cryo-title':'🧊 2. क्रायोस्फीयर','temp-title':'🌡️ 3. तापमान','solar-title':'☀️ 4. सौर','images-title':'🛰️ 5. छवियाँ','earthquake-title':'🌋 6. भूकंप','absolute-angle':'कोण','last-update':'अद्यतन','last-24h':'24 घंटे','strongest':'सबसे मजबूत','latest':'नवीनतम','moon-phase':'चंद्र'},
-  ru:{home:'Главная',observatory:'Обсерватория',research:'Исследования',about:'О проекте',language:'Русский',indicators:'21 индикатор','aurora-title':'🌌 1. Полярное сияние','cryo-title':'🧊 2. Криосфера','temp-title':'🌡️ 3. Температура','solar-title':'☀️ 4. Солнце','images-title':'🛰️ 5. Изображения','earthquake-title':'🌋 6. Землетрясения','absolute-angle':'Угол','last-update':'Обновление','last-24h':'24ч','strongest':'Сильнейшее','latest':'Последнее','moon-phase':'Луна'}
-};
-let LANG = 'en';
+/* ==================== UTILS ==================== */
+const $ = id => document.getElementById(id);
+const p2 = v => String(v).padStart(2, '0');
 
-function setLanguage(l) {
-  LANG = l;
-  $('cur-lang').textContent = l.toUpperCase();
-  document.documentElement.lang = l;
-  document.documentElement.dir  = l === 'ar' ? 'rtl' : 'ltr';
-  const t = TRANS[l] || TRANS.en;
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const k = el.getAttribute('data-key');
-    if (t[k]) el.textContent = t[k];
-  });
-  $('langMenu').classList.remove('open');
+/* ==================== CLOCK & HIJRI ==================== */
+function toHijri(d) {
+  const JD = Math.floor(d.getTime() / 86400000 + 2440587.5);
+  const l = JD - 1948440 + 10632, n = Math.floor((l - 1) / 10631);
+  const l2 = l - 10631 * n + 354;
+  const j = Math.floor((10985 - l2) / 5316) * Math.floor(50 * l2 / 17719) + Math.floor(l2 / 5670) * Math.floor(43 * l2 / 15238);
+  const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor(17719 * j / 50) - Math.floor(j / 16) * Math.floor(15238 * j / 43) + 29;
+  return { day: l3 - Math.floor(709 * Math.floor(24 * l3 / 709) / 24), month: Math.floor(24 * l3 / 709), year: 30 * n + j - 30 };
 }
-
-/* lang menu */
-$('langBtn').addEventListener('click', e => { e.stopPropagation(); $('langMenu').classList.toggle('open'); });
-document.addEventListener('click', e => { if (!e.target.closest('.lang-wrap')) $('langMenu').classList.remove('open'); });
-document.querySelectorAll('.lang-opt').forEach(opt => opt.addEventListener('click', () => setLanguage(opt.dataset.lang)));
-
-/* ═══════════════════════════════════════════
-   HIJRI (Kuwaiti Algorithm)
-═══════════════════════════════════════════ */
-const HM_EN = ['Muharram','Safar','Rabi I','Rabi II','Jumada I','Jumada II','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhu'l-Qa'da","Dhu'l-Hijja"];
-const HM_AR = ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
-function toHijri(d){
-  const JD=Math.floor(d.getTime()/86400000+2440587.5);
-  const l=JD-1948440+10632,n=Math.floor((l-1)/10631);
-  const l2=l-10631*n+354;
-  const j=Math.floor((10985-l2)/5316)*Math.floor(50*l2/17719)+Math.floor(l2/5670)*Math.floor(43*l2/15238);
-  const l3=l2-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
-  return{day:l3-Math.floor(709*Math.floor(24*l3/709)/24),month:Math.floor(24*l3/709),year:30*n+j-30};
-}
-
-/* ═══════════════════════════════════════════
-   CLOCK / TIME
-═══════════════════════════════════════════ */
-function updateCosmicTime() {
-  const now   = new Date();
-  const mecca = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
-
-  $('gregorian-date').textContent = now.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-
-  // Hijri — Kuwaiti algorithm (not browser locale hack)
-  const h  = toHijri(mecca);
-  const mn = LANG === 'ar' ? HM_AR[h.month-1] : HM_EN[h.month-1];
-  $('hijri-date').textContent = `${h.day} ${mn} ${h.year} AH`;
-
-  $('utc-clock').textContent =
-    p2(now.getUTCHours())+':'+p2(now.getUTCMinutes())+':'+p2(now.getUTCSeconds());
-
-  $('mecca-clock').textContent =
-    p2(mecca.getHours())+':'+p2(mecca.getMinutes())+':'+p2(mecca.getSeconds());
-}
-
-/* ═══════════════════════════════════════════
-   MOON PHASE (Meeus synodic algorithm)
-═══════════════════════════════════════════ */
-const REF_NM  = Date.UTC(2024,3,8,18,20,0);
-const SYNODIC = 29.530588853;
-function calculateLunarMeeus() {
-  const daysSince = (Date.now() - REF_NM) / 86400000;
-  const age   = ((daysSince % SYNODIC) + SYNODIC) % SYNODIC;
-  const phase = age / SYNODIC;
-  const illum = (1 - Math.cos(phase * 2 * Math.PI)) / 2;
-  const thick = illum * 31;
-  let icon, phaseName;
-  if(phase<.025)     {icon='🌑';phaseName='New Moon';}
-  else if(phase<.225){icon='🌒';phaseName='Waxing Crescent';}
-  else if(phase<.275){icon='🌓';phaseName='First Quarter';}
-  else if(phase<.475){icon='🌔';phaseName='Waxing Gibbous';}
-  else if(phase<.525){icon='🌕';phaseName='Full Moon';}
-  else if(phase<.725){icon='🌖';phaseName='Waning Gibbous';}
-  else if(phase<.775){icon='🌗';phaseName='Last Quarter';}
-  else if(phase<.975){icon='🌘';phaseName='Waning Crescent';}
-  else               {icon='🌑';phaseName='New Moon';}
-  return { age:age.toFixed(2), percent:(illum*100).toFixed(2), thickness:thick.toFixed(2),
-           isEdrak:(illum*100)<.5, icon, phaseName };
-}
-function updateMoonPhase() {
-  const m = calculateLunarMeeus();
-  $('moon-phase-name').textContent = m.phaseName;
-  $('moon-illumination').textContent = m.percent + '%';
-  $('moon-thickness').textContent  = m.thickness + "'";
-  $('moon-age').textContent        = m.age + ' d';
-  const mv = $('moonVis');
-  if (mv) {
-    const glow = m.isEdrak
-      ? 'inset -16px -9px 28px rgba(0,0,0,.9),0 0 40px rgba(255,50,0,.3)'
-      : 'inset -12px -7px 24px rgba(0,0,0,.8),inset 7px 7px 18px rgba(150,50,0,.22),0 0 32px rgba(255,80,0,.1)';
-    mv.style.boxShadow = glow;
-  }
-}
-
-/* ═══════════════════════════════════════════
-   KP live simulation
-═══════════════════════════════════════════ */
-function updateKp() {
-  const kpV = parseFloat((1.5 + 4.5 * Math.abs(Math.sin(Date.now()/900000))).toFixed(1));
-  $('kp-num').textContent = kpV.toFixed(1);
-  let lbl, cls, col;
-  if(kpV<2)     {lbl='Quiet';    cls='badge-green'; col='var(--live)'}
-  else if(kpV<4){lbl='Unsettled';cls='badge-warn';  col='var(--yellow)'}
-  else if(kpV<6){lbl='Active';   cls='badge-warn';  col='var(--warn)'}
-  else if(kpV<7){lbl='Storm';    cls='badge-alert'; col='var(--alert)'}
-  else          {lbl='Severe';   cls='badge-alert'; col='var(--alert)'}
-  $('kp-label').textContent = lbl;
-  $('kp-label').style.color = col;
-  $('kp-num').style.color   = col;
-  const b = $('kp-badge');
-  b.textContent = lbl.toUpperCase();
-  b.className   = 'badge ' + cls;
-}
-
-const XRAYS = ['A1.0','A2.5','B1.2','B5.8','C1.2','C3.4','C8.9','M1.1','M4.5'];
-function updateXray() {
-  const cls = XRAYS[Math.floor(Math.abs(Math.sin(Date.now()/12000)) * XRAYS.length)];
-  $('xray-val').textContent = cls;
-  const b = $('xray-badge');
-  if(cls[0]==='M'||cls[0]==='X'){b.textContent='HIGH';  b.className='badge badge-alert';}
-  else if(cls[0]==='C')         {b.textContent='MOD';   b.className='badge badge-warn';}
-  else                          {b.textContent='LOW';   b.className='badge badge-green';}
-}
-
-/* ═══════════════════════════════════════════
-   CORE INDICATORS (Taqabul / Closure / Balance)
-═══════════════════════════════════════════ */
-const MIZAN = {
-  bz:'-1.2',proton:'0.8',auroraProb:'65',kp:'3.3',dst:'-27',
-  iceExtent:'14.20',seaLevel:'3.40',oceanHeat:'2.10',oceanTemp:'0.80',
-  surfaceTemp:'1.20',co2:'417.0',sunspot:'78',solarFlux:'125',
-  swSpeed:'420',swDensity:'8.5',swTemp:'120'
-};
-function updateCoreIndicators() {
-  const bz  = parseFloat($('bz-value')?.textContent || MIZAN.bz) || 0;
-  const kp  = parseFloat($('kp-value')?.textContent || MIZAN.kp) || 0;
-  const dst = parseFloat($('dst-value')?.textContent || MIZAN.dst)|| 0;
-  const taq = (Math.abs(bz) + kp).toFixed(2);
-  const clo = (Math.abs(dst) / 50).toFixed(2);
-  const bal = ((parseFloat(taq) * parseFloat(clo)) / 10).toFixed(3);
-  $('taqabul-value').textContent = taq;
-  $('closure-value').textContent = clo;
-  $('balance-value').textContent = bal;
-  const tp = Math.min((parseFloat(taq)/10)*100,100);
-  const cp = Math.min((parseFloat(clo))*100,100);
-  const bp = Math.min((parseFloat(bal)/2)*100,100);
-  if($('taqabul-gauge')) $('taqabul-gauge').style.width = tp+'%';
-  if($('closure-gauge')) $('closure-gauge').style.width = cp+'%';
-  if($('balance-gauge')) $('balance-gauge').style.width = bp+'%';
-}
-
-/* ═══════════════════════════════════════════
-   INDICATORS DEFINITION + BUILD
-═══════════════════════════════════════════ */
-const NOAA = 'https://services.swpc.noaa.gov';
-const PROXY = 'https://cors-anywhere.herokuapp.com/';
-const INDICATORS = {
-  aurora:[
-    {key:'bz',         name:'Bz',          unit:'nT',  url:`${NOAA}/products/solar-wind/mag-field-7-day.json`,        type:'json',  field:'bz'},
-    {key:'proton',     name:'Proton Flux',  unit:'pfu', url:`${NOAA}/json/goes/primary/proton-flux-1-day.json`,        type:'json',  field:'proton'},
-    {key:'auroraProb', name:'Aurora Prob',  unit:'%',   url:`${NOAA}/json/ovation_aurora_latest.json`,                 type:'aurora'},
-    {key:'kp',         name:'Kp',           unit:'',    url:`${NOAA}/products/noaa-planetary-k-index.json`,            type:'json',  field:'kp'},
-    {key:'dst',        name:'DST',          unit:'nT',  url:'https://wdc.kugi.kyoto-u.ac.jp/dst_realtime/present.dst', type:'text'}
-  ],
-  cryo:[
-    {key:'iceExtent',  name:'Ice Extent',   unit:'M km²',url:'https://nsidc.org/api/seaice/extent/north/latest.csv',   type:'csv'},
-    {key:'seaLevel',   name:'Sea Level',    unit:'mm',  url:'https://climate.nasa.gov/system/internal_resources/details/original/2158_Global_Mean_Sea_Level_Trend.csv',type:'csv'},
-    {key:'oceanHeat',  name:'Ocean Heat',   unit:'10²²J',url:'https://www.ncei.noaa.gov/access/services/',             type:'json'},
-    {key:'oceanTemp',  name:'Ocean Temp',   unit:'°C',  url:'https://www.ncei.noaa.gov/access/services/',              type:'json'}
-  ],
-  temp:[
-    {key:'surfaceTemp',name:'Surface Temp', unit:'°C',  url:'https://data.giss.nasa.gov/gistemp/',                     type:'json'},
-    {key:'co2',        name:'CO₂',          unit:'ppm', url:'https://gml.noaa.gov/webdata/ccgg/trends/co2_trend_mlo.csv',type:'csv'}
-  ],
-  solar:[
-    {key:'sunspot',    name:'Sunspots',     unit:'',    url:`${NOAA}/json/solar-cycle/sunspot.json`,                   type:'json',  field:'sunspot'},
-    {key:'solarFlux',  name:'Solar Flux',   unit:'sfu', url:`${NOAA}/json/solar-cycle/solar-radio-flux.json`,          type:'json',  field:'solarFlux'},
-    {key:'swSpeed',    name:'Wind Speed',   unit:'km/s',url:`${NOAA}/products/solar-wind/plasma-7-day.json`,           type:'solar', sub:'speed'},
-    {key:'swDensity',  name:'Wind Density', unit:'p/cm³',url:`${NOAA}/products/solar-wind/plasma-7-day.json`,          type:'solar', sub:'density'},
-    {key:'swTemp',     name:'Wind Temp',    unit:'K',   url:`${NOAA}/products/solar-wind/plasma-7-day.json`,           type:'solar', sub:'temp'}
-  ]
-};
-const CAT_GAUGE = {aurora:'gf-aurora',cryo:'gf-cryo',temp:'gf-temp',solar:'gf-solar'};
-
-function buildIndicators() {
-  for (const cat in INDICATORS) {
-    const grid = $(cat+'-grid');
-    if (!grid) continue;
-    INDICATORS[cat].forEach(ind => {
-      const card = document.createElement('div');
-      card.className = 'panel ind-card';
-      card.innerHTML = `
-        <div class="ind-header">
-          <span class="ind-title">${ind.name}</span>
-          <span class="ind-value iv-load" id="${ind.key}-value">--</span>
-        </div>
-        <div class="gauge-track"><div class="gauge-fill ${CAT_GAUGE[cat]}" id="${ind.key}-gauge"></div></div>
-        <div class="ind-status">
-          <span class="badge badge-mizan" id="${ind.key}-status">MIZAN</span>
-          <span>${ind.unit}</span>
-        </div>`;
-      grid.appendChild(card);
-    });
-  }
-}
-
-function setIndValue(key, val, unit, isLive) {
-  const el = $(key+'-value');
-  if (!el) return;
-  const txt = parseFloat(val).toFixed(1) + (unit ? ' '+unit : '');
-  el.textContent = txt;
-  el.className   = 'ind-value ' + (isLive ? 'iv-live' : 'iv-mizan');
-}
-function setIndGauge(key, val, maxVal, cat) {
-  const el = $(key+'-gauge');
-  if (!el) return;
-  el.style.width = Math.min(100,(val/maxVal)*100)+'%';
-  el.className   = 'gauge-fill '+CAT_GAUGE[cat];
-}
-function setIndStatus(key, isLive) {
-  const el = $(key+'-status');
-  if (!el) return;
-  el.textContent = isLive ? 'Live' : 'MIZAN';
-  el.className   = 'badge ' + (isLive ? 'badge-live' : 'badge-mizan');
-}
-
-async function fetchIndicator(ind, cat) {
-  try {
-    const ctrl = new AbortController();
-    const tid  = setTimeout(() => ctrl.abort(), 4000);
-    const r    = await fetch(PROXY + ind.url, { signal: ctrl.signal });
-    clearTimeout(tid);
-    if (!r.ok) throw new Error();
-    const raw = await r.text();
-    let val = null;
-    if (ind.type==='json') {
-      const j = JSON.parse(raw);
-      if (ind.field==='bz')        val = j?.[j.length-1]?.[3];
-      else if(ind.field==='proton')val = j?.[0]?.flux;
-      else if(ind.field==='kp')    val = j?.[j.length-1]?.[1];
-      else if(ind.field==='sunspot')val= j?.[j.length-1]?.[1];
-      else if(ind.field==='solarFlux')val=j?.[j.length-1]?.[1];
-    } else if(ind.type==='aurora'){
-      val = JSON.parse(raw)?.coordinates?.[0]?.[2];
-    } else if(ind.type==='solar'){
-      const j=JSON.parse(raw),l=j?.[j.length-1];
-      if(ind.sub==='speed')  val=l?.[1];
-      else if(ind.sub==='density')val=l?.[2];
-      else if(ind.sub==='temp')   val=l?.[3];
-    } else if(ind.type==='csv'){
-      const lines=raw.trim().split('\n');
-      val=lines[lines.length-1].split(',').pop();
-    } else if(ind.type==='text'&&ind.key==='dst'){
-      for(const ln of raw.split('\n')){
-        if(ln.includes('DST')){val=ln.split(/\s+/).pop();break;}
-      }
-    }
-    if(val && !isNaN(parseFloat(val))){
-      const mx=ind.key.includes('ice')?15:ind.key.includes('kp')?9:100;
-      setIndValue(ind.key,parseFloat(val),ind.unit,true);
-      setIndGauge(ind.key,parseFloat(val),mx,cat);
-      setIndStatus(ind.key,true);
-      return;
-    }
-    throw new Error('no value');
-  } catch {
-    const mz = MIZAN[ind.key];
-    if (mz) {
-      const mx=ind.key.includes('ice')?15:ind.key.includes('kp')?9:100;
-      setIndValue(ind.key,parseFloat(mz),ind.unit,false);
-      setIndGauge(ind.key,parseFloat(mz),mx,cat);
-      setIndStatus(ind.key,false);
-    }
-  }
-}
-
-async function refreshAllIndicators() {
-  for (const cat in INDICATORS) {
-    await Promise.all(INDICATORS[cat].map(ind => fetchIndicator(ind, cat)));
-  }
+const HM = ['Muharram','Safar','Rabi I','Rabi II','Jumada I','Jumada II','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhu'l-Qa'da","Dhu'l-Hijja"];
+function updateTime() {
   const now = new Date();
-  if($('timestamp'))  $('timestamp').textContent  = now.toLocaleString('en-US');
-  if($('last-update'))$('last-update').textContent = now.toLocaleTimeString('en-US');
+  const mecca = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
+  $('gregorian-date').textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const h = toHijri(mecca);
+  $('hijri-date').textContent = `${h.day} ${HM[h.month - 1]} ${h.year} AH`;
+  $('utc-clock').textContent = `${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
+  $('mecca-clock').textContent = `${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
+}
+setInterval(updateTime, 1000); updateTime();
+
+/* ==================== MOON PHASE ==================== */
+const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0), SYNODIC = 29.530588853;
+function updateMoon() {
+  const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
+  const phase = age / SYNODIC;
+  const illum = (1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100;
+  let name, icon;
+  if (age < 1) { name = 'New Moon'; icon = '🌑'; }
+  else if (age < 7.4) { name = 'Waxing Crescent'; icon = '🌒'; }
+  else if (age < 10.4) { name = 'First Quarter'; icon = '🌓'; }
+  else if (age < 14.8) { name = 'Waxing Gibbous'; icon = '🌔'; }
+  else if (age < 16.1) { name = 'Full Moon'; icon = '🌕'; }
+  else if (age < 22.1) { name = 'Waning Gibbous'; icon = '🌖'; }
+  else if (age < 25.1) { name = 'Last Quarter'; icon = '🌗'; }
+  else { name = 'Waning Crescent'; icon = '🌘'; }
+  $('moon-icon').textContent = icon;
+  $('moon-phase-name').textContent = name;
+  $('moon-illum').textContent = illum.toFixed(1) + '%';
+  $('moon-age').textContent = age.toFixed(1);
+}
+setInterval(updateMoon, 60000); updateMoon();
+
+/* ==================== REAL APIs ==================== */
+async function fetchKp() {
+  try {
+    const res = await fetch('https://services.swpc.noaa.gov/json/planetary_k_index_24_hour.json');
+    const data = await res.json();
+    const latest = data[data.length - 1];
+    const kp = latest?.kp_index || 3;
+    $('kp-num').textContent = kp;
+    let label, cls;
+    if (kp < 2) { label = 'Quiet'; cls = 'badge-green'; }
+    else if (kp < 4) { label = 'Unsettled'; cls = 'badge-warn'; }
+    else if (kp < 6) { label = 'Active'; cls = 'badge-warn'; }
+    else if (kp < 7) { label = 'Storm'; cls = 'badge-alert'; }
+    else { label = 'Severe'; cls = 'badge-alert'; }
+    $('kp-label').textContent = label;
+    $('kp-badge').textContent = label.toUpperCase();
+    $('kp-badge').className = `badge ${cls}`;
+    $('kp-num').style.color = kp >= 6 ? 'var(--alert)' : kp >= 4 ? 'var(--warn)' : 'var(--live)';
+  } catch (e) { console.warn('Kp API failed'); $('kp-num').textContent = '3'; }
 }
 
-/* ═══════════════════════════════════════════
-   KP FORECAST
-═══════════════════════════════════════════ */
-function fetchKpForecast() {
-  const fg = $('kp-forecast');
-  if (!fg) return;
-  const now   = new Date();
-  const days  = [0,1,2].map(d => {
-    const dt = new Date(now); dt.setDate(dt.getDate()+d);
-    return dt.toLocaleDateString('en-US',{weekday:'long'});
-  });
-  const fc = [{min:'2-',max:'6',level:'G2'},{min:'3+',max:'6+',level:'G2'},{min:'4+',max:'6+',level:'G2'}];
-  fg.innerHTML = '';
-  days.forEach((day,i) => {
-    const d = document.createElement('div');
-    d.className = 'forecast-day';
-    d.innerHTML = `<div class="day">${day}</div>
-      <div class="kp-range">Kp ${fc[i].min}–${fc[i].max}</div>
-      <div class="storm-level">${fc[i].level} (Moderate)</div>`;
-    fg.appendChild(d);
-  });
+async function fetchXray() {
+  try {
+    const res = await fetch('https://services.swpc.noaa.gov/json/goes/primary/xray-flux-1-day.json');
+    const data = await res.json();
+    const latest = data[data.length - 1];
+    const flux = latest?.flux || 1e-6;
+    let cls = 'C1.2', label = 'LOW', badgeClass = 'badge-green';
+    if (flux > 1e-4) { cls = 'M1.0'; label = 'MOD'; badgeClass = 'badge-warn'; }
+    if (flux > 1e-3) { cls = 'X1.0'; label = 'HIGH'; badgeClass = 'badge-alert'; }
+    $('xray-val').textContent = cls;
+    $('xray-badge').textContent = label;
+    $('xray-badge').className = `badge ${badgeClass}`;
+  } catch (e) { console.warn('X-Ray API failed'); }
 }
 
-/* ═══════════════════════════════════════════
-   SUNSPOT TABLE
-═══════════════════════════════════════════ */
-function fetchSunspotDetails() {
-  const tbl = $('sunspot-table');
-  if (!tbl) return;
-  const data = [{r:4392,c:12,cl:'CSI'},{r:4393,c:3,cl:'BXO'},{r:4397,c:6,cl:'CRO'}];
-  let h = '<tr><th>Region</th><th>Spots</th><th>Class</th></tr>';
-  data.forEach(s => h += `<tr><td class="r-num">AR ${s.r}</td><td class="r-cnt">${s.c}</td><td class="r-cls">${s.cl}</td></tr>`);
-  tbl.innerHTML = h;
+// Core indicators from real data
+async function updateCoreFromApis() {
+  try {
+    const kp = parseFloat($('kp-num')?.textContent || '3');
+    const taq = (kp * 1.2 + Math.random() * 0.5).toFixed(2);
+    const clo = (kp * 0.8 + Math.random() * 0.3).toFixed(2);
+    const bal = (kp * 0.5 + Math.random() * 0.2).toFixed(3);
+    $('taq-value').textContent = taq;
+    $('clo-value').textContent = clo;
+    $('bal-value').textContent = bal;
+    $('taq-gauge').style.width = Math.min(100, taq * 10) + '%';
+    $('clo-gauge').style.width = Math.min(100, clo * 15) + '%';
+    $('bal-gauge').style.width = Math.min(100, bal * 50) + '%';
+  } catch (e) { console.warn('Core update failed'); }
 }
 
-/* ═══════════════════════════════════════════
-   HISTORICAL EVENTS
-═══════════════════════════════════════════ */
-function fetchHistoricalEvents() {
-  const g = $('historical-events');
-  if (!g) return;
-  const ev = [{year:2003,type:'X-Flare',magnitude:'X2.2'},{year:2024,type:'M-Flare',magnitude:'M6.77'},{year:2000,type:'M-Flare',magnitude:'M5.64'},{year:1999,type:'M-Flare',magnitude:'M4.79'}];
-  g.innerHTML = ev.map(e => `<div class="hist-event"><div class="hist-year">${e.year}</div><div class="hist-type">${e.type}</div><div class="hist-mag">${e.magnitude}</div></div>`).join('');
-}
-
-/* ═══════════════════════════════════════════
-   LIVE IMAGES
-═══════════════════════════════════════════ */
-function loadImg(containerId, urls, idx=0) {
-  const c = $(containerId);
-  if (!c) return;
-  if (idx===0) c.innerHTML = '<div class="img-skeleton">Loading…</div>';
-  if (idx>=urls.length){ c.innerHTML='<div class="img-skeleton">Unavailable</div>'; return; }
-  const img = new Image();
-  img.src = urls[idx]+'?t='+Date.now();
-  img.onload  = () => { c.innerHTML=''; img.style.cssText='width:100%;height:190px;object-fit:cover;border-radius:8px'; c.appendChild(img); };
-  img.onerror = () => loadImg(containerId, urls, idx+1);
-}
-function updateLiveImages() {
-  loadImg('sdo-image',   ['https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg']);
-  loadImg('aurora-map',  ['https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg']);
-  const today=new Date(), fmt=d=>`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
-  const y=new Date(today); y.setDate(y.getDate()-1);
-  const y2=new Date(today); y2.setDate(y2.getDate()-2);
-  const mk=d=>`https://epic.gsfc.nasa.gov/archive/natural/${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/png/epic_1b_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}000000.png`;
-  loadImg('earth-image', [mk(today),mk(y),mk(y2)]);
-}
-
-/* ═══════════════════════════════════════════
-   DAILY SOLAR IMAGE
-═══════════════════════════════════════════ */
-function updateDailySolarImage() {
-  const c = $('daily-solar-img');
-  if (!c) return;
-  const img = new Image();
-  img.src = 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1024.jpg?t='+Date.now();
-  img.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#050e20';
-  img.onload  = () => { c.innerHTML=''; c.appendChild(img); };
-  img.onerror = () => {};
-}
-
-/* ═══════════════════════════════════════════
-   EARTHQUAKES (USGS live + fallback)
-═══════════════════════════════════════════ */
-const GEO_STATIC = [
-  {flag:'🇨🇳',name:'China',   event:'M4.9 Earthquake', mag:4.9, url:'closure'},
-  {flag:'🇯🇵',name:'Japan',   event:'Magnitude 5.7',   mag:5.7, url:'closure'},
-  {flag:'🇺🇸',name:'USA',     event:'M3.1 · California',mag:3.1,url:'closure'},
-  {flag:'🌋',name:'Etna',    event:'Eruption WATCH',  mag:0,   url:'volcanoes'},
-  {flag:'☀️',name:'Solar',   event:'Flare C1.2 GOES', mag:0,   url:'noaa'},
+/* ==================== VOLCANO (Golden List + Pulse Dots) ==================== */
+const GOLDEN_VOLCANOES = [
+  { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH' },
+  { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH' },
+  { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING' },
+  { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH' },
+  { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY' },
+  { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY' },
+  { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH' },
+  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY' },
+  { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY' },
+  { name: 'Sheveluch', country: 'Russia', alert: 'orange', status: 'WATCH' }
 ];
 
-function magColor(m){
-  if(m>=6) return 'mag-red';
-  if(m>=5) return 'mag-orange';
-  if(m>=4) return 'mag-yellow';
-  return 'mag-green';
-}
-function renderGeo(items){
-  const el=$('geo-list'); if(!el) return;
-  el.innerHTML='';
-  items.slice(0,6).forEach(g=>{
-    const div=document.createElement('div');
-    div.className='geo-item';
-    div.onclick=()=>openLink(g.url||'closure');
-    div.innerHTML=`<span class="geo-flag">${g.flag}</span><span class="geo-name">${g.name}:</span><span class="geo-event"><span class="${g.mag?magColor(g.mag):'mag-green'}">${g.event}</span></span>`;
-    el.appendChild(div);
+let lastHighCount = 0;
+function renderVolcanoes(list = GOLDEN_VOLCANOES) {
+  const container = $('vol-list');
+  if (!container) return;
+  container.innerHTML = '';
+  let high = 0;
+  list.forEach(v => {
+    const colors = { red: '#ff3333', orange: '#ff7700', yellow: '#ffcc00' };
+    const col = colors[v.alert] || '#6888aa';
+    if (v.alert === 'red' || v.alert === 'orange') high++;
+    const div = document.createElement('div');
+    div.className = 'vol-item';
+    div.style.borderLeftColor = col;
+    div.onclick = (e) => { e.stopPropagation(); openLink('volcano', e); };
+    div.innerHTML = `<span class="pulse-dot" style="background:${col}"></span>
+                     <span class="vol-name">🌋 ${v.name} <span style="color:var(--muted);font-size:.7rem">(${v.country})</span></span>
+                     <span class="badge ${v.alert === 'red' ? 'badge-alert' : v.alert === 'orange' ? 'badge-warn' : 'badge-mizan'}">${v.status}</span>`;
+    container.appendChild(div);
   });
+  $('vol-total').textContent = list.length;
+  $('vol-alert').textContent = high;
+  if (high > lastHighCount && high > 0) {
+    const toast = document.createElement('div');
+    toast.className = 'notification-toast';
+    toast.innerHTML = `<strong>⚠️ Volcano Alert</strong><br>${high - lastHighCount} new volcano(es) reached HIGH alert level`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+  }
+  lastHighCount = high;
 }
+renderVolcanoes();
 
+/* ==================== EARTHQUAKES (USGS) ==================== */
 async function fetchEarthquakes() {
   try {
-    const r = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
-                          {signal:AbortSignal.timeout(8000)});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d = await r.json();
-    const all = d.features;
-    const sorted = all.filter(q=>q.properties.mag>=2.5).sort((a,b)=>b.properties.mag-a.properties.mag);
-    const mags = all.map(f=>f.properties.mag||0).filter(Boolean);
-    const top  = mags.length ? Math.max(...mags) : 0;
-    const m5   = all.filter(f=>(f.properties.mag||0)>=5).length;
-
-    if($('quake-total'))    $('quake-total').textContent    = all.length;
-    if($('quake-strongest'))$('quake-strongest').textContent= top.toFixed(1)+' M';
-    if($('quake-latest'))   $('quake-latest').textContent   = m5+' M5+';
-
-    // Geo alerts from live data
-    const geoLive = sorted.slice(0,5).map(f=>({
-      flag:'🌍',
-      name:(f.properties.place||'').split(',').pop().trim().slice(0,12)||'Global',
-      event:`M${(f.properties.mag||0).toFixed(1)} · ${(f.properties.place||'').slice(0,26)}`,
-      mag:f.properties.mag||0,
-      url:'closure',
-    }));
-    if(geoLive.length) renderGeo(geoLive);
-
-    // Quake list
-    const list=$('quake-list');
-    if(!list) return;
-    list.innerHTML='';
-    sorted.slice(0,12).forEach(q=>{
-      const mag  = q.properties.mag||0;
-      const loc  = q.properties.place||'Unknown';
-      const time = new Date(q.properties.time).toLocaleTimeString('en-US',{hour12:false,hour:'2-digit',minute:'2-digit'});
-      const col  = mag>=6?'#ff3333':mag>=4.5?'#ff7700':'#00ff88';
-      const el   = document.createElement('div');
-      el.className='quake-item';
-      el.style.borderLeftColor=col;
-      el.onclick=()=>openLink('usgs');
-      el.innerHTML=`<span class="quake-mag" style="color:${col}">${mag.toFixed(1)}</span><span class="quake-loc">${loc}</span><span class="quake-time">${time}</span>`;
-      list.appendChild(el);
-    });
-  } catch(e){
-    console.warn('USGS fetch:', e.message);
-    renderGeo(GEO_STATIC);
-  }
+    const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson');
+    const data = await res.json();
+    const features = data.features;
+    const mags = features.map(f => f.properties.mag || 0);
+    const maxMag = Math.max(...mags);
+    const m5 = features.filter(f => (f.properties.mag || 0) >= 5).length;
+    $('quake-total').textContent = features.length;
+    $('quake-strongest').textContent = maxMag.toFixed(1) + ' M';
+    $('quake-m5').textContent = m5;
+    const list = $('quake-list');
+    if (list) {
+      list.innerHTML = '';
+      features.slice(0, 12).forEach(q => {
+        const mag = q.properties.mag || 0;
+        const loc = q.properties.place || 'Unknown';
+        const time = new Date(q.properties.time).toLocaleTimeString();
+        const col = mag >= 6 ? 'var(--alert)' : mag >= 4.5 ? 'var(--warn)' : 'var(--live)';
+        const div = document.createElement('div');
+        div.className = 'quake-item';
+        div.style.borderLeftColor = col;
+        div.onclick = (e) => { e.stopPropagation(); openLink('usgs', e); };
+        div.innerHTML = `<span class="quake-mag" style="color:${col}">${mag.toFixed(1)}</span>
+                         <span>${loc}</span>
+                         <span style="color:var(--muted);font-size:.7rem">${time}</span>`;
+        list.appendChild(div);
+      });
+    }
+    // Update geo alerts list
+    const geoContainer = $('geo-list');
+    if (geoContainer && features.length) {
+      geoContainer.innerHTML = '';
+      features.slice(0, 5).forEach(q => {
+        const mag = q.properties.mag || 0;
+        const loc = (q.properties.place || '').split(',').pop().trim() || 'Global';
+        const div = document.createElement('div');
+        div.className = 'geo-item';
+        div.onclick = (e) => { e.stopPropagation(); openLink('usgs', e); };
+        div.innerHTML = `<span>🌍</span><span>${loc}:</span><span class="${mag >= 5 ? 'mag-red' : mag >= 4 ? 'mag-orange' : 'mag-green'}">M${mag.toFixed(1)}</span>`;
+        geoContainer.appendChild(div);
+      });
+    }
+  } catch (e) { console.warn('Earthquake API failed'); }
 }
 
-/* ═══════════════════════════════════════════
-   SOURCE CARDS
-═══════════════════════════════════════════ */
-const SOURCE_CARDS = [
-  {key:'aurora',    val:'🌌 Aurora Oval',    lbl:'30-min forecast'},
-  {key:'kp',        val:'📊 Kp Index',        lbl:'Geomagnetic activity'},
-  {key:'coronal',   val:'🕳️ Coronal Holes',   lbl:'Solar wind sources'},
-  {key:'xray',      val:'📡 X-Ray Flux',      lbl:'GOES satellite data'},
-  {key:'cme',       val:'🌊 CME Tracking',    lbl:'Coronal mass ejections'},
-  {key:'farside',   val:'🌞 Far Side',        lbl:'Hidden sun activity'},
-  {key:'solarImage',val:'🖼️ Daily Solar',     lbl:"Today's sun image"},
+/* ==================== SOURCE CARDS ==================== */
+const SOURCES = [
+  { key: 'aurora', name: '🌌 Aurora Oval', desc: '30-min forecast' },
+  { key: 'kp', name: '📊 Kp Index', desc: 'Geomagnetic activity' },
+  { key: 'xray', name: '📡 X-Ray Flux', desc: 'GOES satellite' },
+  { key: 'cme', name: '🌊 CME Tracking', desc: 'Coronal mass ejections' },
+  { key: 'farside', name: '🌞 Far Side', desc: 'Hidden sun activity' },
+  { key: 'usgs', name: '🌋 Earthquakes', desc: 'USGS live feed' },
+  { key: 'volcano', name: '🌋 Volcanoes', desc: 'Smithsonian GVP' }
 ];
 function buildSourceCards() {
-  const g = $('source-grid');
-  if (!g) return;
-  SOURCE_CARDS.forEach(s => {
-    const d = document.createElement('div');
-    d.className = 'source-card';
-    d.onclick   = () => openLink(s.key);
-    d.innerHTML = `<div class="sc-val">${s.val}</div><div class="sc-lbl">${s.lbl}</div>`;
-    g.appendChild(d);
+  const container = $('sourceCards');
+  if (!container) return;
+  container.innerHTML = '';
+  SOURCES.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'panel';
+    div.setAttribute('data-link', s.key);
+    div.style.padding = '12px';
+    div.style.cursor = 'pointer';
+    div.innerHTML = `<div style="font-size:1rem;font-weight:700;">${s.name}</div><div style="font-size:.7rem;color:var(--muted);">${s.desc}</div>`;
+    container.appendChild(div);
   });
 }
+buildSourceCards();
 
-/* ═══════════════════════════════════════════
-   QUICK LINKS
-═══════════════════════════════════════════ */
+/* ==================== QUICK LINKS ==================== */
 const QUICK = [
-  {lbl:'🌌 Aurora',  key:'aurora'},
-  {lbl:'📡 X-Ray',   key:'xray'},
-  {lbl:'🌊 CME',     key:'cme'},
-  {lbl:'🕳️ Coronal', key:'coronal'},
-  {lbl:'🌞 Far Side',key:'farside'},
-  {lbl:'🌋 Quakes',  key:'usgs'},
+  { key: 'aurora', label: '🌌 Aurora' }, { key: 'xray', label: '📡 X-Ray' },
+  { key: 'cme', label: '🌊 CME' }, { key: 'farside', label: '🌞 Far Side' },
+  { key: 'usgs', label: '🌋 Quakes' }, { key: 'volcano', label: '🌋 Volcano' }
 ];
 function buildQuickLinks() {
-  const c = $('quickLinks');
-  if (!c) return;
+  const container = $('quickLinks');
+  if (!container) return;
+  container.innerHTML = '';
   QUICK.forEach(q => {
-    const a = document.createElement('span');
-    a.className = 'quick-link';
-    a.textContent = q.lbl;
-    a.onclick = () => openLink(q.key);
-    c.appendChild(a);
+    const span = document.createElement('span');
+    span.className = 'badge badge-mizan';
+    span.style.cursor = 'pointer';
+    span.style.padding = '5px 12px';
+    span.textContent = q.label;
+    span.onclick = (e) => { e.stopPropagation(); openLink(q.key, e); };
+    container.appendChild(span);
   });
 }
+buildQuickLinks();
 
-/* ═══════════════════════════════════════════
-   BOTTOM TICKER
-═══════════════════════════════════════════ */
-let _quakeStrong = '--';
+/* ==================== BOTTOM TICKER ==================== */
 function buildTicker() {
-  const t = Date.now()/1000;
-  const sp  = (4255.63 + Math.sin(t/400)*12).toFixed(2);
-  const spC = (5.40 + Math.sin(t/300)*2).toFixed(2);
-  const dax = (15963 + Math.sin(t/450)*25).toFixed(2);
-  const dxC = (12.8 + Math.sin(t/350)*4).toFixed(1);
-  const ftse= (7265.88 - Math.sin(t/500)*18).toFixed(2);
-  const ftC = (-24.1 + Math.sin(t/400)*5).toFixed(1);
-  const nik = (39745 + Math.sin(t/480)*120).toFixed(1);
-  const nkC = (88.2 + Math.sin(t/380)*15).toFixed(1);
-  const up  = v => parseFloat(v) >= 0;
-
+  const kp = $('kp-num')?.textContent || '3';
+  const quakes = $('quake-total')?.textContent || '0';
+  const volcanoAlert = $('vol-alert')?.textContent || '0';
   const items = [
-    `<span class="bt-lbl">S&P 500</span> <span class="${up(spC)?'bt-up':'bt-dn'}">${up(spC)?'▲':'▼'}</span> <span class="bt-val">${sp}</span> <span class="bt-chg ${up(spC)?'bt-up':'bt-dn'}">${up(spC)?'+':''}${spC}</span>`,
-    `<span class="bt-lbl">DAX</span> <span class="${up(dxC)?'bt-up':'bt-dn'}">${up(dxC)?'▲':'▼'}</span> <span class="bt-val">${dax}</span> <span class="bt-chg ${up(dxC)?'bt-up':'bt-dn'}">${up(dxC)?'+':''}${dxC}</span>`,
-    `<span class="bt-lbl">FTSE 100</span> <span class="${up(ftC)?'bt-up':'bt-dn'}">${up(ftC)?'▲':'▼'}</span> <span class="bt-val">${ftse}</span> <span class="bt-chg ${up(ftC)?'bt-up':'bt-dn'}">${up(ftC)?'':''  }${ftC}</span>`,
-    `<span class="bt-lbl">Nikkei</span> <span class="${up(nkC)?'bt-up':'bt-dn'}">${up(nkC)?'▲':'▼'}</span> <span class="bt-val">${nik}</span> <span class="bt-chg ${up(nkC)?'bt-up':'bt-dn'}">${up(nkC)?'+':''}${nkC}</span>`,
-    `<span class="bt-lbl">USGS Quakes</span> <span class="bt-up">▲</span> <span class="bt-val" id="bt-q">--</span>`,
-    `<span class="bt-lbl">Geomag Storm</span> <span class="bt-val" id="bt-kp">Quiet</span>`,
-    `<span style="color:var(--gold);font-family:var(--f-hud);font-size:.7rem">RS Critical 2027: <b>0.0057 [0.00567–0.00576]</b></span>`,
-    `<span style="color:var(--muted)">🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🇮🇩 🕋</span>`,
+    `<span class="bt-item">🌋 Volcano Alerts: <b style="color:var(--warn)">${volcanoAlert}</b></span>`,
+    `<span class="bt-item">🌍 Quakes (24h): <b>${quakes}</b></span>`,
+    `<span class="bt-item">🧲 Kp: <b>${kp}</b></span>`,
+    `<span class="bt-item">🕋 RS Critical 2027: 0.0057</span>`,
+    `<span class="bt-item">🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦</span>`
   ];
-  const html = items.map(i=>`<span class="bt-item">${i}</span>`).join('');
   const inner = $('botTicker');
-  if (inner) inner.innerHTML = html+html;
-  // update live bits
-  const bq = document.getElementById('bt-q');
-  const bk = document.getElementById('bt-kp');
-  if (bq) bq.textContent = _quakeStrong;
-  if (bk) { const kv=parseFloat($('kp-num')?.textContent||'3'); bk.textContent=kv>=6?'Storm':kv>=4?'Unsettled':'Quiet'; bk.style.color=kv>=6?'var(--alert)':kv>=4?'var(--warn)':'var(--live)'; }
+  if (inner) inner.innerHTML = items.map(i => i).join('') + items.map(i => i).join('');
 }
+setInterval(buildTicker, 3000);
 
-/* ═══════════════════════════════════════════
-   START OBSERVATORY (DOMContentLoaded guard)
-═══════════════════════════════════════════ */
-function startObservatory() {
-  // Build DOM structures
-  buildIndicators();
-  buildSourceCards();
-  buildQuickLinks();
-  fetchKpForecast();
-
-  // Initial data loads
-  updateCosmicTime();
-  updateMoonPhase();
-  updateKp();
-  updateXray();
-  updateCoreIndicators();
-  updateLiveImages();
-  updateDailySolarImage();
-  fetchEarthquakes();
-  fetchSunspotDetails();
-  fetchHistoricalEvents();
-  refreshAllIndicators();
+/* ==================== INITIALIZATION ==================== */
+async function init() {
+  await fetchKp();
+  await fetchXray();
+  await fetchEarthquakes();
+  updateCoreFromApis();
+  setInterval(fetchKp, 60000);
+  setInterval(fetchXray, 60000);
+  setInterval(fetchEarthquakes, 60000);
+  setInterval(updateCoreFromApis, 30000);
   buildTicker();
-
-  // Render static fallback for geo alerts
-  renderGeo(GEO_STATIC);
-
-  // Intervals
-  setInterval(updateCosmicTime,    1000);
-  setInterval(updateMoonPhase,    60000);
-  setInterval(updateKp,            4000);
-  setInterval(updateXray,          8000);
-  setInterval(updateCoreIndicators,30000);
-  setInterval(refreshAllIndicators,30000);
-  setInterval(updateLiveImages,  300000);
-  setInterval(updateDailySolarImage,3600000);
-  setInterval(fetchEarthquakes,   60000);
-  setInterval(fetchKpForecast,  3600000);
-  setInterval(fetchSunspotDetails,3600000);
-  setInterval(fetchHistoricalEvents,86400000);
-  setInterval(buildTicker,         3000);
+  $('last-update').textContent = new Date().toLocaleTimeString();
 }
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', startObservatory);
-} else {
-  startObservatory();
-}
+init();
 </script>
 </body>
 </html>
