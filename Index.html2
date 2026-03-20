@@ -1,230 +1,746 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>TRIO SEAL · Cosmic Observatory</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
 :root{
-  --bg:#0a0f1a; --card:rgba(10,24,52,0.88); --bdr:rgba(255,215,0,.25); --gold:#ffd700; --gold-dim:rgba(255,215,0,.10);
-  --live:#4ade80; --alert:#ef4444; --warn:#f97316; --yellow:#eab308; --muted:#94a3b8; --glow:0 0 22px rgba(255,215,0,.35);
-  --r:18px; --r-pill:60px; --t:all .3s ease;
+  --bg:       #03080f;
+  --bg2:      #060d1a;
+  --panel:    rgba(4,18,42,0.92);
+  --panel2:   rgba(6,22,52,0.88);
+  --bdr:      rgba(0,180,255,0.28);
+  --bdr2:     rgba(0,220,255,0.55);
+  --gold:     #ffd700;
+  --cyan:     #00d4ff;
+  --cyan2:    #00ffff;
+  --live:     #00ff88;
+  --alert:    #ff3333;
+  --warn:     #ff7700;
+  --yellow:   #ffcc00;
+  --muted:    #6888aa;
+  --white:    #e8f4ff;
+  --f-hud:    'Orbitron', sans-serif;
+  --f-data:   'Rajdhani', sans-serif;
+  --f-mono:   'Share Tech Mono', monospace;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:#f1f5f9;font-family:'Orbitron',sans-serif;min-height:100vh;padding:18px 18px 72px;overflow-x:hidden;}
-body::before{
-  content:'';position:fixed;inset:0;
-  background:
-    radial-gradient(1.5px 1.5px at  7% 11%,#fff,transparent),
-    radial-gradient(1.5px 1.5px at 21% 43%,#fff,transparent),
-    radial-gradient(1px 1px at 54%  7%,#fff,transparent),
-    radial-gradient(1.5px 1.5px at 67% 71%,#fff,transparent),
-    radial-gradient(1px 1px at 82% 24%,#fff,transparent),
-    radial-gradient(1px 1px at 11% 79%,#fff,transparent),
-    radial-gradient(1.5px 1.5px at 37% 90%,#fff,transparent),
-    radial-gradient(1px 1px at 91% 54%,#fff,transparent),
-    radial-gradient(1px 1px at 48% 33%,#fff,transparent),
-    radial-gradient(1.5px 1.5px at 73% 16%,#fff,transparent);
-  background-size:220px 220px;opacity:.2;pointer-events:none;z-index:0;
+html,body{width:100%;height:100%;overflow-x:hidden}
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:var(--f-data);
+  min-height:100vh;
+  padding-bottom:64px;
 }
-.container{max-width:1400px;margin:0 auto;position:relative;z-index:1}
-/* CARD BASE */
-.card{background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--bdr);border-radius:var(--r);transition:var(--t);position:relative;overflow:hidden;}
-.card::before{content:'';position:absolute;top:0;left:-110%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transition:left .55s ease;pointer-events:none;}
-.card[data-link]{cursor:pointer}
-.card[data-link]:hover{transform:translateY(-5px) scale(1.015);border-color:var(--gold);box-shadow:var(--glow)}
-.card[data-link]:hover::before{left:110%}
-/* HEADER */
-.header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:14px 24px;margin-bottom:16px;border-radius:var(--r-pill);}
-.logo{font-size:1.8rem;font-weight:900;color:var(--gold);text-shadow:0 0 14px rgba(255,215,0,.6);text-decoration:none;cursor:pointer;user-select:none;transition:transform .2s;display:inline-block;}
-.logo:hover{transform:scale(1.07)}
-.hdr-time{display:flex;gap:1.4rem;flex-wrap:wrap;font-family:'Share Tech Mono',monospace;font-size:.9rem}
-.hdr-time span{color:var(--live)}
-.lang-wrap{position:relative}
-.lang-btn{background:var(--gold-dim);border:1px solid var(--bdr);color:var(--gold);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:.78rem;display:flex;align-items:center;gap:6px;transition:background .2s;}
-.lang-btn:hover{background:rgba(255,215,0,.2)}
-.lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:rgba(8,18,42,.96);backdrop-filter:blur(14px);border:1px solid var(--bdr);border-radius:10px;display:none;z-index:300;min-width:130px;overflow:hidden;}
-.lang-menu.open{display:block}
-.lang-opt{padding:10px 16px;cursor:pointer;font-size:.82rem;border-bottom:1px solid rgba(255,215,0,.12);transition:background .15s}
-.lang-opt:last-child{border-bottom:none}
-.lang-opt:hover{background:rgba(255,215,0,.14)}
-/* TICKER */
-.ticker-wrap{border-radius:10px;padding:9px 20px;margin-bottom:16px;overflow:hidden;white-space:nowrap}
-.ticker-inner{display:inline-block;animation:marquee 38s linear infinite;font-size:.85rem;color:var(--live)}
-.ticker-inner span{margin-right:48px;color:#fff}
-@keyframes marquee{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
-/* TIME BAR */
-#time-bar{display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;padding:12px 24px;margin-bottom:18px;border-radius:var(--r-pill);font-family:'Share Tech Mono',monospace;font-size:.9rem;}
-#time-bar .utc{color:var(--live)}
-#time-bar .mecca{color:var(--gold)}
-/* GRIDS */
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:18px}
-@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.grid-3,.grid-4{grid-template-columns:1fr}}
-/* OBS CARDS */
-.obs-card{padding:1.4rem;min-height:230px;display:flex;flex-direction:column;gap:6px}
-.obs-title{color:var(--gold);font-size:1rem;font-weight:600}
-.obs-value{font-size:2rem;font-weight:700;color:var(--live);font-family:'Share Tech Mono',monospace;transition:color .4s}
-.obs-unit{color:var(--muted);font-size:.75rem}
-.obs-desc{color:var(--muted);font-size:.78rem;margin-top:auto;line-height:1.5}
-.gauge-track{height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:6px 0}
-.gauge-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1),background .4s;width:0%}
-.g-gold{background:linear-gradient(90deg,#f1c40f,#d4a017)}
-.g-blue{background:linear-gradient(90deg,#3b82f6,#1d4ed8)}
-.g-green{background:linear-gradient(90deg,#22c55e,#16a34a)}
-.g-red{background:linear-gradient(90deg,#ef4444,#b91c1c)}
-.g-orange{background:linear-gradient(90deg,#f97316,#ea580c)}
-.obs-image{width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:.75rem;border:1px solid var(--bdr);background:rgba(255,215,0,.04)}
-.obs-image[data-error]{opacity:.3;filter:grayscale(1)}
-/* MOON */
-.moon-card{display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap;padding:2rem 2.5rem;margin-bottom:18px;cursor:pointer}
-.moon-emoji{font-size:5rem;line-height:1;transition:transform .3s}
-.moon-card:hover .moon-emoji{transform:scale(1.1)}
-.moon-info{flex:1}
-.moon-name{font-size:1.4rem;font-weight:700;color:var(--gold);margin-bottom:1rem}
-.moon-stats{display:flex;gap:2.5rem;flex-wrap:wrap}
-.moon-stat .val{font-size:1.5rem;font-weight:700;color:var(--live);font-family:'Share Tech Mono',monospace}
-.moon-stat .lbl{color:var(--muted);font-size:.75rem}
-/* SECTION TITLES */
-.section-title{color:var(--gold);font-size:1.6rem;margin:1.8rem 0 1rem;text-shadow:0 0 12px rgba(255,215,0,.25)}
-/* FOOTER */
-.footer{margin:2.5rem 0 1rem;padding:1.5rem;text-align:center;cursor:pointer}
-.footer .name{color:var(--gold);font-weight:700;font-size:1.05rem}
-.footer .sub{color:var(--muted);font-size:.82rem;margin:6px 0}
-.footer a{color:var(--live);text-decoration:none}
-.footer a:hover{text-decoration:underline}
-/* BOTTOM TICKER */
-.bticker{position:fixed;bottom:0;left:0;width:100%;background:rgba(8,14,28,.97);backdrop-filter:blur(14px);border-top:1px solid var(--bdr);padding:9px 0;overflow:hidden;white-space:nowrap;z-index:1000}
-.bticker-inner{display:inline-block;animation:marquee 55s linear infinite;font-size:.84rem}
-.bticker-inner .ti{display:inline-block;margin-right:48px;color:#fff}
-.bticker-inner .ti i{color:var(--gold);margin-right:5px}
-.bticker-inner .ti b{color:var(--live)}
+
+/* ── nebula bg ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,80,180,.35) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(0,40,120,.25) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 60%, rgba(0,20,80,.2) 0%, transparent 60%);
+  pointer-events:none;
+}
+/* stars */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    radial-gradient(1.2px 1.2px at  5%  8%, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px   1px   at 18% 22%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 32%  4%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px   1px   at 47% 35%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.2px 1.2px at 61% 14%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px   1px   at 73% 28%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 84%  6%, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px   1px   at 91% 42%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.2px 1.2px at  9% 55%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px   1px   at 25% 68%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 52% 75%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px   1px   at 78% 85%, rgba(255,255,255,.4), transparent);
+  background-size:300px 300px;
+  pointer-events:none;
+  opacity:.6;
+}
+
+.wrap{max-width:1380px;margin:0 auto;padding:12px 14px;position:relative;z-index:1}
+
+/* ═══════════════════════════════════════════════
+   MASTER TITLE
+═══════════════════════════════════════════════ */
+.master-title{
+  text-align:center;padding:10px 0 8px;
+  font-family:var(--f-hud);letter-spacing:6px;
+  font-size:clamp(1.1rem,2.5vw,1.7rem);font-weight:900;
+  color:var(--white);
+  text-shadow:0 0 20px rgba(0,200,255,.7), 0 0 40px rgba(0,200,255,.3);
+  border-bottom:1px solid var(--bdr);
+  margin-bottom:12px;
+  position:relative;
+}
+.master-title::before,.master-title::after{
+  content:'';position:absolute;bottom:-1px;
+  width:30%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan2),transparent);
+}
+.master-title::before{left:0}.master-title::after{right:0}
+.master-title span{color:var(--cyan2)}
+
+/* ═══════════════════════════════════════════════
+   PANEL BASE
+═══════════════════════════════════════════════ */
+.panel{
+  background:var(--panel);
+  border:1px solid var(--bdr);
+  border-radius:6px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .25s,box-shadow .25s;
+}
+.panel::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,180,255,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+.panel:hover{border-color:var(--bdr2);box-shadow:0 0 16px rgba(0,200,255,.2)}
+
+.panel-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:5px 10px;
+  background:linear-gradient(90deg,rgba(0,60,120,.6),rgba(0,30,80,.4));
+  border-bottom:1px solid var(--bdr);
+  font-family:var(--f-hud);font-size:.7rem;letter-spacing:2px;
+  color:var(--cyan);font-weight:600;
+}
+.panel-close{
+  color:var(--muted);cursor:pointer;font-size:.8rem;line-height:1;
+  transition:color .2s;
+}
+.panel-close:hover{color:var(--alert)}
+
+/* ═══════════════════════════════════════════════
+   TOP ROW — SOLAR PANELS (6 tiles)
+═══════════════════════════════════════════════ */
+.solar-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;margin-bottom:10px;
+}
+@media(max-width:1100px){.solar-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px) {.solar-grid{grid-template-columns:repeat(2,1fr)}}
+
+.solar-tile{cursor:pointer}
+.solar-tile img{
+  width:100%;height:110px;object-fit:cover;display:block;
+  background:#030a18;
+  transition:filter .3s;
+}
+.solar-tile:hover img{filter:brightness(1.15)}
+.solar-tile-body{padding:6px 10px 8px}
+.solar-tile-val{font-family:var(--f-hud);font-size:1.5rem;font-weight:700;color:var(--live);line-height:1}
+.solar-tile-sub{font-size:.78rem;color:var(--muted);margin-top:2px}
+.solar-tile-badge{
+  display:inline-block;margin-top:4px;
+  font-size:.65rem;padding:2px 8px;border-radius:3px;
+  font-family:var(--f-hud);font-weight:600;letter-spacing:1px;
+}
+.badge-orange{background:rgba(255,119,0,.15);color:var(--warn);border:1px solid rgba(255,119,0,.4)}
+.badge-green {background:rgba(0,255,136,.12);color:var(--live);border:1px solid rgba(0,255,136,.35)}
+.badge-red   {background:rgba(255,50,50,.15); color:var(--alert);border:1px solid rgba(255,50,50,.4)}
+.badge-yellow{background:rgba(255,200,0,.13); color:var(--yellow);border:1px solid rgba(255,200,0,.4)}
+.badge-cyan  {background:rgba(0,200,255,.12); color:var(--cyan);border:1px solid rgba(0,200,255,.35)}
+
+/* ═══════════════════════════════════════════════
+   MAIN ROW  (solar image | lunar data | geophys)
+═══════════════════════════════════════════════ */
+.main-row{display:grid;grid-template-columns:300px 1fr 310px;gap:10px;margin-bottom:10px}
+@media(max-width:1000px){.main-row{grid-template-columns:1fr 1fr}}
+@media(max-width:640px) {.main-row{grid-template-columns:1fr}}
+
+/* Daily Solar Image */
+.solar-daily img{
+  width:100%;aspect-ratio:1/1;object-fit:cover;display:block;
+  background:#050e20;
+}
+.solar-daily-sunspot{
+  position:absolute;bottom:6px;left:8px;
+  font-family:var(--f-mono);font-size:.7rem;color:rgba(255,255,200,.5);
+  pointer-events:none;
+}
+
+/* Lunar Data */
+.lunar-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px;cursor:pointer;text-align:center}
+.lunar-visual{position:relative;margin-bottom:20px}
+.moon-3d{
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle at 38% 38%, #1a0000, #000 70%);
+  box-shadow:
+    inset -18px -10px 30px rgba(0,0,0,.9),
+    inset 8px 8px 20px rgba(150,50,0,.3),
+    0 0 40px rgba(255,60,0,.15);
+  position:relative;overflow:hidden;
+}
+.moon-3d::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, rgba(220,80,0,.4) 0%, rgba(180,30,0,.2) 40%, transparent 70%);
+}
+.moon-crescent{
+  position:absolute;top:0;right:0;width:60%;height:100%;
+  background:radial-gradient(ellipse 65% 100% at 70% 50%, rgba(255,80,0,.1) 0%, transparent 100%);
+  border-radius:0 50% 50% 0;
+}
+.lunar-name{font-family:var(--f-hud);font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:14px;letter-spacing:2px}
+.lunar-stats{display:flex;flex-direction:column;gap:6px;width:100%;max-width:280px}
+.lunar-stat-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 12px;
+  background:rgba(0,30,60,.4);border-radius:4px;
+  font-family:var(--f-data);font-size:.95rem;
+}
+.lunar-stat-row .lbl{color:var(--muted)}
+.lunar-stat-row .val{color:var(--white);font-weight:600;font-family:var(--f-mono)}
+.lunar-more{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:12px;color:var(--cyan);font-size:.8rem;
+  cursor:pointer;border:1px solid rgba(0,180,255,.3);
+  padding:4px 14px;border-radius:3px;
+  transition:background .2s;
+}
+.lunar-more:hover{background:rgba(0,180,255,.1)}
+
+/* Geophysical Alerts */
+.geo-panel{padding:0}
+.geo-list{padding:8px 0}
+.geo-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;
+  border-bottom:1px solid rgba(0,100,200,.15);
+  cursor:pointer;transition:background .2s;
+  font-family:var(--f-data);font-size:.92rem;
+}
+.geo-item:last-child{border-bottom:none}
+.geo-item:hover{background:rgba(0,100,200,.1)}
+.geo-flag{width:22px;height:16px;border-radius:2px;flex-shrink:0;object-fit:cover;background:#1a2a3a}
+.geo-flag-emoji{font-size:1.1rem;line-height:1;flex-shrink:0}
+.geo-name{color:var(--muted);flex-shrink:0}
+.geo-event{flex:1;padding-left:6px}
+.geo-mag{font-weight:700;font-family:var(--f-mono)}
+.mag-red   {color:var(--alert)}
+.mag-orange{color:var(--warn)}
+.mag-yellow{color:var(--yellow)}
+.mag-green {color:var(--live)}
+
+/* ═══════════════════════════════════════════════
+   TRIO INDICATORS (Taqabul / Closure / Balance)
+═══════════════════════════════════════════════ */
+.trio-bar{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin-bottom:10px;
+}
+.trio-card{
+  padding:14px 18px;text-align:center;cursor:pointer;
+  background:linear-gradient(145deg,rgba(0,40,90,.8),rgba(0,20,60,.9));
+}
+.trio-label{
+  font-family:var(--f-hud);font-size:.72rem;letter-spacing:3px;
+  color:var(--cyan);font-weight:600;margin-bottom:6px;
+  text-transform:uppercase;
+}
+.trio-value{
+  font-family:var(--f-hud);font-size:2rem;font-weight:900;
+  line-height:1;transition:color .4s,text-shadow .4s;
+}
+.trio-value.normal{color:var(--white);text-shadow:0 0 12px rgba(255,255,255,.3)}
+.trio-value.alert {color:var(--warn); text-shadow:0 0 16px rgba(255,119,0,.6)}
+.trio-value.crit  {color:var(--alert);text-shadow:0 0 16px rgba(255,50,50,.7)}
+.trio-sub{font-size:.75rem;color:var(--muted);margin-top:4px}
+
+/* ═══════════════════════════════════════════════
+   BOTTOM TICKER  (market + quakes + geomag)
+═══════════════════════════════════════════════ */
+.ticker-bar{
+  position:fixed;bottom:0;left:0;width:100%;
+  background:rgba(2,10,24,.97);
+  border-top:1px solid var(--bdr);
+  z-index:1000;overflow:hidden;white-space:nowrap;
+  height:58px;display:flex;align-items:stretch;
+}
+.ticker-label{
+  flex-shrink:0;display:flex;align-items:center;
+  padding:0 16px;
+  background:linear-gradient(90deg,rgba(0,60,140,.9),rgba(0,40,100,.6));
+  border-right:1px solid var(--bdr);
+  font-family:var(--f-hud);font-size:.68rem;letter-spacing:2px;
+  color:var(--cyan);font-weight:700;
+}
+.ticker-scroll{
+  flex:1;display:flex;align-items:center;
+  overflow:hidden;
+}
+.ticker-inner{
+  display:inline-flex;align-items:center;gap:0;
+  animation:tickerScroll 60s linear infinite;
+  font-family:var(--f-data);font-size:.88rem;
+}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.tick-item{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:0 20px;border-right:1px solid rgba(0,120,200,.25);
+  white-space:nowrap;height:58px;
+}
+.tick-up{color:var(--live)}
+.tick-dn{color:var(--alert)}
+.tick-lbl{color:var(--muted);font-weight:600}
+.tick-val{color:var(--white);font-family:var(--f-mono);font-weight:600}
+.tick-chg{font-size:.8rem;font-weight:700}
+
+/* flags row in ticker */
+.flag-row{display:inline-flex;align-items:center;gap:8px;padding:0 20px}
+.flag-row span{font-size:1.2rem;cursor:pointer;opacity:.7;transition:opacity .2s}
+.flag-row span:hover{opacity:1}
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════ */
+@keyframes scanline{
+  0%{transform:translateY(-100%);opacity:.3}
+  100%{transform:translateY(200%);opacity:0}
+}
+.scanline{
+  position:absolute;inset-x:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(0,200,255,.4),transparent);
+  animation:scanline 4s linear infinite;pointer-events:none;z-index:10;
+}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.live-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--live);animation:pulse 1.5s ease-in-out infinite;
+  margin-right:6px;vertical-align:middle;
+}
+
+@keyframes kpPulse{0%,100%{box-shadow:0 0 8px rgba(0,255,136,.4)}50%{box-shadow:0 0 22px rgba(0,255,136,.8)}}
+.kp-num{
+  font-family:var(--f-hud);font-size:3rem;font-weight:900;
+  color:var(--live);display:block;line-height:1;
+  animation:kpPulse 2s ease-in-out infinite;
+}
+
+/* corner brackets decoration */
+.bracket{position:absolute;width:14px;height:14px;pointer-events:none}
+.bracket.tl{top:0;left:0;border-top:2px solid var(--cyan2);border-left:2px solid var(--cyan2)}
+.bracket.tr{top:0;right:0;border-top:2px solid var(--cyan2);border-right:2px solid var(--cyan2)}
+.bracket.bl{bottom:0;left:0;border-bottom:2px solid var(--cyan2);border-left:2px solid var(--cyan2)}
+.bracket.br{bottom:0;right:0;border-bottom:2px solid var(--cyan2);border-right:2px solid var(--cyan2)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(0,180,255,.4);border-radius:2px}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="wrap">
 
-<header class="header card">
-  <a class="logo" href="https://github.com/sidichaker1-beep/Trio-seal" target="_blank" rel="noopener">🌌 TRIO SEAL</a>
-  <div class="hdr-time">
-    <span id="h-date">📅 --</span>
-    <span id="h-utc">🌐 00:00:00</span>
-    <span id="h-mecca">🕋 00:00:00</span>
+  <!-- ════ MASTER TITLE ════ -->
+  <div class="master-title">
+    TRIO SEAL &nbsp;<span>COSMIC OBSERVATORY</span>
+    <div id="liveTime" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--muted);font-family:var(--f-mono);letter-spacing:1px"></div>
   </div>
-  <div class="lang-wrap">
-    <button class="lang-btn" id="langBtn">🌐 <span id="cur-lang">EN</span> ▾</button>
-    <div class="lang-menu" id="langMenu">
-      <div class="lang-opt" data-lang="en">🇬🇧 English</div>
-      <div class="lang-opt" data-lang="ar">🇸🇦 العربية</div>
+
+  <!-- ════ SOLAR GRID (6 tiles) ════ -->
+  <div class="solar-grid">
+
+    <!-- 1. Aurora Oval -->
+    <div class="panel solar-tile" onclick="window.open('https://www.swpc.noaa.gov/products/aurora-30-minute-forecast','_blank')">
+      <div class="panel-hdr">Aurora Oval <span class="panel-close">×</span></div>
+      <div class="scanline"></div>
+      <img src="https://services.swpc.noaa.gov/images/aurora-forecast/latest.jpg"
+           alt="Aurora" loading="lazy"
+           onerror="this.style.height='110px';this.style.background='#030a18'"/>
+    </div>
+
+    <!-- 2. Kp Index -->
+    <div class="panel solar-tile" onclick="window.open('https://www.swpc.noaa.gov/products/planetary-k-index','_blank')">
+      <div class="panel-hdr">Kp Index <span class="panel-close">×</span></div>
+      <div class="solar-tile-body" style="min-height:118px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+        <span class="kp-num" id="kp-num">3</span>
+        <div class="solar-tile-sub" id="kp-label" style="font-size:.85rem;margin-top:4px">Unsettled</div>
+        <span class="solar-tile-badge badge-orange" style="margin-top:8px" id="kp-badge">ACTIVE</span>
+      </div>
+    </div>
+
+    <!-- 3. Coronal Holes -->
+    <div class="panel solar-tile" onclick="window.open('https://sdo.gsfc.nasa.gov/data/','_blank')">
+      <div class="panel-hdr">Coronal Holes <span class="panel-close">×</span></div>
+      <div class="scanline" style="animation-delay:1.3s"></div>
+      <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg"
+           alt="Coronal Holes" loading="lazy"
+           onerror="this.style.height='110px';this.style.background='#030a18'"/>
+    </div>
+
+    <!-- 4. X-Ray Flux -->
+    <div class="panel solar-tile" onclick="window.open('https://www.swpc.noaa.gov/products/goes-x-ray-flux','_blank')">
+      <div class="panel-hdr">X-Ray Flux <span class="panel-close">×</span></div>
+      <div class="scanline" style="animation-delay:.7s"></div>
+      <img src="https://services.swpc.noaa.gov/images/goes-xray-flux-latest.png"
+           alt="X-Ray Flux" loading="lazy"
+           onerror="this.style.height='110px';this.style.background='#030a18'"/>
+      <div class="solar-tile-body" style="padding-top:4px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="solar-tile-val" id="xray-val">C1.2</span>
+          <span class="solar-tile-badge badge-green" id="xray-badge">LOW</span>
+        </div>
+        <div class="solar-tile-sub">GOES X-Ray · Class</div>
+      </div>
+    </div>
+
+    <!-- 5. CME Tracking -->
+    <div class="panel solar-tile" onclick="window.open('https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction','_blank')">
+      <div class="panel-hdr">CME Tracking <span class="panel-close">×</span></div>
+      <div class="solar-tile-body" style="min-height:118px;display:flex;flex-direction:column;justify-content:center;padding:10px">
+        <div style="font-size:.82rem;color:var(--yellow);margin-bottom:6px">⚠ <strong>Minor CME Observed</strong></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-bottom:8px">▲ Low Impact Expected</div>
+        <img src="https://services.swpc.noaa.gov/images/enlil.jpg" alt="CME"
+             style="width:100%;height:58px;object-fit:cover;border-radius:3px;opacity:.8"
+             loading="lazy" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+
+    <!-- 6. Far Side Monitor -->
+    <div class="panel solar-tile" onclick="window.open('https://stereo.gsfc.nasa.gov/','_blank')">
+      <div class="panel-hdr">Far Side Monitor <span class="panel-close">×</span></div>
+      <div class="scanline" style="animation-delay:2s"></div>
+      <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg"
+           alt="Far Side" loading="lazy"
+           onerror="this.style.height='110px';this.style.background='#030a18'"/>
+    </div>
+
+  </div><!-- /.solar-grid -->
+
+  <!-- ════ MAIN ROW ════ -->
+  <div class="main-row">
+
+    <!-- Daily Solar Image -->
+    <div class="panel solar-daily" onclick="window.open('https://sdo.gsfc.nasa.gov/data/','_blank')" style="cursor:pointer">
+      <div class="panel-hdr">Daily Solar Image <span class="panel-close">×</span></div>
+      <div class="scanline" style="animation-delay:1.8s"></div>
+      <div style="position:relative">
+        <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1024.jpg"
+             alt="Daily Sun" loading="lazy"
+             onerror="this.style.height='260px';this.style.background='#030a18'"
+             style="width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#050e20"/>
+        <div class="solar-daily-sunspot" id="sunspot-labels">
+          <div>● 3664</div><div>● 3665</div><div>● 3667</div>
+        </div>
+        <div class="bracket tl"></div><div class="bracket tr"></div>
+        <div class="bracket bl"></div><div class="bracket br"></div>
+      </div>
+    </div>
+
+    <!-- Lunar Data -->
+    <div class="panel lunar-panel" onclick="window.open('https://www.timeanddate.com/moon/','_blank')">
+      <div style="position:absolute;top:0;left:0;right:0">
+        <div class="panel-hdr">Lunar Data <span class="panel-close">×</span></div>
+      </div>
+      <div style="margin-top:32px">
+        <div class="lunar-visual">
+          <div class="moon-3d" id="moonVis">
+            <div class="moon-crescent" id="moonCrescent"></div>
+          </div>
+        </div>
+        <div class="lunar-name" id="moonPhaseName">Waxing Crescent</div>
+        <div class="lunar-stats">
+          <div class="lunar-stat-row"><span class="lbl">Illumination:</span><span class="val" id="moonIllum">7.56%</span></div>
+          <div class="lunar-stat-row"><span class="lbl">Thickness:</span><span class="val" id="moonThick">2.34'</span></div>
+          <div class="lunar-stat-row"><span class="lbl">Age:</span><span class="val" id="moonAge">2.22 days</span></div>
+        </div>
+        <div class="lunar-more" onclick="event.stopPropagation();window.open('https://www.timeanddate.com/moon/','_blank')">
+          More Lunar Data &nbsp;›
+        </div>
+      </div>
+    </div>
+
+    <!-- Geophysical Alerts -->
+    <div class="panel" style="display:flex;flex-direction:column">
+      <div class="panel-hdr">Geophysical Alerts <span class="panel-close">×</span></div>
+      <div class="geo-list" id="geoList"></div>
+    </div>
+
+  </div><!-- /.main-row -->
+
+  <!-- ════ TRIO INDICATORS ════ -->
+  <div class="trio-bar">
+    <div class="panel trio-card" onclick="window.open('https://www.timeanddate.com/astronomy/moon/mecca.html','_blank')">
+      <div class="trio-label">⬡ Taqabul</div>
+      <div class="trio-value normal" id="trio-taq">8.78</div>
+      <div class="trio-sub">° Mecca Angle</div>
+    </div>
+    <div class="panel trio-card" onclick="window.open('https://earthquake.usgs.gov','_blank')">
+      <div class="trio-label">◎ Closure</div>
+      <div class="trio-value alert" id="trio-clo">RS-7.3</div>
+      <div class="trio-sub">Resonance Score</div>
+    </div>
+    <div class="panel trio-card" onclick="window.open('https://www.noaa.gov','_blank')">
+      <div class="trio-label">⚖ Balance</div>
+      <div class="trio-value normal" id="trio-bal">1.6180</div>
+      <div class="trio-sub">α_stab · φ Golden</div>
     </div>
   </div>
-</header>
 
-<div class="ticker-wrap card">
-  <div class="ticker-inner" id="topTicker"></div>
+</div><!-- /.wrap -->
+
+<!-- ════ TICKER BAR ════ -->
+<div class="ticker-bar">
+  <div class="ticker-label"><span class="live-dot"></span>LIVE</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner" id="tickerInner"></div>
+  </div>
 </div>
 
-<div id="time-bar" class="card"></div>
-
-<div class="grid-3" id="obsGrid"></div>
-
-<div class="section-title">🌕 Moon & Lunar Data</div>
-<div class="grid-3" id="moonGrid"></div>
-
-<div class="section-title">🌞 Solar Activity</div>
-<div class="grid-3" id="solarGrid"></div>
-
-<div class="section-title">🌋 Volcanoes</div>
-<div class="grid-3" id="volcanoGrid"></div>
-
-<div class="section-title">🌐 Earthquakes</div>
-<div class="grid-3" id="quakeGrid"></div>
-
-<div class="footer card">
-  <div class="name">TRIO SEAL · Cosmic Observatory</div>
-  <div class="sub">Live Observatory Dashboard · All Rights Reserved 2026</div>
-  <div><a href="https://github.com/sidichaker1-beep/Trio-seal" target="_blank">Source & Updates</a></div>
-</div>
-
-<div class="bticker card">
-  <div class="bticker-inner" id="bticker"></div>
-</div>
-
+<!-- ════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════ -->
 <script>
-// Utility
-const $=id=>document.getElementById(id);
-const p2=v=>String(v).padStart(2,'0');
-function setText(id,v){const e=$(id);if(e)e.textContent=v;}
-function setGauge(id,pct,cls){const e=$(id);if(!e)return;e.style.width=Math.max(0,Math.min(pct,100))+'%';e.className='gauge-fill '+cls;}
+'use strict';
+const $ = id => document.getElementById(id);
+const p2 = v => String(v).padStart(2,'0');
 
-// Lang Menu
-const langBtn=$('langBtn'), langMenu=$('langMenu'), curLang=$('cur-lang');
-langBtn.addEventListener('click',()=>langMenu.classList.toggle('open'));
-langMenu.querySelectorAll('.lang-opt').forEach(o=>{
-  o.addEventListener('click',()=>{
-    curLang.textContent=o.dataset.lang.toUpperCase();
-    langMenu.classList.remove('open');
-  });
-});
-
-// Clock
-function updateTime(){
-  const now=new Date();
-  const mecca=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Riyadh'}));
-  const utc=`${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
-  const mkt=`${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
-  const ds=now.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-  setText('h-date','📅 '+ds); setText('h-utc','🌐 '+utc); setText('h-mecca','🕋 '+mkt);
-  $('time-bar').innerHTML=`<div>📅 ${ds}</div><div class="utc">🌐 UTC: ${utc}</div><div class="mecca">🕋 Mecca: ${mkt}</div>`;
+/* ── Hijri (Kuwaiti) ── */
+const HM = ['Muharram','Safar','Rabi I','Rabi II','Jumada I','Jumada II','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhu'l-Qa'da","Dhu'l-Hijja"];
+function toHijri(d){
+  const JD=Math.floor(d.getTime()/86400000+2440587.5);
+  const l=JD-1948440+10632,n=Math.floor((l-1)/10631);
+  const l2=l-10631*n+354;
+  const j=Math.floor((10985-l2)/5316)*Math.floor(50*l2/17719)+Math.floor(l2/5670)*Math.floor(43*l2/15238);
+  const l3=l2-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
+  return{day:l3-Math.floor(709*Math.floor(24*l3/709)/24),month:Math.floor(24*l3/709),year:30*n+j-30};
 }
-setInterval(updateTime,500); updateTime();
 
-// Ticker
-const tickerMsgs=[
-  "🌋 Fuego Volcano — WARNING level active",
-  "🌀 Solar activity moderate · C-class flares",
-  "📡 USGS live feed · updates every 30s",
-  "🕋 Mizan al-Malakut v7.3 · Critical RS=0.0057",
-  "🌕 Moon phase computed via synodic algorithm",
-  "⚡ All observatory systems nominal"
-];
-$('topTicker').innerHTML=tickerMsgs.map(s=>`<span>${s}</span>`).join('');
+/* ── Clock ── */
+function updateClock(){
+  const now = new Date();
+  const mecca = new Date(now.toLocaleString('en-US',{timeZone:'Asia/Riyadh'}));
+  const utc = `${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())} UTC`;
+  const mkt = `🕋 ${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())} KSA`;
+  const h   = toHijri(mecca);
+  const ds  = now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  $('liveTime').textContent = `${ds} · ${h.day} ${HM[h.month-1]} ${h.year}AH · ${utc} · ${mkt}`;
+}
+setInterval(updateClock,1000);
+updateClock();
 
-// Observatories Example Data
-const obsIndicators=[
-  {title:'🕋 Taqābul',unit:'° — Mecca angle',val:42,gauge:'g-gold',desc:'Angular alignment to Mecca'},
-  {title:'🌀 Closure Index',unit:'0–1 Resonance',val:0.57,gauge:'g-blue',desc:'System resonance metric'},
-  {title:'⚖️ Balance Index',unit:'0–1 α deviation',val:0.72,gauge:'g-green',desc:'Stability metric'}
+/* ── Moon phase ── */
+const REF_NM=Date.UTC(2024,3,8,18,20,0), SYNODIC=29.530588853;
+function updateMoon(){
+  const age=(((Date.now()-REF_NM)/86400000)%SYNODIC+SYNODIC)%SYNODIC;
+  const phase=age/SYNODIC;
+  const illum=(1-Math.cos(phase*2*Math.PI))/2*100;
+  const thick=illum*31/100;
+  let name,icon;
+  if(age<1)       {name='New Moon';        icon='🌑'}
+  else if(age<7.4){name='Waxing Crescent'; icon='🌒'}
+  else if(age<10.4){name='First Quarter';  icon='🌓'}
+  else if(age<14.8){name='Waxing Gibbous'; icon='🌔'}
+  else if(age<16.1){name='Full Moon';      icon='🌕'}
+  else if(age<22.1){name='Waning Gibbous'; icon='🌖'}
+  else if(age<25.1){name='Last Quarter';   icon='🌗'}
+  else             {name='Waning Crescent';icon='🌘'}
+
+  $('moonPhaseName').textContent = name;
+  $('moonIllum').textContent  = illum.toFixed(2)+'%';
+  $('moonThick').textContent  = thick.toFixed(2)+"'";
+  $('moonAge').textContent    = age.toFixed(2)+' days';
+
+  // update 3D moon appearance
+  const mv = $('moonVis');
+  const mc = $('moonCrescent');
+  if(illum < 50){
+    mv.style.boxShadow = `inset -${10+illum*0.4}px -8px 30px rgba(0,0,0,.95),inset 6px 6px 18px rgba(150,50,0,.2),0 0 30px rgba(255,60,0,.1)`;
+  } else {
+    mv.style.boxShadow = `inset -6px -4px 20px rgba(0,0,0,.6),inset 14px 10px 30px rgba(200,80,0,.25),0 0 50px rgba(255,120,30,.2)`;
+  }
+}
+setInterval(updateMoon,60000);
+updateMoon();
+
+/* ── Kp Index simulation (smooth) ── */
+function updateKp(){
+  const t=Date.now()/1000;
+  const kp=Math.abs(2+3*Math.sin(t/800)+Math.random()*0.5);
+  const kpR=Math.min(9,Math.max(0,kp));
+  $('kp-num').textContent = kpR.toFixed(1);
+  let lbl,badge,col;
+  if(kpR<2)     {lbl='Quiet';     badge='QUIET';    col='var(--live)';   }
+  else if(kpR<4){lbl='Unsettled'; badge='ACTIVE';   col='var(--yellow)'; }
+  else if(kpR<6){lbl='Active';    badge='WATCH';    col='var(--warn)';   }
+  else if(kpR<7){lbl='Storm';     badge='STORM';    col='var(--alert)';  }
+  else          {lbl='Severe';    badge='SEVERE';   col='var(--alert)';  }
+  $('kp-label').textContent = lbl;
+  $('kp-label').style.color = col;
+  $('kp-num').style.color   = col;
+  const b=$('kp-badge');
+  b.textContent=badge;
+  b.className='solar-tile-badge '+(kpR>=6?'badge-red':kpR>=4?'badge-orange':'badge-green');
+}
+setInterval(updateKp,4000);
+updateKp();
+
+/* ── X-Ray class simulation ── */
+const XRAY_CLASSES=['A1.0','A2.5','B1.2','B5.8','C1.2','C3.4','C8.9','M1.1','M4.5'];
+function updateXray(){
+  const idx=Math.floor(Math.abs(Math.sin(Date.now()/12000))*XRAY_CLASSES.length);
+  const cls=XRAY_CLASSES[Math.min(idx,XRAY_CLASSES.length-1)];
+  $('xray-val').textContent=cls;
+  const letter=cls[0];
+  const b=$('xray-badge');
+  if(letter==='M'||letter==='X'){b.textContent='HIGH';  b.className='solar-tile-badge badge-red';}
+  else if(letter==='C')         {b.textContent='MOD';   b.className='solar-tile-badge badge-orange';}
+  else                          {b.textContent='LOW';   b.className='solar-tile-badge badge-green';}
+}
+setInterval(updateXray,8000);
+
+/* ── Trio indicators (smooth simulation) ── */
+function updateTrio(){
+  const t=Date.now()/1000;
+  const taq=(8.78+Math.sin(t/200)*0.15).toFixed(2);
+  const clo=(7.3+Math.sin(t/150)*0.8).toFixed(1);
+  const bal=(1.618+Math.sin(t/300)*0.01).toFixed(4);
+
+  $('trio-taq').textContent = taq;
+  $('trio-bal').textContent = bal;
+
+  const cloEl=$('trio-clo');
+  const cloV=parseFloat(clo);
+  cloEl.textContent='RS-'+clo;
+  cloEl.className='trio-value '+(cloV>9?'crit':cloV>7.5?'alert':'normal');
+}
+setInterval(updateTrio,2000);
+updateTrio();
+
+/* ── Geophysical alerts (live USGS + static fallback) ── */
+const GEO_STATIC=[
+  {flag:'🇨🇳',name:'China',   event:'M4.9 · Earthquake',  mag:4.9,link:'https://earthquake.usgs.gov/earthquakes/map/'},
+  {flag:'🇯🇵',name:'Japan',   event:'Magnitude 5.7',       mag:5.7,link:'https://earthquake.usgs.gov/earthquakes/map/'},
+  {flag:'🇺🇸',name:'USA',     event:'3.1 Tremor · California',mag:3.1,link:'https://earthquake.usgs.gov/earthquakes/map/'},
+  {flag:'🌋',name:'Etna',    event:'Eruption — WATCH',     mag:0, link:'https://volcano.si.edu/'},
+  {flag:'☀️',name:'Solar',   event:'Flare C1.2 · GOES',   mag:0, link:'https://www.swpc.noaa.gov/'},
 ];
-const grids={obs:'obsGrid',moon:'moonGrid',solar:'solarGrid',volcano:'volcanoGrid',quake:'quakeGrid'};
-function fillGrid(id,data){
-  const grid=$(id); grid.innerHTML='';
-  data.forEach(d=>{
-    const c=document.createElement('div'); c.className='obs-card card';
-    if(d.link)c.setAttribute('data-link',d.link);
-    c.innerHTML=`<span class="obs-title">${d.title}</span>
-      <span class="obs-value">${d.val}</span>
-      <span class="obs-unit">${d.unit}</span>
-      <div class="gauge-track"><div class="gauge-fill ${d.gauge}" style="width:${d.val*100/100}%"></div></div>
-      <span class="obs-desc">${d.desc}</span>`;
-    grid.appendChild(c);
+
+function magColor(m){
+  if(m>=6) return 'mag-red';
+  if(m>=5) return 'mag-orange';
+  if(m>=4) return 'mag-yellow';
+  return 'mag-green';
+}
+
+function renderGeo(items){
+  const el=$('geoList');
+  if(!el)return;
+  el.innerHTML='';
+  items.slice(0,6).forEach(g=>{
+    const div=document.createElement('div');
+    div.className='geo-item';
+    div.onclick=()=>window.open(g.link,'_blank','noopener');
+    const magCls = g.mag>0 ? magColor(g.mag) : 'mag-green';
+    div.innerHTML=`
+      <span class="geo-flag-emoji">${g.flag}</span>
+      <span class="geo-name">${g.name}:</span>
+      <span class="geo-event"><span class="${magCls}">${g.event}</span></span>`;
+    el.appendChild(div);
   });
 }
-fillGrid('obsGrid',obsIndicators);
 
-// Clickable cards
-document.querySelectorAll('.card[data-link]').forEach(c=>{
-  c.addEventListener('click',()=>window.open(c.dataset.link,'_blank','noopener'));
-});
+async function fetchGeoAlerts(){
+  try{
+    const r=await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
+                        {signal:AbortSignal.timeout(7000)});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    const top=d.features
+      .filter(f=>f.properties.mag>=3.5)
+      .sort((a,b)=>b.properties.mag-a.properties.mag)
+      .slice(0,6);
+    if(!top.length){renderGeo(GEO_STATIC);return;}
+    const mapped=top.map(f=>({
+      flag: '🌍',
+      name: (f.properties.place||'').split(',').pop().trim().slice(0,12)||'Global',
+      event:`M${(f.properties.mag||0).toFixed(1)} · ${(f.properties.place||'Unknown').slice(0,28)}`,
+      mag: f.properties.mag||0,
+      link:'https://earthquake.usgs.gov/earthquakes/map/',
+    }));
+    renderGeo(mapped);
+  }catch{renderGeo(GEO_STATIC);}
+}
+renderGeo(GEO_STATIC);
+fetchGeoAlerts();
+setInterval(fetchGeoAlerts,30000);
 
-// Bottom Ticker
-$('bticker').innerHTML=tickerMsgs.map(s=>`<span class="ti"><i class="fa-solid fa-star"></i> ${s}</span>`).join('');
+/* ── Bottom Ticker ── */
+let quakeStrong='--', quakeTotal='--', m5count='--';
+
+async function fetchQuakeStats(){
+  try{
+    const r=await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
+                        {signal:AbortSignal.timeout(7000)});
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    const all=d.features;
+    const mags=all.map(f=>f.properties.mag||0).filter(Boolean);
+    quakeStrong=mags.length?Math.max(...mags).toFixed(1)+'M':'--';
+    quakeTotal=all.length;
+    m5count=all.filter(f=>(f.properties.mag||0)>=5).length;
+    buildTicker();
+  }catch{}
+}
+
+function buildTicker(){
+  const t=Date.now()/1000;
+  // Simulated market data (sinusoidal drift)
+  const sp  =(4255.63+Math.sin(t/400)*12).toFixed(2);
+  const spC =(5.40 +Math.sin(t/300)*2).toFixed(2);
+  const dax =(15963+Math.sin(t/450)*25).toFixed(2);
+  const daxC=(12.8 +Math.sin(t/350)*4).toFixed(1);
+  const ftse=(7265.88-Math.sin(t/500)*18).toFixed(2);
+  const ftsC=(-24.1+Math.sin(t/400)*5).toFixed(1);
+  const nik =(39745+Math.sin(t/480)*120).toFixed(1);
+  const nikC=(88.2 +Math.sin(t/380)*15).toFixed(1);
+  const spUp=parseFloat(spC)>=0, daxUp=parseFloat(daxC)>=0;
+  const ftUp=parseFloat(ftsC)>=0, nikUp=parseFloat(nikC)>=0;
+
+  const kpV=parseFloat($('kp-num')?.textContent||'3');
+  const geoStorm= kpV>=6?'<span style="color:var(--alert)">⚠ Storm</span>':kpV>=4?'<span style="color:var(--warn)">Unsettled</span>':'<span style="color:var(--live)">● Quiet</span>';
+  const alertLvl= kpV>=6?'High '+Math.floor(kpV):kpV>=4?'Low '+Math.floor(kpV-2):'Low 1';
+
+  const items=[
+    `<span class="tick-lbl">S&P 500</span> <span class="${spUp?'tick-up':'tick-dn'}">${spUp?'▲':'▼'}</span> <span class="tick-val">${sp}</span> <span class="tick-chg ${spUp?'tick-up':'tick-dn'}">${spUp?'+':''}${spC}</span>`,
+    `<span class="tick-lbl">DAX</span> <span class="${daxUp?'tick-up':'tick-dn'}">${daxUp?'▲':'▼'}</span> <span class="tick-val">${dax}</span> <span class="tick-chg ${daxUp?'tick-up':'tick-dn'}">${daxUp?'+':''}${daxC}</span>`,
+    `<span class="tick-lbl">FTSE 100</span> <span class="${ftUp?'tick-up':'tick-dn'}">${ftUp?'▲':'▼'}</span> <span class="tick-val">${ftse}</span> <span class="tick-chg ${ftUp?'tick-up':'tick-dn'}">${ftUp?'+':''}${ftsC}</span>`,
+    `<span class="tick-lbl">Nikkei</span> <span class="${nikUp?'tick-up':'tick-dn'}">${nikUp?'▲':'▼'}</span> <span class="tick-val">${nik}</span> <span class="tick-chg ${nikUp?'tick-up':'tick-dn'}">${nikUp?'+':''}${nikC}</span>`,
+    `<span class="tick-lbl">USGS Quakes</span> <span class="tick-up">▲</span> <span class="tick-val">${quakeTotal} / <span style="color:var(--warn)">${m5count} Strong</span></span>`,
+    `<span class="tick-lbl">Geomag Storm</span> ${geoStorm} <span class="tick-val" style="margin-left:6px">▶ ${alertLvl}</span>`,
+    `<span class="flag-row">🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🇮🇩 🕋</span>`,
+    `<span class="tick-lbl">RS Critical 2027</span> <span class="tick-val" style="color:var(--gold)">0.0057 [0.00567–0.00576]</span>`,
+  ];
+
+  // Double the array for seamless loop
+  const html=items.map(i=>`<span class="tick-item">${i}</span>`).join('');
+  const inner=$('tickerInner');
+  if(inner) inner.innerHTML=html+html; // doubled for infinite scroll
+}
+
+buildTicker();
+fetchQuakeStats();
+setInterval(buildTicker,3000);
+setInterval(fetchQuakeStats,30000);
 </script>
-
-</div>
 </body>
 </html>
