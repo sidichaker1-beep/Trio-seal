@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · Cosmic Observatory v8.1 · Light Theme</title>
+    <title>TRIO SEAL · Cosmic Observatory v8.2 · Enhanced Visibility</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         * {
@@ -39,7 +39,6 @@
             border-radius: 60px;
             margin-bottom: 2rem;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
         
         .logo {
@@ -169,7 +168,7 @@
             padding-left: 1rem;
         }
         
-        /* Core Indicators Grid */
+        /* Core Indicators Grid - FIXED: All text WHITE/LIGHT */
         .core-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -177,52 +176,41 @@
             margin-bottom: 2rem;
         }
         
-        /* Unified Card Style - WHITE BACKGROUND */
-        .card, .core-card, .forecast-card, .historical-card, .panel, .obs-card {
-            background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
+        .core-card {
+            background: #0f2b4f !important;
+            border: 1px solid #fbbf24 !important;
             border-radius: 20px;
             padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
+            color: #ffffff !important;
         }
         
-        .card:hover, .core-card:hover, .forecast-card:hover, .historical-card:hover, .panel:hover, .obs-card:hover {
+        .core-card:hover {
             transform: translateY(-5px);
-            border-color: #fbbf24 !important;
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: #4ade80 !important;
         }
         
-        /* Data Link System */
-        [data-link] {
-            cursor: pointer;
-        }
-        
-        [data-link]:hover {
-            transform: translateY(-3px);
-        }
-        
-        .card-header, .core-header {
+        .core-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
         
-        .card-title, .core-title {
-            color: #0f2b4f !important;
-            background: #f1f5f9 !important;
-            border: 1px solid #e2e8f0 !important;
+        .core-title {
+            color: #fbbf24 !important;
+            background: rgba(0,0,0,0.3) !important;
+            border: 1px solid #fbbf24 !important;
             padding: 0.3rem 1rem;
             border-radius: 30px;
             font-size: 1rem;
             font-weight: 600;
         }
         
-        .card-value, .core-value {
-            background: #f8fafc !important;
-            color: #10b981 !important;
-            border: 2px solid #10b981 !important;
+        .core-value {
+            background: rgba(0,0,0,0.4) !important;
+            color: #4ade80 !important;
+            border: 2px solid #4ade80 !important;
             padding: 0.2rem 0.8rem;
             border-radius: 12px;
             font-family: 'Courier New', monospace;
@@ -233,31 +221,29 @@
         }
         
         #taqabul-value {
-            color: #ef4444 !important;
-            border-color: #ef4444 !important;
+            color: #f97316 !important;
+            border-color: #f97316 !important;
         }
         
-        .gauge, .core-gauge {
-            background: #e2e8f0 !important;
+        .core-gauge {
+            background: rgba(255,255,255,0.2) !important;
             height: 8px;
             border-radius: 10px;
             margin: 1rem 0;
             overflow: hidden;
         }
         
-        .gauge-fill, .core-gauge-fill {
+        .core-gauge-fill {
             height: 100%;
             border-radius: 10px;
             transition: width 0.5s ease;
         }
         
-        .gauge-fill.live { background: #10b981 !important; }
-        .gauge-fill.mizan { background: #10b981 !important; }
-        #taqabul-gauge { background: #ef4444 !important; }
-        #closure-gauge, #balance-gauge { background: #10b981 !important; }
+        #taqabul-gauge { background: #f97316 !important; }
+        #closure-gauge, #balance-gauge { background: #4ade80 !important; }
         
         .status {
-            color: #64748b !important;
+            color: #cbd5e1 !important;
             font-size: 0.8rem;
             margin-top: 0.5rem;
             display: flex;
@@ -265,15 +251,36 @@
         }
         
         .status-badge {
-            background: #f1f5f9 !important;
-            color: #0f2b4f !important;
+            background: rgba(255,255,255,0.15) !important;
+            color: #fbbf24 !important;
             padding: 0.2rem 0.6rem;
             border-radius: 20px;
             font-size: 0.7rem;
         }
         
-        .status-badge.live { background: #10b981 !important; color: white !important; }
-        .status-badge.mizan { background: #10b981 !important; color: white !important; }
+        /* Other Cards - White Background */
+        .card, .forecast-card, .historical-card, .panel, .obs-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover, .forecast-card:hover, .historical-card:hover, .panel:hover, .obs-card:hover {
+            transform: translateY(-5px);
+            border-color: #fbbf24 !important;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        
+        [data-link] {
+            cursor: pointer;
+        }
+        
+        [data-link]:hover {
+            transform: translateY(-3px);
+        }
         
         /* Forecast Grid */
         .forecast-grid {
@@ -353,7 +360,7 @@
             background: #e2e8f0;
         }
         
-        /* OFFline Badge + Visit Button */
+        /* OFFLINE Badge + Visit Button */
         .offline-badge {
             background: #fee2e2;
             color: #dc2626;
@@ -621,7 +628,7 @@
             padding-bottom: 0.5rem;
         }
         
-        /* Red Mode (Emergency) - Still dramatic but readable */
+        /* Red Mode (Emergency) */
         body.red-mode {
             background: #330000;
         }
@@ -667,12 +674,18 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
+        /* FOOTER - FIXED: Dark gray for better visibility */
         .footer {
             margin-top: 3rem;
             text-align: center;
-            color: #64748b;
+            color: #334155 !important;
             padding: 1rem;
             border-top: 1px solid #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .footer span, .footer div {
+            color: #334155 !important;
         }
         
         /* Bottom Ticker */
@@ -703,6 +716,26 @@
             margin-right: 5px;
         }
         @keyframes pulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
+        
+        /* Name section at bottom - FIXED: Dark gray, bold, visible */
+        .name-section {
+            text-align: center;
+            margin-top: 1rem;
+            color: #334155 !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .name-section a {
+            color: #0f2b4f;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        .name-section a:hover {
+            color: #fbbf24;
+        }
     </style>
 </head>
 <body>
@@ -739,7 +772,7 @@
             <span>🌋 Fuego Volcano — WARNING level active</span>
             <span>🌊 CME expected · Low Impact</span>
             <span>📡 Type II Radio Emission 866 km/s</span>
-            <span>🕋 Mizan al-Malakut v8.1 · Light Theme</span>
+            <span>🕋 Mizan al-Malakut v8.2 · Enhanced Visibility</span>
             <span>⚡ All observatory systems nominal</span>
         </div>
     </div>
@@ -753,19 +786,19 @@
 
     <h1>
         TRIO SEAL · Cosmic Observatory
-        <span style="font-size:1rem; background:#f1f5f9; padding:0.3rem 1rem; border-radius:40px; color:#0f2b4f;">v8.1</span>
+        <span style="font-size:1rem; background:#f1f5f9; padding:0.3rem 1rem; border-radius:40px; color:#0f2b4f;">v8.2</span>
     </h1>
 
     <div class="subtitle">
         <span class="live-badge">⚡ Live</span>
-        <span class="mizan-badge">⚖️ Mizan al-Malakut v8.1</span>
+        <span class="mizan-badge">⚖️ Mizan al-Malakut v8.2</span>
         <span data-key="indicators">21 Indicators · Auto Update</span>
     </div>
 
     <!-- Quick Links Menu -->
     <div id="quick-links-container" class="quick-links"></div>
 
-    <!-- Core Indicators (3) -->
+    <!-- Core Indicators (3) - FIXED: Text is now WHITE/BRIGHT -->
     <div class="core-grid">
         <div class="core-card" data-link="taqabul">
             <div class="core-header">
@@ -808,7 +841,7 @@
         <div class="forecast-grid" id="kp-forecast"></div>
     </div>
 
-    <!-- SOLAR OBSERVATORY (Cards with OFFLINE + Visit) -->
+    <!-- SOLAR OBSERVATORY -->
     <h2 class="section-title">☀️ Solar Observatory</h2>
     <div class="source-grid">
         <div class="source-card" data-link="aurora">
@@ -896,7 +929,8 @@
         <h3 style="color: #0f2b4f; margin-bottom: 1rem;">📊 Sunspot Regions</h3>
         <div id="sunspot-details" class="sunspot-details">
             <table class="sunspot-table" id="sunspot-table">
-                <tr><td colspan="3">Loading sunspot data...</td></tr>
+                <tr><td colspan="3">Loading sunspot data...</td>
+                </tr>
             </table>
         </div>
     </div>
@@ -929,7 +963,11 @@
     <div class="footer">
         <span id="timestamp">Loading...</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
     </div>
-    <div style="text-align: center; margin-top: 1rem; color: #64748b;">Hicham Chigar · هشام شيكر</div>
+    
+    <!-- NAME SECTION - FIXED: Dark gray, bold, clearly visible -->
+    <div class="name-section">
+        Hicham Chigar · هشام شيكر
+    </div>
 </div>
 
 <!-- Bottom Ticker -->
@@ -1325,7 +1363,7 @@ setLanguage('en');
 
 /* ==================== INIT ==================== */
 window.addEventListener('load', () => {
-    console.log('🚀 TRIO SEAL v8.1 — Light Theme · Integrated Cosmic Platform Ready');
+    console.log('🚀 TRIO SEAL v8.2 — Enhanced Visibility · All Text Clear');
     console.log('💡 Type debugClicks() to see analytics');
     renderVolcanoes();
     updateTime();
