@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en" dir="ltr">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,34 +61,3 @@ body.red-mode { --bg: #1a0303; --panel: rgba(80,20,20,0.92); --bdr: rgba(255,50,
 .badge { display: inline-block; padding: 2px 9px; border-radius: 99px; font-size: .68rem; font-weight: 700; font-family: var(--f-hud); }
 .badge-live { background: rgba(0,255,136,.14); color: var(--live); border: 1px solid rgba(0,255,136,.4); }
 .badge-mizan { background: rgba(255,215,0,.13); color: var(--gold); border: 1px solid rgba(255,215,0,.4); }
-.badge-alert { background: rgba(239,68,68,.14); color: var(--alert); border: 1px solid rgba(239,68,68,.4); }
-.badge-warn { background: rgba(255,119,0,.14); color: var(--warn); border: 1px solid rgba(255,119,0,.4); }
-.moon-canvas { width: 100px; height: 100px; margin: 0 auto 12px; display: block; }
-.bticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 56px; background: rgba(2,8,22,.97); backdrop-filter: blur(16px); border-top: 1px solid var(--bdr); z-index: 1000; display: flex; align-items: stretch; }
-.bticker-lbl { flex-shrink: 0; display: flex; align-items: center; padding: 0 16px; background: linear-gradient(90deg, rgba(0,60,140,.9), rgba(0,40,100,.6)); border-right: 1px solid var(--bdr); font-family: var(--f-hud); font-size: .65rem; color: var(--cyan); font-weight: 700; }
-.bticker-scroll { flex: 1; overflow: hidden; display: flex; align-items: center; }
-.bticker-inner { display: inline-flex; animation: marquee 58s linear infinite; }
-@keyframes marquee { 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
-.bt-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 20px; white-space: nowrap; height: 56px; }
-.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--live); animation: pulse 1.5s infinite; margin-right: 5px; }
-@keyframes pulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
-@media (max-width: 1100px) { .solar-grid { grid-template-columns: repeat(3, 1fr); } .main-row { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 700px) { .grid-3, .grid-4, .solar-grid, .main-row { grid-template-columns: 1fr; } }
-</style>
-</head>
-<body>
-<div class="wrap">
-<!-- HEADER, QUICK LINKS, CORE INDICATORS, SOLAR, MOON, VOLCANO, QUAKES, SOURCES ... هنا يبقى التصميم نفسه -->
-<!-- سنترك نفس الهيكل مع تحديثات JS للروابط تلقائيًا -->
-</div>
-<script>
-'use strict';/* ==================== LINKS ==================== */ const LINKS = { aurora: 'https://www.swpc.noaa.gov/products/aurora-30-minute-forecast', kp: 'https://www.swpc.noaa.gov/products/planetary-k-index', coronal: 'https://sdo.gsfc.nasa.gov/data/', xray: 'https://www.swpc.noaa.gov/products/goes-x-ray-flux', cme: 'https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction', farside: 'https://stereo.gsfc.nasa.gov/', solarImage: 'https://sdo.gsfc.nasa.gov/data/', moon: 'https://www.timeanddate.com/moon/', taqabul: 'https://www.timeanddate.com/astronomy/moon/mecca.html', closure: 'https://earthquake.usgs.gov', balance: 'https://www.noaa.gov', usgs: 'https://earthquake.usgs.gov/earthquakes/map/', volcano: 'https://volcano.si.edu/' };
-
-/* ==================== CLICK HANDLER ==================== */ document.addEventListener('click', function(e){ if(e.target.closest('button, a, .lang-wrap')) return; const el = e.target.closest('[data-link]'); if(!el) return; const key = el.getAttribute('data-link'); if(!key) return; e.preventDefault(); const url = LINKS[key]; if(url) window.open(url, '_blank', 'noopener,noreferrer'); });
-
-/* ==================== DYNAMIC ELEMENT LINK SETUP ==================== */ function setDynamicLinks(){ document.querySelectorAll('[data-link]').forEach(el=>{ const key = el.getAttribute('data-link'); if(key && LINKS[key]) el.title = Open ${key} live feed; }); } setDynamicLinks();
-
-/* باقي الكود (LIVE IMAGE REFRESH, KP, VOLCANO, QUAKES, CLOCK, MOON ...) سيبقى كما هو */ </script>
-
-</body>
-</html>
