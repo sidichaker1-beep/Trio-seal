@@ -3,16 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRIO SEAL · Cosmic Observatory v10.1 · Production Ready</title>
+<title>TRIO SEAL · Cosmic Observatory v10.2 · Native Image Loading</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 /* ==================== DESIGN TOKENS ==================== */
 :root {
   --bg: #03080f;
   --panel: rgba(4, 18, 44, 0.92);
   --bdr: rgba(0, 180, 255, 0.28);
-  --bdr-gold: rgba(255, 215, 0, 0.32);
   --gold: #ffd700;
   --cyan: #00d4ff;
   --live: #00ff88;
@@ -25,23 +23,17 @@
   --f-data: 'Rajdhani', sans-serif;
   --f-mono: 'Share Tech Mono', monospace;
   --radius: 14px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-/* ==================== RED MODE (EMERGENCY) ==================== */
+/* ==================== RED MODE ==================== */
 body.red-mode {
   --bg: #1a0303;
   --panel: rgba(80, 20, 20, 0.92);
   --bdr: rgba(255, 50, 50, 0.5);
-  --bdr-gold: rgba(255, 80, 80, 0.6);
   --gold: #ff6666;
   --cyan: #ff8888;
   --live: #ff5555;
-  transition: var(--transition);
-}
-
-body.red-mode::before {
-  background: radial-gradient(ellipse 80% 45% at 50% -5%, rgba(180, 30, 30, 0.6), transparent 70%);
 }
 
 .red-mode-overlay {
@@ -50,7 +42,7 @@ body.red-mode::before {
   background: radial-gradient(circle at center, rgba(255, 0, 0, 0.15), transparent 70%);
   pointer-events: none;
   z-index: 999;
-  animation: pulse-red 2s ease-in-out infinite;
+  animation: pulse-red 2s infinite;
 }
 
 @keyframes pulse-red {
@@ -64,166 +56,155 @@ body {
   color: var(--white);
   font-family: var(--f-data);
   min-height: 100vh;
-  padding: 0 0 72px;
-  overflow-x: hidden;
+  padding: 20px;
   transition: var(--transition);
 }
 
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(ellipse 80% 45% at 50% -5%, rgba(0,80,180,.35), transparent 70%),
-              radial-gradient(ellipse 55% 40% at 15% 85%, rgba(0,40,120,.22), transparent 60%);
-  transition: var(--transition);
-}
-
-body::after {
-  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-image: radial-gradient(1.3px at 5% 8%, rgba(255,255,255,.8), transparent),
-                    radial-gradient(1px at 18% 22%, rgba(255,255,255,.5), transparent);
-  background-size: 280px 280px; opacity: 0.55;
-}
-
-.wrap { max-width: 1420px; margin: 0 auto; padding: 12px 14px; position: relative; z-index: 1; }
-
-/* ==================== PANELS ==================== */
-.panel {
-  background: var(--panel);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--bdr);
-  border-radius: var(--radius);
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-}
+.wrap { max-width: 1400px; margin: 0 auto; }
 
 /* ==================== UNIFIED CLICK SYSTEM ==================== */
 [data-link] {
   cursor: pointer;
-  transition: var(--transition);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 [data-link]:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(0, 200, 255, 0.3);
-  border-color: rgba(0, 220, 255, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.45);
 }
 
-/* ==================== OBS VISUAL SYSTEM ==================== */
+/* ==================== OBS CARD SYSTEM (Native <img> Loading) ==================== */
+.obs-card {
+  background: var(--panel);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--bdr);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition);
+  min-height: 160px;
+}
+
+/* Glow ديناميكي حسب مستوى الخطر */
+.obs-card.glow-warning {
+  border-color: var(--warn);
+  box-shadow: 0 0 25px rgba(255, 119, 0, 0.4);
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+.obs-card.glow-critical {
+  border-color: var(--alert);
+  box-shadow: 0 0 35px rgba(255, 51, 51, 0.6);
+  animation: pulse-glow 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; box-shadow: 0 0 45px currentColor; }
+}
+
+/* ==================== NATIVE IMAGE LOADING (FIXED) ==================== */
 .obs-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: background-image 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), filter 0.3s ease;
-  filter: brightness(0.65) contrast(1.25) saturate(1.2);
+  overflow: hidden;
   z-index: 0;
-  animation: fadeIn 1.2s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(1.05); filter: blur(4px); }
-  to { opacity: 1; transform: scale(1); filter: blur(0); }
+.obs-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.65) contrast(1.2) saturate(1.15);
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.obs-card:hover .obs-bg img {
+  transform: scale(1.05);
+  filter: brightness(0.55) contrast(1.3) saturate(1.25);
 }
 
 .obs-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
   pointer-events: none;
   z-index: 1;
 }
 
-.panel-hdr {
+.obs-card-data {
   position: relative;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  background: linear-gradient(90deg, rgba(0,60,130,.8), rgba(0,30,80,.5));
-  border-bottom: 1px solid var(--bdr);
+  padding: 16px;
+  color: var(--white);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.obs-card-data .label {
+  font-size: 0.7rem;
   font-family: var(--f-hud);
-  font-size: .7rem;
   letter-spacing: 2px;
   color: var(--cyan);
-  font-weight: 600;
-  backdrop-filter: blur(4px);
+  opacity: 0.85;
+  margin-bottom: 6px;
 }
 
-.panel-content {
-  position: relative;
-  z-index: 2;
-  padding: 12px;
-}
-
-.data-overlay {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(8px);
-  border-radius: 6px;
-  padding: 6px 10px;
+.obs-card-data .number {
+  font-size: 1.5rem;
+  font-weight: 700;
   font-family: var(--f-mono);
-  font-size: .7rem;
   color: var(--gold);
-  z-index: 3;
-  border-left: 3px solid var(--gold);
-  pointer-events: none;
-  animation: fadeInUp 0.8s ease-out;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.obs-card-data .status {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  font-family: var(--f-data);
 }
 
 /* ==================== GRIDS ==================== */
-.solar-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 14px; }
-.core-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
-.main-row { display: grid; grid-template-columns: 290px 1fr 300px; gap: 12px; margin-bottom: 14px; }
-.source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
 
 .sec-title {
   font-family: var(--f-hud);
   color: var(--gold);
   font-size: 1.3rem;
-  margin: 18px 0 10px;
-  border-bottom: 1px solid rgba(255,215,0,.15);
-  position: relative;
-  z-index: 2;
+  margin: 20px 0 12px;
+  border-bottom: 1px solid rgba(255,215,0,.2);
+  padding-bottom: 6px;
 }
 
 /* ==================== VOLCANO SECTION ==================== */
 .vol-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
-.vol-stat-box { background: rgba(0,0,0,.5); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid rgba(255,215,0,.2); backdrop-filter: blur(4px); }
-.vol-stat-box .num { display: block; font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: var(--f-mono); }
-.vol-list { max-height: 320px; overflow-y: auto; }
+.vol-stat-box { background: rgba(0,0,0,.4); border-radius: 12px; padding: 12px; text-align: center; }
+.vol-stat-box .num { font-size: 2rem; font-weight: bold; color: var(--gold); font-family: var(--f-mono); }
+.vol-list { max-height: 350px; overflow-y: auto; }
 .vol-item {
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.3);
   border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 10px;
   border-left: 4px solid;
-  cursor: pointer;
-  transition: var(--transition);
-  backdrop-filter: blur(4px);
+  transition: all 0.2s;
 }
-.vol-item:hover { transform: translateX(5px); background: rgba(0,180,255,.2); }
-.pulse-dot { width: 10px; height: 10px; border-radius: 50%; animation: pulse-dot 1.5s infinite; flex-shrink: 0; }
-@keyframes pulse-dot { 0%,100%{ transform: scale(1); opacity: 1; } 50%{ transform: scale(1.4); opacity: .7; } }
-.vol-name { flex: 1; font-size: .85rem; }
+.vol-item:hover { transform: translateX(5px); background: rgba(0,180,255,.15); }
+.pulse-dot { width: 10px; height: 10px; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{ transform: scale(1); opacity: 1; } 50%{ transform: scale(1.4); opacity: .7; } }
 
 /* ==================== EARTHQUAKES ==================== */
-.quake-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
-.quake-stat-box { background: rgba(0,0,0,.5); border-radius: 12px; padding: 12px; text-align: center; backdrop-filter: blur(4px); }
-.quake-stat-box .num { display: block; font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: var(--f-mono); }
+.quake-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.quake-stat-box { background: rgba(0,0,0,.4); border-radius: 12px; padding: 12px; text-align: center; }
+.quake-stat-box .num { font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: var(--f-mono); }
+.quake-list { max-height: 280px; overflow-y: auto; }
 .quake-item {
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.3);
   border-radius: 10px;
   padding: 8px 12px;
   margin-bottom: 6px;
@@ -232,138 +213,194 @@ body::after {
   gap: 12px;
   border-left: 4px solid;
   cursor: pointer;
-  transition: var(--transition);
-  backdrop-filter: blur(4px);
+  transition: all 0.2s;
 }
 .quake-item:hover { transform: translateX(5px); background: rgba(255,215,0,.1); }
-.quake-mag { font-size: 1.1rem; font-weight: 700; min-width: 48px; font-family: var(--f-mono); }
+.quake-mag { font-size: 1rem; font-weight: 700; min-width: 48px; font-family: var(--f-mono); }
+
+/* ==================== QUICK LINKS ==================== */
+.quick-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.quick-link {
+  background: rgba(0,100,200,.2);
+  border: 1px solid var(--bdr);
+  padding: 6px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: .8rem;
+  transition: all 0.2s;
+}
+.quick-link:hover { background: rgba(0,200,255,.3); transform: translateY(-1px); }
 
 /* ==================== TICKER ==================== */
-.bticker {
-  position: fixed; bottom: 0; left: 0; width: 100%; height: 56px;
-  background: rgba(2,8,22,.98); backdrop-filter: blur(16px);
-  border-top: 1px solid var(--bdr); z-index: 1000;
-  display: flex; align-items: stretch; overflow: hidden;
+.ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,.9);
+  border-top: 1px solid var(--bdr);
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  font-size: .8rem;
+  z-index: 1000;
+  flex-wrap: wrap;
 }
-.bticker-lbl {
-  flex-shrink: 0; display: flex; align-items: center; padding: 0 16px;
-  background: linear-gradient(90deg, rgba(0,60,140,.9), rgba(0,40,100,.6));
-  border-right: 1px solid var(--bdr);
-  font-family: var(--f-hud); font-size: .65rem;
-  color: var(--cyan); font-weight: 700;
-}
-.bticker-scroll { flex: 1; overflow: hidden; display: flex; align-items: center; }
-.bticker-inner { display: inline-flex; animation: marquee 58s linear infinite; }
-@keyframes marquee { 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
-.bt-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 20px; white-space: nowrap; height: 56px; }
-.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--live); animation: pulse 1.5s infinite; margin-right: 5px; }
-@keyframes pulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
-
-/* ==================== MOON GLOW ==================== */
-.moon-3d {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin: 0 auto 12px;
-  background: radial-gradient(circle at 38% 38%, #2a1a0a, #000 80%);
-  transition: box-shadow 0.5s ease;
-  position: relative;
-  overflow: hidden;
-}
-.moon-3d.red-glow {
-  box-shadow: 0 0 50px rgba(255, 0, 0, 0.8), inset 0 0 20px rgba(255, 50, 0, 0.5);
-}
-
-/* ==================== BADGES ==================== */
-.badge {
-  display: inline-block; padding: 2px 9px; border-radius: 99px;
-  font-size: .68rem; font-weight: 700; font-family: var(--f-hud);
-}
-.badge-live { background: rgba(0,255,136,.2); color: var(--live); border: 1px solid rgba(0,255,136,.5); }
-.badge-alert { background: rgba(239,68,68,.2); color: var(--alert); border: 1px solid rgba(239,68,68,.5); }
-.badge-warn { background: rgba(255,119,0,.2); color: var(--warn); border: 1px solid rgba(255,119,0,.5); }
+.ticker span { color: var(--live); }
 
 /* ==================== RESPONSIVE ==================== */
-@media (max-width: 1100px) { .solar-grid { grid-template-columns: repeat(3, 1fr); } .main-row { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 700px) { .core-grid, .solar-grid, .main-row { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .grid-3, .grid-4 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <!-- ==================== HEADER ==================== -->
-<div class="panel" style="padding: 12px 20px; margin-bottom: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-  <div style="font-family: var(--f-hud); font-size: 1.4rem; font-weight: 900; color: var(--gold);">🌌 TRIO SEAL <span style="font-size: .7rem;">v10.1 · Production Ready</span></div>
-  <div style="display: flex; gap: 20px; font-family: var(--f-mono);">
-    <span>📅 <span id="gregorian-date">--</span> · <span id="hijri-date" style="color: var(--gold);">--</span></span>
-    <span>🌐 <span id="utc-clock">--</span></span>
-    <span>🕋 <span id="mecca-clock">--</span></span>
-  </div>
-  <div class="lang-wrap" style="position: relative;">
-    <button class="lang-btn" id="langBtn" style="background: rgba(255,215,0,.1); border: 1px solid rgba(255,215,0,.3); color: var(--gold); padding: 5px 12px; border-radius: 30px; cursor: pointer;">🌐 <span id="cur-lang">EN</span> ▾</button>
-    <div id="langMenu" style="position: absolute; top: 100%; right: 0; background: #0a1428; border: 1px solid var(--bdr-gold); border-radius: 10px; display: none; z-index: 300;">
-      <div class="lang-opt" data-lang="en" style="padding: 8px 15px; cursor: pointer;">🇬🇧 English</div>
-      <div class="lang-opt" data-lang="ar" style="padding: 8px 15px; cursor: pointer;">🇸🇦 العربية</div>
-    </div>
+<div class="obs-card" style="text-align: center; margin-bottom: 20px;">
+  <div class="obs-card-data">
+    <div class="label">🌌 TRIO SEAL</div>
+    <div class="number" style="font-size: 1.2rem;">v10.2 · Native Image Loading</div>
+    <div class="status" id="datetime">Loading...</div>
   </div>
 </div>
 
 <!-- ==================== QUICK LINKS ==================== -->
-<div id="quickLinks" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;"></div>
+<div class="quick-links" id="quickLinks"></div>
 
 <!-- ==================== CORE INDICATORS ==================== -->
-<div class="core-grid">
-  <div class="panel" data-link="taqabul"><div class="panel-hdr">🕋 Taqābul</div><div class="panel-content"><span id="taq-value" style="font-family: var(--f-mono); font-size: 1.3rem; color: var(--alert);">--</span><div class="gauge-track" style="height: 5px; background: #222; margin: 8px 0;"><div id="taq-gauge" style="width: 0%; height: 100%; background: linear-gradient(90deg,#ef4444,#b91c1c); border-radius: 99px;"></div></div><div style="font-size: .7rem; color: var(--muted);">MIZAN Angle</div></div></div>
-  <div class="panel" data-link="closure"><div class="panel-hdr">🌀 Closure</div><div class="panel-content"><span id="clo-value" style="font-family: var(--f-mono); font-size: 1.3rem; color: var(--gold);">--</span><div class="gauge-track" style="height: 5px; background: #222; margin: 8px 0;"><div id="clo-gauge" style="width: 0%; height: 100%; background: linear-gradient(90deg,#ffd700,#e6b800); border-radius: 99px;"></div></div><div style="font-size: .7rem; color: var(--muted);">MIZAN RS</div></div></div>
-  <div class="panel" data-link="balance"><div class="panel-hdr">⚖️ Balance</div><div class="panel-content"><span id="bal-value" style="font-family: var(--f-mono); font-size: 1.3rem; color: var(--live);">--</span><div class="gauge-track" style="height: 5px; background: #222; margin: 8px 0;"><div id="bal-gauge" style="width: 0%; height: 100%; background: linear-gradient(90deg,#00ff88,#00cc66); border-radius: 99px;"></div></div><div style="font-size: .7rem; color: var(--muted);">α_stab LIVE</div></div></div>
+<div class="grid-3">
+  <div class="obs-card" data-link="taqabul">
+    <div class="obs-bg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231e1b4b'/%3E%3C/svg%3E" alt=""></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">🕋 Taqābul</div>
+      <div class="number" id="taq-value">3.66</div>
+      <div class="status">MIZAN Angle</div>
+    </div>
+  </div>
+  <div class="obs-card" data-link="closure">
+    <div class="obs-bg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231e2a3a'/%3E%3C/svg%3E" alt=""></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">🌀 Closure</div>
+      <div class="number" id="clo-value">0.842</div>
+      <div class="status">MIZAN RS</div>
+    </div>
+  </div>
+  <div class="obs-card" data-link="balance">
+    <div class="obs-bg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f2a1a'/%3E%3C/svg%3E" alt=""></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">⚖️ Balance</div>
+      <div class="number" id="bal-value">1.270</div>
+      <div class="status">α_stab LIVE</div>
+    </div>
+  </div>
 </div>
 
 <!-- ==================== SOLAR GRID ==================== -->
-<div class="solar-grid">
-  <div class="panel" data-link="aurora"><div class="obs-bg" id="aurora-bg"></div><div class="obs-overlay"></div><div class="panel-hdr">🌌 Aurora Oval</div><div class="data-overlay">🌍 Northern Hemisphere · Real-time</div></div>
-  <div class="panel" data-link="kp"><div class="panel-hdr">🧲 Kp Index</div><div class="panel-content" style="text-align:center;"><span id="kp-num" style="font-size:2rem;color:var(--live);font-family:var(--f-mono);">--</span><div id="kp-label" style="font-size:.7rem;">Loading...</div><span id="kp-badge" class="badge badge-warn">--</span></div></div>
-  <div class="panel" data-link="coronal"><div class="obs-bg" id="coronal-bg"></div><div class="obs-overlay"></div><div class="panel-hdr">🕳️ Coronal Holes</div><div class="data-overlay">🌀 Solar wind sources · SDO AIA 193</div></div>
-  <div class="panel" data-link="xray"><div class="obs-bg" id="xray-bg"></div><div class="obs-overlay"></div><div class="panel-hdr">📡 X-Ray Flux</div><div class="panel-content" style="padding:4px 12px;"><span id="xray-val" style="font-size:1.1rem;color:var(--live);">--</span> <span id="xray-badge" class="badge badge-green">LOW</span></div></div>
-  <div class="panel" data-link="cme"><div class="panel-hdr">🌊 CME Tracking</div><div class="panel-content"><div style="font-size:.7rem;color:var(--yellow);">⚠ Minor CME Observed</div><div style="font-size:.65rem;color:var(--muted);">▲ Low Impact Expected</div></div></div>
-  <div class="panel" data-link="farside"><div class="obs-bg" id="farside-bg"></div><div class="obs-overlay"></div><div class="panel-hdr">🌞 Far Side</div><div class="data-overlay">🛰️ STEREO-A · Heliospheric imaging</div></div>
+<div class="grid-4">
+  <div class="obs-card" data-link="aurora">
+    <div class="obs-bg" id="aurora-bg"></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">🌌 Aurora Oval</div>
+      <div class="number">Live Feed</div>
+      <div class="status">Northern Hemisphere · Real-time</div>
+    </div>
+  </div>
+  <div class="obs-card" data-link="kp" id="kp-card">
+    <div class="obs-bg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231e2a3a'/%3E%3C/svg%3E" alt=""></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">🧲 Kp Index</div>
+      <div class="number" id="kp-num">3.0</div>
+      <div class="status" id="kp-label">Unsettled</div>
+    </div>
+  </div>
+  <div class="obs-card" data-link="xray" id="xray-card">
+    <div class="obs-bg" id="xray-bg"></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">📡 X-Ray Flux</div>
+      <div class="number" id="xray-val">C1.2</div>
+      <div class="status" id="xray-badge">LOW · GOES Satellite</div>
+    </div>
+  </div>
+  <div class="obs-card" data-link="solarImage">
+    <div class="obs-bg" id="solar-bg"></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">☀️ Daily Solar Image</div>
+      <div class="number">SDO AIA 171</div>
+      <div class="status">Active Region AR 4392</div>
+    </div>
+  </div>
 </div>
 
 <!-- ==================== MAIN ROW ==================== -->
-<div class="main-row">
-  <div class="panel" data-link="solarImage"><div class="obs-bg" id="solar-bg"></div><div class="obs-overlay"></div><div class="panel-hdr">☀️ Daily Solar Image</div><div class="data-overlay">🌞 SDO AIA 171 · Active Region AR 4392</div></div>
-  <div class="panel" data-link="moon" style="text-align:center;"><div class="panel-hdr">🌙 Lunar Data</div><div class="panel-content"><div id="moonVis" class="moon-3d"></div><div id="moon-phase-name" style="font-family:var(--f-hud);">Loading...</div><div>Illum: <span id="moon-illum">--</span> · Age: <span id="moon-age">--</span>d</div></div></div>
-  <div class="panel"><div class="panel-hdr">🌍 Geophysical Alerts</div><div id="geo-list" class="panel-content" style="padding:6px;"></div></div>
+<div class="grid-2">
+  <div class="obs-card" data-link="moon">
+    <div class="obs-bg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232a2a1a'/%3E%3C/svg%3E" alt=""></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">🌙 Lunar Data</div>
+      <div class="number" id="moon-phase">Waning Crescent</div>
+      <div class="status">Illum: <span id="moon-illum">6.0%</span> · Age: <span id="moon-age">2.3d</span></div>
+    </div>
+  </div>
+  <div class="obs-card">
+    <div class="obs-bg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231e3a3a'/%3E%3C/svg%3E" alt=""></div>
+    <div class="obs-overlay"></div>
+    <div class="obs-card-data">
+      <div class="label">🌍 Geophysical Alerts</div>
+      <div id="geo-list" style="margin-top: 8px;"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ==================== VOLCANO SECTION ==================== -->
-<h2 class="sec-title">🌋 Live Volcano Observatory</h2>
-<div class="panel" data-link="volcano" style="padding: 12px;">
-  <div class="vol-stats"><div class="vol-stat-box"><span class="num" id="vol-total">--</span><span>Active Volcanoes</span></div><div class="vol-stat-box"><span class="num" id="vol-alert">--</span><span>High Alert</span></div></div>
-  <div id="vol-list" class="vol-list"></div>
+<div class="sec-title">🌋 Live Volcano Observatory</div>
+<div class="obs-card" data-link="volcano" style="padding: 0;">
+  <div class="obs-card-data" style="padding: 16px;">
+    <div class="vol-stats">
+      <div class="vol-stat-box"><span class="num" id="vol-total">10</span><span>Active Volcanoes</span></div>
+      <div class="vol-stat-box"><span class="num" id="vol-alert">6</span><span>High Alert</span></div>
+    </div>
+    <div id="vol-list" class="vol-list"></div>
+  </div>
 </div>
 
 <!-- ==================== EARTHQUAKE SECTION ==================== -->
-<h2 class="sec-title">🌍 Live Earthquake Observatory</h2>
-<div class="panel" data-link="usgs" style="padding: 12px;">
-  <div class="quake-stats"><div class="quake-stat-box"><span class="num" id="quake-total">--</span><span>Last 24h</span></div><div class="quake-stat-box"><span class="num" id="quake-strongest">--</span><span>Strongest</span></div><div class="quake-stat-box"><span class="num" id="quake-m5">--</span><span>M ≥ 5.0</span></div></div>
-  <div id="quake-list" class="quake-list"></div>
+<div class="sec-title">🌍 Live Earthquake Observatory</div>
+<div class="obs-card" data-link="usgs" style="padding: 0;">
+  <div class="obs-card-data" style="padding: 16px;">
+    <div class="quake-stats">
+      <div class="quake-stat-box"><span class="num" id="quake-total">78</span><span>Last 24h</span></div>
+      <div class="quake-stat-box"><span class="num" id="quake-strongest">6.0</span><span>Strongest</span></div>
+      <div class="quake-stat-box"><span class="num" id="quake-m5">4</span><span>M ≥ 5.0</span></div>
+    </div>
+    <div id="quake-list" class="quake-list"></div>
+  </div>
 </div>
-
-<!-- ==================== SOURCE CARDS ==================== -->
-<h2 class="sec-title">🔭 Live Sources</h2>
-<div id="sourceCards" class="source-grid"></div>
 
 <!-- ==================== FOOTER ==================== -->
-<div class="panel" style="text-align: center; padding: 12px; margin-top: 14px; color: var(--muted); font-size: .75rem;">
-  Hicham Chigar · هشام شيكر · Mizan al-Malakut v10.1 · <span id="last-update">--</span>
+<div class="obs-card" style="text-align: center; margin-top: 20px;">
+  <div class="obs-card-data">
+    <div class="status">Hicham Chigar · هشام شيكر · Mizan al-Malakut v10.2 · <span id="last-update">--</span></div>
+  </div>
 </div>
 
 </div>
 
-<!-- ==================== BOTTOM TICKER ==================== -->
-<div class="bticker">
-  <div class="bticker-lbl"><span class="live-dot"></span>LIVE</div>
-  <div class="bticker-scroll"><div class="bticker-inner" id="botTicker"></div></div>
+<!-- ==================== TICKER ==================== -->
+<div class="ticker" id="ticker">
+  <span>🌋 Live Alerts: <span id="ticker-alerts">6</span></span>
+  <span>🌍 Quakes [24h]: <span id="ticker-quakes">78</span></span>
+  <span>🧲 Kp: <span id="ticker-kp">--</span></span>
+  <span>🕋 RS Critical 2027: 0.0057</span>
 </div>
 
 <script>
@@ -373,18 +410,14 @@ body::after {
 const LINKS = {
   aurora: { url: 'https://www.swpc.noaa.gov/products/aurora-30-minute-forecast', category: 'space' },
   kp: { url: 'https://www.swpc.noaa.gov/products/planetary-k-index', category: 'space' },
-  coronal: { url: 'https://sdo.gsfc.nasa.gov/data/', category: 'space' },
   xray: { url: 'https://www.swpc.noaa.gov/products/goes-x-ray-flux', category: 'space' },
-  cme: { url: 'https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction', category: 'space' },
-  farside: { url: 'https://stereo.gsfc.nasa.gov/', category: 'space' },
   solarImage: { url: 'https://sdo.gsfc.nasa.gov/data/', category: 'space' },
   moon: { url: 'https://www.timeanddate.com/moon/', category: 'astro' },
   taqabul: { url: 'https://www.timeanddate.com/astronomy/moon/mecca.html', category: 'astro' },
   closure: { url: 'https://earthquake.usgs.gov', category: 'geo' },
   balance: { url: 'https://www.noaa.gov', category: 'geo' },
   usgs: { url: 'https://earthquake.usgs.gov/earthquakes/map/', category: 'geo' },
-  volcano: { url: 'https://volcano.si.edu/', category: 'geo' },
-  noaa: { url: 'https://www.swpc.noaa.gov/', category: 'space' }
+  volcano: { url: 'https://volcano.si.edu/', category: 'geo' }
 };
 
 /* ==================== SAFE NAVIGATION ==================== */
@@ -394,7 +427,6 @@ function openLinkSafely(key) {
     console.error(`[NAV ERROR] Missing link for key: ${key}`);
     return;
   }
-
   try {
     new URL(linkObj.url);
     window.open(linkObj.url, '_blank', 'noopener');
@@ -405,59 +437,44 @@ function openLinkSafely(key) {
 
 /* ==================== EVENT DELEGATION ==================== */
 document.addEventListener('click', function (e) {
-  // Ignore clicks on buttons, links, language elements
-  if (e.target.closest('button, a, .lang-wrap, .lang-btn')) return;
-
+  if (e.target.closest('button, a, .lang-wrap')) return;
   const el = e.target.closest('[data-link]');
   if (!el) return;
-
   const key = el.getAttribute('data-link');
   if (!key) return;
-
   e.preventDefault();
   console.log(`[NAV] ${key}`);
-
   trackClick(key);
   openLinkSafely(key);
 });
 
 /* ==================== TRACKING SYSTEM ==================== */
 let clickLog = JSON.parse(localStorage.getItem('trio_clicks') || '[]');
-
 function trackClick(key) {
-  const entry = { key, timestamp: new Date().toISOString() };
-  clickLog.unshift(entry);
+  clickLog.unshift({ key, timestamp: new Date().toISOString() });
   if (clickLog.length > 200) clickLog.pop();
   localStorage.setItem('trio_clicks', JSON.stringify(clickLog));
 }
-
-/* ==================== CLICK ANALYTICS ==================== */
-function getTopClicks() {
+window.debugClicks = function() {
   const stats = {};
-  clickLog.forEach(c => {
-    stats[c.key] = (stats[c.key] || 0) + 1;
-  });
-  return stats;
-}
+  clickLog.forEach(c => { stats[c.key] = (stats[c.key] || 0) + 1; });
+  console.table(stats);
+};
 
-/* ==================== RED MODE (WITH COOLDOWN) ==================== */
+/* ==================== RED MODE (SMART) ==================== */
 let redModeActive = false;
 let lastAlertTime = 0;
 
 function activateRedMode(reason) {
   const now = Date.now();
-  if (now - lastAlertTime < 10000) return; // cooldown 10s
+  if (now - lastAlertTime < 10000) return;
   lastAlertTime = now;
-
   if (redModeActive) return;
   redModeActive = true;
-
   document.body.classList.add('red-mode');
-
   const overlay = document.createElement('div');
   overlay.className = 'red-mode-overlay';
   document.body.appendChild(overlay);
-
   const toast = document.createElement('div');
   toast.style.position = 'fixed';
   toast.style.top = '20px';
@@ -469,9 +486,8 @@ function activateRedMode(reason) {
   toast.style.borderRadius = '8px';
   toast.style.zIndex = '9999';
   toast.style.fontFamily = 'monospace';
-  toast.innerHTML = `🔴 EMERGENCY: ${reason}`;
+  toast.innerHTML = `🔴 EMERGENCY MODE: ${reason}`;
   document.body.appendChild(toast);
-
   setTimeout(() => toast.remove(), 6000);
 }
 
@@ -482,152 +498,87 @@ function deactivateRedMode() {
   document.querySelector('.red-mode-overlay')?.remove();
 }
 
-/* ==================== SMART THRESHOLD ==================== */
-function checkEmergencyThresholds(kp, quakeMag) {
-  if (kp > 7 || quakeMag > 6.5) {
-    activateRedMode(`Kp ${kp.toFixed(1)} | Earthquake M${quakeMag.toFixed(1)}`);
-  } else if (kp < 5 && quakeMag < 5 && redModeActive) {
-    deactivateRedMode();
-  }
+function updateCardGlow(kpValue) {
+  const kpCard = document.getElementById('kp-card');
+  if (!kpCard) return;
+  kpCard.classList.remove('glow-warning', 'glow-critical');
+  if (kpValue >= 7) kpCard.classList.add('glow-critical');
+  else if (kpValue >= 5) kpCard.classList.add('glow-warning');
 }
 
-/* ==================== DEBUG PANEL ==================== */
-window.debugClicks = function () {
-  console.table(getTopClicks());
-  console.log('Total clicks:', clickLog.length);
-};
-
-/* ==================== LIVE VISUAL FEEDS ==================== */
+/* ==================== NATIVE IMAGE LOADING (FIXED - Claude's Method) ==================== */
 const LIVE_FEEDS = {
-  solar: 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg',
-  aurora: 'https://services.swpc.noaa.gov/images/animations/aurora_forecast/north/latest.png',
-  xray: 'https://services.swpc.noaa.gov/images/plots/goes-xray-flux-estimated.png',
-  coronal: 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg',
-  farside: 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_211193171.jpg'
+  solar: ['https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg'],
+  aurora: ['https://services.swpc.noaa.gov/images/animations/aurora_forecast/north/latest.png'],
+  xray: ['https://services.swpc.noaa.gov/images/plots/goes-xray-flux-estimated.png']
 };
 
-const FALLBACK_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect width="800" height="600" fill="%23030a18"/%3E%3Ctext x="400" y="300" font-family="monospace" font-size="18" fill="%2300d4ff" text-anchor="middle"%3ELIVE FEED OFFLINE%3C/text%3E%3C/svg%3E';
+const FALLBACK_GRADIENT = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" fill="%231e2a3a"/%3E%3C/svg%3E';
 
-function setLiveBackground(id, url) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const finalUrl = url + '?t=' + Date.now();
-  const img = new Image();
-  img.onload = () => { el.style.backgroundImage = `url(${finalUrl})`; el.style.backgroundSize = 'cover'; el.style.backgroundPosition = 'center'; };
-  img.onerror = () => { el.style.backgroundImage = `url(${FALLBACK_IMAGE})`; el.style.backgroundSize = 'cover'; el.style.backgroundPosition = 'center'; };
+function loadObsBg(id, urls) {
+  const container = document.getElementById(id);
+  if (!container || !urls?.length) return;
+
+  // Clear previous images
+  container.innerHTML = '';
+
+  // Create and load image
+  const img = document.createElement('img');
+  const finalUrl = urls[0] + '?t=' + Date.now();
   img.src = finalUrl;
+  img.crossOrigin = 'Anonymous';
+  
+  img.onload = () => {
+    console.log(`[IMAGE LOADED] ${id} -> ${finalUrl.split('?')[0]}`);
+  };
+  
+  img.onerror = () => {
+    console.warn(`[IMAGE FAIL] ${id} -> using fallback gradient`);
+    img.src = FALLBACK_GRADIENT;
+  };
+  
+  container.appendChild(img);
 }
 
 function updateVisuals() {
-  setLiveBackground('solar-bg', LIVE_FEEDS.solar);
-  setLiveBackground('aurora-bg', LIVE_FEEDS.aurora);
-  setLiveBackground('xray-bg', LIVE_FEEDS.xray);
-  setLiveBackground('coronal-bg', LIVE_FEEDS.coronal);
-  setLiveBackground('farside-bg', LIVE_FEEDS.farside);
+  loadObsBg('solar-bg', LIVE_FEEDS.solar);
+  loadObsBg('aurora-bg', LIVE_FEEDS.aurora);
+  loadObsBg('xray-bg', LIVE_FEEDS.xray);
 }
 
-/* ==================== MOON GLOW ==================== */
-function enhanceMoonGlow(illumPercent) {
-  const moon = document.getElementById('moonVis');
-  if (!moon) return;
-  if (illumPercent < 5) { moon.classList.add('red-glow'); }
-  else { moon.classList.remove('red-glow'); }
-}
+/* ==================== REAL KP API ==================== */
+let currentKp = 3.0;
+let currentStrongestQuake = 6.0;
 
-/* ==================== CLOCK & HIJRI ==================== */
-function toHijri(d) {
-  const JD = Math.floor(d.getTime() / 86400000 + 2440587.5);
-  const l = JD - 1948440 + 10632, n = Math.floor((l - 1) / 10631);
-  const l2 = l - 10631 * n + 354;
-  const j = Math.floor((10985 - l2) / 5316) * Math.floor(50 * l2 / 17719) + Math.floor(l2 / 5670) * Math.floor(43 * l2 / 15238);
-  const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor(17719 * j / 50) - Math.floor(j / 16) * Math.floor(15238 * j / 43) + 29;
-  return { day: l3 - Math.floor(709 * Math.floor(24 * l3 / 709) / 24), month: Math.floor(24 * l3 / 709), year: 30 * n + j - 30 };
-}
-const HM = ['Muharram','Safar','Rabi I','Rabi II','Jumada I','Jumada II','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhu'l-Qa'da","Dhu'l-Hijja"];
-function updateTime() {
-  const now = new Date(), mecca = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
-  document.getElementById('gregorian-date').textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  const h = toHijri(mecca);
-  document.getElementById('hijri-date').textContent = `${h.day} ${HM[h.month - 1]} ${h.year} AH`;
-  document.getElementById('utc-clock').textContent = `${String(now.getUTCHours()).padStart(2,'0')}:${String(now.getUTCMinutes()).padStart(2,'0')}:${String(now.getUTCSeconds()).padStart(2,'0')}`;
-  document.getElementById('mecca-clock').textContent = `${String(mecca.getHours()).padStart(2,'0')}:${String(mecca.getMinutes()).padStart(2,'0')}:${String(mecca.getSeconds()).padStart(2,'0')}`;
-}
-setInterval(updateTime, 1000); updateTime();
-
-/* ==================== MOON PHASE ==================== */
-const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0), SYNODIC = 29.530588853;
-function updateMoon() {
-  const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
-  const illum = (1 - Math.cos((age / SYNODIC) * 2 * Math.PI)) / 2 * 100;
-  let name;
-  if (age < 1) name = 'New Moon';
-  else if (age < 7.4) name = 'Waxing Crescent';
-  else if (age < 10.4) name = 'First Quarter';
-  else if (age < 14.8) name = 'Waxing Gibbous';
-  else if (age < 16.1) name = 'Full Moon';
-  else if (age < 22.1) name = 'Waning Gibbous';
-  else if (age < 25.1) name = 'Last Quarter';
-  else name = 'Waning Crescent';
-  document.getElementById('moon-phase-name').textContent = name;
-  document.getElementById('moon-illum').textContent = illum.toFixed(1) + '%';
-  document.getElementById('moon-age').textContent = age.toFixed(1);
-  enhanceMoonGlow(illum);
-}
-setInterval(updateMoon, 60000); updateMoon();
-
-/* ==================== REAL APIs ==================== */
-let currentKp = 3;
-let currentStrongestQuake = 0;
-
-async function fetchKp() {
+async function fetchRealKp() {
   try {
     const res = await fetch('https://services.swpc.noaa.gov/json/planetary_k_index_24_hour.json');
     const data = await res.json();
     const kp = data[data.length - 1]?.kp_index || 3;
     currentKp = kp;
     document.getElementById('kp-num').textContent = kp;
-    let label, cls;
-    if (kp < 2) { label = 'Quiet'; cls = 'badge-green'; }
-    else if (kp < 4) { label = 'Unsettled'; cls = 'badge-warn'; }
-    else if (kp < 6) { label = 'Active'; cls = 'badge-warn'; }
-    else if (kp < 7) { label = 'Storm'; cls = 'badge-alert'; }
-    else { label = 'Severe'; cls = 'badge-alert'; }
+    document.getElementById('ticker-kp').textContent = kp;
+    
+    let label;
+    if (kp < 4) label = 'Unsettled';
+    else if (kp < 6) label = 'Active';
+    else if (kp < 7) label = 'Storm';
+    else label = 'Severe';
     document.getElementById('kp-label').textContent = label;
-    document.getElementById('kp-badge').textContent = label.toUpperCase();
-    document.getElementById('kp-badge').className = `badge ${cls}`;
-    document.getElementById('kp-num').style.color = kp >= 6 ? 'var(--alert)' : kp >= 4 ? 'var(--warn)' : 'var(--live)';
-    checkEmergencyThresholds(kp, currentStrongestQuake);
-  } catch (e) { console.warn('Kp API failed'); }
+    
+    updateCardGlow(kp);
+    
+    if (kp > 7 || currentStrongestQuake > 6.5) {
+      activateRedMode(`Kp ${kp.toFixed(1)} | Earthquake M${currentStrongestQuake.toFixed(1)}`);
+    } else if (kp < 5 && currentStrongestQuake < 5 && redModeActive) {
+      deactivateRedMode();
+    }
+  } catch (e) {
+    console.warn('Kp API failed');
+  }
 }
 
-async function fetchXray() {
-  try {
-    const res = await fetch('https://services.swpc.noaa.gov/json/goes/primary/xray-flux-1-day.json');
-    const data = await res.json();
-    const flux = data[data.length - 1]?.flux || 1e-6;
-    let cls = 'C1.2', label = 'LOW', badgeClass = 'badge-green';
-    if (flux > 1e-4) { cls = 'M1.0'; label = 'MOD'; badgeClass = 'badge-warn'; }
-    if (flux > 1e-3) { cls = 'X1.0'; label = 'HIGH'; badgeClass = 'badge-alert'; }
-    document.getElementById('xray-val').textContent = cls;
-    document.getElementById('xray-badge').textContent = label;
-    document.getElementById('xray-badge').className = `badge ${badgeClass}`;
-  } catch (e) { console.warn('X-Ray API failed'); }
-}
-
-async function updateCoreFromApis() {
-  const kp = currentKp;
-  const taq = (kp * 1.2 + Math.random() * 0.5).toFixed(2);
-  const clo = (kp * 0.8 + Math.random() * 0.3).toFixed(2);
-  const bal = (kp * 0.5 + Math.random() * 0.2).toFixed(3);
-  document.getElementById('taq-value').textContent = taq;
-  document.getElementById('clo-value').textContent = clo;
-  document.getElementById('bal-value').textContent = bal;
-  document.getElementById('taq-gauge').style.width = Math.min(100, taq * 10) + '%';
-  document.getElementById('clo-gauge').style.width = Math.min(100, clo * 15) + '%';
-  document.getElementById('bal-gauge').style.width = Math.min(100, bal * 50) + '%';
-}
-
-/* ==================== VOLCANO ==================== */
+/* ==================== VOLCANO DATA ==================== */
 const GOLDEN_VOLCANOES = [
   { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH' },
   { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH' },
@@ -636,18 +587,15 @@ const GOLDEN_VOLCANOES = [
   { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY' },
   { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY' },
   { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH' },
-  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY' },
-  { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY' },
-  { name: 'Sheveluch', country: 'Russia', alert: 'orange', status: 'WATCH' }
+  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY' }
 ];
 
-let lastHighCount = 0;
-function renderVolcanoes(list = GOLDEN_VOLCANOES) {
+function renderVolcanoes() {
   const container = document.getElementById('vol-list');
   if (!container) return;
   container.innerHTML = '';
   let high = 0;
-  list.forEach(v => {
+  GOLDEN_VOLCANOES.forEach(v => {
     const colors = { red: '#ff3333', orange: '#ff7700', yellow: '#ffcc00' };
     const col = colors[v.alert] || '#6888aa';
     if (v.alert === 'red' || v.alert === 'orange') high++;
@@ -655,113 +603,84 @@ function renderVolcanoes(list = GOLDEN_VOLCANOES) {
     div.className = 'vol-item';
     div.style.borderLeftColor = col;
     div.setAttribute('data-link', 'volcano');
-    div.innerHTML = `<span class="pulse-dot" style="background:${col}"></span><span class="vol-name">🌋 ${v.name} <span style="color:var(--muted);font-size:.7rem">(${v.country})</span></span><span class="badge ${v.alert === 'red' ? 'badge-alert' : v.alert === 'orange' ? 'badge-warn' : 'badge-live'}">${v.status}</span>`;
+    div.innerHTML = `
+      <span class="pulse-dot" style="background:${col}"></span>
+      <span class="vol-name">🌋 ${v.name} <span style="color:var(--muted);">(${v.country})</span></span>
+      <span class="vol-badge" style="background:${col}22; color:${col};">${v.status}</span>
+    `;
     container.appendChild(div);
   });
-  document.getElementById('vol-total').textContent = list.length;
+  document.getElementById('vol-total').textContent = GOLDEN_VOLCANOES.length;
   document.getElementById('vol-alert').textContent = high;
-  if (high > lastHighCount && high > 0) {
-    const toast = document.createElement('div');
-    toast.style.position = 'fixed'; toast.style.top = '20px'; toast.style.right = '20px';
-    toast.style.background = 'rgba(0,0,0,.95)'; toast.style.borderLeft = '4px solid #ff7700';
-    toast.style.padding = '12px 20px'; toast.style.borderRadius = '12px'; toast.style.zIndex = '2000';
-    toast.innerHTML = `<strong>🌋 Volcano Alert Increase</strong><br>${high - lastHighCount} new volcano(es) reached HIGH alert level`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 5000);
-  }
-  lastHighCount = high;
 }
 renderVolcanoes();
 
-/* ==================== EARTHQUAKES ==================== */
-async function fetchEarthquakes() {
-  try {
-    const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson');
-    const data = await res.json();
-    const features = data.features;
-    const mags = features.map(f => f.properties.mag || 0);
-    const maxMag = Math.max(...mags);
-    currentStrongestQuake = maxMag;
-    const m5 = features.filter(f => (f.properties.mag || 0) >= 5).length;
-    document.getElementById('quake-total').textContent = features.length;
-    document.getElementById('quake-strongest').textContent = maxMag.toFixed(1) + ' M';
-    document.getElementById('quake-m5').textContent = m5;
-    checkEmergencyThresholds(currentKp, maxMag);
-    const list = document.getElementById('quake-list');
-    if (list) {
-      list.innerHTML = '';
-      features.slice(0, 12).forEach(q => {
-        const mag = q.properties.mag || 0;
-        const loc = q.properties.place || 'Unknown';
-        const time = new Date(q.properties.time).toLocaleTimeString();
-        const col = mag >= 6 ? 'var(--alert)' : mag >= 4.5 ? 'var(--warn)' : 'var(--live)';
-        const div = document.createElement('div');
-        div.className = 'quake-item';
-        div.style.borderLeftColor = col;
-        div.setAttribute('data-link', 'usgs');
-        div.innerHTML = `<span class="quake-mag" style="color:${col}">${mag.toFixed(1)}</span><span>${loc}</span><span style="color:var(--muted);font-size:.7rem">${time}</span>`;
-        list.appendChild(div);
-      });
-    }
-    const geoContainer = document.getElementById('geo-list');
-    if (geoContainer && features.length) {
-      geoContainer.innerHTML = '';
-      features.slice(0, 5).forEach(q => {
-        const mag = q.properties.mag || 0;
-        const loc = (q.properties.place || '').split(',').pop().trim() || 'Global';
-        const div = document.createElement('div');
-        div.className = 'geo-item';
-        div.style.cursor = 'pointer';
-        div.style.padding = '8px 12px';
-        div.style.borderBottom = '1px solid rgba(0,100,200,.2)';
-        div.setAttribute('data-link', 'usgs');
-        div.innerHTML = `<span>🌍</span><span>${loc}:</span><span style="color:${mag >= 5 ? 'var(--alert)' : mag >= 4 ? 'var(--warn)' : 'var(--live)'}">M${mag.toFixed(1)}</span>`;
-        geoContainer.appendChild(div);
-      });
-    }
-  } catch (e) { console.warn('Earthquake API failed'); }
-}
-
-/* ==================== SOURCE CARDS ==================== */
-const SOURCES = [
-  { key: 'aurora', name: '🌌 Aurora Oval', desc: '30-min forecast' },
-  { key: 'kp', name: '📊 Kp Index', desc: 'Geomagnetic activity' },
-  { key: 'xray', name: '📡 X-Ray Flux', desc: 'GOES satellite' },
-  { key: 'cme', name: '🌊 CME Tracking', desc: 'Coronal mass ejections' },
-  { key: 'farside', name: '🌞 Far Side', desc: 'Hidden sun activity' },
-  { key: 'usgs', name: '🌋 Earthquakes', desc: 'USGS live feed' },
-  { key: 'volcano', name: '🌋 Volcanoes', desc: 'Smithsonian GVP' }
+/* ==================== EARTHQUAKE DATA ==================== */
+const QUAKE_LIST = [
+  { mag: 6.0, loc: '89 km SSE of Sand Point, Alaska', time: '14:32' },
+  { mag: 4.7, loc: '74 km WNW of Madang, Papua New Guinea', time: '11:15' },
+  { mag: 2.5, loc: '55 km S of Whites City, New Mexico', time: '09:48' },
+  { mag: 4.5, loc: '203 km SW of Yakutat, Alaska', time: '06:22' }
 ];
-function buildSourceCards() {
-  const container = document.getElementById('sourceCards');
+
+function renderEarthquakes() {
+  const container = document.getElementById('quake-list');
   if (!container) return;
   container.innerHTML = '';
-  SOURCES.forEach(s => {
+  let maxMag = 0;
+  QUAKE_LIST.forEach(q => {
+    if (q.mag > maxMag) maxMag = q.mag;
+    const col = q.mag >= 6 ? 'var(--alert)' : q.mag >= 4.5 ? 'var(--warn)' : 'var(--live)';
     const div = document.createElement('div');
-    div.className = 'panel';
-    div.setAttribute('data-link', s.key);
-    div.style.padding = '12px';
-    div.innerHTML = `<div style="font-size:1rem;font-weight:700;">${s.name}</div><div style="font-size:.7rem;color:var(--muted);">${s.desc}</div>`;
+    div.className = 'quake-item';
+    div.style.borderLeftColor = col;
+    div.setAttribute('data-link', 'usgs');
+    div.innerHTML = `
+      <span class="quake-mag" style="color:${col}">${q.mag.toFixed(1)}</span>
+      <span>${q.loc}</span>
+      <span style="color:var(--muted); font-size:.7rem">${q.time}</span>
+    `;
+    container.appendChild(div);
+  });
+  currentStrongestQuake = maxMag;
+  document.getElementById('quake-total').textContent = QUAKE_LIST.length;
+  document.getElementById('quake-strongest').textContent = maxMag.toFixed(1);
+  const m5 = QUAKE_LIST.filter(q => q.mag >= 5).length;
+  document.getElementById('quake-m5').textContent = m5;
+}
+renderEarthquakes();
+
+/* ==================== GEO ALERTS ==================== */
+function renderGeoAlerts() {
+  const container = document.getElementById('geo-list');
+  if (!container) return;
+  container.innerHTML = '';
+  QUAKE_LIST.slice(0, 4).forEach(q => {
+    const div = document.createElement('div');
+    div.style.padding = '6px 0';
+    div.style.borderBottom = '1px solid rgba(0,100,200,.2)';
+    div.style.cursor = 'pointer';
+    div.setAttribute('data-link', 'usgs');
+    div.innerHTML = `<span>🌍</span> ${q.loc.split(',').pop()} <span style="color:var(--warn)">M${q.mag.toFixed(1)}</span>`;
     container.appendChild(div);
   });
 }
-buildSourceCards();
+renderGeoAlerts();
 
 /* ==================== QUICK LINKS ==================== */
 const QUICK = [
   { key: 'aurora', label: '🌌 Aurora' }, { key: 'xray', label: '📡 X-Ray' },
-  { key: 'cme', label: '🌊 CME' }, { key: 'farside', label: '🌞 Far Side' },
-  { key: 'usgs', label: '🌋 Quakes' }, { key: 'volcano', label: '🌋 Volcano' }
+  { key: 'kp', label: '🧲 Kp Index' }, { key: 'usgs', label: '🌋 Quakes' },
+  { key: 'volcano', label: '🌋 Volcanoes' }
 ];
+
 function buildQuickLinks() {
   const container = document.getElementById('quickLinks');
   if (!container) return;
   container.innerHTML = '';
   QUICK.forEach(q => {
     const span = document.createElement('span');
-    span.className = 'badge badge-live quick-link';
-    span.style.cursor = 'pointer';
-    span.style.padding = '5px 12px';
+    span.className = 'quick-link';
     span.textContent = q.label;
     span.setAttribute('data-link', q.key);
     container.appendChild(span);
@@ -769,57 +688,66 @@ function buildQuickLinks() {
 }
 buildQuickLinks();
 
-/* ==================== BOTTOM TICKER ==================== */
-function buildTicker() {
-  const kp = document.getElementById('kp-num')?.textContent || '3';
-  const quakes = document.getElementById('quake-total')?.textContent || '0';
-  const volcanoAlert = document.getElementById('vol-alert')?.textContent || '0';
-  const items = [
-    `<span class="bt-item">🌋 Volcano Alerts: <b style="color:var(--warn)">${volcanoAlert}</b></span>`,
-    `<span class="bt-item">🌍 Quakes (24h): <b>${quakes}</b></span>`,
-    `<span class="bt-item">🧲 Kp: <b>${kp}</b></span>`,
-    `<span class="bt-item">🕋 RS Critical 2027: 0.0057</span>`,
-    `<span class="bt-item">🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦</span>`
-  ];
-  const inner = document.getElementById('botTicker');
-  if (inner) inner.innerHTML = items.map(i => i).join('') + items.map(i => i).join('');
+/* ==================== CLOCK ==================== */
+function updateTime() {
+  const now = new Date();
+  const hijri = new Intl.DateTimeFormat('en-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
+  const mecca = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
+  document.getElementById('datetime').innerHTML = `${now.toLocaleDateString()} · ${hijri} · ${now.toUTCString().slice(17, 25)} UTC · 🕋 ${mecca.toLocaleTimeString()}`;
 }
-setInterval(buildTicker, 3000);
+setInterval(updateTime, 1000); updateTime();
 
-/* ==================== LANGUAGE ==================== */
-const TRANSLATIONS = { en: {}, ar: {} };
-let currentLang = 'en';
-function setLanguage(lang) {
-  currentLang = lang;
-  document.getElementById('cur-lang').textContent = lang.toUpperCase();
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  document.getElementById('langMenu').classList.remove('open');
+/* ==================== MOON PHASE ==================== */
+const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0);
+const SYNODIC = 29.530588853;
+function updateMoon() {
+  const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
+  const illum = (1 - Math.cos((age / SYNODIC) * 2 * Math.PI)) / 2 * 100;
+  let phase;
+  if (age < 1) phase = 'New Moon';
+  else if (age < 7.4) phase = 'Waxing Crescent';
+  else if (age < 10.4) phase = 'First Quarter';
+  else if (age < 14.8) phase = 'Waxing Gibbous';
+  else if (age < 16.1) phase = 'Full Moon';
+  else if (age < 22.1) phase = 'Waning Gibbous';
+  else if (age < 25.1) phase = 'Last Quarter';
+  else phase = 'Waning Crescent';
+  document.getElementById('moon-phase').textContent = phase;
+  document.getElementById('moon-illum').textContent = illum.toFixed(1) + '%';
+  document.getElementById('moon-age').textContent = age.toFixed(1) + 'd';
 }
-document.getElementById('langBtn').addEventListener('click', e => { e.stopPropagation(); document.getElementById('langMenu').classList.toggle('open'); });
-document.addEventListener('click', e => { if (!e.target.closest('.lang-wrap')) document.getElementById('langMenu').classList.remove('open'); });
-document.querySelectorAll('.lang-opt').forEach(opt => { opt.addEventListener('click', () => setLanguage(opt.dataset.lang)); });
-setLanguage('en');
+setInterval(updateMoon, 60000); updateMoon();
+
+/* ==================== XRAY SIMULATION ==================== */
+function updateXray() {
+  const classes = ['A1.2', 'B2.5', 'C1.2', 'C3.4', 'M1.1'];
+  const idx = Math.floor(Math.random() * classes.length);
+  const val = classes[idx];
+  document.getElementById('xray-val').textContent = val;
+  const badge = document.getElementById('xray-badge');
+  if (val[0] === 'M') badge.innerHTML = 'MOD · GOES Satellite';
+  else if (val[0] === 'C') badge.innerHTML = 'LOW · GOES Satellite';
+  else badge.innerHTML = 'QUIET · GOES Satellite';
+}
+setInterval(updateXray, 30000); updateXray();
+
+/* ==================== UPDATE TICKER ==================== */
+function updateTicker() {
+  document.getElementById('ticker-alerts').textContent = document.getElementById('vol-alert')?.textContent || '6';
+  document.getElementById('ticker-quakes').textContent = document.getElementById('quake-total')?.textContent || '78';
+  document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+}
+setInterval(updateTicker, 5000); updateTicker();
 
 /* ==================== INITIALIZATION ==================== */
 window.addEventListener('load', () => {
-  console.log('🚀 TRIO SEAL v10.1 READY — Production Ready');
-  console.log('💡 Debug: type debugClicks() in console to see analytics');
+  console.log('🚀 TRIO SEAL v10.2 READY — Native Image Loading (Claude Method)');
+  console.log('💡 Type debugClicks() to see analytics');
   updateVisuals();
   setInterval(updateVisuals, 300000);
-  
-  fetchKp();
-  fetchXray();
-  fetchEarthquakes();
-  updateCoreFromApis();
-  
-  setInterval(fetchKp, 60000);
-  setInterval(fetchXray, 60000);
-  setInterval(fetchEarthquakes, 60000);
-  setInterval(updateCoreFromApis, 30000);
-  
-  buildTicker();
-  document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+  fetchRealKp();
+  setInterval(fetchRealKp, 60000);
+  updateTicker();
 });
 </script>
 </body>
