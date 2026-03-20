@@ -212,6 +212,11 @@
             flex-direction: column;
         }
 
+        /* منع النقر على العناصر الداخلية */
+        .obs-card img, .obs-card span, .obs-card div {
+            pointer-events: none;
+        }
+
         .obs-card[data-link] {
             cursor: pointer;
         }
@@ -303,6 +308,7 @@
             font-size: 0.8rem;
             transition: all 0.3s ease;
             width: 100%;
+            pointer-events: auto; /* الأزرار تبقى قابلة للنقر */
         }
 
         .source-btn:hover {
@@ -338,64 +344,6 @@
 
         [data-tooltip]:hover:before {
             display: block;
-        }
-
-        /* ===== MODAL ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--text-glow);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            color: white;
-        }
-
-        .modal-title {
-            color: var(--text-glow);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .modal-link {
-            display: inline-block;
-            margin: 1rem 0;
-            padding: 10px 20px;
-            background: var(--text-glow);
-            color: var(--bg-dark);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .modal-close {
-            margin-top: 1rem;
-            padding: 8px 16px;
-            background: transparent;
-            border: 1px solid var(--text-glow);
-            color: var(--text-glow);
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
         }
 
         /* ===== MOON PHASE ===== */
@@ -546,17 +494,6 @@
     </style>
 </head>
 <body>
-    <!-- Modal -->
-    <div class="modal" id="sourceModal">
-        <div class="modal-content">
-            <h2 class="modal-title" id="modal-title">Source</h2>
-            <p id="modal-description">Scientific data source for this indicator</p>
-            <a href="#" id="modal-link" class="modal-link" target="_blank">Open Source</a>
-            <br>
-            <button class="modal-close" onclick="closeModal()">Close</button>
-        </div>
-    </div>
-
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -573,8 +510,6 @@
                 <div id="language-menu" class="lang-menu">
                     <div class="lang-option" onclick="setLanguage('en')">🇬🇧 EN</div>
                     <div class="lang-option" onclick="setLanguage('ar')">🇸🇦 AR</div>
-                    <div class="lang-option" onclick="setLanguage('fr')">🇫🇷 FR</div>
-                    <div class="lang-option" onclick="setLanguage('es')">🇪🇸 ES</div>
                 </div>
             </div>
         </div>
@@ -595,17 +530,17 @@
         <div class="grid-3">
             <div class="obs-card" data-link="https://www.timeanddate.com/astronomy/moon/mecca.html">
                 <span class="obs-title">🕋 Taqābul</span>
-                <span class="obs-value" id="taqabul-value">0.00</span>
+                <span class="obs-value" id="taqabul-value">23.50</span>
                 <span class="obs-unit">Angle</span>
             </div>
             <div class="obs-card" data-link="https://earthquake.usgs.gov">
                 <span class="obs-title">🌀 Closure</span>
-                <span class="obs-value" id="closure-value">0.000</span>
+                <span class="obs-value" id="closure-value">0.842</span>
                 <span class="obs-unit">RS</span>
             </div>
             <div class="obs-card" data-link="https://www.noaa.gov">
                 <span class="obs-title">⚖️ Balance</span>
-                <span class="obs-value" id="balance-value">0.000</span>
+                <span class="obs-value" id="balance-value">1.270</span>
                 <span class="obs-unit">α_stab</span>
             </div>
         </div>
@@ -642,20 +577,14 @@
             <div class="obs-card" data-link="https://www.swpc.noaa.gov/products/planetary-k-index">
                 <img class="obs-image" id="kp-img" src="https://services.swpc.noaa.gov/images/planetary-k-index.gif" alt="Kp">
                 <span class="obs-title">Kp Index</span>
-                <span class="obs-value" id="kp-value">3.3</span>
-                <span class="obs-unit">Kp</span>
             </div>
             <div class="obs-card" data-link="https://solarham.com/cmetracking.htm">
-                <img class="obs-image" id="cme-img" src="https://solarham.com/images/cme_latest.gif" alt="CME">
+                <img class="obs-image" id="cme-img" src="https://solarham.com/images/cme_latest.png" alt="CME">
                 <span class="obs-title">CME Tracking</span>
-                <span class="obs-value" id="cme-value">C1.2</span>
-                <span class="obs-unit">Class</span>
             </div>
             <div class="obs-card" data-link="https://www.swpc.noaa.gov/products/goes-x-ray-flux">
-                <img class="obs-image" id="xray-img" src="https://services.swpc.noaa.gov/images/goes-xray-flux-latest.gif" alt="X-Ray">
+                <img class="obs-image" id="xray-img" src="https://services.swpc.noaa.gov/images/goes-xray-flux-latest.png" alt="X-Ray">
                 <span class="obs-title">X-Ray Flux</span>
-                <span class="obs-value" id="xray-value">C1.2</span>
-                <span class="obs-unit">Flux</span>
             </div>
         </div>
 
@@ -663,14 +592,6 @@
         <div class="obs-card" data-link="https://sdo.gsfc.nasa.gov/data/" style="margin: 1rem 0;">
             <img class="obs-image" id="daily-solar-img" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_1024.jpg" alt="Daily Solar">
             <span class="obs-title">☀️ Today's Sun</span>
-        </div>
-
-        <!-- Sunspot Details -->
-        <div class="obs-card" data-link="https://solarham.com/sunspots.htm">
-            <span class="obs-title">📊 Sunspot Regions</span>
-            <table class="sunspot-table" id="sunspot-table">
-                <tr><td colspan="3">Loading...</td></tr>
-            </table>
         </div>
 
         <!-- Earthquake Observatory -->
@@ -782,13 +703,6 @@
             } catch (e) { console.error('Failed to fetch earthquakes:', e); }
         }
 
-        // ===== CORE INDICATORS =====
-        function updateCoreIndicators() {
-            document.getElementById('taqabul-value').innerText = '23.50';
-            document.getElementById('closure-value').innerText = '0.842';
-            document.getElementById('balance-value').innerText = '1.270';
-        }
-
         // ===== LANGUAGE =====
         function setLanguage(lang) {
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -805,7 +719,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             updateTime();
             updateMoon();
-            updateCoreIndicators();
             fetchEarthquakes();
             
             setInterval(() => updateTime(), 1000);
