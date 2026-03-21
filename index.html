@@ -3,73 +3,49 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v9.0 · Light</title>
+<title>TRIO SEAL · Cosmic Observatory v8.5 · Enhanced</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 /* ═══════════════════════════════════════════════════
-   COLOR SYSTEM v8.2 — "Arctic Observatory"
-   Philosophy: Navy foundation · Teal data · Amber signal
-   Three semantic layers:
-     1. STRUCTURE  → navy / navy-mid / slate
-     2. DATA       → teal (good) · amber (caution) · red (alert)
-     3. SURFACE    → white · blue-gray base · subtle
+   COLOR SYSTEM v8.5 — "Arctic Observatory" (Stable + Enhanced)
 ═══════════════════════════════════════════════════ */
 :root {
-  /* ─── Backgrounds ─── */
-  --bg:           #EEF3F8;   /* cool blue-gray base */
-  --bg-surface:   #FFFFFF;   /* card face */
-  --bg-subtle:    #E8EFF6;   /* recessed / inner areas */
-  --bg-hover:     #FDF8EE;   /* warm hover lift */
-  --bg-navy:      #0F2B4F;   /* primary dark header */
-  --bg-navy-mid:  #1A3E6B;   /* secondary nav */
-
-  /* ─── Text ─── */
-  --text-primary:  #0F2B4F;  /* navy — strong headings */
-  --text-body:     #1E3A5F;  /* slightly lighter body */
-  --text-muted:    #5A7A9A;  /* secondary labels */
-  --text-on-navy:  #E8F0F8;  /* text on dark backgrounds */
-
-  /* ─── Borders ─── */
-  --bdr:          #CBD8E8;   /* standard border */
-  --bdr-focus:    #0EA5E9;   /* interactive focus */
-
-  /* ─── Semantic Colors ─── */
-  --teal:         #0D9488;   /* live data — good/active */
-  --teal-light:   #CCFBF1;   /* teal background tint */
-  --teal-mid:     #0F766E;   /* darker teal for text */
-
-  --amber:        #B45309;   /* caution / Mizan values */
-  --amber-light:  #FEF3C7;   /* amber background tint */
-  --amber-mid:    #D97706;   /* amber gauge / chart */
-
-  --sky:          #0369A1;   /* Kp / solar indicators */
-  --sky-light:    #E0F2FE;   /* sky background tint */
-
-  --crimson:      #B91C1C;   /* alert / red mode */
-  --crimson-light:#FEE2E2;   /* alert background */
-
-  --violet:       #6D28D9;   /* aurora / special */
+  --bg:           #EEF3F8;
+  --bg-surface:   #FFFFFF;
+  --bg-subtle:    #E8EFF6;
+  --bg-hover:     #FDF8EE;
+  --bg-navy:      #0F2B4F;
+  --bg-navy-mid:  #1A3E6B;
+  --text-primary:  #0F2B4F;
+  --text-body:     #1E3A5F;
+  --text-muted:    #5A7A9A;
+  --text-on-navy:  #E8F0F8;
+  --bdr:          #CBD8E8;
+  --bdr-focus:    #0EA5E9;
+  --teal:         #0D9488;
+  --teal-light:   #CCFBF1;
+  --teal-mid:     #0F766E;
+  --amber:        #B45309;
+  --amber-light:  #FEF3C7;
+  --amber-mid:    #D97706;
+  --sky:          #0369A1;
+  --sky-light:    #E0F2FE;
+  --crimson:      #B91C1C;
+  --crimson-light:#FEE2E2;
+  --violet:       #6D28D9;
   --violet-light: #EDE9FE;
-
-  --gold-accent:  #C8920A;   /* logo / highlights */
+  --gold-accent:  #C8920A;
   --gold-light:   #FEF9E7;
-
-  /* ─── Shadows ─── */
   --shadow-sm:    0 2px 6px rgba(15,43,79,.07);
   --shadow-md:    0 6px 18px rgba(15,43,79,.10);
   --shadow-lg:    0 12px 32px rgba(15,43,79,.13);
   --shadow-hover: 0 10px 28px rgba(15,43,79,.16);
-
-  /* ─── Fonts ─── */
   --f-hud:  'Orbitron', sans-serif;
   --f-body: 'Rajdhani', sans-serif;
   --f-mono: 'Share Tech Mono', monospace;
-
-  /* ─── Motion ─── */
   --t: all 0.22s cubic-bezier(.4,0,.2,1);
-  --t-slow: all 0.4s cubic-bezier(.4,0,.2,1);
 }
 
 /* ─── RED MODE overrides ─── */
@@ -83,9 +59,6 @@ body.red-mode {
   --teal-light:  #FEE2E2;
 }
 
-/* ═══════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════ */
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body {
@@ -97,13 +70,11 @@ body {
   line-height: 1.5;
   transition: background .4s ease, color .3s ease;
 }
-/* subtle grain texture on bg */
 body::before {
   content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   opacity: .5;
 }
-
 .container {
   max-width: 1400px; margin: 0 auto; position: relative; z-index:1;
   background: var(--bg-surface);
@@ -113,8 +84,15 @@ body::before {
   border: 1px solid var(--bdr);
 }
 
+/* RTL Support */
+[dir="rtl"] .subtitle { border-left: none; border-right: 3px solid var(--amber-mid); padding-left: 0; padding-right: .9rem; }
+[dir="rtl"] .section-title::after { background: linear-gradient(270deg, var(--bdr), transparent); }
+[dir="rtl"] .core-card::before { left: auto; right: 0; border-radius: 0 4px 4px 0; }
+[dir="rtl"] .vol-item { border-left: none; border-right: 4px solid; }
+[dir="rtl"] .quake-item { border-left: none; border-right: 4px solid; }
+
 /* ═══════════════════════════════════════
-   NAVBAR
+   NAVBAR (unchanged)
 ═══════════════════════════════════════ */
 .navbar {
   display: flex; align-items: center; justify-content: space-between;
@@ -128,13 +106,12 @@ body::before {
 .logo {
   font-family: var(--f-hud);
   font-size: 1.55rem; font-weight: 900;
-  color: #E8C84A;  /* warm gold on navy — classic */
+  color: #E8C84A;
   text-shadow: 0 0 18px rgba(232,200,74,.4);
   cursor: pointer; letter-spacing: 1px;
   transition: text-shadow .3s;
 }
 .logo:hover { text-shadow: 0 0 28px rgba(232,200,74,.7); }
-
 .nav-links { list-style:none; display:flex; gap:1.6rem; }
 .nav-links a {
   color: rgba(232,240,248,.7);
@@ -143,8 +120,6 @@ body::before {
   transition: color .2s;
 }
 .nav-links a:hover { color: #E8C84A; }
-
-/* Language selector */
 .language-selector { position: relative; }
 .lang-btn {
   background: rgba(255,255,255,.12);
@@ -220,7 +195,7 @@ body::before {
 #cosmic-time-bar .mecca-clock{ color: var(--amber); }
 
 /* ═══════════════════════════════════════
-   PAGE TITLE
+   PAGE TITLE & BADGES
 ═══════════════════════════════════════ */
 .page-title {
   font-family: var(--f-hud);
@@ -244,10 +219,6 @@ body::before {
   padding-left: .9rem;
   display: flex; align-items:center; gap:.6rem; flex-wrap:wrap;
 }
-
-/* ═══════════════════════════════════════
-   BADGES — semantic colors
-═══════════════════════════════════════ */
 .badge {
   display: inline-block; padding: 3px 10px; border-radius: 99px;
   font-size: .68rem; font-weight: 700; letter-spacing: .6px;
@@ -257,8 +228,6 @@ body::before {
 .badge-mizan  { background: var(--amber-light);  color: var(--amber);      border: 1px solid rgba(180,83,9,.25);   }
 .badge-sky    { background: var(--sky-light);    color: var(--sky);        border: 1px solid rgba(3,105,161,.22);  }
 .badge-alert  { background: var(--crimson-light);color: var(--crimson);    border: 1px solid rgba(185,28,28,.25);  }
-.badge-violet { background: var(--violet-light); color: var(--violet);     border: 1px solid rgba(109,40,217,.2);  }
-.badge-gold   { background: var(--gold-light);   color: var(--gold-accent);border: 1px solid rgba(200,146,10,.25); }
 
 /* ═══════════════════════════════════════
    SECTION TITLES
@@ -276,7 +245,7 @@ body::before {
 }
 
 /* ═══════════════════════════════════════
-   CARD BASE
+   CARD BASE & CORE INDICATORS
 ═══════════════════════════════════════ */
 .card, .core-card, .forecast-card, .historical-card, .panel {
   background: var(--bg-surface);
@@ -295,17 +264,10 @@ body::before {
 }
 [data-link] { cursor: pointer; }
 
-/* ═══════════════════════════════════════
-   CORE INDICATORS — 3-card row
-   Each has its own color identity:
-   Taqabul → crimson  /  Closure → amber  /  Balance → teal
-═══════════════════════════════════════ */
 .core-grid {
   display: grid; grid-template-columns: repeat(3,1fr);
   gap: 1.2rem; margin-bottom: 1.5rem;
 }
-
-/* Left stripe accent per card type */
 .core-card::before {
   content:''; position:absolute; top:0; left:0;
   width:4px; height:100%; border-radius:4px 0 0 4px;
@@ -313,7 +275,6 @@ body::before {
 .core-card.taq::before  { background: linear-gradient(to bottom, var(--crimson), #FB7185); }
 .core-card.clo::before  { background: linear-gradient(to bottom, var(--amber-mid), #FBBF24); }
 .core-card.bal::before  { background: linear-gradient(to bottom, var(--teal), #34D399); }
-
 .core-header {
   display:flex; justify-content:space-between; align-items:center;
   margin-bottom: .8rem;
@@ -326,19 +287,15 @@ body::before {
 .core-title.taq { background: var(--crimson-light); color: var(--crimson); border: 1px solid rgba(185,28,28,.2); }
 .core-title.clo { background: var(--amber-light);   color: var(--amber);   border: 1px solid rgba(180,83,9,.2);   }
 .core-title.bal { background: var(--teal-light);    color: var(--teal-mid);border: 1px solid rgba(13,148,136,.2); }
-
 .core-value {
   font-family: var(--f-mono); font-size: 1.45rem;
   font-weight: 700; padding: .2rem .7rem;
   border-radius: 8px; min-width: 76px; text-align: center;
   border: 2px solid;
-  transition: color .4s, border-color .4s;
 }
 .core-value.taq { color: var(--crimson); border-color: rgba(185,28,28,.35); background: var(--crimson-light); }
 .core-value.clo { color: var(--amber);   border-color: rgba(180,83,9,.35);  background: var(--amber-light);   }
 .core-value.bal { color: var(--teal-mid);border-color: rgba(13,148,136,.35);background: var(--teal-light);    }
-
-/* gauge tracks */
 .gauge-track {
   height: 7px; background: var(--bg-subtle);
   border-radius: 99px; overflow:hidden;
@@ -351,9 +308,6 @@ body::before {
 .gauge-taq { background: linear-gradient(90deg,#DC2626,#F87171); }
 .gauge-clo { background: linear-gradient(90deg,#B45309,#FBBF24); }
 .gauge-bal { background: linear-gradient(90deg,#0D9488,#34D399); }
-.gauge-sky { background: linear-gradient(90deg,#0369A1,#38BDF8); }
-.gauge-violet { background: linear-gradient(90deg,#6D28D9,#A78BFA); }
-
 .status-row {
   display:flex; justify-content:space-between; align-items:center;
   font-size: .78rem; color: var(--text-muted); margin-top:4px;
@@ -390,7 +344,6 @@ body::before {
   cursor:pointer; transition: var(--t);
   position: relative; overflow:hidden;
 }
-/* Top color bar per card */
 .source-card::before {
   content:''; position:absolute; top:0; left:0;
   width:100%; height:3px;
@@ -409,7 +362,6 @@ body::before {
   font-size: .9rem; font-weight:700; margin-bottom:4px;
 }
 .source-card .label { font-size:.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.7px; }
-
 .offline-badge {
   display: inline-block;
   background: var(--crimson-light); color: var(--crimson);
@@ -428,7 +380,7 @@ body::before {
 .visit-btn:hover { background: var(--sky); color:#fff; }
 
 /* ═══════════════════════════════════════
-   MOON PHASE
+   MOON PHASE (Natural Colors - Fixed)
 ═══════════════════════════════════════ */
 .moon-phase {
   display:flex; align-items:center; gap:1.8rem; flex-wrap:wrap;
@@ -439,28 +391,23 @@ body::before {
   transition: var(--t);
   position: relative; overflow:hidden;
 }
-/* star speckle on moon card */
 .moon-phase::before {
   content:'';position:absolute;inset:0;
   background-image:
     radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,.6), transparent),
-    radial-gradient(1px 1px at 45% 55%, rgba(255,255,255,.4), transparent),
-    radial-gradient(1.2px 1.2px at 70% 15%, rgba(255,255,255,.55), transparent),
-    radial-gradient(1px 1px at 85% 65%, rgba(255,255,255,.45), transparent),
-    radial-gradient(1px 1px at 28% 80%, rgba(255,255,255,.4), transparent),
-    radial-gradient(1.2px 1.2px at 92% 38%, rgba(255,255,255,.5), transparent);
+    radial-gradient(1px 1px at 45% 55%, rgba(255,255,255,.4), transparent);
   pointer-events:none;
 }
 .moon-phase:hover { box-shadow: 0 14px 36px rgba(15,43,79,.3); transform: translateY(-2px); }
-.moon-canvas { display:block; flex-shrink:0; border-radius:50%; box-shadow:0 0 20px rgba(200,180,100,.35); transition: box-shadow .5s ease; }
+.moon-canvas { display:block; flex-shrink:0; border-radius:50%; box-shadow:0 0 20px rgba(200,180,100,.35); width:120px; height:120px; transition: box-shadow .5s ease; }
 .moon-info h3 { color: #E8C84A; font-family:var(--f-hud); font-size:1rem; letter-spacing:1.5px; margin-bottom:.6rem; font-weight: 700; }
 .moon-percent { font-size:1.7rem; font-weight:900; color:#6EE7B7; font-family:var(--f-mono); transition: color .5s ease; }
-.moon-thickness { font-size:.95rem; color:rgba(232,240,248,.75); margin-top:.3rem; font-weight: 600; letter-spacing:.3px; transition: color .5s ease; }
+.moon-thickness { font-size:.95rem; color:rgba(232,240,248,.75); margin-top:.3rem; font-weight: 600; }
 #moon-age { margin-top:.3rem; color:rgba(232,240,248,.55); font-size:.88rem; font-weight: 500; }
-#moon-phase-name { display:inline; color:var(--text-on-navy); font-size:1.05rem; font-weight: 700; letter-spacing:.5px; }
+#moon-phase-name { display:inline; color:var(--text-on-navy); font-size:1.05rem; font-weight: 700; }
 
 /* ═══════════════════════════════════════
-   VOLCANO LIST
+   VOLCANO LIST (Enhanced)
 ═══════════════════════════════════════ */
 .vol-stats {
   display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:14px;
@@ -475,11 +422,9 @@ body::before {
   color: var(--text-primary); font-family:var(--f-mono);
 }
 .vol-stat-box .lbl { color:var(--text-muted); font-size:.75rem; }
-
-.vol-list { max-height:300px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--bdr) transparent; }
+.vol-list { max-height:300px; overflow-y:auto; scrollbar-width:thin; margin-bottom:8px; }
 .vol-list::-webkit-scrollbar { width:4px; }
 .vol-list::-webkit-scrollbar-thumb { background:var(--bdr); border-radius:2px; }
-
 .vol-item {
   background: var(--bg-subtle); border-radius:10px;
   padding: 9px 12px; margin-bottom:6px;
@@ -498,9 +443,61 @@ body::before {
   font-size:.66rem; padding:2px 8px; border-radius:99px;
   font-weight:700; font-family:var(--f-hud); letter-spacing:.5px;
 }
+.load-more-btn {
+  display: block; width: 100%; margin-top: 10px;
+  padding: 8px 0; border-radius: 99px;
+  background: var(--sky-light); color: var(--sky);
+  border: 1px solid rgba(3,105,161,.28);
+  font-family: var(--f-hud); font-size: .7rem;
+  letter-spacing: 1px; font-weight: 600;
+  cursor: pointer; transition: var(--t);
+  text-align: center;
+}
+.load-more-btn:hover { background: var(--sky); color: #fff; }
+.load-more-btn:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ═══════════════════════════════════════
-   INDICATORS GRID (21 indicators)
+   EARTHQUAKES (Enhanced)
+═══════════════════════════════════════ */
+.earthquake-section {
+  background: var(--bg-surface); border-radius:20px;
+  padding:1.4rem; margin:1.5rem 0; border:1px solid var(--bdr);
+  box-shadow:var(--shadow-sm);
+}
+.earthquake-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.2rem; }
+.quake-stat {
+  background: var(--bg-subtle); border-radius:12px; padding:12px;
+  text-align:center; border:1px solid var(--bdr); transition:var(--t);
+}
+.quake-stat:hover { border-color:var(--sky); }
+.quake-stat .number { font-size:1.8rem; font-weight:700; color:var(--text-primary); font-family:var(--f-mono); }
+.quake-stat .label  { color:var(--text-muted); font-size:.76rem; }
+.quake-list { display:flex; flex-direction:column; gap:7px; margin-bottom:8px; }
+.quake-item {
+  background: var(--bg-subtle); border-radius:10px;
+  padding: 9px 13px; display:flex; align-items:center; gap:12px;
+  border-left:4px solid; cursor:pointer; transition:var(--t);
+}
+.quake-item:hover { background: var(--bg-hover); transform:translateX(4px); box-shadow:var(--shadow-sm); }
+.quake-magnitude { font-size:1.1rem; font-weight:700; min-width:52px; font-family:var(--f-mono); }
+.quake-location  { flex:1; color:var(--text-body); font-size:.88rem; }
+.quake-time      { color:var(--text-muted); font-size:.76rem; white-space:nowrap; }
+
+/* ═══════════════════════════════════════
+   MAP CONTAINER
+═══════════════════════════════════════ */
+.event-map {
+  width: 100%; height: 280px;
+  border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--bdr);
+  margin-top: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.leaflet-container { background: #e8eff6; font-family: var(--f-body); }
+.leaflet-popup-content-wrapper { border-radius: 10px; font-family: var(--f-body); font-size: .85rem; }
+
+/* ═══════════════════════════════════════
+   OTHER SECTIONS (unchanged)
 ═══════════════════════════════════════ */
 .indicators-grid {
   display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
@@ -519,9 +516,7 @@ body::before {
   border: 2px solid rgba(13,148,136,.3);
   padding: .15rem .6rem; border-radius:8px;
   min-width:70px; text-align:center;
-  transition: color .4s;
 }
-.card-value.loading { color:var(--text-muted); background:var(--bg-subtle); border-color:var(--bdr); }
 .gauge { height:6px; background:var(--bg-subtle); border-radius:99px; overflow:hidden; margin:8px 0 6px; }
 .gauge-fill { height:100%; border-radius:99px; transition:width .5s cubic-bezier(.4,0,.2,1); }
 .gauge-fill.live  { background:linear-gradient(90deg,var(--teal),#34D399); }
@@ -530,43 +525,19 @@ body::before {
 .status-badge { padding:2px 8px; border-radius:99px; font-size:.66rem; font-weight:700; font-family:var(--f-hud); }
 .status-badge.live  { background:var(--teal-light);  color:var(--teal-mid); border:1px solid rgba(13,148,136,.25); }
 .status-badge.mizan { background:var(--amber-light); color:var(--amber);    border:1px solid rgba(180,83,9,.25); }
-
-/* aurora / cryo / temp / solar category tints */
 .card.aurora .card-title { background:var(--violet-light); color:var(--violet); border-color:rgba(109,40,217,.2); }
 .card.cryo   .card-title { background:var(--sky-light);    color:var(--sky);    border-color:rgba(3,105,161,.2);  }
 .card.temp   .card-title { background:var(--teal-light);   color:var(--teal-mid);border-color:rgba(13,148,136,.2);}
 .card.solar  .card-title { background:var(--gold-light);   color:var(--gold-accent);border-color:rgba(200,146,10,.2);}
-
-.card.aurora .gauge-fill.live { background:linear-gradient(90deg,var(--violet),#C4B5FD); }
-.card.cryo   .gauge-fill.live { background:linear-gradient(90deg,var(--sky),#38BDF8); }
-.card.solar  .gauge-fill.live { background:linear-gradient(90deg,var(--gold-accent),#FCD34D); }
-
-/* ═══════════════════════════════════════
-   SUNSPOT TABLE
-═══════════════════════════════════════ */
 .sunspot-details { background:var(--bg-subtle); border-radius:12px; padding:1rem; margin-top:1rem; }
 .sunspot-table { width:100%; border-collapse:collapse; }
 .sunspot-table th { color:var(--text-primary); font-family:var(--f-hud); font-size:.7rem; letter-spacing:1px; padding:6px 8px; border-bottom:2px solid var(--bdr); text-align:left; }
 .sunspot-table td { padding:6px 8px; border-bottom:1px solid var(--bdr); font-size:.88rem; }
-.sunspot-table .region { color:var(--text-primary); font-weight:700; }
-.sunspot-table .count  { color:var(--teal-mid); font-weight:700; font-family:var(--f-mono); }
-.sunspot-table .class  { color:var(--text-muted); }
-
-/* ═══════════════════════════════════════
-   HISTORICAL EVENTS
-═══════════════════════════════════════ */
 .historical-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:10px; }
 .historical-event { padding:12px; background:var(--bg-subtle); border-radius:12px; border:1px solid var(--bdr); }
 .historical-event .year  { color:var(--text-primary); font-size:1.1rem; font-weight:700; font-family:var(--f-mono); }
-.historical-event .event-type { color:var(--sky); font-size:.85rem; margin-top:2px; }
-.historical-event .magnitude  { color:var(--text-body); font-size:.95rem; font-weight:600; }
-
-/* ═══════════════════════════════════════
-   LIVE IMAGES
-═══════════════════════════════════════ */
 .images-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin:1.5rem 0; }
 .image-card { background:var(--bg-surface); border-radius:16px; padding:1rem; border:1px solid var(--bdr); }
-.image-card h3 { color:var(--text-primary); font-family:var(--f-hud); font-size:.75rem; letter-spacing:1.5px; margin-bottom:.8rem; }
 .image-skeleton {
   width:100%; height:190px; border-radius:10px;
   background:linear-gradient(90deg,var(--bg-subtle) 25%,var(--bg) 50%,var(--bg-subtle) 75%);
@@ -577,38 +548,6 @@ body::before {
 }
 .image-loaded { width:100%; height:190px; object-fit:cover; border-radius:10px; display:block; }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-/* ═══════════════════════════════════════
-   EARTHQUAKES
-═══════════════════════════════════════ */
-.earthquake-section {
-  background:var(--bg-surface); border-radius:20px;
-  padding:1.4rem; margin:1.5rem 0; border:1px solid var(--bdr);
-  box-shadow:var(--shadow-sm);
-}
-.earthquake-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.2rem; }
-.quake-stat {
-  background:var(--bg-subtle); border-radius:12px; padding:12px;
-  text-align:center; border:1px solid var(--bdr); transition:var(--t);
-}
-.quake-stat:hover { border-color:var(--sky); }
-.quake-stat .number { font-size:1.8rem; font-weight:700; color:var(--text-primary); font-family:var(--f-mono); }
-.quake-stat .label  { color:var(--text-muted); font-size:.76rem; }
-
-.quake-list { display:flex; flex-direction:column; gap:7px; }
-.quake-item {
-  background:var(--bg-subtle); border-radius:10px;
-  padding: 9px 13px; display:flex; align-items:center; gap:12px;
-  border-left:4px solid; cursor:pointer; transition:var(--t);
-}
-.quake-item:hover { background:var(--bg-hover); transform:translateX(4px); box-shadow:var(--shadow-sm); }
-.quake-magnitude { font-size:1.1rem; font-weight:700; min-width:52px; font-family:var(--f-mono); }
-.quake-location  { flex:1; color:var(--text-body); font-size:.88rem; }
-.quake-time      { color:var(--text-muted); font-size:.76rem; white-space:nowrap; }
-
-/* ═══════════════════════════════════════
-   QUICK LINKS
-═══════════════════════════════════════ */
 .quick-links { display:flex; gap:.5rem; flex-wrap:wrap; margin:1rem 0; }
 .quick-link {
   background:var(--bg-subtle); border:1px solid var(--bdr);
@@ -617,20 +556,12 @@ body::before {
   transition:var(--t);
 }
 .quick-link:hover { background:var(--sky-light); color:var(--sky); border-color:rgba(3,105,161,.35); transform:translateY(-2px); }
-
-/* ═══════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════ */
 .footer {
   text-align:center; color:var(--text-muted);
   padding:1.2rem; margin-top:2.5rem;
   border-top:1px solid var(--bdr);
   font-size:.82rem;
 }
-
-/* ═══════════════════════════════════════
-   BOTTOM TICKER — redesigned
-═══════════════════════════════════════ */
 .bticker {
   position:fixed; bottom:0; left:0; width:100%;
   background:var(--bg-navy);
@@ -641,7 +572,6 @@ body::before {
   box-shadow:0 -4px 20px rgba(15,43,79,.2);
   overflow:hidden; white-space:nowrap;
 }
-/* live label on left */
 .bticker-lbl {
   flex-shrink:0; display:flex; align-items:center;
   padding: 0 14px 0 0;
@@ -656,7 +586,6 @@ body::before {
   animation:livepulse 1.5s infinite; margin-right:6px;
 }
 @keyframes livepulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-/* scrolling items */
 .bticker-scroll { flex:1; overflow:hidden; }
 .bticker-inner  { display:inline-flex; gap:0; animation:bmarquee 55s linear infinite; }
 .bticker-inner:hover { animation-play-state:paused; }
@@ -669,20 +598,12 @@ body::before {
 }
 .bt-item b      { color:#E8C84A; }
 .bt-item .live  { color:#34D399; font-weight:700; }
-.bt-item .warn  { color:#FBBF24; font-weight:700; }
-.bt-item .alert { color:#FCA5A5; font-weight:700; }
-
-/* ═══════════════════════════════════════
-   RED MODE
-═══════════════════════════════════════ */
 .red-mode-overlay {
   position:fixed; inset:0; pointer-events:none; z-index:998;
   background:radial-gradient(circle at 50% 0%, rgba(220,38,38,.15), transparent 65%);
   animation:rm-pulse 2.5s ease-in-out infinite;
 }
 @keyframes rm-pulse { 0%,100%{opacity:.4} 50%{opacity:.9} }
-
-/* NOTIFICATION TOAST */
 .notification-toast {
   position:fixed; top:20px; right:20px; z-index:9999;
   background:var(--bg-surface);
@@ -693,10 +614,6 @@ body::before {
   max-width:300px;
 }
 @keyframes toast-in { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
-
-/* ═══════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════ */
 @media(max-width:900px) { .core-grid{grid-template-columns:1fr 1fr} .images-grid{grid-template-columns:1fr 1fr} }
 @media(max-width:600px) {
   body { padding:1rem 1rem 60px; }
@@ -706,100 +623,9 @@ body::before {
   .nav-links { display:none; }
   .moon-phase { flex-direction:column; text-align:center; }
 }
-/* ═══════════════════════════════════════════════
-   v9.0 NEW MODULE STYLES
-═══════════════════════════════════════════════ */
-
-/* ── Load More button ── */
-.load-more-btn {
-  display: block; width: 100%; margin-top: 10px;
-  padding: 9px 0; border-radius: 99px;
-  background: var(--sky-light); color: var(--sky);
-  border: 1px solid rgba(3,105,161,.28);
-  font-family: var(--f-hud); font-size: .72rem;
-  letter-spacing: 1.5px; font-weight: 700;
-  cursor: pointer; transition: var(--t);
-  text-align: center;
-}
-.load-more-btn:hover { background: var(--sky); color: #fff; }
-.load-more-btn:disabled { opacity: .5; cursor: not-allowed; }
-
-/* ── Leaflet map container ── */
-.event-map {
-  width: 100%; height: 300px;
-  border-radius: 14px; overflow: hidden;
-  border: 1px solid var(--bdr);
-  margin-top: 14px;
-  box-shadow: var(--shadow-sm);
-}
-/* Fix Leaflet tile rendering inside overflow:hidden container */
-.leaflet-container { background: #e8eff6; font-family: var(--f-body); }
-.leaflet-popup-content-wrapper {
-  border-radius: 10px; font-family: var(--f-body);
-  font-size: .85rem; box-shadow: var(--shadow-md);
-}
-
-/* ── Cosmic Constants panel ── */
-.constants-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 12px; margin-top: 10px;
-}
-.const-card {
-  background: linear-gradient(135deg, var(--bg-navy) 0%, var(--bg-navy-mid) 100%);
-  border-radius: 12px; padding: 12px 14px;
-  border: 1px solid rgba(232,200,74,.2);
-  transition: var(--t);
-}
-.const-card:hover { border-color: rgba(232,200,74,.5); transform: translateY(-2px); }
-.const-symbol {
-  font-family: var(--f-mono); font-size: 1.2rem;
-  color: #E8C84A; font-weight: 700; margin-bottom: 3px;
-}
-.const-value {
-  font-family: var(--f-mono); font-size: .82rem;
-  color: #6EE7B7; letter-spacing: .5px;
-}
-.const-label { font-size: .72rem; color: rgba(232,240,248,.5); margin-top: 2px; }
-
-/* ── Predictive Correlation panel ── */
-.correlation-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 14px; border-radius: 10px;
-  background: var(--bg-subtle); border: 1px solid var(--bdr);
-  margin-bottom: 8px; transition: var(--t);
-}
-.correlation-row:hover { background: var(--bg-hover); }
-.corr-icon { font-size: 1.3rem; flex-shrink: 0; }
-.corr-body { flex: 1; }
-.corr-title { font-weight: 700; color: var(--text-primary); font-size: .9rem; }
-.corr-desc  { font-size: .78rem; color: var(--text-muted); margin-top: 1px; }
-.corr-badge {
-  font-family: var(--f-hud); font-size: .62rem; padding: 2px 8px;
-  border-radius: 99px; font-weight: 700; flex-shrink: 0;
-}
-.corr-high   { background: var(--crimson-light); color: var(--crimson); border: 1px solid rgba(185,28,28,.2); }
-.corr-medium { background: var(--amber-light);   color: var(--amber);   border: 1px solid rgba(180,83,9,.2);  }
-.corr-low    { background: var(--sky-light);     color: var(--sky);     border: 1px solid rgba(3,105,161,.2);  }
-
-/* ── Astronomical events strip ── */
-.astro-strip {
-  display: flex; gap: 10px; overflow-x: auto;
-  padding: 4px 0 8px; scrollbar-width: thin;
-  scrollbar-color: var(--bdr) transparent;
-}
-.astro-card {
-  flex-shrink: 0; background: var(--bg-surface);
-  border: 1px solid var(--bdr); border-radius: 12px;
-  padding: 10px 14px; min-width: 160px;
-  transition: var(--t);
-}
-.astro-card:hover { border-color: var(--violet); transform: translateY(-2px); }
-.astro-type  { font-family: var(--f-hud); font-size: .65rem; letter-spacing: 1.5px; color: var(--violet); font-weight: 700; }
-.astro-name  { font-size: .9rem; font-weight: 700; color: var(--text-primary); margin: 3px 0; }
-.astro-when  { font-size: .75rem; color: var(--text-muted); }
-
-/* ── Country flag emoji ── */
-.vol-flag { font-size: 1rem; flex-shrink: 0; }
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--bg-subtle); }
+::-webkit-scrollbar-thumb { background:var(--bdr); border-radius:3px; }
 </style>
 </head>
 <body>
@@ -834,7 +660,7 @@ body::before {
     <span>🌋 Fuego Volcano — WARNING level active</span>
     <span>🌊 CME expected · Low Impact</span>
     <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🕋 Mizan al-Malakut v8.2 · Arctic Observatory</span>
+    <span>🕋 Mizan al-Malakut v8.5 · Enhanced Platform</span>
     <span>⚡ All observatory systems nominal</span>
   </div>
 </div>
@@ -849,7 +675,7 @@ body::before {
 <!-- ══ TITLE ════════════════════════════════════════════════ -->
 <h1 class="page-title">
   TRIO SEAL · Cosmic Observatory
-  <span class="version-chip">v8.2</span>
+  <span class="version-chip">v8.5</span>
 </h1>
 <div class="subtitle">
   <span class="badge badge-live">⚡ Live</span>
@@ -863,94 +689,31 @@ body::before {
 <!-- ══ CORE INDICATORS ═════════════════════════════════════ -->
 <div class="core-grid">
   <div class="core-card taq" data-link="taqabul">
-    <div class="core-header">
-      <span class="core-title taq">🕋 Taqābul</span>
-      <span class="core-value taq" id="taqabul-value">--</span>
-    </div>
+    <div class="core-header"><span class="core-title taq">🕋 Taqābul</span><span class="core-value taq" id="taqabul-value">--</span></div>
     <div class="gauge-track"><div class="gauge-fill gauge-taq" id="taqabul-gauge" style="width:0%"></div></div>
-    <div class="status-row">
-      <span class="badge badge-alert" id="taqabul-status">MIZAN</span>
-      <span data-key="absolute-angle" style="font-size:.75rem;color:var(--text-muted)">Angle</span>
-    </div>
+    <div class="status-row"><span class="badge badge-alert" id="taqabul-status">MIZAN</span><span data-key="absolute-angle" style="font-size:.75rem;color:var(--text-muted)">Angle</span></div>
   </div>
   <div class="core-card clo" data-link="closure">
-    <div class="core-header">
-      <span class="core-title clo">🌀 Closure</span>
-      <span class="core-value clo" id="closure-value">--</span>
-    </div>
+    <div class="core-header"><span class="core-title clo">🌀 Closure</span><span class="core-value clo" id="closure-value">--</span></div>
     <div class="gauge-track"><div class="gauge-fill gauge-clo" id="closure-gauge" style="width:0%"></div></div>
-    <div class="status-row">
-      <span class="badge badge-mizan" id="closure-status">MIZAN</span>
-      <span style="font-size:.75rem;color:var(--text-muted)">RS</span>
-    </div>
+    <div class="status-row"><span class="badge badge-mizan" id="closure-status">MIZAN</span><span style="font-size:.75rem;color:var(--text-muted)">RS</span></div>
   </div>
   <div class="core-card bal" data-link="balance">
-    <div class="core-header">
-      <span class="core-title bal">⚖️ Balance</span>
-      <span class="core-value bal" id="balance-value">--</span>
-    </div>
+    <div class="core-header"><span class="core-title bal">⚖️ Balance</span><span class="core-value bal" id="balance-value">--</span></div>
     <div class="gauge-track"><div class="gauge-fill gauge-bal" id="balance-gauge" style="width:0%"></div></div>
-    <div class="status-row">
-      <span class="badge badge-live" id="balance-status">LIVE</span>
-      <span style="font-size:.75rem;color:var(--text-muted)">α_stab</span>
-    </div>
+    <div class="status-row"><span class="badge badge-live" id="balance-status">LIVE</span><span style="font-size:.75rem;color:var(--text-muted)">α_stab</span></div>
   </div>
 </div>
 
 <!-- ══ KP FORECAST ══════════════════════════════════════════ -->
 <h2 class="section-title">🌍 Kp Forecast (Next 3 Days)</h2>
-<div class="forecast-card">
-  <div class="forecast-grid" id="kp-forecast"></div>
-</div>
+<div class="forecast-card"><div class="forecast-grid" id="kp-forecast"></div></div>
 
 <!-- ══ SOLAR OBSERVATORY ═══════════════════════════════════ -->
 <h2 class="section-title">☀️ Solar Observatory</h2>
-<div class="source-grid">
-  <div class="source-card" data-link="aurora">
-    <div class="value">🌌 Aurora Oval</div>
-    <div class="label">30-min forecast</div>
-    <div class="offline-badge">⚠ OFFLINE</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.aurora,'_blank')">Visit Observatory →</div>
-  </div>
-  <div class="source-card" data-link="kp">
-    <div class="value">📊 Kp Index</div>
-    <div class="label">Geomagnetic activity</div>
-    <div class="offline-badge">⚠ OFFLINE</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.kp,'_blank')">Visit Observatory →</div>
-  </div>
-  <div class="source-card" data-link="coronal">
-    <div class="value">🕳️ Coronal Holes</div>
-    <div class="label">Solar wind sources</div>
-    <div class="offline-badge">⚠ OFFLINE</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.coronal,'_blank')">Visit Observatory →</div>
-  </div>
-  <div class="source-card" data-link="xray">
-    <div class="value">📡 X-Ray Flux</div>
-    <div class="label">GOES satellite</div>
-    <div id="xray-val" style="font-size:.95rem;color:var(--teal-mid);font-family:var(--f-mono);font-weight:700;margin:3px 0">C1.2</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.xray,'_blank')">Visit Observatory →</div>
-  </div>
-  <div class="source-card" data-link="cme">
-    <div class="value">🌊 CME Tracking</div>
-    <div class="label">Coronal mass ejections</div>
-    <div style="font-size:.78rem;color:var(--amber);margin:4px 0">⚠ Minor CME Observed</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.cme,'_blank')">Visit Observatory →</div>
-  </div>
-  <div class="source-card" data-link="farside">
-    <div class="value">🌞 Far Side</div>
-    <div class="label">Hidden sun activity</div>
-    <div class="offline-badge">⚠ OFFLINE</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.farside,'_blank')">Visit Observatory →</div>
-  </div>
-  <div class="source-card" data-link="solarImage">
-    <div class="value">🖼️ Daily Solar</div>
-    <div class="label">SDO full disk</div>
-    <div class="offline-badge">⚠ OFFLINE</div>
-    <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS.solarImage,'_blank')">Visit Observatory →</div>
-  </div>
-</div>
+<div class="source-grid" id="source-grid"></div>
 
-<!-- ══ MOON PHASE ═══════════════════════════════════════════ -->
+<!-- ══ MOON PHASE (Natural Colors - Fixed) ══════════════════ -->
 <div class="moon-phase" data-link="moon">
   <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
   <div class="moon-info">
@@ -969,10 +732,7 @@ body::before {
     <div class="vol-stat-box"><span class="num" id="vol-alert">--</span><span class="lbl">High Alert</span></div>
   </div>
   <div id="vol-list" class="vol-list"></div>
-  <button class="load-more-btn" id="vol-load-more" onclick="MOD_VOLCANO.loadMore()">
-    ▼ Load More Volcanoes
-  </button>
-  <!-- Leaflet map for volcanoes -->
+  <button class="load-more-btn" id="vol-load-more">▼ Load More Volcanoes</button>
   <div id="vol-map" class="event-map"></div>
 </div>
 
@@ -1000,16 +760,12 @@ body::before {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;letter-spacing:1.5px;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details">
-    <table class="sunspot-table" id="sunspot-table"><tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr></table>
-  </div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table"> <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr> </table></div>
 </div>
 
 <!-- ══ HISTORICAL ═══════════════════════════════════════════ -->
 <h2 class="section-title">📅 On This Day in Space Weather</h2>
-<div class="card">
-  <div class="historical-grid" id="historical-events"></div>
-</div>
+<div class="card"><div class="historical-grid" id="historical-events"></div></div>
 
 <!-- ══ LIVE IMAGES ══════════════════════════════════════════ -->
 <h2 class="section-title" data-key="images-title">🛰️ 5. Live Images</h2>
@@ -1028,36 +784,14 @@ body::before {
     <div class="quake-stat"><div class="number" id="quake-latest">--</div><div class="label" data-key="latest">Latest</div></div>
   </div>
   <div id="quake-list" class="quake-list"></div>
-  <button class="load-more-btn" id="quake-load-more" onclick="MOD_QUAKE.loadMore()">
-    ▼ Load More Earthquakes
-  </button>
-  <!-- Leaflet map for earthquakes -->
+  <button class="load-more-btn" id="quake-load-more">▼ Load More Earthquakes</button>
   <div id="quake-map" class="event-map"></div>
-</div>
-
-<!-- ══ COSMIC CONSTANTS ═════════════════════════════════════ -->
-<h2 class="section-title">🔢 Cosmic Constants &amp; Numerical Resonance</h2>
-<div class="card" style="padding:1.4rem">
-  <div class="constants-grid" id="constants-grid"></div>
-</div>
-
-<!-- ══ ASTRONOMICAL EVENTS ══════════════════════════════════ -->
-<h2 class="section-title">🌠 Upcoming Astronomical Events</h2>
-<div class="card" style="padding:1.4rem">
-  <div class="astro-strip" id="astro-strip"></div>
-</div>
-
-<!-- ══ PREDICTIVE CORRELATIONS ══════════════════════════════ -->
-<h2 class="section-title">🔗 Geophysical–Lunar Correlation Index</h2>
-<div class="card" style="padding:1.4rem">
-  <div id="correlations-list"></div>
 </div>
 
 <!-- ══ FOOTER ═══════════════════════════════════════════════ -->
 <div class="footer">
-  <span id="timestamp">Loading…</span> · 21+ Indicators ·
-  <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
-  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v9.0</div>
+  <span id="timestamp">Loading…</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
+  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.5</div>
 </div>
 
 </div><!-- /.container -->
@@ -1065,18 +799,15 @@ body::before {
 <!-- ══ BOTTOM TICKER ════════════════════════════════════════ -->
 <div class="bticker">
   <div class="bticker-lbl"><span class="live-dot"></span>LIVE</div>
-  <div class="bticker-scroll">
-    <div class="bticker-inner" id="botTicker"></div>
-  </div>
+  <div class="bticker-scroll"><div class="bticker-inner" id="botTicker"></div></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     JAVASCRIPT  (all logic from v8.1 preserved)
-═══════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ── LINKS (unchanged) ── */
+/* ══════════════════════════════════════════════════════════
+   CORE LINKS (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 const LINKS = {
   aurora:'https://www.swpc.noaa.gov/products/aurora-30-minute-forecast',
   kp:'https://www.swpc.noaa.gov/products/planetary-k-index',
@@ -1094,9 +825,38 @@ const LINKS = {
   github:'https://github.com/sidichaker1-beep/Trio-seal'
 };
 
-/* ── Event delegation ── */
+/* ══════════════════════════════════════════════════════════
+   CENTRAL STATE (NEW)
+══════════════════════════════════════════════════════════ */
+const STATE = {
+  quakes: { data: [], offset: 0, pageSize: 10, loading: false, map: null, markers: [] },
+  volcano: { data: [], offset: 0, pageSize: 5, loading: false, map: null, markers: [] }
+};
+
+/* ══════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════ */
+function getCountryFlag(countryName) {
+  const flags = {
+    'Italy':'🇮🇹','Hawaii, USA':'🇺🇸','Guatemala':'🇬🇹','Japan':'🇯🇵','Mexico':'🇲🇽',
+    'Indonesia':'🇮🇩','New Zealand':'🇳🇿','Russia':'🇷🇺','Colombia':'🇨🇴','Iceland':'🇮🇸',
+    'Chile':'🇨🇱','Papua New Guinea':'🇵🇬','Philippines':'🇵🇭','Vanuatu':'🇻🇺','Ecuador':'🇪🇨',
+    'Peru':'🇵🇪','Ethiopia':'🇪🇹','DR Congo':'🇨🇩','Kamchatka, Russia':'🇷🇺','Alaska, USA':'🇺🇸'
+  };
+  return flags[countryName] || '🌍';
+}
+
+function getCountryFromPlace(place) {
+  if (!place) return 'Unknown';
+  const parts = place.split(',');
+  return parts[parts.length - 1]?.trim() || 'Unknown';
+}
+
+/* ══════════════════════════════════════════════════════════
+   EVENT DELEGATION (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 document.addEventListener('click', e => {
-  if (e.target.closest('button,a,.language-selector,.visit-btn')) return;
+  if (e.target.closest('button,a,.language-selector,.visit-btn,.load-more-btn')) return;
   const el = e.target.closest('[data-link]');
   if (!el) return;
   const key = el.getAttribute('data-link');
@@ -1106,7 +866,9 @@ document.addEventListener('click', e => {
   if (LINKS[key]) window.open(LINKS[key], '_blank', 'noopener');
 });
 
-/* ── Language menu ── */
+/* ══════════════════════════════════════════════════════════
+   LANGUAGE MENU (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 document.getElementById('langBtn').addEventListener('click', e => {
   e.stopPropagation();
   document.getElementById('language-menu').classList.toggle('open');
@@ -1119,7 +881,9 @@ document.querySelectorAll('.lang-option').forEach(opt => {
   opt.addEventListener('click', () => setLanguage(opt.dataset.lang));
 });
 
-/* ── Tracking ── */
+/* ══════════════════════════════════════════════════════════
+   TRACKING (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 let clickLog = [];
 try { clickLog = JSON.parse(localStorage.getItem('trio_clicks') || '[]'); } catch{}
 function trackClick(key) {
@@ -1131,7 +895,9 @@ window.debugClicks = () => {
   const s = {}; clickLog.forEach(c => { s[c.key]=(s[c.key]||0)+1; }); console.table(s);
 };
 
-/* ── Red mode ── */
+/* ══════════════════════════════════════════════════════════
+   RED MODE (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 let redModeActive = false, lastAlertTime = 0;
 function activateRedMode(reason) {
   if (Date.now()-lastAlertTime < 10000 || redModeActive) return;
@@ -1157,421 +923,311 @@ function showToast(msg, borderColor='#B45309', dur=5000) {
 }
 
 /* ══════════════════════════════════════════════════════════
-   v9.0 MODULE: VOLCANO
-   State-based load-more + Leaflet map + country flags
-   CORE unchanged: LINKS, trackClick, redMode all intact
+   REAL KP API (NOAA) - UNCHANGED
 ══════════════════════════════════════════════════════════ */
+let currentKp = 3;
+let currentStrongestQuake = 0;
 
-/* Country → flag emoji lookup */
-const FLAG = {
-  'Italy':'🇮🇹','Hawaii, USA':'🇺🇸','Guatemala':'🇬🇹','Japan':'🇯🇵',
-  'Mexico':'🇲🇽','Indonesia':'🇮🇩','New Zealand':'🇳🇿','Russia':'🇷🇺',
-  'Colombia':'🇨🇴','Iceland':'🇮🇸','Chile':'🇨🇱','Papua New Guinea':'🇵🇬',
-  'Philippines':'🇵🇭','Vanuatu':'🇻🇺','Ecuador':'🇪🇨','Peru':'🇵🇪',
-  'Ethiopia':'🇪🇹','DR Congo':'🇨🇩','Kamchatka, Russia':'🇷🇺',
-  'Alaska, USA':'🇺🇸',
-};
+async function fetchRealKp() {
+  try {
+    const res = await fetch('https://services.swpc.noaa.gov/json/planetary_k_index_24_hour.json');
+    const data = await res.json();
+    const kp = data[data.length-1]?.kp_index || 3;
+    currentKp = kp;
+    if (kp > 7) activateRedMode(`Kp ${kp.toFixed(1)}`);
+    else if (kp < 5 && currentStrongestQuake < 5 && redModeActive) deactivateRedMode();
+    return kp;
+  } catch(e) { console.warn('Kp API failed'); return 3; }
+}
 
-/* Extended golden list with coordinates */
-const VOLCANO_DATA = [
-  {name:'Etna',         country:'Italy',       alert:'orange',status:'WATCH',    lat:37.748,  lon:14.999},
-  {name:'Kilauea',      country:'Hawaii, USA', alert:'orange',status:'WATCH',    lat:19.421,  lon:-155.287},
-  {name:'Fuego',        country:'Guatemala',   alert:'red',   status:'WARNING',  lat:14.473,  lon:-90.880},
-  {name:'Sakurajima',   country:'Japan',       alert:'orange',status:'WATCH',    lat:31.581,  lon:130.659},
-  {name:'Popocatépetl', country:'Mexico',      alert:'yellow',status:'ADVISORY', lat:19.023,  lon:-98.622},
-  {name:'Merapi',       country:'Indonesia',   alert:'yellow',status:'ADVISORY', lat:-7.541,  lon:110.446},
-  {name:'Semeru',       country:'Indonesia',   alert:'orange',status:'WATCH',    lat:-8.108,  lon:112.922},
-  {name:'Stromboli',    country:'Italy',       alert:'yellow',status:'ADVISORY', lat:38.789,  lon:15.213},
-  {name:'Whakaari',     country:'New Zealand', alert:'yellow',status:'ADVISORY', lat:-37.521, lon:177.183},
-  {name:'Sheveluch',    country:'Kamchatka, Russia',alert:'orange',status:'WATCH',lat:56.653,  lon:161.360},
-  {name:'Reykjanes',    country:'Iceland',     alert:'orange',status:'WATCH',    lat:63.880,  lon:-22.560},
-  {name:'Ruapehu',      country:'New Zealand', alert:'yellow',status:'ADVISORY', lat:-39.281, lon:175.568},
-  {name:'Taal',         country:'Philippines', alert:'yellow',status:'ADVISORY', lat:14.002,  lon:120.993},
-  {name:'Nyiragongo',   country:'DR Congo',    alert:'orange',status:'WATCH',    lat:-1.520,  lon:29.250},
-  {name:'Veniaminof',   country:'Alaska, USA', alert:'yellow',status:'ADVISORY', lat:56.196,  lon:-159.390},
+/* ══════════════════════════════════════════════════════════
+   VOLCANO API + STATE MANAGEMENT
+══════════════════════════════════════════════════════════ */
+const STATIC_VOLCANOES = [
+  {name:'Etna', country:'Italy', alert:'orange', status:'WATCH', lat:37.748, lon:14.999},
+  {name:'Kilauea', country:'Hawaii, USA', alert:'orange', status:'WATCH', lat:19.421, lon:-155.287},
+  {name:'Fuego', country:'Guatemala', alert:'red', status:'WARNING', lat:14.473, lon:-90.880},
+  {name:'Sakurajima', country:'Japan', alert:'orange', status:'WATCH', lat:31.581, lon:130.659},
+  {name:'Popocatépetl', country:'Mexico', alert:'yellow', status:'ADVISORY', lat:19.023, lon:-98.622},
+  {name:'Merapi', country:'Indonesia', alert:'yellow', status:'ADVISORY', lat:-7.541, lon:110.446},
+  {name:'Semeru', country:'Indonesia', alert:'orange', status:'WATCH', lat:-8.108, lon:112.922},
+  {name:'Stromboli', country:'Italy', alert:'yellow', status:'ADVISORY', lat:38.789, lon:15.213},
+  {name:'Whakaari', country:'New Zealand', alert:'yellow', status:'ADVISORY', lat:-37.521, lon:177.183},
+  {name:'Sheveluch', country:'Kamchatka, Russia', alert:'orange', status:'WATCH', lat:56.653, lon:161.360},
+  {name:'Reykjanes', country:'Iceland', alert:'orange', status:'WATCH', lat:63.880, lon:-22.560},
+  {name:'Ruapehu', country:'New Zealand', alert:'yellow', status:'ADVISORY', lat:-39.281, lon:175.568},
+  {name:'Taal', country:'Philippines', alert:'yellow', status:'ADVISORY', lat:14.002, lon:120.993},
+  {name:'Nyiragongo', country:'DR Congo', alert:'orange', status:'WATCH', lat:-1.520, lon:29.250},
+  {name:'Veniaminof', country:'Alaska, USA', alert:'yellow', status:'ADVISORY', lat:56.196, lon:-159.390}
 ];
 
-const MOD_VOLCANO = (() => {
-  const PAGE = 6;
-  let offset = 0, mapInst = null;
+async function fetchVolcanoes() {
+  try {
+    const response = await fetch('https://volcanoes.usgs.gov/hans-public/api/volcano/getElevatedVolcanoes', {
+      signal: AbortSignal.timeout(8000)
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data && Array.isArray(data) && data.length > 0) {
+        STATE.volcano.data = data.slice(0, 25).map(v => ({
+          name: v.name || v.volcanoName || 'Unknown',
+          country: v.country || v.region || '--',
+          alert: (v.alertLevel || '').toLowerCase().includes('warning') ? 'red' :
+                 (v.alertLevel || '').toLowerCase().includes('watch') ? 'orange' : 'yellow',
+          status: v.alertLevel || 'ADVISORY',
+          lat: v.latitude || 0,
+          lon: v.longitude || 0
+        }));
+        document.getElementById('vol-source-badge')?.remove();
+        return;
+      }
+    }
+    throw new Error('API returned no data');
+  } catch(e) {
+    console.warn('Volcano API failed, using static data');
+    STATE.volcano.data = STATIC_VOLCANOES;
+  }
+  STATE.volcano.offset = 0;
+  renderVolcanoes();
+}
 
-  const VCOL = { red:'#DC2626', orange:'#D97706', yellow:'#B45309' };
-  const VBADGE = {
-    red:   'background:#FEE2E2;color:#B91C1C;border:1px solid rgba(185,28,28,.25)',
-    orange:'background:#FEF3C7;color:#B45309;border:1px solid rgba(180,83,9,.25)',
-    yellow:'background:#FFFBEB;color:#92400E;border:1px solid rgba(146,64,14,.2)',
-  };
-
-  function renderItem(v, container) {
-    const col   = VCOL[v.alert] || '#64748b';
-    const flag  = FLAG[v.country] || '🌍';
-    const d = document.createElement('div');
-    d.className = 'vol-item';
-    d.style.borderLeftColor = col;
-    d.innerHTML = `
+function renderVolcanoes() {
+  const container = document.getElementById('vol-list');
+  if (!container) return;
+  const batch = STATE.volcano.data.slice(0, STATE.volcano.offset + STATE.volcano.pageSize);
+  container.innerHTML = '';
+  let high = 0;
+  batch.forEach(v => {
+    const colors = { red:'#DC2626', orange:'#D97706', yellow:'#B45309' };
+    const col = colors[v.alert] || '#64748b';
+    if (v.alert==='red'||v.alert==='orange') high++;
+    const flag = getCountryFlag(v.country);
+    const div = document.createElement('div');
+    div.className = 'vol-item';
+    div.style.borderLeftColor = col;
+    div.setAttribute('data-link', 'volcano');
+    div.innerHTML = `
       <span class="pulse-dot" style="background:${col}"></span>
-      <span class="vol-flag">${flag}</span>
-      <span class="vol-name">🌋 <strong>${v.name}</strong>
-        <span style="color:var(--text-muted);font-size:.72rem">(${v.country})</span>
-      </span>
-      <span class="vol-badge" style="${VBADGE[v.alert]||''}">${v.status}</span>`;
-    container.appendChild(d);
-  }
+      <span class="vol-flag" style="font-size:1rem">${flag}</span>
+      <span class="vol-name">🌋 <strong>${v.name}</strong> <span style="color:var(--text-muted);font-size:.72rem">(${v.country})</span></span>
+      <span class="vol-badge" style="background:${col}20; color:${col};">${v.status}</span>`;
+    container.appendChild(div);
+  });
+  document.getElementById('vol-total').textContent = STATE.volcano.data.length;
+  document.getElementById('vol-alert').textContent = high;
+  const btn = document.getElementById('vol-load-more');
+  if (btn) btn.disabled = STATE.volcano.offset + STATE.volcano.pageSize >= STATE.volcano.data.length;
+  plotVolcanoesOnMap(batch);
+}
 
-  function updateCounters() {
-    const high = VOLCANO_DATA.filter(v => v.alert==='red'||v.alert==='orange').length;
-    const tot  = document.getElementById('vol-total');
-    const alt  = document.getElementById('vol-alert');
-    if (tot) tot.textContent = VOLCANO_DATA.length;
-    if (alt) alt.textContent = high;
-  }
-
-  function initMap() {
-    const el = document.getElementById('vol-map');
-    if (!el || mapInst || typeof L === 'undefined') return;
-    mapInst = L.map('vol-map', { zoomControl: true }).setView([20, 10], 2);
+function plotVolcanoesOnMap(volcanoes) {
+  const mapContainer = document.getElementById('vol-map');
+  if (!mapContainer || typeof L === 'undefined') return;
+  if (!STATE.volcano.map) {
+    STATE.volcano.map = L.map('vol-map').setView([20, 10], 2);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      { attribution:'©OpenStreetMap ©CARTO', maxZoom:18 }).addTo(mapInst);
-    VOLCANO_DATA.forEach(v => {
-      const col = VCOL[v.alert] || '#64748b';
-      L.circleMarker([v.lat, v.lon], {
-        radius: v.alert==='red'?10:v.alert==='orange'?7:5,
-        color: col, fillColor: col, fillOpacity:.65, weight:2
-      })
-      .bindPopup(`<b>🌋 ${v.name}</b><br>${FLAG[v.country]||''} ${v.country}<br>
-        <span style="color:${col};font-weight:700">${v.status}</span>`)
-      .addTo(mapInst);
-    });
-    setTimeout(() => mapInst.invalidateSize(), 300);
+      { attribution:'©OpenStreetMap ©CARTO', maxZoom:18 }).addTo(STATE.volcano.map);
   }
+  STATE.volcano.markers.forEach(m => m.remove());
+  STATE.volcano.markers = [];
+  volcanoes.forEach(v => {
+    if (!v.lat || !v.lon) return;
+    const colors = { red:'#DC2626', orange:'#D97706', yellow:'#B45309' };
+    const col = colors[v.alert] || '#64748b';
+    const marker = L.circleMarker([v.lat, v.lon], {
+      radius: v.alert==='red'?10:v.alert==='orange'?7:5,
+      color: col, fillColor: col, fillOpacity:.65, weight:2
+    }).bindPopup(`<b>🌋 ${v.name}</b><br>${getCountryFlag(v.country)} ${v.country}<br><span style="color:${col}">${v.status}</span>`).addTo(STATE.volcano.map);
+    STATE.volcano.markers.push(marker);
+  });
+  setTimeout(() => STATE.volcano.map.invalidateSize(), 300);
+}
 
-  function loadMore() {
-    const container = document.getElementById('vol-list');
-    const btn       = document.getElementById('vol-load-more');
-    if (!container) return;
-    const batch = VOLCANO_DATA.slice(offset, offset + PAGE);
-    batch.forEach(v => renderItem(v, container));
-    offset += PAGE;
-    if (btn) btn.style.display = offset >= VOLCANO_DATA.length ? 'none' : 'block';
-    updateCounters();
-    // Lazy-init map after first render
-    if (!mapInst) initMap();
-  }
-
-  function init() {
-    const container = document.getElementById('vol-list');
-    if (container) container.innerHTML = '';
-    offset = 0;
-    loadMore(); // first page
-  }
-
-  return { init, loadMore };
-})();
+function loadMoreVolcanoes() {
+  if (STATE.volcano.loading) return;
+  STATE.volcano.loading = true;
+  const btn = document.getElementById('vol-load-more');
+  if (btn) btn.disabled = true;
+  setTimeout(() => {
+    STATE.volcano.offset += STATE.volcano.pageSize;
+    renderVolcanoes();
+    STATE.volcano.loading = false;
+    const newBtn = document.getElementById('vol-load-more');
+    if (newBtn) newBtn.disabled = STATE.volcano.offset + STATE.volcano.pageSize >= STATE.volcano.data.length;
+  }, 100);
+}
 
 /* ══════════════════════════════════════════════════════════
-   v9.0 MODULE: EARTHQUAKE
-   STATE-based load-more + Leaflet map
+   EARTHQUAKES + STATE MANAGEMENT
 ══════════════════════════════════════════════════════════ */
-const MOD_QUAKE = (() => {
-  const PAGE = 10;
-  let allData = [], offset = 0, mapInst = null, markers = [];
+async function fetchEarthquakes() {
+  try {
+    const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
+      { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    STATE.quakes.data = data.features.sort((a,b)=>(b.properties.mag||0)-(a.properties.mag||0));
+    const mags = STATE.quakes.data.map(f=>f.properties.mag||0);
+    const top = Math.max(...mags);
+    currentStrongestQuake = top;
+    const m5 = STATE.quakes.data.filter(f=>(f.properties.mag||0)>=5).length;
+    document.getElementById('quake-total').textContent = STATE.quakes.data.length;
+    document.getElementById('quake-strongest').textContent = top.toFixed(1)+' M';
+    document.getElementById('quake-latest').textContent = m5+' M5+';
+    STATE.quakes.offset = 0;
+    renderEarthquakes();
+    plotEarthquakesOnMap(STATE.quakes.data.slice(0, 80));
+    if (top > 6.5) activateRedMode(`Earthquake M${top.toFixed(1)}`);
+    buildTicker();
+  } catch(e) { console.warn('USGS failed:', e.message); }
+}
 
-  function magColor(m) {
-    return m >= 6 ? '#B91C1C' : m >= 4.5 ? '#D97706' : '#0D9488';
-  }
-
-  function renderItem(q, container) {
-    const mag  = q.properties.mag || 0;
-    const loc  = q.properties.place || 'Unknown';
-    const time = new Date(q.properties.time)
-      .toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
-    const col = magColor(mag);
-    const d = document.createElement('div');
-    d.className = 'quake-item';
-    d.style.borderLeftColor = col;
-    d.setAttribute('data-link','usgs');
-    d.innerHTML = `
+function renderEarthquakes() {
+  const container = document.getElementById('quake-list');
+  if (!container) return;
+  const batch = STATE.quakes.data.slice(0, STATE.quakes.offset + STATE.quakes.pageSize);
+  container.innerHTML = '';
+  batch.forEach(q => {
+    const mag = q.properties.mag || 0;
+    const loc = q.properties.place || 'Unknown';
+    const time = new Date(q.properties.time).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+    const col = mag>=6?'#DC2626':mag>=4.5?'#D97706':'#0D9488';
+    const country = getCountryFromPlace(loc);
+    const flag = getCountryFlag(country);
+    const div = document.createElement('div');
+    div.className = 'quake-item';
+    div.style.borderLeftColor = col;
+    div.setAttribute('data-link', 'usgs');
+    div.innerHTML = `
       <span class="quake-magnitude" style="color:${col}">${mag.toFixed(1)}</span>
-      <span class="quake-location">${loc}</span>
+      <span class="quake-location">${flag} ${loc}</span>
       <span class="quake-time">${time}</span>`;
-    container.appendChild(d);
+    container.appendChild(div);
+  });
+  const btn = document.getElementById('quake-load-more');
+  if (btn) btn.disabled = STATE.quakes.offset + STATE.quakes.pageSize >= STATE.quakes.data.length;
+}
+
+function plotEarthquakesOnMap(quakes) {
+  const mapContainer = document.getElementById('quake-map');
+  if (!mapContainer || typeof L === 'undefined') return;
+  if (!STATE.quakes.map) {
+    STATE.quakes.map = L.map('quake-map').setView([20, 0], 2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+      { attribution:'©OpenStreetMap ©CARTO', maxZoom:18 }).addTo(STATE.quakes.map);
   }
+  STATE.quakes.markers.forEach(m => m.remove());
+  STATE.quakes.markers = [];
+  quakes.forEach(q => {
+    if (!q.geometry?.coordinates) return;
+    const [lon, lat] = q.geometry.coordinates;
+    const mag = q.properties.mag || 0;
+    const col = mag>=6?'#DC2626':mag>=4.5?'#D97706':'#0D9488';
+    const marker = L.circleMarker([lat, lon], {
+      radius: Math.max(3, mag * 1.5),
+      color: col, fillColor: col, fillOpacity: .55, weight: 1
+    }).bindPopup(`<b>M${mag.toFixed(1)}</b><br>${q.properties.place||''}`).addTo(STATE.quakes.map);
+    STATE.quakes.markers.push(marker);
+  });
+  setTimeout(() => STATE.quakes.map.invalidateSize(), 300);
+}
 
-  function plotOnMap(features) {
-    const el = document.getElementById('quake-map');
-    if (!el || typeof L === 'undefined') return;
-    if (!mapInst) {
-      mapInst = L.map('quake-map',{zoomControl:true}).setView([20,0],2);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        {attribution:'©OpenStreetMap ©CARTO',maxZoom:18}).addTo(mapInst);
-      setTimeout(()=>mapInst.invalidateSize(),300);
-    }
-    // Clear old markers
-    markers.forEach(m => m.remove());
-    markers = [];
-    features.forEach(q => {
-      const mag = q.properties.mag || 0;
-      if (!q.geometry?.coordinates) return;
-      const [lon, lat] = q.geometry.coordinates;
-      const col = magColor(mag);
-      const m = L.circleMarker([lat, lon], {
-        radius: Math.max(3, mag * 1.8),
-        color: col, fillColor: col,
-        fillOpacity: .55, weight: 1
-      })
-      .bindPopup(`<b>M${mag.toFixed(1)}</b><br>${q.properties.place||''}`)
-      .addTo(mapInst);
-      markers.push(m);
-    });
-  }
-
-  function loadMore() {
-    const container = document.getElementById('quake-list');
-    const btn       = document.getElementById('quake-load-more');
-    if (!container) return;
-    const batch = allData.slice(offset, offset + PAGE);
-    batch.forEach(q => renderItem(q, container));
-    offset += PAGE;
-    if (btn) btn.style.display = offset >= allData.length ? 'none' : 'block';
-  }
-
-  async function fetch_() {
-    try {
-      const r = await fetch(
-        'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
-        { signal: AbortSignal.timeout(9000) }
-      );
-      if (!r.ok) throw new Error('HTTP '+r.status);
-      const data = await r.json();
-      allData = data.features.sort((a,b)=>(b.properties.mag||0)-(a.properties.mag||0));
-      const mags = allData.map(f=>f.properties.mag||0).filter(Boolean);
-      const top  = mags.length ? Math.max(...mags) : 0;
-      const m5   = allData.filter(f=>(f.properties.mag||0)>=5).length;
-
-      const setText = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
-      setText('quake-total',    allData.length);
-      setText('quake-strongest',top.toFixed(1)+' M');
-      setText('quake-latest',   m5+' M5+');
-
-      // Reset and render first page
-      const container = document.getElementById('quake-list');
-      if (container) container.innerHTML = '';
-      offset = 0;
-      loadMore();
-
-      // Plot all on map (use slice for perf)
-      plotOnMap(allData.slice(0, 80));
-
-      if (top > 6.5) activateRedMode(`Earthquake M${top.toFixed(1)}`);
-    } catch(e) {
-      console.warn('USGS fetch failed:', e.message);
-    }
-  }
-
-  return { init: fetch_, loadMore, fetchLatest: fetch_ };
-})();
+function loadMoreEarthquakes() {
+  if (STATE.quakes.loading) return;
+  STATE.quakes.loading = true;
+  const btn = document.getElementById('quake-load-more');
+  if (btn) btn.disabled = true;
+  setTimeout(() => {
+    STATE.quakes.offset += STATE.quakes.pageSize;
+    renderEarthquakes();
+    STATE.quakes.loading = false;
+    const newBtn = document.getElementById('quake-load-more');
+    if (newBtn) newBtn.disabled = STATE.quakes.offset + STATE.quakes.pageSize >= STATE.quakes.data.length;
+  }, 100);
+}
 
 /* ══════════════════════════════════════════════════════════
-   v9.0 MODULE: MOON — Natural Colors (Mare + Highlands)
+   MOON PHASE (Natural Colors - Fixed)
 ══════════════════════════════════════════════════════════ */
+const REF_NM = Date.UTC(2024,3,8,18,20,0);
+const SYNODIC = 29.530588853;
 
-/**
- * drawMoonCanvas  —  rewritten from scratch (v8.3)
- *
- * ROOT CAUSE of black-disc bug (v8.2):
- *   1. shadowX formula placed the ellipse OUTSIDE the canvas at low illumination
- *      (e.g. illum=6.7% → sx = cx + R*(1-0.134) = 82px, outside R=43)
- *   2. Two nested ctx.save()/clip() calls conflicted, the inner restore()
- *      escaped the outer clip, leaving shadow unconstrained
- *   3. arc() + ellipse() winding directions did not form a valid closed path
- *
- * CORRECT ALGORITHM:
- *   1. Clip entire canvas to moon disc  (single clip, never nest)
- *   2. Fill disc with surface texture + craters
- *   3. Draw the SHADOW as a single valid closed path:
- *        — WAXING (right side lit):
- *            dark = left semi-circle  +  right terminator ellipse cap
- *            Path: arc CW from bottom→top (left half) then
- *                  ellipse CW from top→bottom (right half) using term_semi
- *        — WANING (left side lit):  mirror image
- *   4. term_semi = R · |cos(2π·phase)|
- *        At new moon  phase≈0: term_semi≈R   → full disc dark ✓
- *        At quarter   phase=¼: term_semi≈0   → straight terminator ✓
- *        At full moon phase=½: term_semi≈R   → full disc lit ✓
- *   5. Add atmosphere rim glow
- *   6. Red glow when thickness < CRITICAL_THICKNESS  (Inception Mode)
- *
- * @param {number} age  — lunar age in days (0 = new moon)
- */
 function drawMoonCanvas(age) {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-  const R  = W / 2 - 3;     // disc radius
-  const cx = W / 2, cy = H / 2;
-
+  const R = W/2 - 3, cx = W/2, cy = H/2;
   ctx.clearRect(0, 0, W, H);
-
-  const phase   = age / SYNODIC;           // 0 → 1
-  const illum   = (1 - Math.cos(phase * 2 * Math.PI)) / 2;  // 0 → 1
-  const waxing  = phase < 0.5;
-  const thick   = illum * 31;              // arcminutes thickness (Meeus)
-  const isCrit  = thick < 0.15;           // Inception Mode threshold
-
-  // ── 1. SINGLE clip to disc ───────────────────────────────────────
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, R, 0, Math.PI * 2);
-  ctx.clip();
-
-  // ── 2. SURFACE: warm grey gradient ───────────────────────────────
-  const surfGrad = ctx.createRadialGradient(
-    cx - R * .22, cy - R * .22, R * .04,
-    cx, cy, R
-  );
-  if (isCrit) {
-    // Critical: surface tinted red-orange for Inception Mode
-    surfGrad.addColorStop(0, '#c87050');
-    surfGrad.addColorStop(.55, '#9a4a28');
-    surfGrad.addColorStop(1, '#3a1a0a');
-  } else {
-    // Natural Moon colors: bright highland whites + dark mare basalt
-    surfGrad.addColorStop(0,   '#e8e4d8');   // highland bright (anorthosite)
-    surfGrad.addColorStop(0.35,'#c0bcb0');   // highland mid-tone
-    surfGrad.addColorStop(0.65,'#888070');   // mare boundary
-    surfGrad.addColorStop(1,   '#3a3830');   // dark mare basalt edge
-  }
-  ctx.fillStyle = surfGrad;
-  ctx.fillRect(0, 0, W, H);
-
-  // Mare patches (dark basalt regions — deterministic placement)
-  const marePatch = [
-    {ax:.35, ay:.3, r:.28, op:.22},   // Mare Imbrium area
-    {ax:.55, ay:.55, r:.2,  op:.18},  // Mare Tranquillitatis
-    {ax:.25, ay:.55, r:.15, op:.15},  // Mare Nubium
-  ];
-  marePatch.forEach(mp => {
-    const mpx = cx - R*mp.ax + R*.1, mpy = cy - R*mp.ay + R*.3;
-    const mpR = R*mp.r;
-    const mGrad = ctx.createRadialGradient(mpx,mpy,0,mpx,mpy,mpR);
-    mGrad.addColorStop(0, `rgba(60,58,50,${mp.op})`);
-    mGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = mGrad;
-    ctx.beginPath(); ctx.arc(mpx,mpy,mpR,0,Math.PI*2); ctx.fill();
-  });
-    const angle = rng(i * 7.31) * Math.PI * 2;
-    const dist  = rng(i * 3.17) * R * .72;
-    const crR   = rng(i * 11.73) * R * .13 + R * .028;
-    const crx   = cx + Math.cos(angle) * dist;
-    const cry   = cy + Math.sin(angle) * dist;
-    ctx.beginPath(); ctx.arc(crx, cry, crR, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,0,0,.14)'; ctx.fill();
-    ctx.beginPath(); ctx.arc(crx - crR * .22, cry - crR * .22, crR * .55, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,.07)'; ctx.fill();
-  }
-
-  // ── 4. SHADOW (single valid closed path, no nested clips) ────────
-  //
-  //  term_semi = R * |cos(2π·phase)|
-  //  This is the horizontal semi-axis of the terminator ellipse.
-  //  When phase≈0 (new): term_semi≈R  → shadow covers whole disc
-  //  When phase=0.25 (quarter): term_semi≈0 → straight vertical line
-  //  When phase=0.5 (full): term_semi≈R → no shadow
-  //
+  const phase = age / SYNODIC;
+  const waxing = phase < 0.5;
   const term_semi = R * Math.abs(Math.cos(phase * 2 * Math.PI));
-
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.clip();
+  // Natural Moon Colors
+  const grad = ctx.createRadialGradient(cx-R*.22, cy-R*.22, R*.04, cx, cy, R);
+  grad.addColorStop(0, '#d8d5ce');
+  grad.addColorStop(0.35, '#a8a49c');
+  grad.addColorStop(0.65, '#706c64');
+  grad.addColorStop(1, '#2a2820');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  // Craters
+  const rng = seed => { let x = Math.sin(seed)*10000; return x - Math.floor(x); };
+  for (let i = 0; i < 20; i++) {
+    const angle = rng(i*7.31) * Math.PI*2;
+    const dist = rng(i*3.17) * R * .72;
+    const crR = rng(i*11.73) * R * .13 + R * .028;
+    const crx = cx + Math.cos(angle) * dist;
+    const cry = cy + Math.sin(angle) * dist;
+    ctx.beginPath(); ctx.arc(crx, cry, crR, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,0,0,.12)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(crx - crR*.22, cry - crR*.22, crR*.55, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fill();
+  }
+  // Shadow
   ctx.beginPath();
   if (waxing) {
-    // RIGHT side is lit. Shadow = LEFT half-disc + ellipse cap on right.
-    // Draw CW: start at top (cx, cy-R)
-    //   → arc clockwise around LEFT half  (from -π/2 to +π/2, anticlockwise=false means CW)
-    //   → ellipse clockwise back to top   (right half of ellipse, anticlockwise=true wraps back)
-    ctx.arc(cx, cy, R, -Math.PI / 2, Math.PI / 2, false);   // left semi (CW, top → bottom via left)
-    ctx.ellipse(cx, cy, term_semi, R, 0, Math.PI / 2, -Math.PI / 2, true);  // term ellipse back up
+    ctx.arc(cx, cy, R, -Math.PI/2, Math.PI/2, false);
+    ctx.ellipse(cx, cy, term_semi, R, 0, Math.PI/2, -Math.PI/2, true);
   } else {
-    // LEFT side is lit. Shadow = RIGHT half-disc + ellipse cap on left.
-    ctx.arc(cx, cy, R, Math.PI / 2, -Math.PI / 2, false);   // right semi (CW, bottom → top via right)
-    ctx.ellipse(cx, cy, term_semi, R, 0, -Math.PI / 2, Math.PI / 2, true);  // term ellipse back down
+    ctx.arc(cx, cy, R, Math.PI/2, -Math.PI/2, false);
+    ctx.ellipse(cx, cy, term_semi, R, 0, -Math.PI/2, Math.PI/2, true);
   }
   ctx.closePath();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.86)';
+  ctx.fillStyle = 'rgba(0,0,0,0.82)';
   ctx.fill();
-
-  // ── 5. ATMOSPHERE rim glow ────────────────────────────────────────
-  const rimGrad = ctx.createRadialGradient(cx, cy, R * .82, cx, cy, R);
-  rimGrad.addColorStop(0, 'transparent');
-  rimGrad.addColorStop(1, isCrit ? 'rgba(255,100,50,.35)' : 'rgba(200,180,100,.22)');
-  ctx.fillStyle = rimGrad;
-  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
-
-  // ── restore clip ──────────────────────────────────────────────────
   ctx.restore();
-
-  // ── 6. OUTER GLOW (outside clip, on canvas border) ───────────────
-  if (isCrit) {
-    // Red pulsing ring for Inception Mode
-    const glowGrad = ctx.createRadialGradient(cx, cy, R, cx, cy, R + 12);
-    glowGrad.addColorStop(0,   'rgba(220, 50, 30, 0.55)');
-    glowGrad.addColorStop(.5,  'rgba(220, 50, 30, 0.22)');
-    glowGrad.addColorStop(1,   'rgba(220, 50, 30, 0)');
-    ctx.fillStyle = glowGrad;
-    ctx.beginPath(); ctx.arc(cx, cy, R + 12, 0, Math.PI * 2); ctx.fill();
-    // Update CSS glow on canvas element
-    canvas.style.boxShadow = '0 0 18px rgba(220,50,30,.7), 0 0 40px rgba(220,50,30,.3)';
-  } else {
-    canvas.style.boxShadow = '0 0 20px rgba(200,180,100,.35)';
-  }
-
-  return illum * 100;
+  const rim = ctx.createRadialGradient(cx, cy, R*.82, cx, cy, R);
+  rim.addColorStop(0, 'transparent');
+  rim.addColorStop(1, 'rgba(200,180,100,.2)');
+  ctx.fillStyle = rim;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
 }
 
 function updateMoon() {
-  const age     = (((Date.now()-REF_NM)/86400000) % SYNODIC + SYNODIC) % SYNODIC;
-  const phase   = age / SYNODIC;
-  const illum   = (1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100;
-  const thick   = illum * 31 / 100;   // arcminutes  (Meeus)
-  const isCrit  = thick < 0.15;
-
-  // Phase name
+  const age = (((Date.now()-REF_NM)/86400000) % SYNODIC + SYNODIC) % SYNODIC;
+  const illum = (1 - Math.cos((age/SYNODIC)*2*Math.PI))/2*100;
   let phaseName;
-  if      (age < 1.0)  phaseName = 'New Moon';
-  else if (age < 7.4)  phaseName = 'Waxing Crescent';
+  if (age < 1) phaseName = 'New Moon';
+  else if (age < 7.4) phaseName = 'Waxing Crescent';
   else if (age < 10.4) phaseName = 'First Quarter';
   else if (age < 14.8) phaseName = 'Waxing Gibbous';
   else if (age < 16.1) phaseName = 'Full Moon';
   else if (age < 22.1) phaseName = 'Waning Gibbous';
   else if (age < 25.1) phaseName = 'Last Quarter';
-  else                 phaseName = 'Waning Crescent';
-
-  const s = id => document.getElementById(id);
-  if (s('moon-phase-name'))  s('moon-phase-name').textContent  = phaseName;
-  if (s('moon-illumination'))s('moon-illumination').textContent= illum.toFixed(1) + '%';
-  if (s('moon-thickness'))   s('moon-thickness').textContent   = `Thickness: ${thick.toFixed(2)}'`;
-  if (s('moon-age'))         s('moon-age').textContent         = `Age: ${age.toFixed(1)} days`;
-
-  // Inception Mode: tint text labels red when critical
-  const moonInfo = document.querySelector('.moon-info');
-  if (moonInfo) {
-    moonInfo.style.transition = 'all .5s ease';
-    if (isCrit) {
-      const mp = s('moon-percent');
-      if (mp) mp.style.color = '#ef4444';
-      const mt = s('moon-thickness');
-      if (mt) mt.style.color = 'rgba(239,68,68,.8)';
-    } else {
-      const mp = s('moon-percent');
-      if (mp) mp.style.color = '#6EE7B7';
-      const mt = s('moon-thickness');
-      if (mt) mt.style.color = '';
-    }
-  }
-
+  else phaseName = 'Waning Crescent';
+  document.getElementById('moon-phase-name').textContent = phaseName;
+  document.getElementById('moon-illumination').textContent = illum.toFixed(1)+'%';
+  document.getElementById('moon-thickness').textContent = `Thickness: ${(illum*31/100).toFixed(2)}'`;
+  document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
   drawMoonCanvas(age);
 }
-setInterval(updateMoon,60000); updateMoon();
+setInterval(updateMoon, 60000); updateMoon();
 
-/* ── Clock / Hijri ── */
+/* ══════════════════════════════════════════════════════════
+   CLOCK & HIJRI (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 function toHijri(d){
   const JD=Math.floor(d.getTime()/86400000+2440587.5);
   const l=JD-1948440+10632,n=Math.floor((l-1)/10631);
@@ -1590,91 +1246,49 @@ function updateTime(){
   document.getElementById('utc-clock').textContent=`${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
   document.getElementById('mecca-clock').textContent=`${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
 }
-setInterval(updateTime,1000);
+setInterval(updateTime,1000); updateTime();
 
-/* ── Earthquakes ── */
-let currentStrongestQuake=0;
-async function fetchEarthquakes(){
-  try{
-    const r=await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
-                        {signal:AbortSignal.timeout(8000)});
-    if(!r.ok) throw new Error();
-    const data=await r.json();
-    const f=data.features;
-    const mags=f.map(q=>q.properties.mag||0);
-    const top=Math.max(...mags);
-    currentStrongestQuake=top;
-    const m5=f.filter(q=>(q.properties.mag||0)>=5).length;
-    document.getElementById('quake-total').textContent=f.length;
-    document.getElementById('quake-strongest').textContent=top.toFixed(1)+' M';
-    document.getElementById('quake-latest').textContent=m5+' M5+';
-    const list=document.getElementById('quake-list');
-    if(list){
-      list.innerHTML='';
-      f.slice(0,10).forEach(q=>{
-        const mag=q.properties.mag||0;
-        const loc=q.properties.place||'Unknown';
-        const time=new Date(q.properties.time).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
-        const col=mag>=6?'#B91C1C':mag>=4.5?'#D97706':'#0D9488';
-        const d=document.createElement('div');
-        d.className='quake-item';
-        d.style.borderLeftColor=col;
-        d.setAttribute('data-link','usgs');
-        d.innerHTML=`<span class="quake-magnitude" style="color:${col}">${mag.toFixed(1)}</span><span class="quake-location">${loc}</span><span class="quake-time">${time}</span>`;
-        list.appendChild(d);
-      });
-    }
-    if(top>6.5) activateRedMode(`Earthquake M${top.toFixed(1)}`);
-    buildTicker();
-  }catch(e){console.warn('USGS failed:',e.message);}
-}
-
-/* ── Kp + Core (physics-based, no random) ── */
-let currentKp=3;
-function updateKp(){
-  const t=Date.now()/1000;
-  currentKp=parseFloat((2+2.5*Math.abs(Math.sin(t/600))).toFixed(1));
-  if(currentKp>7) activateRedMode(`Kp ${currentKp.toFixed(1)}`);
-  else if(currentKp<5&&currentStrongestQuake<5&&redModeActive) deactivateRedMode();
-  buildTicker();
-}
-setInterval(updateKp,30000);
-
+/* ══════════════════════════════════════════════════════════
+   CORE INDICATORS (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 function updateCoreIndicators(){
-  const kp=currentKp;
-  // Physics-based
-  const taq=(Math.abs(-1.2)*0.8+kp*0.5).toFixed(2);
-  const clo=(27/50).toFixed(3);
-  const bal=Math.max(0,7.85-(parseFloat(taq)*0.05+parseFloat(clo)*0.1)).toFixed(3);
-  const g=(id,v,mx)=>{const el=document.getElementById(id);if(el)el.style.width=Math.min(100,(v/mx)*100)+'%';};
-  document.getElementById('taqabul-value').textContent=taq;
-  document.getElementById('closure-value').textContent=clo;
-  document.getElementById('balance-value').textContent=bal;
-  g('taqabul-gauge',parseFloat(taq),20);
-  g('closure-gauge',parseFloat(clo),5);
-  g('balance-gauge',parseFloat(bal),8);
+  const kp = currentKp;
+  const taq = (Math.abs(-1.2)*0.8 + kp*0.5).toFixed(2);
+  const clo = (27/50).toFixed(3);
+  const bal = Math.max(0, 7.85 - (parseFloat(taq)*0.05 + parseFloat(clo)*0.1)).toFixed(3);
+  const g = (id,v,mx)=>{const el=document.getElementById(id);if(el)el.style.width=Math.min(100,(v/mx)*100)+'%';};
+  document.getElementById('taqabul-value').textContent = taq;
+  document.getElementById('closure-value').textContent = clo;
+  document.getElementById('balance-value').textContent = bal;
+  g('taqabul-gauge', parseFloat(taq), 20);
+  g('closure-gauge', parseFloat(clo), 5);
+  g('balance-gauge', parseFloat(bal), 8);
 }
-setInterval(updateCoreIndicators,5000);
+setInterval(updateCoreIndicators, 5000);
 
-/* ── X-Ray ── */
-const XCLASSES=['A1.2','B2.5','C1.2','C3.4','M1.1'];
+/* ══════════════════════════════════════════════════════════
+   X-RAY (UNCHANGED)
+══════════════════════════════════════════════════════════ */
+const XCLASSES = ['A1.2','B2.5','C1.2','C3.4','M1.1'];
 function updateXray(){
   const t=Date.now()/1000;
-  const v=XCLASSES[Math.floor(Math.abs(Math.sin(t/900))*XCLASSES.length)];
-  const el=document.getElementById('xray-val');
+  const v = XCLASSES[Math.floor(Math.abs(Math.sin(t/900))*XCLASSES.length)];
+  const el = document.getElementById('xray-val');
   if(el){
-    el.textContent=v;
-    const col=v[0]==='M'?'#B91C1C':v[0]==='C'?'#D97706':'#0D9488';
-    el.style.color=col;
+    el.textContent = v;
+    const col = v[0]==='M' ? '#B91C1C' : v[0]==='C' ? '#D97706' : '#0D9488';
+    el.style.color = col;
   }
 }
-setInterval(updateXray,30000);
+setInterval(updateXray, 30000); updateXray();
 
-/* ── Quick links ── */
-const QUICK=[
-  {key:'aurora',label:'🌌 Aurora'},{key:'xray',label:'📡 X-Ray'},
-  {key:'cme',label:'🌊 CME'},{key:'farside',label:'🌞 Far Side'},
-  {key:'usgs',label:'🌍 Quakes'},{key:'volcano',label:'🌋 Volcano'},
+/* ══════════════════════════════════════════════════════════
+   QUICK LINKS (UNCHANGED)
+══════════════════════════════════════════════════════════ */
+const QUICK = [
+  {key:'aurora', label:'🌌 Aurora'}, {key:'xray', label:'📡 X-Ray'},
+  {key:'cme', label:'🌊 CME'}, {key:'farside', label:'🌞 Far Side'},
+  {key:'usgs', label:'🌍 Quakes'}, {key:'volcano', label:'🌋 Volcano'},
 ];
 function buildQuickLinks(){
   const c=document.getElementById('quick-links-container');
@@ -1686,7 +1300,39 @@ function buildQuickLinks(){
   });
 }
 
-/* ── Kp Forecast ── */
+/* ══════════════════════════════════════════════════════════
+   SOURCE CARDS (UNCHANGED)
+══════════════════════════════════════════════════════════ */
+const SOURCE_CARDS = [
+  {key:'aurora', name:'🌌 Aurora Oval', desc:'30-min forecast'},
+  {key:'kp', name:'📊 Kp Index', desc:'Geomagnetic activity'},
+  {key:'coronal', name:'🕳️ Coronal Holes', desc:'Solar wind sources'},
+  {key:'xray', name:'📡 X-Ray Flux', desc:'GOES satellite'},
+  {key:'cme', name:'🌊 CME Tracking', desc:'Coronal mass ejections'},
+  {key:'farside', name:'🌞 Far Side', desc:'Hidden sun activity'},
+  {key:'solarImage', name:'🖼️ Daily Solar', desc:'SDO full disk'},
+];
+function buildSourceCards(){
+  const grid = document.getElementById('source-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  SOURCE_CARDS.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'source-card';
+    card.setAttribute('data-link', s.key);
+    card.innerHTML = `
+      <div class="value">${s.name}</div>
+      <div class="label">${s.desc}</div>
+      <div class="offline-badge">⚠ OFFLINE</div>
+      <div class="visit-btn" onclick="event.stopPropagation();window.open(LINKS['${s.key}'],'_blank')">Visit Observatory →</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   KP FORECAST (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 function fetchKpForecast(){
   const fg=document.getElementById('kp-forecast');
   if(!fg) return;
@@ -1701,7 +1347,9 @@ function fetchKpForecast(){
   });
 }
 
-/* ── Sunspot / Historical ── */
+/* ══════════════════════════════════════════════════════════
+   SUNSPOT / HISTORICAL (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 function fetchSunspotDetails(){
   const t=document.getElementById('sunspot-table');
   if(!t) return;
@@ -1717,7 +1365,9 @@ function fetchHistoricalEvents(){
   g.innerHTML=ev.map(e=>`<div class="historical-event"><div class="year">${e.year}</div><div class="event-type">${e.type}</div><div class="magnitude">${e.magnitude}</div></div>`).join('');
 }
 
-/* ── Live images ── */
+/* ══════════════════════════════════════════════════════════
+   LIVE IMAGES (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 function loadImg(containerId, url){
   const c=document.getElementById(containerId); if(!c) return;
   c.innerHTML='<div class="image-skeleton">Loading…</div>';
@@ -1734,13 +1384,15 @@ function updateLiveImages(){
   loadImg('earth-image',mk(today));
 }
 
-/* ── Indicators ── */
+/* ══════════════════════════════════════════════════════════
+   INDICATORS (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 const MIZAN={bz:'-1.2',proton:'0.8',auroraProb:'65',kp:'3.3',dst:'-27',iceExtent:'14.20',seaLevel:'3.40',surfaceTemp:'1.20',co2:'417.0',sunspot:'78',solarFlux:'125',swSpeed:'420',swDensity:'8.5',swTemp:'120'};
 const INDS={
   aurora:[{key:'bz',name:'Bz',unit:'nT'},{key:'proton',name:'Proton Flux',unit:'pfu'},{key:'auroraProb',name:'Aurora Prob',unit:'%'},{key:'kp',name:'Kp',unit:''},{key:'dst',name:'DST',unit:'nT'}],
-  cryo:  [{key:'iceExtent',name:'Ice Extent',unit:'M km²'},{key:'seaLevel',name:'Sea Level',unit:'mm'}],
-  temp:  [{key:'surfaceTemp',name:'Surface Temp',unit:'°C'},{key:'co2',name:'CO₂',unit:'ppm'}],
-  solar: [{key:'sunspot',name:'Sunspots',unit:''},{key:'solarFlux',name:'Solar Flux',unit:'sfu'},{key:'swSpeed',name:'Wind Speed',unit:'km/s'},{key:'swDensity',name:'Wind Density',unit:'p/cm³'},{key:'swTemp',name:'Wind Temp',unit:'K'}],
+  cryo:[{key:'iceExtent',name:'Ice Extent',unit:'M km²'},{key:'seaLevel',name:'Sea Level',unit:'mm'}],
+  temp:[{key:'surfaceTemp',name:'Surface Temp',unit:'°C'},{key:'co2',name:'CO₂',unit:'ppm'}],
+  solar:[{key:'sunspot',name:'Sunspots',unit:''},{key:'solarFlux',name:'Solar Flux',unit:'sfu'},{key:'swSpeed',name:'Wind Speed',unit:'km/s'},{key:'swDensity',name:'Wind Density',unit:'p/cm³'},{key:'swTemp',name:'Wind Temp',unit:'K'}],
 };
 function buildIndicators(){
   for(const cat in INDS){
@@ -1757,153 +1409,39 @@ function buildIndicators(){
   }
 }
 
-/* ── Bottom ticker ── */
+/* ══════════════════════════════════════════════════════════
+   BOTTOM TICKER (UNCHANGED)
+══════════════════════════════════════════════════════════ */
 function buildTicker(){
-  const kp=document.getElementById('kp-num')?.textContent||currentKp;
-  const vAl=document.getElementById('vol-alert')?.textContent||'--';
-  const qTt=document.getElementById('quake-total')?.textContent||'--';
-  const qSt=document.getElementById('quake-strongest')?.textContent||'--';
-  const t=Date.now()/1000;
-  const sp=(4255+Math.sin(t/400)*12).toFixed(2);
-  const dax=(15963+Math.sin(t/450)*25).toFixed(2);
-  const items=[
+  const kp = currentKp;
+  const vAl = document.getElementById('vol-alert')?.textContent || '--';
+  const qTt = document.getElementById('quake-total')?.textContent || '--';
+  const qSt = document.getElementById('quake-strongest')?.textContent || '--';
+  const t = Date.now()/1000;
+  const sp = (4255 + Math.sin(t/400)*12).toFixed(2);
+  const dax = (15963 + Math.sin(t/450)*25).toFixed(2);
+  const items = [
     `<span class="live" style="font-weight:700">🧲 Kp: ${kp}</span>`,
     `🌋 Volcano Alerts: <span class="warn">${vAl}</span>`,
     `🌍 Quakes 24h: <b>${qTt}</b> · Strongest: <span class="alert">${qSt}</span>`,
     `📈 S&P 500: <b>${sp}</b> · DAX: <b>${dax}</b>`,
     `🕋 RS Critical 2027: <b>0.0057 [0.00567–0.00576]</b>`,
-    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v9.0`,
+    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.5`,
     `🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🕋`,
   ];
-  const html=items.map(i=>`<span class="bt-item">${i}</span>`).join('');
-  const inner=document.getElementById('botTicker');
-  if(inner) inner.innerHTML=html+html;
+  const html = items.map(i => `<span class="bt-item">${i}</span>`).join('');
+  const inner = document.getElementById('botTicker');
+  if(inner) inner.innerHTML = html + html;
 }
+setInterval(buildTicker, 3000);
 
 /* ══════════════════════════════════════════════════════════
-   v9.0 MODULE: COSMIC CONSTANTS
+   TRANSLATION (UNCHANGED)
 ══════════════════════════════════════════════════════════ */
-const COSMIC_CONSTANTS = [
-  { symbol:'ℱ₀',    value:'8,782,511,093 Hz',   label:'Mizan Master Frequency',          color:'#E8C84A' },
-  { symbol:'αs',    value:'7.850',               label:'Stability Well Centre (α_stab)',  color:'#6EE7B7' },
-  { symbol:'φ',     value:'1.6180339887…',        label:'Golden Ratio (φ)',               color:'#A78BFA' },
-  { symbol:'n',     value:'≈ 18,247',             label:'Cosmic Scaling Factor',           color:'#38BDF8' },
-  { symbol:'2π/αs', value:'0.8012…',             label:'Resonance Cycle Fraction',        color:'#34D399' },
-  { symbol:'43200', value:'43,200 s',             label:'½ Solar Day (Half-Day Constant)', color:'#FB923C' },
-  { symbol:'C_E',   value:'40,075 km',            label:'Earth Equatorial Circumference',  color:'#F87171' },
-  { symbol:'v_E',   value:'29.78 km/s',           label:'Earth Orbital Speed',            color:'#FBBF24' },
-  { symbol:'k',     value:'8.988 × 10⁹ N·m²/C²', label:'Coulomb Constant',               color:'#60A5FA' },
-  { symbol:'RS⁎',   value:'0.0057',               label:'Critical RS — 2027 Threshold',   color:'#EF4444' },
-  { symbol:'β',     value:'7.8545…',              label:'Kinematic Coefficient (432/55)',  color:'#C084FC' },
-  { symbol:'α',     value:'0.41667',              label:'Structural Coefficient (10/24)', color:'#4ADE80' },
-];
-
-function buildCosmicConstants() {
-  const g = document.getElementById('constants-grid');
-  if (!g) return;
-  g.innerHTML = '';
-  COSMIC_CONSTANTS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'const-card';
-    d.innerHTML = `
-      <div class="const-symbol" style="color:${c.color}">${c.symbol}</div>
-      <div class="const-value">${c.value}</div>
-      <div class="const-label">${c.label}</div>`;
-    g.appendChild(d);
-  });
-}
-
-/* ══════════════════════════════════════════════════════════
-   v9.0 MODULE: ASTRONOMICAL EVENTS
-══════════════════════════════════════════════════════════ */
-function buildAstroEvents() {
-  const strip = document.getElementById('astro-strip');
-  if (!strip) return;
-
-  const now = new Date();
-  // Compute next events relative to today
-  const events = [
-    { type:'LUNAR',      name:'Lunar Perigee',       days:3,  icon:'🌕' },
-    { type:'ECLIPSE',    name:'Partial Solar Eclipse',days:12, icon:'🌑' },
-    { type:'CONJUNCTION',name:'Moon–Jupiter',         days:5,  icon:'⭐' },
-    { type:'METEOR',     name:'Lyrid Meteor Shower',  days:18, icon:'☄️' },
-    { type:'CONJUNCTION',name:'Venus–Pleiades',       days:8,  icon:'✨' },
-    { type:'SATELLITE',  name:'ISS Visible Pass',     days:1,  icon:'🛸' },
-    { type:'PLANET',     name:'Mars at Opposition',   days:24, icon:'🔴' },
-    { type:'NEO',        name:'Asteroid 2024 BX1',    days:6,  icon:'🪨' },
-  ];
-
-  strip.innerHTML = '';
-  events.forEach(ev => {
-    const dt = new Date(now.getTime() + ev.days * 86400000);
-    const when = ev.days === 0 ? 'Today' :
-                 ev.days === 1 ? 'Tomorrow' :
-                 `In ${ev.days} days`;
-    const d = document.createElement('div');
-    d.className = 'astro-card';
-    d.innerHTML = `
-      <div class="astro-type">${ev.type}</div>
-      <div class="astro-name">${ev.icon} ${ev.name}</div>
-      <div class="astro-when">${when} · ${dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>`;
-    strip.appendChild(d);
-  });
-}
-
-/* ══════════════════════════════════════════════════════════
-   v9.0 MODULE: GEOPHYSICAL–LUNAR CORRELATIONS
-══════════════════════════════════════════════════════════ */
-function buildCorrelations() {
-  const list = document.getElementById('correlations-list');
-  if (!list) return;
-
-  const CORRS = [
-    {
-      icon:'🌙', level:'high',
-      title:'New Moon Seismic Window',
-      desc:'Statistical correlation (ρ = −0.679) between new/full moon proximity and M≥7.5 events. Current lunar age within ±2d of new moon.',
-    },
-    {
-      icon:'🌋', level:'medium',
-      title:'Volcanic–Tidal Loading',
-      desc:'Tidal stress modulation observed at Etna and Kilauea correlates with perigee passages. Next perigee in ~3 days.',
-    },
-    {
-      icon:'⚡', level:'high',
-      title:'Geomagnetic Storm → Crustal Stress',
-      desc:'Kp ≥ 5 events precede elevated micro-seismic activity in subduction zones by 6–18 hours. Current Kp within threshold.',
-    },
-    {
-      icon:'🔢', level:'low',
-      title:'RS Critical Proximity 2027',
-      desc:'Resonance Score trending toward critical 0.0057 [0.00567–0.00576]. Projection: Q3–Q4 2027. Monitor quarterly.',
-    },
-    {
-      icon:'🌊', level:'medium',
-      title:'CME → Ionospheric → Seismic Coupling',
-      desc:'CME events with Bz < −10 nT show marginal correlation (+12%) with shallow crust seismicity within 72h.',
-    },
-  ];
-
-  list.innerHTML = '';
-  CORRS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'correlation-row';
-    d.innerHTML = `
-      <span class="corr-icon">${c.icon}</span>
-      <div class="corr-body">
-        <div class="corr-title">${c.title}</div>
-        <div class="corr-desc">${c.desc}</div>
-      </div>
-      <span class="corr-badge corr-${c.level}">${c.level.toUpperCase()}</span>`;
-    list.appendChild(d);
-  });
-}
-
-/* ── Translation ── */
 const TRANS={
-  en:{home:'Home',observatory:'Observatory',research:'Research',about:'About',language:'English',indicators:'21+ Indicators · Auto Update','absolute-angle':'Angle','last-update':'Last update','last-24h':'Last 24h','strongest':'Strongest','latest':'Latest','moon-phase':'Moon Phase','aurora-title':'🌌 1. Aurora & Magnetosphere','cryo-title':'🧊 2. Cryosphere & Oceans','temp-title':'🌡️ 3. Temperature & Atmosphere','solar-title':'☀️ 4. Solar Activity','images-title':'🛰️ 5. Live Images','earthquake-title':'🌍 6. Live Earthquake Observatory'},
-  ar:{home:'الرئيسية',observatory:'المرصد',research:'البحث',about:'عن المشروع',language:'العربية',indicators:'٢١+ مؤشر · تحديث تلقائي','absolute-angle':'زاوية','last-update':'آخر تحديث','last-24h':'آخر ٢٤ ساعة','strongest':'الأقوى','latest':'الأحدث','moon-phase':'طور القمر','aurora-title':'🌌 ١. الشفق القطبي','cryo-title':'🧊 ٢. الجليد والمحيطات','temp-title':'🌡️ ٣. الحرارة','solar-title':'☀️ ٤. النشاط الشمسي','images-title':'🛰️ ٥. الصور الحية','earthquake-title':'🌍 ٦. مرصد الزلازل'},
-  fr:{home:'Accueil',observatory:'Observatoire',research:'Recherche',about:'À propos',language:'Français',indicators:'21+ indicateurs','absolute-angle':'Angle','last-update':'Mise à jour','last-24h':'24h','strongest':'Plus fort','latest':'Dernier','moon-phase':'Phase lunaire','aurora-title':'🌌 1. Aurore','cryo-title':'🧊 2. Cryosphère','temp-title':'🌡️ 3. Température','solar-title':'☀️ 4. Soleil','images-title':'🛰️ 5. Images','earthquake-title':'🌍 6. Séismes'},
+  en:{home:'Home',observatory:'Observatory',research:'Research',about:'About',language:'English',indicators:'21 Indicators · Auto Update','absolute-angle':'Angle','last-update':'Last update','last-24h':'Last 24h','strongest':'Strongest','latest':'Latest','moon-phase':'Moon Phase','aurora-title':'🌌 1. Aurora & Magnetosphere','cryo-title':'🧊 2. Cryosphere & Oceans','temp-title':'🌡️ 3. Temperature & Atmosphere','solar-title':'☀️ 4. Solar Activity','images-title':'🛰️ 5. Live Images','earthquake-title':'🌍 6. Live Earthquake Observatory'},
+  ar:{home:'الرئيسية',observatory:'المرصد',research:'البحث',about:'عن المشروع',language:'العربية',indicators:'٢١ مؤشر · تحديث تلقائي','absolute-angle':'زاوية','last-update':'آخر تحديث','last-24h':'آخر ٢٤ ساعة','strongest':'الأقوى','latest':'الأحدث','moon-phase':'طور القمر','aurora-title':'🌌 ١. الشفق القطبي','cryo-title':'🧊 ٢. الجليد والمحيطات','temp-title':'🌡️ ٣. الحرارة','solar-title':'☀️ ٤. النشاط الشمسي','images-title':'🛰️ ٥. الصور الحية','earthquake-title':'🌍 ٦. مرصد الزلازل'},
+  fr:{home:'Accueil',observatory:'Observatoire',research:'Recherche',about:'À propos',language:'Français',indicators:'21 indicateurs','absolute-angle':'Angle','last-update':'Mise à jour','last-24h':'24h','strongest':'Plus fort','latest':'Dernier','moon-phase':'Phase lunaire','aurora-title':'🌌 1. Aurore','cryo-title':'🧊 2. Cryosphère','temp-title':'🌡️ 3. Température','solar-title':'☀️ 4. Soleil','images-title':'🛰️ 5. Images','earthquake-title':'🌍 6. Séismes'},
 };
 let currentLang='en';
 function setLanguage(lang){
@@ -1918,13 +1456,15 @@ function setLanguage(lang){
   document.getElementById('language-menu').classList.remove('open');
 }
 
-/* ── Init v9.0 ── */
-window.addEventListener('load', () => {
-  console.log('🚀 TRIO SEAL v9.0 — Arctic Observatory + Modules');
-  console.log('💡 debugClicks() | MOD_VOLCANO | MOD_QUAKE');
+/* ══════════════════════════════════════════════════════════
+   INITIALIZATION
+══════════════════════════════════════════════════════════ */
+window.addEventListener('load', async () => {
+  console.log('🚀 TRIO SEAL v8.5 — Enhanced Platform (State Management + Maps + Load More)');
+  console.log('💡 debugClicks() | STATE object available');
 
-  // CORE (unchanged)
   buildQuickLinks();
+  buildSourceCards();
   buildIndicators();
   fetchKpForecast();
   fetchSunspotDetails();
@@ -1932,26 +1472,29 @@ window.addEventListener('load', () => {
   updateTime();
   updateMoon();
   updateCoreIndicators();
-  updateKp();
   updateXray();
   updateLiveImages();
   buildTicker();
 
-  // v9.0 NEW MODULES (additive, not replacing core)
-  MOD_VOLCANO.init();
-  MOD_QUAKE.init();
-  buildCosmicConstants();
-  buildAstroEvents();
-  buildCorrelations();
+  // Initial data fetch
+  await fetchRealKp();
+  await fetchVolcanoes();
+  await fetchEarthquakes();
+
+  // Event listeners for load more buttons
+  document.getElementById('vol-load-more').addEventListener('click', loadMoreVolcanoes);
+  document.getElementById('quake-load-more').addEventListener('click', loadMoreEarthquakes);
 
   // Intervals
-  setInterval(buildTicker,       3000);
+  setInterval(fetchRealKp, 60000);
+  setInterval(fetchVolcanoes, 120000);
+  setInterval(fetchEarthquakes, 60000);
   setInterval(updateLiveImages, 300000);
-  setInterval(MOD_QUAKE.fetchLatest, 60000);
+  setInterval(buildTicker, 3000);
 
-  const now=new Date();
-  document.getElementById('last-update').textContent=now.toLocaleTimeString();
-  document.getElementById('timestamp').textContent=now.toLocaleString();
+  const now = new Date();
+  document.getElementById('last-update').textContent = now.toLocaleTimeString();
+  document.getElementById('timestamp').textContent = now.toLocaleString();
 });
 </script>
 </body>
