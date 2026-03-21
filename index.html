@@ -15,7 +15,6 @@
   --bg-subtle: #E8EFF6;
   --bg-hover: #FDF8EE;
   --bg-navy: #0F2B4F;
-  --bg-navy-mid: #1A3E6B;
   --text-primary: #0F2B4F;
   --text-body: #1E3A5F;
   --text-muted: #5A7A9A;
@@ -29,12 +28,9 @@
   --sky-light: #E0F2FE;
   --crimson: #B91C1C;
   --crimson-light: #FEE2E2;
-  --violet: #6D28D9;
-  --gold-accent: #C8920A;
+  --gold: #C8920A;
   --shadow-sm: 0 2px 6px rgba(15,43,79,.07);
   --shadow-md: 0 6px 18px rgba(15,43,79,.10);
-  --shadow-lg: 0 12px 32px rgba(15,43,79,.13);
-  --shadow-hover: 0 10px 28px rgba(15,43,79,.16);
   --f-hud: 'Orbitron', sans-serif;
   --f-body: 'Rajdhani', sans-serif;
   --f-mono: 'Share Tech Mono', monospace;
@@ -63,14 +59,13 @@ body {
   background: var(--bg-surface);
   border-radius: 28px;
   padding: 1.8rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   border: 1px solid var(--bdr);
 }
 
 /* RTL Support */
 [dir="rtl"] .subtitle { border-left: none; border-right: 3px solid var(--amber); padding-left: 0; padding-right: .9rem; }
 [dir="rtl"] .section-title::after { background: linear-gradient(270deg, var(--bdr), transparent); }
-[dir="rtl"] .core-card::before { left: auto; right: 0; border-radius: 0 4px 4px 0; }
 
 /* NAVBAR */
 .navbar {
@@ -84,14 +79,13 @@ body {
 .logo {
   font-family: var(--f-hud);
   font-size: 1.55rem; font-weight: 900;
-  color: #E8C84A;
-  text-shadow: 0 0 18px rgba(232,200,74,.4);
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(200,146,10,.4);
   cursor: pointer;
 }
-.logo:hover { text-shadow: 0 0 28px rgba(232,200,74,.7); }
 .nav-links { list-style:none; display:flex; gap:1.6rem; }
-.nav-links a { color: rgba(232,240,248,.7); text-decoration: none; font-weight: 500; font-size: .9rem; transition: color .2s; }
-.nav-links a:hover { color: #E8C84A; }
+.nav-links a { color: rgba(232,240,248,.7); text-decoration: none; font-weight: 500; font-size: .9rem; }
+.nav-links a:hover { color: var(--gold); }
 .language-selector { position: relative; }
 .lang-btn {
   background: rgba(255,255,255,.12);
@@ -101,13 +95,11 @@ body {
   cursor: pointer; font-size: .82rem;
   display: flex; align-items: center; gap: 6px;
 }
-.lang-btn:hover { background: rgba(255,255,255,.2); }
 .lang-menu {
   position: absolute; top: calc(100%+6px); right:0;
   background: var(--bg-surface);
   border: 1px solid var(--bdr);
   border-radius: 14px;
-  box-shadow: var(--shadow-lg);
   display: none; z-index:300; min-width:150px;
   overflow: hidden;
 }
@@ -116,7 +108,6 @@ body {
   padding: 9px 16px; cursor:pointer;
   border-bottom: 1px solid var(--bdr);
   color: var(--text-body);
-  transition: background .15s;
 }
 .lang-option:hover { background: #FEF9E7; color: var(--text-primary); }
 
@@ -138,7 +129,7 @@ body {
   color: var(--text-on-navy);
   opacity: .85;
 }
-.news-ticker-content span:first-child { color: #E8C84A; }
+.news-ticker-content span:first-child { color: var(--gold); }
 @keyframes ticker {
   0% { transform: translateX(100vw); }
   100% { transform: translateX(-100%); }
@@ -167,7 +158,6 @@ body {
 .version-chip {
   font-size: .75rem; font-family: var(--f-hud);
   background: var(--sky-light); color: var(--sky);
-  border: 1px solid rgba(3,105,161,.2);
   padding: .25rem .9rem; border-radius: 99px;
   vertical-align: middle;
 }
@@ -182,8 +172,8 @@ body {
   display: inline-block; padding: 3px 10px; border-radius: 99px;
   font-size: .68rem; font-weight: 700; font-family: var(--f-hud);
 }
-.badge-live { background: var(--teal-light); color: var(--teal); border: 1px solid rgba(13,148,136,.25); }
-.badge-mizan { background: var(--amber-light); color: var(--amber); border: 1px solid rgba(180,83,9,.25); }
+.badge-live { background: var(--teal-light); color: var(--teal); }
+.badge-mizan { background: var(--amber-light); color: var(--amber); }
 
 /* SECTION TITLES */
 .section-title {
@@ -204,12 +194,11 @@ body {
   border: 1px solid var(--bdr);
   border-radius: 18px;
   padding: 1.3rem;
-  box-shadow: var(--shadow-sm);
   transition: var(--t);
 }
 .card:hover, .core-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: var(--shadow-md);
   border-color: rgba(3,105,161,.35);
 }
 [data-link] { cursor: pointer; }
@@ -219,9 +208,13 @@ body {
   display: grid; grid-template-columns: repeat(3,1fr);
   gap: 1.2rem; margin-bottom: 1.5rem;
 }
+.core-card {
+  position: relative;
+  overflow: hidden;
+}
 .core-card::before {
   content: ''; position: absolute; top: 0; left: 0;
-  width: 4px; height: 100%; border-radius: 4px 0 0 4px;
+  width: 4px; height: 100%;
 }
 .core-card.taq::before { background: linear-gradient(to bottom, var(--crimson), #FB7185); }
 .core-card.clo::before { background: linear-gradient(to bottom, var(--amber), #FBBF24); }
@@ -234,9 +227,9 @@ body {
   font-family: var(--f-hud); font-size: .72rem;
   padding: .25rem .9rem; border-radius: 99px;
 }
-.core-title.taq { background: var(--crimson-light); color: var(--crimson); border: 1px solid rgba(185,28,28,.2); }
-.core-title.clo { background: var(--amber-light); color: var(--amber); border: 1px solid rgba(180,83,9,.2); }
-.core-title.bal { background: var(--teal-light); color: var(--teal); border: 1px solid rgba(13,148,136,.2); }
+.core-title.taq { background: var(--crimson-light); color: var(--crimson); }
+.core-title.clo { background: var(--amber-light); color: var(--amber); }
+.core-title.bal { background: var(--teal-light); color: var(--teal); }
 .core-value {
   font-family: var(--f-mono); font-size: 1.45rem;
   font-weight: 700; padding: .2rem .7rem;
@@ -294,11 +287,10 @@ body {
   content: ''; position: absolute; top: 0; left: 0;
   width: 100%; height: 3px;
   background: linear-gradient(90deg, var(--sky), rgba(3,105,161,.2));
-  transition: height .2s;
 }
 .source-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: var(--shadow-md);
   border-color: var(--sky);
   background: var(--sky-light);
 }
@@ -316,7 +308,6 @@ body {
 .visit-btn {
   display: inline-block;
   background: var(--sky-light); color: var(--sky);
-  border: 1px solid rgba(3,105,161,.25);
   padding: 4px 11px; border-radius: 99px;
   font-size: .7rem; cursor: pointer;
   transition: var(--t);
@@ -329,11 +320,9 @@ body {
   background: linear-gradient(135deg, #0F2B4F 0%, #1A3E6B 100%);
   border-radius: 20px; padding: 1.6rem 2rem;
   margin: 1.5rem 0; cursor: pointer;
-  box-shadow: var(--shadow-md);
-  position: relative;
 }
 .moon-canvas { display: block; flex-shrink: 0; width: 120px; height: 120px; border-radius: 50%; }
-.moon-info h3 { color: #E8C84A; font-family: var(--f-hud); font-size: 1rem; margin-bottom: .6rem; }
+.moon-info h3 { color: var(--gold); font-family: var(--f-hud); font-size: 1rem; margin-bottom: .6rem; }
 .moon-percent { font-size: 1.7rem; font-weight: 900; color: #6EE7B7; font-family: var(--f-mono); }
 .moon-thickness { font-size: .95rem; color: rgba(232,240,248,.75); margin-top: .3rem; }
 #moon-age { margin-top: .3rem; color: rgba(232,240,248,.55); }
@@ -414,7 +403,6 @@ body {
   margin-top: 14px;
 }
 .leaflet-container { background: #e8eff6; font-family: var(--f-body); }
-.leaflet-popup-content-wrapper { border-radius: 10px; font-size: .85rem; }
 
 /* OTHER SECTIONS */
 .indicators-grid {
@@ -430,21 +418,20 @@ body {
 .card-value {
   font-family: var(--f-mono); font-size: 1.3rem; font-weight: 700;
   background: var(--teal-light); color: var(--teal);
-  border: 2px solid rgba(13,148,136,.3);
   padding: .15rem .6rem; border-radius: 8px;
   min-width: 70px; text-align: center;
 }
 .gauge { height: 6px; background: var(--bg-subtle); border-radius: 99px; margin: 8px 0 6px; }
-.gauge-fill { height: 100%; border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+.gauge-fill { height: 100%; border-radius: 99px; transition: width .5s; }
 .status { display: flex; justify-content: space-between; font-size: .77rem; color: var(--text-muted); margin-top: 4px; }
-.status-badge { padding: 2px 8px; border-radius: 99px; font-size: .66rem; font-weight: 700; font-family: var(--f-hud); }
+.status-badge { padding: 2px 8px; border-radius: 99px; font-size: .66rem; font-weight: 700; }
 .sunspot-details { background: var(--bg-subtle); border-radius: 12px; padding: 1rem; margin-top: 1rem; }
 .sunspot-table { width: 100%; border-collapse: collapse; }
 .sunspot-table th { color: var(--text-primary); font-family: var(--f-hud); font-size: .7rem; padding: 6px 8px; border-bottom: 2px solid var(--bdr); text-align: left; }
 .sunspot-table td { padding: 6px 8px; border-bottom: 1px solid var(--bdr); }
 .historical-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 10px; }
 .historical-event { padding: 12px; background: var(--bg-subtle); border-radius: 12px; border: 1px solid var(--bdr); }
-.historical-event .year { color: var(--text-primary); font-size: 1.1rem; font-weight: 700; font-family: var(--f-mono); }
+.historical-event .year { color: var(--text-primary); font-size: 1.1rem; font-weight: 700; }
 .images-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; margin: 1.5rem 0; }
 .image-card { background: var(--bg-surface); border-radius: 16px; padding: 1rem; border: 1px solid var(--bdr); }
 .image-skeleton {
@@ -462,7 +449,6 @@ body {
   background: var(--bg-subtle); border: 1px solid var(--bdr);
   padding: 5px 14px; border-radius: 99px;
   color: var(--text-body); font-size: .83rem; cursor: pointer;
-  transition: var(--t);
 }
 .quick-link:hover { background: var(--sky-light); color: var(--sky); transform: translateY(-2px); }
 .footer {
@@ -474,7 +460,7 @@ body {
 .bticker {
   position: fixed; bottom: 0; left: 0; width: 100%;
   background: var(--bg-navy);
-  border-top: 2px solid rgba(232,200,74,.4);
+  border-top: 2px solid rgba(200,146,10,.4);
   padding: 0 20px;
   display: flex; align-items: center;
   height: 48px; z-index: 1000;
@@ -486,7 +472,7 @@ body {
   border-right: 1px solid rgba(255,255,255,.12);
   margin-right: 16px;
   font-family: var(--f-hud); font-size: .62rem;
-  color: #E8C84A;
+  color: var(--gold);
 }
 .live-dot {
   display: inline-block; width: 7px; height: 7px;
@@ -504,19 +490,17 @@ body {
   border-right: 1px solid rgba(255,255,255,.08);
   font-size: .84rem; color: rgba(232,240,248,.8);
 }
-.bt-item b { color: #E8C84A; }
+.bt-item b { color: var(--gold); }
 .red-mode-overlay {
   position: fixed; inset: 0; pointer-events: none; z-index: 998;
   background: radial-gradient(circle at 50% 0%, rgba(220,38,38,.15), transparent 65%);
   animation: rm-pulse 2.5s infinite;
 }
-@keyframes rm-pulse { 0%,100%{opacity:.4} 50%{opacity:.9} }
 .notification-toast {
   position: fixed; top: 20px; right: 20px; z-index: 9999;
   background: var(--bg-surface);
   border-left: 4px solid var(--amber);
   padding: 12px 20px; border-radius: 12px;
-  box-shadow: var(--shadow-lg);
   font-size: .84rem; animation: toast-in .3s ease-out;
 }
 @keyframes toast-in { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
@@ -620,7 +604,7 @@ body {
 <h2 class="section-title">☀️ Solar Observatory</h2>
 <div class="source-grid" id="source-grid"></div>
 
-<!-- MOON PHASE - Natural Colors -->
+<!-- MOON PHASE -->
 <div class="moon-phase" data-link="moon">
   <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
   <div class="moon-info">
@@ -667,7 +651,7 @@ body {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">  <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr> </table></div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">   <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>   </table></div>
 </div>
 
 <!-- HISTORICAL -->
@@ -833,21 +817,21 @@ async function fetchRealKp() {
 
 /* ==================== VOLCANO API + STATE MANAGEMENT ==================== */
 const STATIC_VOLCANOES = [
-  { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', latitude: 37.748, longitude: 14.999 },
-  { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', latitude: 19.421, longitude: -155.287 },
-  { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING', latitude: 14.473, longitude: -90.880 },
-  { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH', latitude: 31.581, longitude: 130.659 },
-  { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY', latitude: 19.023, longitude: -98.622 },
-  { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY', latitude: -7.541, longitude: 110.446 },
-  { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH', latitude: -8.108, longitude: 112.922 },
-  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY', latitude: 38.789, longitude: 15.213 },
-  { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', latitude: -37.521, longitude: 177.183 },
-  { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', latitude: 56.653, longitude: 161.360 },
-  { name: 'Reykjanes', country: 'Iceland', alert: 'orange', status: 'WATCH', latitude: 63.880, longitude: -22.560 },
-  { name: 'Ruapehu', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', latitude: -39.281, longitude: 175.568 },
-  { name: 'Taal', country: 'Philippines', alert: 'yellow', status: 'ADVISORY', latitude: 14.002, longitude: 120.993 },
-  { name: 'Nyiragongo', country: 'DR Congo', alert: 'orange', status: 'WATCH', latitude: -1.520, longitude: 29.250 },
-  { name: 'Veniaminof', country: 'Alaska, USA', alert: 'yellow', status: 'ADVISORY', latitude: 56.196, longitude: -159.390 }
+  { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', lat: 37.748, lon: 14.999 },
+  { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', lat: 19.421, lon: -155.287 },
+  { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING', lat: 14.473, lon: -90.880 },
+  { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH', lat: 31.581, lon: 130.659 },
+  { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY', lat: 19.023, lon: -98.622 },
+  { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY', lat: -7.541, lon: 110.446 },
+  { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH', lat: -8.108, lon: 112.922 },
+  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY', lat: 38.789, lon: 15.213 },
+  { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -37.521, lon: 177.183 },
+  { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', lat: 56.653, lon: 161.360 },
+  { name: 'Reykjanes', country: 'Iceland', alert: 'orange', status: 'WATCH', lat: 63.880, lon: -22.560 },
+  { name: 'Ruapehu', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -39.281, lon: 175.568 },
+  { name: 'Taal', country: 'Philippines', alert: 'yellow', status: 'ADVISORY', lat: 14.002, lon: 120.993 },
+  { name: 'Nyiragongo', country: 'DR Congo', alert: 'orange', status: 'WATCH', lat: -1.520, lon: 29.250 },
+  { name: 'Veniaminof', country: 'Alaska, USA', alert: 'yellow', status: 'ADVISORY', lat: 56.196, lon: -159.390 }
 ];
 
 async function fetchVolcanoes() {
@@ -866,8 +850,8 @@ async function fetchVolcanoes() {
           alert: (v.alertLevel || '').toLowerCase().includes('warning') ? 'red' :
                  (v.alertLevel || '').toLowerCase().includes('watch') ? 'orange' : 'yellow',
           status: v.alertLevel || 'ADVISORY',
-          latitude: v.latitude ? parseFloat(v.latitude) : null,
-          longitude: v.longitude ? parseFloat(v.longitude) : null
+          lat: v.latitude ? parseFloat(v.latitude) : null,
+          lon: v.longitude ? parseFloat(v.longitude) : null
         }));
         console.log(`[VOLCANO] Loaded ${STATE.volcano.data.length} volcanoes from API`);
       } else throw new Error('Invalid API response');
@@ -876,8 +860,8 @@ async function fetchVolcanoes() {
     console.warn('[VOLCANO] API failed, using static data:', e.message);
     STATE.volcano.data = STATIC_VOLCANOES.map(v => ({
       ...v,
-      latitude: v.latitude,
-      longitude: v.longitude
+      lat: v.lat,
+      lon: v.lon
     }));
     console.log(`[VOLCANO] Loaded ${STATE.volcano.data.length} volcanoes from static data`);
   }
@@ -941,8 +925,8 @@ function plotVolcanoesOnMap() {
   STATE.volcano.markers = [];
   
   STATE.volcano.data.forEach(v => {
-    const lat = parseFloat(v.latitude);
-    const lng = parseFloat(v.longitude);
+    const lat = parseFloat(v.lat);
+    const lng = parseFloat(v.lon);
     if (isNaN(lat) || isNaN(lng)) return;
     
     const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
@@ -1094,7 +1078,7 @@ function loadMoreEarthquakes() {
   STATE.quakes.loading = false;
 }
 
-/* ==================== MOON PHASE (Natural Colors) ==================== */
+/* ==================== MOON PHASE ==================== */
 const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0);
 const SYNODIC = 29.530588853;
 
@@ -1281,8 +1265,8 @@ function fetchSunspotDetails() {
   const t = document.getElementById('sunspot-table');
   if (!t) return;
   const data = [{ r: 4392, c: 12, cl: 'CSI' }, { r: 4393, c: 3, cl: 'BXO' }, { r: 4397, c: 6, cl: 'CRO' }];
-  let h = '<tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th></tr>';
-  data.forEach(s => h += `<tr><td class="region">AR ${s.r}</td><td class="count">${s.c}</td><td class="class">${s.cl}</td></tr>`);
+  let h = '<tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>ime';
+  data.forEach(s => h += `<tr><td class="region">AR ${s.r} \\xe2\\x80\\xa2<td class="count">${s.c} \\xe2\\x80\\xa2<td class="class">${s.cl} \\xe2\\x80\\xa2`);
   t.innerHTML = h;
 }
 function fetchHistoricalEvents() {
