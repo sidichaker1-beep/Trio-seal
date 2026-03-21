@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v8.2 · Light</title>
+<title>TRIO SEAL · Cosmic Observatory v8.3 · Light</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>
 /* ═══════════════════════════════════════════════════
@@ -450,12 +450,12 @@ body::before {
   pointer-events:none;
 }
 .moon-phase:hover { box-shadow: 0 14px 36px rgba(15,43,79,.3); transform: translateY(-2px); }
-.moon-canvas { display:block; flex-shrink:0; border-radius:50%; box-shadow:0 0 20px rgba(200,180,100,.35); }
-.moon-info h3 { color: #E8C84A; font-family:var(--f-hud); font-size:.9rem; letter-spacing:1.5px; margin-bottom:.5rem; }
-.moon-percent { font-size:1.5rem; font-weight:700; color:#6EE7B7; font-family:var(--f-mono); }
-.moon-thickness { font-size:.85rem; color:rgba(232,240,248,.65); margin-top:.25rem; }
-#moon-age { margin-top:.3rem; color:rgba(232,240,248,.5); font-size:.82rem; }
-#moon-phase-name { display:inline; color:var(--text-on-navy); }
+.moon-canvas { display:block; flex-shrink:0; border-radius:50%; box-shadow:0 0 20px rgba(200,180,100,.35); transition: box-shadow .5s ease; }
+.moon-info h3 { color: #E8C84A; font-family:var(--f-hud); font-size:1rem; letter-spacing:1.5px; margin-bottom:.6rem; font-weight: 700; }
+.moon-percent { font-size:1.7rem; font-weight:900; color:#6EE7B7; font-family:var(--f-mono); transition: color .5s ease; }
+.moon-thickness { font-size:.95rem; color:rgba(232,240,248,.75); margin-top:.3rem; font-weight: 600; letter-spacing:.3px; transition: color .5s ease; }
+#moon-age { margin-top:.3rem; color:rgba(232,240,248,.55); font-size:.88rem; font-weight: 500; }
+#moon-phase-name { display:inline; color:var(--text-on-navy); font-size:1.05rem; font-weight: 700; letter-spacing:.5px; }
 
 /* ═══════════════════════════════════════
    VOLCANO LIST
@@ -859,7 +859,7 @@ body::before {
 
 <!-- ══ MOON PHASE ═══════════════════════════════════════════ -->
 <div class="moon-phase" data-link="moon">
-  <canvas id="moonCanvas" class="moon-canvas" width="90" height="90"></canvas>
+  <canvas id="moonCanvas" class="moon-canvas" width="110" height="110"></canvas>
   <div class="moon-info">
     <h3 data-key="moon-phase">Moon Phase</h3>
     <div><span id="moon-phase-name">--</span> · <span class="moon-percent" id="moon-illumination">--%</span></div>
@@ -1081,70 +1081,185 @@ function renderVolcanoes() {
 
 /* ── Moon — canvas phase rendering ── */
 const REF_NM = Date.UTC(2024,3,8,18,20,0), SYNODIC = 29.530588853;
+
+/**
+ * drawMoonCanvas  —  rewritten from scratch (v8.3)
+ *
+ * ROOT CAUSE of black-disc bug (v8.2):
+ *   1. shadowX formula placed the ellipse OUTSIDE the canvas at low illumination
+ *      (e.g. illum=6.7% → sx = cx + R*(1-0.134) = 82px, outside R=43)
+ *   2. Two nested ctx.save()/clip() calls conflicted, the inner restore()
+ *      escaped the outer clip, leaving shadow unconstrained
+ *   3. arc() + ellipse() winding directions did not form a valid closed path
+ *
+ * CORRECT ALGORITHM:
+ *   1. Clip entire canvas to moon disc  (single clip, never nest)
+ *   2. Fill disc with surface texture + craters
+ *   3. Draw the SHADOW as a single valid closed path:
+ *        — WAXING (right side lit):
+ *            dark = left semi-circle  +  right terminator ellipse cap
+ *            Path: arc CW from bottom→top (left half) then
+ *                  ellipse CW from top→bottom (right half) using term_semi
+ *        — WANING (left side lit):  mirror image
+ *   4. term_semi = R · |cos(2π·phase)|
+ *        At new moon  phase≈0: term_semi≈R   → full disc dark ✓
+ *        At quarter   phase=¼: term_semi≈0   → straight terminator ✓
+ *        At full moon phase=½: term_semi≈R   → full disc lit ✓
+ *   5. Add atmosphere rim glow
+ *   6. Red glow when thickness < CRITICAL_THICKNESS  (Inception Mode)
+ *
+ * @param {number} age  — lunar age in days (0 = new moon)
+ */
 function drawMoonCanvas(age) {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const W=90,H=90, R=43, cx=45, cy=45;
-  ctx.clearRect(0,0,W,H);
-  const phase = age/SYNODIC;
-  const illum = (1-Math.cos(phase*2*Math.PI))/2;
-  const waxing = phase < 0.5;
-  // clip to circle
-  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
-  // moon surface
-  const mg = ctx.createRadialGradient(cx-R*.2,cy-R*.2,R*.05,cx,cy,R);
-  mg.addColorStop(0,'#d4c89a'); mg.addColorStop(.5,'#b0a07a'); mg.addColorStop(1,'#6b5e3c');
-  ctx.fillStyle=mg; ctx.fillRect(0,0,W,H);
-  // craters
-  const rng=s=>{let x=Math.sin(s)*10000;return x-Math.floor(x);};
-  for(let i=0;i<14;i++){
-    const a=rng(i*7.3)*Math.PI*2, d=rng(i*3.1)*R*.75;
-    const cr=rng(i*11.7)*R*.12+R*.03;
-    const cx2=cx+Math.cos(a)*d, cy2=cy+Math.sin(a)*d;
-    ctx.beginPath(); ctx.arc(cx2,cy2,cr,0,Math.PI*2);
-    ctx.fillStyle='rgba(0,0,0,.12)'; ctx.fill();
-    ctx.beginPath(); ctx.arc(cx2-cr*.2,cy2-cr*.2,cr*.55,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,255,255,.07)'; ctx.fill();
-  }
-  // shadow
-  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
-  const sx = waxing ? cx+R*(1-2*illum) : cx-R*(1-2*(1-illum));
+  const W = canvas.width, H = canvas.height;
+  const R  = W / 2 - 3;     // disc radius
+  const cx = W / 2, cy = H / 2;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const phase   = age / SYNODIC;           // 0 → 1
+  const illum   = (1 - Math.cos(phase * 2 * Math.PI)) / 2;  // 0 → 1
+  const waxing  = phase < 0.5;
+  const thick   = illum * 31;              // arcminutes thickness (Meeus)
+  const isCrit  = thick < 0.15;           // Inception Mode threshold
+
+  // ── 1. SINGLE clip to disc ───────────────────────────────────────
+  ctx.save();
   ctx.beginPath();
-  if(waxing){
-    ctx.moveTo(cx,cy-R); ctx.arc(cx,cy,R,-Math.PI/2,Math.PI/2,true);
-    ctx.ellipse(sx,cy,Math.abs(cx-sx),R,0,Math.PI/2,-Math.PI/2,true);
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.clip();
+
+  // ── 2. SURFACE: warm grey gradient ───────────────────────────────
+  const surfGrad = ctx.createRadialGradient(
+    cx - R * .22, cy - R * .22, R * .04,
+    cx, cy, R
+  );
+  if (isCrit) {
+    // Critical: surface tinted red-orange for Inception Mode
+    surfGrad.addColorStop(0, '#c87050');
+    surfGrad.addColorStop(.55, '#9a4a28');
+    surfGrad.addColorStop(1, '#3a1a0a');
   } else {
-    ctx.moveTo(cx,cy-R); ctx.arc(cx,cy,R,-Math.PI/2,Math.PI/2,false);
-    ctx.ellipse(sx,cy,Math.abs(cx-sx),R,0,-Math.PI/2,Math.PI/2,true);
+    surfGrad.addColorStop(0, '#d0c28a');
+    surfGrad.addColorStop(.55, '#a89060');
+    surfGrad.addColorStop(1, '#5c4e30');
   }
-  ctx.closePath(); ctx.fillStyle='rgba(0,0,0,.82)'; ctx.fill();
+  ctx.fillStyle = surfGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── 3. CRATERS (deterministic noise) ─────────────────────────────
+  const rng = seed => { let x = Math.sin(seed) * 10000; return x - Math.floor(x); };
+  for (let i = 0; i < 16; i++) {
+    const angle = rng(i * 7.31) * Math.PI * 2;
+    const dist  = rng(i * 3.17) * R * .72;
+    const crR   = rng(i * 11.73) * R * .13 + R * .028;
+    const crx   = cx + Math.cos(angle) * dist;
+    const cry   = cy + Math.sin(angle) * dist;
+    ctx.beginPath(); ctx.arc(crx, cry, crR, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,.14)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(crx - crR * .22, cry - crR * .22, crR * .55, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,.07)'; ctx.fill();
+  }
+
+  // ── 4. SHADOW (single valid closed path, no nested clips) ────────
+  //
+  //  term_semi = R * |cos(2π·phase)|
+  //  This is the horizontal semi-axis of the terminator ellipse.
+  //  When phase≈0 (new): term_semi≈R  → shadow covers whole disc
+  //  When phase=0.25 (quarter): term_semi≈0 → straight vertical line
+  //  When phase=0.5 (full): term_semi≈R → no shadow
+  //
+  const term_semi = R * Math.abs(Math.cos(phase * 2 * Math.PI));
+
+  ctx.beginPath();
+  if (waxing) {
+    // RIGHT side is lit. Shadow = LEFT half-disc + ellipse cap on right.
+    // Draw CW: start at top (cx, cy-R)
+    //   → arc clockwise around LEFT half  (from -π/2 to +π/2, anticlockwise=false means CW)
+    //   → ellipse clockwise back to top   (right half of ellipse, anticlockwise=true wraps back)
+    ctx.arc(cx, cy, R, -Math.PI / 2, Math.PI / 2, false);   // left semi (CW, top → bottom via left)
+    ctx.ellipse(cx, cy, term_semi, R, 0, Math.PI / 2, -Math.PI / 2, true);  // term ellipse back up
+  } else {
+    // LEFT side is lit. Shadow = RIGHT half-disc + ellipse cap on left.
+    ctx.arc(cx, cy, R, Math.PI / 2, -Math.PI / 2, false);   // right semi (CW, bottom → top via right)
+    ctx.ellipse(cx, cy, term_semi, R, 0, -Math.PI / 2, Math.PI / 2, true);  // term ellipse back down
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.86)';
+  ctx.fill();
+
+  // ── 5. ATMOSPHERE rim glow ────────────────────────────────────────
+  const rimGrad = ctx.createRadialGradient(cx, cy, R * .82, cx, cy, R);
+  rimGrad.addColorStop(0, 'transparent');
+  rimGrad.addColorStop(1, isCrit ? 'rgba(255,100,50,.35)' : 'rgba(200,180,100,.22)');
+  ctx.fillStyle = rimGrad;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+
+  // ── restore clip ──────────────────────────────────────────────────
   ctx.restore();
-  // rim
-  const rg=ctx.createRadialGradient(cx,cy,R*.84,cx,cy,R);
-  rg.addColorStop(0,'transparent'); rg.addColorStop(1,'rgba(200,180,100,.22)');
-  ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
-  ctx.restore();
-  return illum*100;
+
+  // ── 6. OUTER GLOW (outside clip, on canvas border) ───────────────
+  if (isCrit) {
+    // Red pulsing ring for Inception Mode
+    const glowGrad = ctx.createRadialGradient(cx, cy, R, cx, cy, R + 12);
+    glowGrad.addColorStop(0,   'rgba(220, 50, 30, 0.55)');
+    glowGrad.addColorStop(.5,  'rgba(220, 50, 30, 0.22)');
+    glowGrad.addColorStop(1,   'rgba(220, 50, 30, 0)');
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath(); ctx.arc(cx, cy, R + 12, 0, Math.PI * 2); ctx.fill();
+    // Update CSS glow on canvas element
+    canvas.style.boxShadow = '0 0 18px rgba(220,50,30,.7), 0 0 40px rgba(220,50,30,.3)';
+  } else {
+    canvas.style.boxShadow = '0 0 20px rgba(200,180,100,.35)';
+  }
+
+  return illum * 100;
 }
 
 function updateMoon() {
-  const age=(((Date.now()-REF_NM)/86400000)%SYNODIC+SYNODIC)%SYNODIC;
-  const illum=(1-Math.cos((age/SYNODIC)*2*Math.PI))/2*100;
-  let phase;
-  if(age<1) phase='New Moon';
-  else if(age<7.4)  phase='Waxing Crescent';
-  else if(age<10.4) phase='First Quarter';
-  else if(age<14.8) phase='Waxing Gibbous';
-  else if(age<16.1) phase='Full Moon';
-  else if(age<22.1) phase='Waning Gibbous';
-  else if(age<25.1) phase='Last Quarter';
-  else phase='Waning Crescent';
-  const el = id => document.getElementById(id);
-  if(el('moon-phase-name')) el('moon-phase-name').textContent = phase;
-  if(el('moon-illumination')) el('moon-illumination').textContent = illum.toFixed(1)+'%';
-  if(el('moon-thickness'))    el('moon-thickness').textContent = 'Thickness: '+(illum*31/100).toFixed(1)+"'";
-  if(el('moon-age'))          el('moon-age').textContent = 'Age: '+age.toFixed(1)+' days';
+  const age     = (((Date.now()-REF_NM)/86400000) % SYNODIC + SYNODIC) % SYNODIC;
+  const phase   = age / SYNODIC;
+  const illum   = (1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100;
+  const thick   = illum * 31 / 100;   // arcminutes  (Meeus)
+  const isCrit  = thick < 0.15;
+
+  // Phase name
+  let phaseName;
+  if      (age < 1.0)  phaseName = 'New Moon';
+  else if (age < 7.4)  phaseName = 'Waxing Crescent';
+  else if (age < 10.4) phaseName = 'First Quarter';
+  else if (age < 14.8) phaseName = 'Waxing Gibbous';
+  else if (age < 16.1) phaseName = 'Full Moon';
+  else if (age < 22.1) phaseName = 'Waning Gibbous';
+  else if (age < 25.1) phaseName = 'Last Quarter';
+  else                 phaseName = 'Waning Crescent';
+
+  const s = id => document.getElementById(id);
+  if (s('moon-phase-name'))  s('moon-phase-name').textContent  = phaseName;
+  if (s('moon-illumination'))s('moon-illumination').textContent= illum.toFixed(1) + '%';
+  if (s('moon-thickness'))   s('moon-thickness').textContent   = `Thickness: ${thick.toFixed(2)}'`;
+  if (s('moon-age'))         s('moon-age').textContent         = `Age: ${age.toFixed(1)} days`;
+
+  // Inception Mode: tint text labels red when critical
+  const moonInfo = document.querySelector('.moon-info');
+  if (moonInfo) {
+    moonInfo.style.transition = 'all .5s ease';
+    if (isCrit) {
+      const mp = s('moon-percent');
+      if (mp) mp.style.color = '#ef4444';
+      const mt = s('moon-thickness');
+      if (mt) mt.style.color = 'rgba(239,68,68,.8)';
+    } else {
+      const mp = s('moon-percent');
+      if (mp) mp.style.color = '#6EE7B7';
+      const mt = s('moon-thickness');
+      if (mt) mt.style.color = '';
+    }
+  }
+
   drawMoonCanvas(age);
 }
 setInterval(updateMoon,60000); updateMoon();
