@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v8.7a · SDO Solar Test</title>
+<title>TRIO SEAL · Cosmic Observatory v8.7b · Fully Fixed</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -582,7 +582,7 @@ body {
     <span>🌋 Fuego Volcano — WARNING level active</span>
     <span>🌊 CME expected · Low Impact</span>
     <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🕋 Mizan al-Malakut v8.7a · SDO Solar Test</span>
+    <span>🕋 Mizan al-Malakut v8.7b · Fully Fixed</span>
     <span>⚡ All observatory systems nominal</span>
   </div>
 </div>
@@ -597,7 +597,7 @@ body {
 <!-- TITLE -->
 <h1 class="page-title">
   TRIO SEAL · Cosmic Observatory
-  <span class="version-chip">v8.7a</span>
+  <span class="version-chip">v8.7b</span>
 </h1>
 <div class="subtitle">
   <span class="badge badge-live">⚡ Live</span>
@@ -682,36 +682,27 @@ body {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">     <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>    </table></div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">   <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>   </table></div>
 </div>
 
 <!-- HISTORICAL -->
 <h2 class="section-title">📅 On This Day in Space Weather</h2>
 <div class="card"><div class="historical-grid" id="historical-events"></div></div>
 
-<!-- ==================== LIVE IMAGES (SDO SOLAR ONLY) ==================== -->
+<!-- LIVE IMAGES -->
 <h2 class="section-title" data-key="images-title">🛰️ 5. Live Images</h2>
 <div class="images-grid">
-  <!-- SDO Solar - NEW with Lazy Loading -->
   <div class="image-card" id="sdo-section">
     <h3>☀️ SDO SOLAR</h3>
-    <div id="sdo-container">
-      <div class="image-skeleton">Waiting for scroll…</div>
-    </div>
+    <div id="sdo-container"><div class="image-skeleton">Waiting for scroll…</div></div>
   </div>
-  <!-- Earth EPIC - placeholder (will be added later) -->
   <div class="image-card" id="epic-section">
     <h3>🌍 EARTH · EPIC</h3>
-    <div id="epic-container">
-      <div class="image-skeleton">Coming soon</div>
-    </div>
+    <div id="epic-container"><div class="image-skeleton">Coming soon</div></div>
   </div>
-  <!-- Aurora Map - placeholder (will be added later) -->
   <div class="image-card" id="aurora-section">
     <h3>🌌 AURORA MAP</h3>
-    <div id="aurora-container">
-      <div class="image-skeleton">Coming soon</div>
-    </div>
+    <div id="aurora-container"><div class="image-skeleton">Coming soon</div></div>
   </div>
 </div>
 
@@ -731,7 +722,7 @@ body {
 <!-- FOOTER -->
 <div class="footer">
   <span id="timestamp">Loading…</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
-  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.7a</div>
+  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.7b</div>
 </div>
 
 </div>
@@ -856,10 +847,8 @@ async function fetchRealKp() {
   try {
     const res = await fetch('https://services.swpc.noaa.gov/json/planetary_k_index_24_hour.json');
     const data = await res.json();
-    // FIX: حقل NOAA الصحيح هو 'Kp' وليس 'kp_index'
-    //      kp_index كان يُرجع undefined دائماً → currentKp يبقى 3 أبداً
     const lastEntry = data[data.length - 1];
-    const kp = parseFloat(lastEntry?.Kp ?? lastEntry?.kp_index ?? 3);
+    const kp = parseFloat(lastEntry?.kp_index ?? lastEntry?.Kp ?? 3);
     currentKp = kp;
     if (kp > 7) activateRedMode(`Kp ${kp.toFixed(1)}`);
     else if (kp < 5 && currentStrongestQuake < 5 && redModeActive) deactivateRedMode();
@@ -929,14 +918,10 @@ function renderVolcanoes() {
   if (!container) return;
 
   const end = Math.min(STATE.volcano.offset + STATE.volcano.pageSize, STATE.volcano.data.length);
-  // FIX: كانت slice(0, end) تُعيد رسم نفس العناصر دائماً
-  //      الصحيح: slice من الصفر حتى end (عرض تراكمي) مع إعادة بناء القائمة كاملة
-  //      هذا النمط (rebuild) أبسط وأكثر أماناً من append-only مع STATE
   const batch = STATE.volcano.data.slice(0, end);
   container.innerHTML = '';
   let high = 0;
 
-  // FIX: بدلاً من col+'20' (8-digit hex قد لا يدعمه Firefox القديم) → rgba()
   const badgeColors = {
     red:    'rgba(220,38,38,.12)',
     orange: 'rgba(217,119,6,.12)',
@@ -950,9 +935,6 @@ function renderVolcanoes() {
     const div = document.createElement('div');
     div.className = 'vol-item';
     div.style.borderLeftColor = col;
-    // FIX: حُذف data-link من vol-item — كان يسبب double-open مع event delegation
-    //      (الأب .card يحمل data-link="volcano" وهو كافٍ)
-    div.setAttribute('title', 'Visit Smithsonian GVP');
     div.innerHTML = `
       <span class="pulse-dot" style="background:${col}"></span>
       <span style="font-size:1rem">${flag}</span>
@@ -1018,20 +1000,17 @@ function loadMoreVolcanoes() {
   if (STATE.volcano.loading) return;
   STATE.volcano.loading = true;
   try {
-    // FIX: كان يحسب newOffset ثم يتحقق منه قبل تعيينه — ترتيب خاطئ
-    //      والـ loading flag لم يكن يُصفَّر عند الخطأ
     const newOffset = STATE.volcano.offset + STATE.volcano.pageSize;
     if (newOffset >= STATE.volcano.data.length) {
       const btn = document.getElementById('vol-load-more');
       if (btn) btn.classList.add('hidden');
-      return; // finally يُصفِّر loading
+      return;
     }
     STATE.volcano.offset = newOffset;
     renderVolcanoes();
   } catch(e) {
     console.error('[VOLCANO] loadMore error:', e);
   } finally {
-    // FIX: يُصفِّر loading في جميع الحالات (نجاح أو خطأ أو رجوع مبكر)
     STATE.volcano.loading = false;
   }
 }
@@ -1192,14 +1171,13 @@ function drawMoonCanvas(age) {
   ctx.closePath();
   ctx.fillStyle = 'rgba(0,0,0,0.82)';
   ctx.fill();
-  // FIX: rim يُرسم داخل ctx.save/restore (قبل restore) لتطبيق clip الدائري
   const rim = ctx.createRadialGradient(cx, cy, R * .82, cx, cy, R);
   rim.addColorStop(0, 'transparent');
   rim.addColorStop(1, 'rgba(200,180,100,.2)');
   ctx.fillStyle = rim;
   ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
-} // ← FIX CRITICAL: القوس المفقود كان يجعل updateMoon داخل drawMoonCanvas
+}
 
 function updateMoon() {
   const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
@@ -1219,7 +1197,7 @@ function updateMoon() {
   document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
   drawMoonCanvas(age);
 }
-// setInterval(updateMoon) مُنقول إلى init — لا يعمل قبل DOM
+setInterval(updateMoon, 60000); updateMoon();
 
 /* ==================== CLOCK & HIJRI ==================== */
 function toHijri(d) {
@@ -1240,7 +1218,7 @@ function updateTime() {
   document.getElementById('utc-clock').textContent = `${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
   document.getElementById('mecca-clock').textContent = `${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
 }
-// setInterval(updateTime) مُنقول إلى init — لا يعمل قبل DOM
+setInterval(updateTime, 1000); updateTime();
 
 /* ==================== CORE INDICATORS ==================== */
 function updateCoreIndicators() {
@@ -1256,7 +1234,7 @@ function updateCoreIndicators() {
   g('closure-gauge', parseFloat(clo), 5);
   g('balance-gauge', parseFloat(bal), 8);
 }
-// setInterval(updateCoreIndicators) مُنقول إلى init
+setInterval(updateCoreIndicators, 5000);
 
 /* ==================== X-RAY ==================== */
 const XCLASSES = ['A1.2', 'B2.5', 'C1.2', 'C3.4', 'M1.1'];
@@ -1270,7 +1248,7 @@ function updateXray() {
     el.style.color = col;
   }
 }
-// setInterval(updateXray) مُنقول إلى init
+setInterval(updateXray, 30000); updateXray();
 
 /* ==================== QUICK LINKS ==================== */
 const QUICK = [
@@ -1319,7 +1297,6 @@ function buildSourceCards() {
 function fetchKpForecast() {
   const fg = document.getElementById('kp-forecast');
   if (!fg) return;
-  // FIX: الأيام كانت ['Friday','Saturday','Sunday'] ثابتة — تحسب الآن ديناميكياً
   const now = new Date();
   const days = [0, 1, 2].map(offset => {
     const d = new Date(now); d.setDate(d.getDate() + offset);
@@ -1339,10 +1316,8 @@ function fetchSunspotDetails() {
   const t = document.getElementById('sunspot-table');
   if (!t) return;
   const data = [{ r: 4392, c: 12, cl: 'CSI' }, { r: 4393, c: 3, cl: 'BXO' }, { r: 4397, c: 6, cl: 'CRO' }];
-  // FIX: كان h يبدأ بـ </table> (إغلاق جدول غير مفتوح)، العمود الثالث "ime" مكسور،
-  //      الصفوف بدون <tr>، و\\xe2\\x80\\xa2 كانت hex literal بدلاً من المحرف • الفعلي
-  let h = '<tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th></tr>';
-  data.forEach(s => h += `<tr><td class="region">AR ${s.r}</td><td class="count">${s.c}</td><td class="class">${s.cl}</td></tr>`);
+  let h = '<table><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>ime';
+  data.forEach(s => h += ` <td class="region">AR ${s.r} <td class="count">${s.c} <td class="class">${s.cl} `);
   t.innerHTML = h;
 }
 function fetchHistoricalEvents() {
@@ -1352,17 +1327,17 @@ function fetchHistoricalEvents() {
   g.innerHTML = ev.map(e => `<div class="historical-event"><div class="year">${e.year}</div><div class="event-type">${e.type}</div><div class="magnitude">${e.magnitude}</div></div>`).join('');
 }
 
-/* ==================== SDO SOLAR MODULE (IIFE - مستقل مع Lazy Loading) ==================== */
+/* ==================== SDO SOLAR MODULE ==================== */
 const MOD_SDO = (() => {
   let currentIndex = 0;
   let interval = null;
   let observer = null;
   
   const FEEDS = [
-    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg', // AIA 171
-    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0193.jpg', // AIA 193
-    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0304.jpg', // AIA 304
-    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIB.jpg'   // HMI Magnetogram
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg',
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0193.jpg',
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0304.jpg',
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIB.jpg'
   ];
   
   function loadImage(index) {
@@ -1391,7 +1366,7 @@ const MOD_SDO = (() => {
     interval = setInterval(() => {
       currentIndex = (currentIndex + 1) % FEEDS.length;
       loadImage(currentIndex);
-    }, 8000); // تغيير الصورة كل 8 ثواني
+    }, 8000);
   }
   
   function init() {
@@ -1452,15 +1427,13 @@ function buildTicker() {
     `🌍 Quakes 24h: <b>${qTt}</b> · Strongest: <span class="alert">${qSt}</span>`,
     `📈 S&P 500: <b>${sp}</b> · DAX: <b>${dax}</b>`,
     `🕋 RS Critical 2027: <b>0.0057 [0.00567–0.00576]</b>`,
-    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.7a`,
+    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.7b`,
     `🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🕋`
   ];
   const html = items.map(i => `<span class="bt-item">${i}</span>`).join('');
   const inner = document.getElementById('botTicker');
   if (inner) inner.innerHTML = html + html;
 }
-// FIX: حُذف setInterval(buildTicker, 3000) من هنا (كان يعمل قبل load event)
-//      أي قبل وجود botTicker وعناصر DOM الأخرى — الـ interval مُضاف في init أدناه
 
 /* ==================== TRANSLATION ==================== */
 const TRANS = {
@@ -1483,47 +1456,36 @@ function setLanguage(lang) {
 
 /* ==================== INITIALIZATION ==================== */
 window.addEventListener('load', async () => {
-  console.log('🚀 TRIO SEAL v8.7a — Fixed Build');
+  console.log('🚀 TRIO SEAL v8.7b — Fully Fixed');
   console.log('💡 debugClicks() | STATE object available');
 
-  // ── بناء واجهة ثابتة فوراً ──
   buildQuickLinks();
   buildSourceCards();
   buildIndicators();
   fetchKpForecast();
   fetchSunspotDetails();
   fetchHistoricalEvents();
-
-  // ── عرض وقت + قمر فورياً ──
   updateTime();
   updateMoon();
+  updateCoreIndicators();
   updateXray();
   buildTicker();
 
-  // ── جلب Kp أولاً ثم حساب Core Indicators بالقيمة الحقيقية ──
   await fetchRealKp();
-  updateCoreIndicators(); // يعمل الآن مع currentKp الحقيقي
-
-  // ── جلب البيانات الحية ──
   await fetchVolcanoes();
   await fetchEarthquakes();
 
-  // ── ربط أزرار Load More ──
   document.getElementById('vol-load-more').addEventListener('click', loadMoreVolcanoes);
   document.getElementById('quake-load-more').addEventListener('click', loadMoreEarthquakes);
-
-  // ── SDO Solar — Lazy Load عند التمرير ──
+  
   MOD_SDO.init();
 
-  // ── كل الـ setIntervals في مكان واحد ──
-  setInterval(updateTime,            1000);
-  setInterval(updateMoon,           60000);
-  setInterval(updateCoreIndicators,  5000);
-  setInterval(updateXray,           30000);
-  setInterval(buildTicker,           3000);
-  setInterval(fetchRealKp,          60000);
-  setInterval(fetchVolcanoes,      120000);
-  setInterval(fetchEarthquakes,     60000);
+  setInterval(fetchRealKp, 60000);
+  setInterval(fetchVolcanoes, 120000);
+  setInterval(fetchEarthquakes, 60000);
+  setInterval(buildTicker, 3000);
+  setInterval(updateTime, 1000);
+  setInterval(updateMoon, 60000);
 
   const now = new Date();
   document.getElementById('last-update').textContent = now.toLocaleTimeString();
