@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v8.7b · Fully Fixed</title>
+<title>TRIO SEAL · Cosmic Observatory v8.8 · Volcano Pagination</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -359,17 +359,34 @@ body {
   font-size: .66rem; padding: 2px 8px; border-radius: 99px;
   font-weight: 700; font-family: var(--f-hud);
 }
-.load-more-btn {
-  display: block; width: 100%; margin-top: 10px;
-  padding: 8px 0; border-radius: 99px;
-  background: var(--sky-light); color: var(--sky);
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+.pagination-btn {
+  flex: 1;
+  background: var(--sky-light);
+  color: var(--sky);
   border: 1px solid rgba(3,105,161,.28);
-  font-family: var(--f-hud); font-size: .7rem;
-  cursor: pointer; transition: var(--t);
+  padding: 8px 0;
+  border-radius: 99px;
+  font-family: var(--f-hud);
+  font-size: .7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--t);
   text-align: center;
 }
-.load-more-btn:hover { background: var(--sky); color: #fff; }
-.load-more-btn.hidden { display: none; }
+.pagination-btn:hover:not(:disabled) {
+  background: var(--sky);
+  color: #fff;
+}
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 /* EARTHQUAKE SECTION */
 .earthquake-section {
@@ -582,7 +599,7 @@ body {
     <span>🌋 Fuego Volcano — WARNING level active</span>
     <span>🌊 CME expected · Low Impact</span>
     <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🕋 Mizan al-Malakut v8.7b · Fully Fixed</span>
+    <span>🕋 Mizan al-Malakut v8.8 · Volcano Pagination</span>
     <span>⚡ All observatory systems nominal</span>
   </div>
 </div>
@@ -597,7 +614,7 @@ body {
 <!-- TITLE -->
 <h1 class="page-title">
   TRIO SEAL · Cosmic Observatory
-  <span class="version-chip">v8.7b</span>
+  <span class="version-chip">v8.8</span>
 </h1>
 <div class="subtitle">
   <span class="badge badge-live">⚡ Live</span>
@@ -646,7 +663,7 @@ body {
   </div>
 </div>
 
-<!-- VOLCANO OBSERVATORY -->
+<!-- VOLCANO OBSERVATORY (NEW with Next/Previous) -->
 <h2 class="section-title">🌋 Live Volcano Observatory</h2>
 <div class="card" style="padding:1.4rem">
   <div class="vol-stats">
@@ -654,7 +671,10 @@ body {
     <div class="vol-stat-box"><span class="num" id="vol-alert">--</span><span class="lbl">High Alert</span></div>
   </div>
   <div id="vol-list" class="vol-list"></div>
-  <button class="load-more-btn" id="vol-load-more">▼ Load More Volcanoes</button>
+  <div class="pagination-controls">
+    <button class="pagination-btn" id="vol-prev-btn" disabled>← Previous</button>
+    <button class="pagination-btn" id="vol-next-btn">Next →</button>
+  </div>
   <div id="vol-map" class="event-map"></div>
 </div>
 
@@ -682,7 +702,7 @@ body {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">   <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>   </table></div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">    <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>    </table></div>
 </div>
 
 <!-- HISTORICAL -->
@@ -722,7 +742,7 @@ body {
 <!-- FOOTER -->
 <div class="footer">
   <span id="timestamp">Loading…</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
-  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.7b</div>
+  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.8</div>
 </div>
 
 </div>
@@ -779,7 +799,7 @@ function getCountryFromPlace(place) {
 
 /* ==================== EVENT DELEGATION ==================== */
 document.addEventListener('click', e => {
-  if (e.target.closest('button,a,.language-selector,.visit-btn,.load-more-btn')) return;
+  if (e.target.closest('button,a,.language-selector,.visit-btn,.load-more-btn,.pagination-btn')) return;
   const el = e.target.closest('[data-link]');
   if (!el) return;
   const key = el.getAttribute('data-link');
@@ -856,7 +876,7 @@ async function fetchRealKp() {
   } catch(e) { console.warn('Kp API failed'); return 3; }
 }
 
-/* ==================== VOLCANO API + STATE MANAGEMENT ==================== */
+/* ==================== VOLCANO API + STATE MANAGEMENT (with Pagination) ==================== */
 const STATIC_VOLCANOES = [
   { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', lat: 37.748, lon: 14.999 },
   { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', lat: 19.421, lon: -155.287 },
@@ -909,16 +929,22 @@ async function fetchVolcanoes() {
   
   STATE.volcano.offset = 0;
   console.log("[VOLCANO] STATE.volcano:", STATE.volcano);
-  renderVolcanoes();
+  renderVolcanoesPage();
   plotVolcanoesOnMap();
+  updateVolcanoButtons();
 }
 
-function renderVolcanoes() {
+function renderVolcanoesPage() {
   const container = document.getElementById('vol-list');
   if (!container) return;
 
-  const end = Math.min(STATE.volcano.offset + STATE.volcano.pageSize, STATE.volcano.data.length);
-  const batch = STATE.volcano.data.slice(0, end);
+  const { data, offset, pageSize } = STATE.volcano;
+  const start = offset;
+  const end = Math.min(start + pageSize, data.length);
+  const pageData = data.slice(start, end);
+  
+  console.log(`[VOLCANO] Rendering page: offset=${offset}, displayed=${pageData.length}, total=${data.length}`);
+  
   container.innerHTML = '';
   let high = 0;
 
@@ -927,7 +953,8 @@ function renderVolcanoes() {
     orange: 'rgba(217,119,6,.12)',
     yellow: 'rgba(180,83,9,.10)'
   };
-  batch.forEach(v => {
+  
+  pageData.forEach(v => {
     const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
     const col = colors[v.alert] || '#64748b';
     if (v.alert === 'red' || v.alert === 'orange') high++;
@@ -943,17 +970,8 @@ function renderVolcanoes() {
     container.appendChild(div);
   });
   
-  document.getElementById('vol-total').textContent = STATE.volcano.data.length;
+  document.getElementById('vol-total').textContent = data.length;
   document.getElementById('vol-alert').textContent = high;
-  
-  const btn = document.getElementById('vol-load-more');
-  if (btn) {
-    if (end >= STATE.volcano.data.length) {
-      btn.classList.add('hidden');
-    } else {
-      btn.classList.remove('hidden');
-    }
-  }
 }
 
 function plotVolcanoesOnMap() {
@@ -966,10 +984,17 @@ function plotVolcanoesOnMap() {
       { attribution: '©OpenStreetMap ©CARTO', maxZoom: 18 }).addTo(STATE.volcano.map);
   }
   
+  // Clear old markers
   STATE.volcano.markers.forEach(m => m.remove());
   STATE.volcano.markers = [];
   
-  STATE.volcano.data.forEach(v => {
+  // Only show current page volcanoes on map
+  const { data, offset, pageSize } = STATE.volcano;
+  const start = offset;
+  const end = Math.min(start + pageSize, data.length);
+  const pageData = data.slice(start, end);
+  
+  pageData.forEach(v => {
     const lat = parseFloat(v.lat);
     const lng = parseFloat(v.lon);
     if (isNaN(lat) || isNaN(lng)) return;
@@ -996,22 +1021,34 @@ function plotVolcanoesOnMap() {
   setTimeout(() => STATE.volcano.map.invalidateSize(), 300);
 }
 
-function loadMoreVolcanoes() {
-  if (STATE.volcano.loading) return;
-  STATE.volcano.loading = true;
-  try {
-    const newOffset = STATE.volcano.offset + STATE.volcano.pageSize;
-    if (newOffset >= STATE.volcano.data.length) {
-      const btn = document.getElementById('vol-load-more');
-      if (btn) btn.classList.add('hidden');
-      return;
-    }
+function updateVolcanoButtons() {
+  const prevBtn = document.getElementById('vol-prev-btn');
+  const nextBtn = document.getElementById('vol-next-btn');
+  const { offset, pageSize, data } = STATE.volcano;
+  
+  if (prevBtn) prevBtn.disabled = offset <= 0;
+  if (nextBtn) nextBtn.disabled = offset + pageSize >= data.length;
+}
+
+function volcanoPrevPage() {
+  const { offset, pageSize } = STATE.volcano;
+  const newOffset = Math.max(0, offset - pageSize);
+  if (newOffset !== offset) {
     STATE.volcano.offset = newOffset;
-    renderVolcanoes();
-  } catch(e) {
-    console.error('[VOLCANO] loadMore error:', e);
-  } finally {
-    STATE.volcano.loading = false;
+    renderVolcanoesPage();
+    plotVolcanoesOnMap();
+    updateVolcanoButtons();
+  }
+}
+
+function volcanoNextPage() {
+  const { offset, pageSize, data } = STATE.volcano;
+  const newOffset = Math.min(data.length - pageSize, offset + pageSize);
+  if (newOffset !== offset && newOffset >= 0) {
+    STATE.volcano.offset = newOffset;
+    renderVolcanoesPage();
+    plotVolcanoesOnMap();
+    updateVolcanoButtons();
   }
 }
 
@@ -1316,7 +1353,7 @@ function fetchSunspotDetails() {
   const t = document.getElementById('sunspot-table');
   if (!t) return;
   const data = [{ r: 4392, c: 12, cl: 'CSI' }, { r: 4393, c: 3, cl: 'BXO' }, { r: 4397, c: 6, cl: 'CRO' }];
-  let h = '<table><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>ime';
+  let h = ' <th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>';
   data.forEach(s => h += ` <td class="region">AR ${s.r} <td class="count">${s.c} <td class="class">${s.cl} `);
   t.innerHTML = h;
 }
@@ -1427,7 +1464,7 @@ function buildTicker() {
     `🌍 Quakes 24h: <b>${qTt}</b> · Strongest: <span class="alert">${qSt}</span>`,
     `📈 S&P 500: <b>${sp}</b> · DAX: <b>${dax}</b>`,
     `🕋 RS Critical 2027: <b>0.0057 [0.00567–0.00576]</b>`,
-    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.7b`,
+    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.8`,
     `🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🕋`
   ];
   const html = items.map(i => `<span class="bt-item">${i}</span>`).join('');
@@ -1456,7 +1493,7 @@ function setLanguage(lang) {
 
 /* ==================== INITIALIZATION ==================== */
 window.addEventListener('load', async () => {
-  console.log('🚀 TRIO SEAL v8.7b — Fully Fixed');
+  console.log('🚀 TRIO SEAL v8.8 — Volcano Pagination (Next/Previous)');
   console.log('💡 debugClicks() | STATE object available');
 
   buildQuickLinks();
@@ -1475,8 +1512,13 @@ window.addEventListener('load', async () => {
   await fetchVolcanoes();
   await fetchEarthquakes();
 
-  document.getElementById('vol-load-more').addEventListener('click', loadMoreVolcanoes);
   document.getElementById('quake-load-more').addEventListener('click', loadMoreEarthquakes);
+  
+  // Volcano pagination buttons
+  const prevBtn = document.getElementById('vol-prev-btn');
+  const nextBtn = document.getElementById('vol-next-btn');
+  if (prevBtn) prevBtn.addEventListener('click', volcanoPrevPage);
+  if (nextBtn) nextBtn.addEventListener('click', volcanoNextPage);
   
   MOD_SDO.init();
 
