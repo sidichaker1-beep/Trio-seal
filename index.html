@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v8.7 · SDO Solar</title>
+<title>TRIO SEAL · Cosmic Observatory v8.7a · SDO Solar Test</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -582,7 +582,7 @@ body {
     <span>🌋 Fuego Volcano — WARNING level active</span>
     <span>🌊 CME expected · Low Impact</span>
     <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🕋 Mizan al-Malakut v8.7 · SDO Solar Module</span>
+    <span>🕋 Mizan al-Malakut v8.7a · SDO Solar Test</span>
     <span>⚡ All observatory systems nominal</span>
   </div>
 </div>
@@ -597,7 +597,7 @@ body {
 <!-- TITLE -->
 <h1 class="page-title">
   TRIO SEAL · Cosmic Observatory
-  <span class="version-chip">v8.7</span>
+  <span class="version-chip">v8.7a</span>
 </h1>
 <div class="subtitle">
   <span class="badge badge-live">⚡ Live</span>
@@ -682,35 +682,35 @@ body {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">    <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>    </table></div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">     <tr><td colspan="3" style="color:var(--text-muted)">Loading…</td></tr>    </table></div>
 </div>
 
 <!-- HISTORICAL -->
 <h2 class="section-title">📅 On This Day in Space Weather</h2>
 <div class="card"><div class="historical-grid" id="historical-events"></div></div>
 
-<!-- ==================== LIVE IMAGES (NEW SDO MODULE) ==================== -->
+<!-- ==================== LIVE IMAGES (SDO SOLAR ONLY) ==================== -->
 <h2 class="section-title" data-key="images-title">🛰️ 5. Live Images</h2>
 <div class="images-grid">
-  <!-- SDO Solar - NEW MODULE with Lazy Loading -->
+  <!-- SDO Solar - NEW with Lazy Loading -->
   <div class="image-card" id="sdo-section">
     <h3>☀️ SDO SOLAR</h3>
     <div id="sdo-container">
-      <div class="image-skeleton">Loading SDO feed…</div>
+      <div class="image-skeleton">Waiting for scroll…</div>
     </div>
   </div>
   <!-- Earth EPIC - placeholder (will be added later) -->
   <div class="image-card" id="epic-section">
     <h3>🌍 EARTH · EPIC</h3>
     <div id="epic-container">
-      <div class="image-skeleton">Coming soon…</div>
+      <div class="image-skeleton">Coming soon</div>
     </div>
   </div>
   <!-- Aurora Map - placeholder (will be added later) -->
   <div class="image-card" id="aurora-section">
     <h3>🌌 AURORA MAP</h3>
     <div id="aurora-container">
-      <div class="image-skeleton">Coming soon…</div>
+      <div class="image-skeleton">Coming soon</div>
     </div>
   </div>
 </div>
@@ -731,7 +731,7 @@ body {
 <!-- FOOTER -->
 <div class="footer">
   <span id="timestamp">Loading…</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
-  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.7</div>
+  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.7a</div>
 </div>
 
 </div>
@@ -1314,8 +1314,8 @@ function fetchSunspotDetails() {
   const t = document.getElementById('sunspot-table');
   if (!t) return;
   const data = [{ r: 4392, c: 12, cl: 'CSI' }, { r: 4393, c: 3, cl: 'BXO' }, { r: 4397, c: 6, cl: 'CRO' }];
-  let h = '</tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>ime';
-  data.forEach(s => h += `<tr><td class="region">AR ${s.r}</td><td class="count">${s.c}</td><td class="class">${s.cl}</td></tr>`);
+  let h = '</table><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>ime';
+  data.forEach(s => h += `<td><td class="region">AR ${s.r} \\xe2\\x80\\xa2<td class="count">${s.c} \\xe2\\x80\\xa2<td class="class">${s.cl} \\xe2\\x80\\xa2`);
   t.innerHTML = h;
 }
 function fetchHistoricalEvents() {
@@ -1325,62 +1325,67 @@ function fetchHistoricalEvents() {
   g.innerHTML = ev.map(e => `<div class="historical-event"><div class="year">${e.year}</div><div class="event-type">${e.type}</div><div class="magnitude">${e.magnitude}</div></div>`).join('');
 }
 
-/* ==================== LIVE IMAGES (SDO MODULE - LAZY LOADING) ==================== */
-const SDO_FEEDS = [
-  'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg', // AIA 171
-  'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0193.jpg', // AIA 193
-  'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0304.jpg', // AIA 304
-  'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIB.jpg'   // HMI Magnetogram
-];
-let sdoCurrentIndex = 0;
-let sdoInterval = null;
-let sdoObserver = null;
-
-function loadSDOImage(index) {
-  const container = document.getElementById('sdo-container');
-  if (!container) return;
+/* ==================== SDO SOLAR MODULE (IIFE - مستقل مع Lazy Loading) ==================== */
+const MOD_SDO = (() => {
+  let currentIndex = 0;
+  let interval = null;
+  let observer = null;
   
-  const img = new Image();
-  const url = SDO_FEEDS[index] + '?t=' + Date.now();
+  const FEEDS = [
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg', // AIA 171
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0193.jpg', // AIA 193
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0304.jpg', // AIA 304
+    'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIB.jpg'   // HMI Magnetogram
+  ];
   
-  img.onload = () => {
-    container.innerHTML = '';
-    img.className = 'image-loaded';
-    img.alt = 'SDO Solar Image';
-    container.appendChild(img);
-  };
+  function loadImage(index) {
+    const container = document.getElementById('sdo-container');
+    if (!container) return;
+    
+    const img = document.createElement('img');
+    const url = FEEDS[index] + '?t=' + Date.now();
+    
+    img.onload = () => {
+      container.innerHTML = '';
+      img.className = 'image-loaded';
+      img.alt = 'SDO Solar Image';
+      container.appendChild(img);
+    };
+    
+    img.onerror = () => {
+      container.innerHTML = '<div class="image-skeleton">SDO feed unavailable</div>';
+    };
+    
+    img.src = url;
+  }
   
-  img.onerror = () => {
-    container.innerHTML = '<div class="image-skeleton">SDO feed unavailable</div>';
-  };
+  function startCarousel() {
+    if (interval) clearInterval(interval);
+    interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % FEEDS.length;
+      loadImage(currentIndex);
+    }, 8000); // تغيير الصورة كل 8 ثواني
+  }
   
-  img.src = url;
-}
-
-function startSDOCarousel() {
-  if (sdoInterval) clearInterval(sdoInterval);
-  sdoInterval = setInterval(() => {
-    sdoCurrentIndex = (sdoCurrentIndex + 1) % SDO_FEEDS.length;
-    loadSDOImage(sdoCurrentIndex);
-  }, 8000); // تغيير الصورة كل 8 ثواني
-}
-
-function initSDO() {
-  const section = document.getElementById('sdo-section');
-  if (!section) return;
+  function init() {
+    const section = document.getElementById('sdo-section');
+    if (!section) return;
+    
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadImage(0);
+          startCarousel();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    observer.observe(section);
+  }
   
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        loadSDOImage(0);
-        startSDOCarousel();
-        observer.disconnect();
-      }
-    });
-  }, { threshold: 0.1 });
-  
-  observer.observe(section);
-}
+  return { init };
+})();
 
 /* ==================== INDICATORS ==================== */
 const MIZAN = { bz: '-1.2', proton: '0.8', auroraProb: '65', kp: '3.3', dst: '-27', iceExtent: '14.20', seaLevel: '3.40', surfaceTemp: '1.20', co2: '417.0', sunspot: '78', solarFlux: '125', swSpeed: '420', swDensity: '8.5', swTemp: '120' };
@@ -1420,7 +1425,7 @@ function buildTicker() {
     `🌍 Quakes 24h: <b>${qTt}</b> · Strongest: <span class="alert">${qSt}</span>`,
     `📈 S&P 500: <b>${sp}</b> · DAX: <b>${dax}</b>`,
     `🕋 RS Critical 2027: <b>0.0057 [0.00567–0.00576]</b>`,
-    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.7`,
+    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.7a`,
     `🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🕋`
   ];
   const html = items.map(i => `<span class="bt-item">${i}</span>`).join('');
@@ -1450,7 +1455,7 @@ function setLanguage(lang) {
 
 /* ==================== INITIALIZATION ==================== */
 window.addEventListener('load', async () => {
-  console.log('🚀 TRIO SEAL v8.7 — SDO Solar Module Ready');
+  console.log('🚀 TRIO SEAL v8.7a — SDO Solar Module (Lazy Load)');
   console.log('💡 debugClicks() | STATE object available');
 
   buildQuickLinks();
@@ -1473,7 +1478,7 @@ window.addEventListener('load', async () => {
   document.getElementById('quake-load-more').addEventListener('click', loadMoreEarthquakes);
   
   // Initialize SDO Solar module with Lazy Loading
-  initSDO();
+  MOD_SDO.init();
 
   setInterval(fetchRealKp, 60000);
   setInterval(fetchVolcanoes, 120000);
