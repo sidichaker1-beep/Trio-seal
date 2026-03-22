@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v8.9 · Stable Saqar Engine</title>
+<title>TRIO SEAL · Cosmic Observatory v8.9 · Saqar Engine</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-/* ==================== DESIGN TOKENS (من v8.8_fixed) ==================== */
+/* ==================== DESIGN TOKENS ==================== */
 :root {
   --bg: #EEF3F8;
   --bg-surface: #FFFFFF;
@@ -57,6 +57,25 @@ body.red-mode {
   0% { opacity: 0; }
   20% { opacity: 1; }
   100% { opacity: 0; }
+}
+
+.notification-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: var(--bg-surface);
+  border-left: 4px solid var(--amber);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: .84rem;
+  animation: toast-in .3s ease-out;
+  max-width: 300px;
+  box-shadow: var(--shadow-lg);
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
@@ -583,29 +602,6 @@ body {
   background: radial-gradient(circle at 50% 0%, rgba(220,38,38,.15), transparent 65%);
   animation: rm-pulse 2.5s infinite;
 }
-.notification-toast {
-  position: fixed; top: 20px; right: 20px; z-index: 9999;
-  background: var(--bg-surface);
-  border-left: 4px solid var(--amber);
-  padding: 12px 20px; border-radius: 12px;
-  font-size: .84rem; animation: toast-in .3s ease-out;
-}
-@keyframes toast-in { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
-
-@media(max-width:900px) { .core-grid{grid-template-columns:1fr 1fr} .images-grid{grid-template-columns:1fr 1fr} }
-@media(max-width:600px) {
-  body { padding:1rem 1rem 60px; }
-  .container { padding:1.2rem; border-radius:18px; }
-  .core-grid,.images-grid,.earthquake-stats { grid-template-columns:1fr; }
-  .navbar { border-radius:16px; }
-  .nav-links { display:none; }
-  .moon-phase { flex-direction:column; text-align:center; }
-  .quake-item { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .impact-ratio { align-self: flex-start; }
-}
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:var(--bg-subtle); }
-::-webkit-scrollbar-thumb { background:var(--bdr); border-radius:3px; }
 </style>
 </head>
 <body>
@@ -640,8 +636,8 @@ body {
     <span>🌋 Fuego Volcano — WARNING level active</span>
     <span>🌊 CME expected · Low Impact</span>
     <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🕋 Mizan al-Malakut v8.9 · Stable Saqar Engine</span>
-    <span>⚡ All observatory systems nominal</span>
+    <span>🕋 Mizan al-Malakut v8.9 · Saqar Engine Active</span>
+    <span>⚡ Quad-Balance System Online</span>
   </div>
 </div>
 
@@ -743,7 +739,7 @@ body {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">    <thead><tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th></tr> </thead> <tbody> <tr> <td class="region">AR 4392</td> <td class="count">12</td> <td class="class">CSI</td> </tr> <tr> <td class="region">AR 4393</td> <td class="count">3</td> <td class="class">BXO</td> </tr> <tr> <td class="region">AR 4397</td> <td class="count">6</td> <td class="class">CRO</td> </tr> </tbody> </table></div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">    <thead> <tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th></tr> </thead> <tbody> <tr><td class="region">AR 4392</td><td class="count">12</td><td class="class">CSI</td></tr> <tr><td class="region">AR 4393</td><td class="count">3</td><td class="class">BXO</td></tr> <tr><td class="region">AR 4397</td><td class="count">6</td><td class="class">CRO</td></tr> </tbody> </table></div>
 </div>
 
 <!-- HISTORICAL -->
@@ -1005,17 +1001,417 @@ function updateMoon() {
   drawMoonCanvas(age);
 }
 
-/* ==================== SAQAR INFERENCE ENGINE (مستقل) ==================== */
+/* ==================== SAQAR ENGINE v3.0 — QUAD-BALANCE SYSTEM ==================== */
 const SaqarEngine = (() => {
-  const PHI = 1.6180339887;
-  const K = 1.44;
+  const PHI = 1.618033988749895;
+  const K_FACTOR_BASE = 1.44;
+  const VEI_MAX = 10;
+  const SOLAR_FLUX_MAX = 200;
+  const KP_MAX = 9;
+  const RED_THRESHOLD = 1.96;
+  const SECTOR_ALERT_THRESHOLD = 1.8;
+  const UNSTABLE_LOWER = 1.41;
   
-  function compute(magnitude, moonAngleDeg) {
-    const kFactor = Math.max(Math.abs(Math.cos(moonAngleDeg * Math.PI / 180)), 0.1);
-    return (magnitude / (kFactor * K * 10)) * PHI;
+  const WEIGHTS = {
+    earthquake: 0.35,
+    volcano: 0.20,
+    solar: 0.30,
+    aurora: 0.15
+  };
+  
+  let currentState = {
+    earthquake: { value: 0, raw: { magnitude: 0, moonAngle: 0 } },
+    volcano: { value: 0, raw: { vei: 0 } },
+    solar: { value: 0, raw: { solarFlux: 0, sunspots: 0 } },
+    aurora: { value: 0, raw: { kp: 0 } },
+    total: 0,
+    isRedMode: false,
+    sectorAlerts: []
+  };
+  
+  let lastRedModeTrigger = 0;
+  let updateCallbacks = [];
+  
+  function computeEarthquakeImpact(magnitude, moonAngleDeg) {
+    const k = Math.max(Math.abs(Math.cos(moonAngleDeg * Math.PI / 180)), 0.1);
+    return (magnitude / (k * K_FACTOR_BASE * 10)) * PHI;
   }
   
-  return { compute };
+  function computeVolcanoImpact(vei) {
+    return (vei / VEI_MAX) * PHI;
+  }
+  
+  function computeSolarImpact(solarFlux) {
+    return (solarFlux / SOLAR_FLUX_MAX) * PHI;
+  }
+  
+  function computeAuroraImpact(kp) {
+    return (kp / KP_MAX) * PHI;
+  }
+  
+  function computeTotalImpact(earthquake, volcano, solar, aurora) {
+    return WEIGHTS.earthquake * earthquake +
+           WEIGHTS.volcano * volcano +
+           WEIGHTS.solar * solar +
+           WEIGHTS.aurora * aurora;
+  }
+  
+  function derivativeEarthquake(magnitude, moonAngleDeg) {
+    const k = Math.max(Math.abs(Math.cos(moonAngleDeg * Math.PI / 180)), 0.1);
+    return PHI / (k * K_FACTOR_BASE * 10);
+  }
+  
+  function derivativeVolcano(vei) {
+    return PHI / VEI_MAX;
+  }
+  
+  function derivativeSolar(solarFlux) {
+    return PHI / SOLAR_FLUX_MAX;
+  }
+  
+  function derivativeAurora(kp) {
+    return PHI / KP_MAX;
+  }
+  
+  function updateFromData(quakeData, volcanoData, solarData, auroraData) {
+    let changed = false;
+    
+    if (quakeData && quakeData.length > 0) {
+      const maxQuake = quakeData.reduce((max, q) => {
+        const impact = q.impactRatio || 0;
+        return impact > max.impact ? { impact, raw: q } : max;
+      }, { impact: 0, raw: null });
+      
+      if (maxQuake.impact !== currentState.earthquake.value) {
+        currentState.earthquake.value = maxQuake.impact;
+        if (maxQuake.raw) {
+          currentState.earthquake.raw.magnitude = maxQuake.raw.properties?.mag || 0;
+        }
+        changed = true;
+      }
+    }
+    
+    if (volcanoData && volcanoData.length > 0) {
+      const maxVolcano = volcanoData.reduce((max, v) => {
+        const impact = v.impactRatio || computeVolcanoImpact(v.vei || (v.alert === 'red' ? 5 : v.alert === 'orange' ? 3 : 1));
+        return impact > max.impact ? { impact, raw: v } : max;
+      }, { impact: 0, raw: null });
+      
+      if (maxVolcano.impact !== currentState.volcano.value) {
+        currentState.volcano.value = maxVolcano.impact;
+        changed = true;
+      }
+    }
+    
+    if (solarData !== undefined && solarData !== currentState.solar.raw.solarFlux) {
+      currentState.solar.raw.solarFlux = solarData;
+      currentState.solar.value = computeSolarImpact(solarData);
+      changed = true;
+    }
+    
+    if (auroraData !== undefined && auroraData !== currentState.aurora.raw.kp) {
+      currentState.aurora.raw.kp = auroraData;
+      currentState.aurora.value = computeAuroraImpact(auroraData);
+      changed = true;
+    }
+    
+    if (changed) {
+      recalculateTotal();
+      checkRedMode();
+      notifyCallbacks();
+    }
+  }
+  
+  function recalculateTotal() {
+    currentState.total = computeTotalImpact(
+      currentState.earthquake.value,
+      currentState.volcano.value,
+      currentState.solar.value,
+      currentState.aurora.value
+    );
+  }
+  
+  function checkRedMode() {
+    const now = Date.now();
+    let shouldTrigger = false;
+    let reason = '';
+    let sectorAlerts = [];
+    
+    if (currentState.earthquake.value > SECTOR_ALERT_THRESHOLD) {
+      sectorAlerts.push(`Earthquake ${currentState.earthquake.value.toFixed(3)}`);
+      shouldTrigger = true;
+      reason = `Earthquake: ${currentState.earthquake.value.toFixed(3)}`;
+    }
+    if (currentState.volcano.value > SECTOR_ALERT_THRESHOLD) {
+      sectorAlerts.push(`Volcano ${currentState.volcano.value.toFixed(3)}`);
+      shouldTrigger = true;
+      reason = `Volcano: ${currentState.volcano.value.toFixed(3)}`;
+    }
+    if (currentState.solar.value > SECTOR_ALERT_THRESHOLD) {
+      sectorAlerts.push(`Solar ${currentState.solar.value.toFixed(3)}`);
+      shouldTrigger = true;
+      reason = `Solar: ${currentState.solar.value.toFixed(3)}`;
+    }
+    if (currentState.aurora.value > SECTOR_ALERT_THRESHOLD) {
+      sectorAlerts.push(`Aurora ${currentState.aurora.value.toFixed(3)}`);
+      shouldTrigger = true;
+      reason = `Aurora: ${currentState.aurora.value.toFixed(3)}`;
+    }
+    
+    if (currentState.total > RED_THRESHOLD) {
+      shouldTrigger = true;
+      reason = `Total Impact ${currentState.total.toFixed(3)} > ${RED_THRESHOLD}`;
+    }
+    
+    currentState.sectorAlerts = sectorAlerts;
+    currentState.isRedMode = shouldTrigger;
+    
+    if (shouldTrigger && (now - lastRedModeTrigger > 10000)) {
+      lastRedModeTrigger = now;
+      triggerGlobalRedMode(reason);
+    }
+  }
+  
+  let uiElements = {
+    totalValue: null,
+    totalBarFill: null,
+    sectorContainer: null,
+    redModeIndicator: null
+  };
+  
+  function findUIElements() {
+    let container = document.getElementById('saqar-panel');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'saqar-panel';
+      container.className = 'card';
+      container.style.marginBottom = '1rem';
+      container.style.padding = '0.8rem 1.2rem';
+      
+      const title = document.createElement('h3');
+      title.textContent = '⚖️ Saqar Engine · Quad-Balance';
+      title.style.fontFamily = 'var(--f-hud)';
+      title.style.fontSize = '0.85rem';
+      title.style.color = 'var(--gold)';
+      title.style.marginBottom = '0.5rem';
+      container.appendChild(title);
+      
+      const barContainer = document.createElement('div');
+      barContainer.style.marginBottom = '0.5rem';
+      
+      const barLabel = document.createElement('div');
+      barLabel.style.display = 'flex';
+      barLabel.style.justifyContent = 'space-between';
+      barLabel.style.fontSize = '0.7rem';
+      barLabel.style.marginBottom = '0.2rem';
+      barLabel.innerHTML = '<span>Total Impact</span><span id="saqar-total-value">0.000</span>';
+      barContainer.appendChild(barLabel);
+      
+      const bar = document.createElement('div');
+      bar.style.height = '6px';
+      bar.style.background = 'var(--bg-subtle)';
+      bar.style.borderRadius = '99px';
+      bar.style.overflow = 'hidden';
+      
+      const barFill = document.createElement('div');
+      barFill.style.height = '100%';
+      barFill.style.width = '0%';
+      barFill.style.transition = 'width 0.5s ease, background 0.3s ease';
+      barFill.style.borderRadius = '99px';
+      bar.appendChild(barFill);
+      barContainer.appendChild(bar);
+      container.appendChild(barContainer);
+      
+      const sectorsDiv = document.createElement('div');
+      sectorsDiv.id = 'saqar-sectors';
+      sectorsDiv.style.display = 'flex';
+      sectorsDiv.style.gap = '0.8rem';
+      sectorsDiv.style.flexWrap = 'wrap';
+      sectorsDiv.style.fontSize = '0.7rem';
+      sectorsDiv.style.marginTop = '0.3rem';
+      container.appendChild(sectorsDiv);
+      
+      const redIndicator = document.createElement('div');
+      redIndicator.id = 'saqar-red-indicator';
+      redIndicator.style.display = 'none';
+      redIndicator.style.marginTop = '0.3rem';
+      redIndicator.style.padding = '0.2rem 0.5rem';
+      redIndicator.style.borderRadius = '4px';
+      redIndicator.style.background = 'rgba(185,28,28,.2)';
+      redIndicator.style.color = 'var(--crimson)';
+      redIndicator.style.fontSize = '0.7rem';
+      redIndicator.style.fontWeight = 'bold';
+      redIndicator.innerHTML = '⚠️ RED MODE ACTIVE';
+      container.appendChild(redIndicator);
+      
+      const kpSection = document.querySelector('.forecast-card') || document.querySelector('.section-title');
+      if (kpSection && kpSection.parentNode) {
+        kpSection.parentNode.insertBefore(container, kpSection);
+      } else if (document.querySelector('.container')) {
+        document.querySelector('.container').insertBefore(container, document.querySelector('.core-grid')?.nextSibling);
+      }
+    }
+    
+    uiElements.totalValue = document.getElementById('saqar-total-value');
+    uiElements.sectorContainer = document.getElementById('saqar-sectors');
+    uiElements.redModeIndicator = document.getElementById('saqar-red-indicator');
+    
+    const barFill = document.querySelector('#saqar-panel .card div:last-child div');
+    if (barFill) uiElements.totalBarFill = barFill;
+  }
+  
+  function updateUI() {
+    if (!uiElements.totalValue) findUIElements();
+    
+    if (uiElements.totalValue) {
+      uiElements.totalValue.textContent = currentState.total.toFixed(4);
+    }
+    
+    if (uiElements.totalBarFill) {
+      const percentage = Math.min(100, (currentState.total / RED_THRESHOLD) * 100);
+      uiElements.totalBarFill.style.width = `${percentage}%`;
+      
+      if (currentState.total > RED_THRESHOLD) {
+        uiElements.totalBarFill.style.background = 'linear-gradient(90deg, #DC2626, #F87171)';
+      } else if (currentState.total > UNSTABLE_LOWER) {
+        uiElements.totalBarFill.style.background = 'linear-gradient(90deg, #D97706, #FBBF24)';
+      } else {
+        uiElements.totalBarFill.style.background = 'linear-gradient(90deg, #0D9488, #34D399)';
+      }
+    }
+    
+    if (uiElements.sectorContainer) {
+      uiElements.sectorContainer.innerHTML = `
+        <span style="color:var(--teal)">🌍 Eq: ${currentState.earthquake.value.toFixed(3)}</span>
+        <span style="color:var(--amber)">🌋 Vol: ${currentState.volcano.value.toFixed(3)}</span>
+        <span style="color:var(--gold)">☀️ Sun: ${currentState.solar.value.toFixed(3)}</span>
+        <span style="color:var(--sky)">✨ Aur: ${currentState.aurora.value.toFixed(3)}</span>
+      `;
+    }
+    
+    if (uiElements.redModeIndicator) {
+      uiElements.redModeIndicator.style.display = currentState.isRedMode ? 'block' : 'none';
+      if (currentState.sectorAlerts.length > 0 && uiElements.redModeIndicator) {
+        uiElements.redModeIndicator.innerHTML = `⚠️ RED MODE · ${currentState.sectorAlerts.join(', ')}`;
+      } else {
+        uiElements.redModeIndicator.innerHTML = '⚠️ RED MODE ACTIVE';
+      }
+    }
+  }
+  
+  function triggerGlobalRedMode(reason) {
+    const pulse = document.createElement('div');
+    pulse.className = 'red-mode-pulse';
+    document.body.appendChild(pulse);
+    setTimeout(() => pulse.remove(), 1200);
+    
+    if (uiElements.redModeIndicator) {
+      uiElements.redModeIndicator.style.display = 'block';
+      uiElements.redModeIndicator.innerHTML = `⚠️ RED MODE · ${reason}`;
+    }
+    
+    console.log(`[SAQAR] RED MODE TRIGGERED: ${reason}`);
+    
+    const toast = document.createElement('div');
+    toast.className = 'notification-toast';
+    toast.style.borderLeftColor = '#DC2626';
+    toast.innerHTML = `🔴 SAQAR EMERGENCY: ${reason}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 6000);
+  }
+  
+  function bindToGlobalState() {
+    const originalFetchQuakes = window.fetchEarthquakes;
+    if (originalFetchQuakes) {
+      window.fetchEarthquakes = async function(...args) {
+        await originalFetchQuakes(...args);
+        if (STATE?.quakes?.data) {
+          updateFromData(STATE.quakes.data, null, null, null);
+          updateUI();
+        }
+      };
+    }
+    
+    const originalFetchVolcanoes = window.fetchVolcanoes;
+    if (originalFetchVolcanoes) {
+      window.fetchVolcanoes = async function(...args) {
+        await originalFetchVolcanoes(...args);
+        if (STATE?.volcano?.data) {
+          updateFromData(null, STATE.volcano.data, null, null);
+          updateUI();
+        }
+      };
+    }
+    
+    setInterval(() => {
+      const solarFluxEl = document.getElementById('solarFlux-value');
+      if (solarFluxEl) {
+        const solarFlux = parseFloat(solarFluxEl.textContent) || 125;
+        updateFromData(null, null, solarFlux, null);
+        updateUI();
+      }
+    }, 30000);
+    
+    setInterval(() => {
+      const kp = currentKp || 3;
+      updateFromData(null, null, null, kp);
+      updateUI();
+    }, 60000);
+  }
+  
+  function notifyCallbacks() {
+    updateUI();
+    updateCallbacks.forEach(cb => cb(currentState));
+  }
+  
+  function subscribe(callback) {
+    if (typeof callback === 'function') {
+      updateCallbacks.push(callback);
+    }
+  }
+  
+  function init() {
+    findUIElements();
+    updateUI();
+    
+    setTimeout(() => {
+      if (window.STATE) {
+        if (STATE?.quakes?.data) updateFromData(STATE.quakes.data, null, null, null);
+        if (STATE?.volcano?.data) updateFromData(null, STATE.volcano.data, null, null);
+      }
+      bindToGlobalState();
+      updateUI();
+    }, 1000);
+  }
+  
+  return {
+    getState: () => ({ ...currentState }),
+    compute: {
+      earthquake: computeEarthquakeImpact,
+      volcano: computeVolcanoImpact,
+      solar: computeSolarImpact,
+      aurora: computeAuroraImpact,
+      total: computeTotalImpact
+    },
+    derivatives: {
+      earthquake: derivativeEarthquake,
+      volcano: derivativeVolcano,
+      solar: derivativeSolar,
+      aurora: derivativeAurora
+    },
+    update: (quakeData, volcanoData, solarData, auroraData) => {
+      updateFromData(quakeData, volcanoData, solarData, auroraData);
+      updateUI();
+    },
+    subscribe,
+    weights: { ...WEIGHTS },
+    thresholds: {
+      red: RED_THRESHOLD,
+      sectorAlert: SECTOR_ALERT_THRESHOLD,
+      unstableLower: UNSTABLE_LOWER
+    },
+    init
+  };
 })();
 
 /* ==================== VOLCANO API + STATE MANAGEMENT ==================== */
@@ -1155,7 +1551,7 @@ async function fetchEarthquakes() {
     const moonAngle = getMoonAngleDeg();
     STATE.quakes.data = data.features.map(eq => ({
       ...eq,
-      impactRatio: SaqarEngine.compute(eq.properties?.mag || 0, moonAngle)
+      impactRatio: SaqarEngine.compute.earthquake(eq.properties?.mag || 0, moonAngle)
     })).sort((a, b) => (b.properties?.mag || 0) - (a.properties?.mag || 0));
     
     const mags = STATE.quakes.data.map(f => f.properties?.mag || 0);
@@ -1172,6 +1568,7 @@ async function fetchEarthquakes() {
     plotEarthquakesOnMap();
     if (top > 6.5) activateRedMode(`Earthquake M${top.toFixed(1)}`);
     buildTicker();
+    SaqarEngine.update(STATE.quakes.data, null, null, null);
   } catch(e) { console.warn('USGS failed:', e.message); }
 }
 
@@ -1287,6 +1684,7 @@ function updateTime() {
   document.getElementById('utc-clock').textContent = `${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
   document.getElementById('mecca-clock').textContent = `${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
 }
+setInterval(updateTime, 1000); updateTime();
 
 /* ==================== CORE INDICATORS ==================== */
 function updateCoreIndicators() {
@@ -1302,6 +1700,7 @@ function updateCoreIndicators() {
   g('closure-gauge', parseFloat(clo), 5);
   g('balance-gauge', parseFloat(bal), 8);
 }
+setInterval(updateCoreIndicators, 5000);
 
 /* ==================== X-RAY ==================== */
 const XCLASSES = ['A1.2', 'B2.5', 'C1.2', 'C3.4', 'M1.1'];
@@ -1315,6 +1714,7 @@ function updateXray() {
     el.style.color = col;
   }
 }
+setInterval(updateXray, 30000); updateXray();
 
 /* ==================== QUICK LINKS ==================== */
 const QUICK = [
@@ -1382,8 +1782,8 @@ function fetchSunspotDetails() {
   const t = document.getElementById('sunspot-table');
   if (!t) return;
   const data = [{ r: 4392, c: 12, cl: 'CSI' }, { r: 4393, c: 3, cl: 'BXO' }, { r: 4397, c: 6, cl: 'CRO' }];
-  let h = '<thead><tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th></tr></thead><tbody>';
-  data.forEach(s => h += `<tr><td class="region">AR ${s.r}</td><td class="count">${s.c}</td><td class="class">${s.cl}</td></tr>`);
+  let h = '<thead> <th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th> </thead><tbody>';
+  data.forEach(s => h += ` <td class="region">AR ${s.r} <td class="count">${s.c} <td class="class">${s.cl} `);
   h += '</tbody>';
   t.innerHTML = h;
 }
@@ -1498,11 +1898,10 @@ function setLanguage(lang) {
 
 /* ==================== INIT (كل شيء داخل DOMContentLoaded) ==================== */
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('🚀 TRIO SEAL v8.9 — Stable Saqar Engine');
+  console.log('🚀 TRIO SEAL v8.9 — Saqar Engine Active | Quad-Balance System Online');
   console.log('💡 debugClicks() | SaqarEngine available');
   window.SaqarEngine = SaqarEngine;
 
-  // بناء الواجهات الأساسية
   buildQuickLinks();
   buildSourceCards();
   buildIndicators();
@@ -1515,21 +1914,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateXray();
   buildTicker();
 
-  // جلب البيانات من APIs
   await fetchRealKp();
   await fetchVolcanoes();
   await fetchEarthquakes();
 
-  // أزرار التنقل
   document.getElementById('vol-prev-btn')?.addEventListener('click', volcanoPrevPage);
   document.getElementById('vol-next-btn')?.addEventListener('click', volcanoNextPage);
   document.getElementById('quake-prev-btn')?.addEventListener('click', quakePrevPage);
   document.getElementById('quake-next-btn')?.addEventListener('click', quakeNextPage);
   
-  // SDO Solar مع Lazy Loading
   MOD_SDO.init();
+  SaqarEngine.init();
 
-  // كل الـ intervals داخل init فقط (مرة واحدة)
   setInterval(fetchRealKp, 60000);
   setInterval(fetchVolcanoes, 120000);
   setInterval(fetchEarthquakes, 60000);
