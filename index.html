@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TRIO SEAL · Cosmic Observatory v8.10 · Full Data Integration</title>
+<title>TRIO SEAL · Cosmic Observatory v8.11 · Fixed Lists</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -636,7 +636,7 @@ body {
     <span>🌋 Fuego Volcano — WARNING level active</span>
     <span>🌊 CME expected · Low Impact</span>
     <span>📡 Type II Radio Emission 866 km/s</span>
-    <span>🕋 Mizan al-Malakut v8.10 · Full Data Integration</span>
+    <span>🕋 Mizan al-Malakut v8.11 · Fixed Lists</span>
     <span>⚡ Quad-Balance System Online</span>
   </div>
 </div>
@@ -651,7 +651,7 @@ body {
 <!-- TITLE -->
 <h1 class="page-title">
   TRIO SEAL · Cosmic Observatory
-  <span class="version-chip">v8.10</span>
+  <span class="version-chip">v8.11</span>
 </h1>
 <div class="subtitle">
   <span class="badge badge-live">⚡ Live</span>
@@ -760,7 +760,7 @@ body {
 <div class="indicators-grid" id="solar-grid"></div>
 <div class="card" style="margin-top:1rem">
   <h3 style="color:var(--text-primary);font-family:var(--f-hud);font-size:.78rem;margin-bottom:.6rem">📊 SUNSPOT REGIONS</h3>
-  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">    <thead>  <th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th> </thead> <tbody> <tr><td class="region">AR 4392</td><td class="count">12</td><td class="class">CSI</td></tr> <tr><td class="region">AR 4393</td><td class="count">3</td><td class="class">BXO</td></tr> <tr><td class="region">AR 4397</td><td class="count">6</td><td class="class">CRO</td></tr> </tbody> </table></div>
+  <div class="sunspot-details"><table class="sunspot-table" id="sunspot-table">    <thead>  <th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th> </thead> <tbody>  <td class="region">AR 4392</td><td class="count">12</td><td class="class">CSI</td>  <td class="region">AR 4393</td><td class="count">3</td><td class="class">BXO</td>  <td class="region">AR 4397</td><td class="count">6</td><td class="class">CRO</td> </tbody> </table></div>
 </div>
 
 <!-- HISTORICAL -->
@@ -803,7 +803,7 @@ body {
 <!-- FOOTER -->
 <div class="footer">
   <span id="timestamp">Loading…</span> · 21 Indicators · <span data-key="last-update">Last update</span>: <span id="last-update">--</span>
-  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.10</div>
+  <div style="margin-top:4px">Hicham Chigar · هشام شيكر · Mizan al-Malakut v8.11</div>
 </div>
 
 </div>
@@ -1084,23 +1084,23 @@ const SaqarEngine = {
   }
 };
 
-/* ==================== VOLCANO API + STATE MANAGEMENT ==================== */
+/* ==================== VOLCANO API + STATE MANAGEMENT (FIXED NAMES) ==================== */
 const STATIC_VOLCANOES = [
-  { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', lat: 37.748, lon: 14.999 },
-  { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', lat: 19.421, lon: -155.287 },
-  { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING', lat: 14.473, lon: -90.880 },
-  { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH', lat: 31.581, lon: 130.659 },
-  { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY', lat: 19.023, lon: -98.622 },
-  { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY', lat: -7.541, lon: 110.446 },
-  { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH', lat: -8.108, lon: 112.922 },
-  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY', lat: 38.789, lon: 15.213 },
-  { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -37.521, lon: 177.183 },
-  { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', lat: 56.653, lon: 161.360 },
-  { name: 'Reykjanes', country: 'Iceland', alert: 'orange', status: 'WATCH', lat: 63.880, lon: -22.560 },
-  { name: 'Ruapehu', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -39.281, lon: 175.568 },
-  { name: 'Taal', country: 'Philippines', alert: 'yellow', status: 'ADVISORY', lat: 14.002, lon: 120.993 },
-  { name: 'Nyiragongo', country: 'DR Congo', alert: 'orange', status: 'WATCH', lat: -1.520, lon: 29.250 },
-  { name: 'Veniaminof', country: 'Alaska, USA', alert: 'yellow', status: 'ADVISORY', lat: 56.196, lon: -159.390 }
+  { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', lat: 37.748, lon: 14.999, vei: 3 },
+  { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', lat: 19.421, lon: -155.287, vei: 3 },
+  { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING', lat: 14.473, lon: -90.880, vei: 5 },
+  { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH', lat: 31.581, lon: 130.659, vei: 3 },
+  { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY', lat: 19.023, lon: -98.622, vei: 1 },
+  { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY', lat: -7.541, lon: 110.446, vei: 1 },
+  { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH', lat: -8.108, lon: 112.922, vei: 3 },
+  { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY', lat: 38.789, lon: 15.213, vei: 1 },
+  { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -37.521, lon: 177.183, vei: 1 },
+  { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', lat: 56.653, lon: 161.360, vei: 3 },
+  { name: 'Reykjanes', country: 'Iceland', alert: 'orange', status: 'WATCH', lat: 63.880, lon: -22.560, vei: 3 },
+  { name: 'Ruapehu', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -39.281, lon: 175.568, vei: 1 },
+  { name: 'Taal', country: 'Philippines', alert: 'yellow', status: 'ADVISORY', lat: 14.002, lon: 120.993, vei: 1 },
+  { name: 'Nyiragongo', country: 'DR Congo', alert: 'orange', status: 'WATCH', lat: -1.520, lon: 29.250, vei: 3 },
+  { name: 'Veniaminof', country: 'Alaska, USA', alert: 'yellow', status: 'ADVISORY', lat: 56.196, lon: -159.390, vei: 1 }
 ];
 
 async function fetchVolcanoes() {
@@ -1109,22 +1109,31 @@ async function fetchVolcanoes() {
     const response = await fetch('https://volcanoes.usgs.gov/hans-public/api/volcano/getElevatedVolcanoes', { signal: AbortSignal.timeout(8000) });
     if (response.ok) {
       const data = await response.json();
+      console.log("[VOLCANO] API Response sample:", data.slice(0, 3));
       if (data && Array.isArray(data) && data.length > 0) {
-        STATE.volcano.data = data.slice(0, 40).map(v => ({
-          name: v.volcanoName || v.name || 'Unknown',
-          country: v.country || v.region || '--',
-          alert: (v.alertLevel || '').toLowerCase().includes('warning') ? 'red' :
-                 (v.alertLevel || '').toLowerCase().includes('watch') ? 'orange' : 'yellow',
-          status: v.alertLevel || 'ADVISORY',
-          lat: v.latitude ? parseFloat(v.latitude) : null,
-          lon: v.longitude ? parseFloat(v.longitude) : null,
-          vei: v.alertLevel === 'red' ? 5 : v.alertLevel === 'orange' ? 3 : 1
-        }));
+        STATE.volcano.data = data.slice(0, 40).map(v => {
+          // محاولة استخراج الاسم من حقول مختلفة
+          const name = v.volcanoName || v.name || v.volcano_title || v.title || 'Unknown';
+          const country = v.country || v.region || v.location || '--';
+          const alertLevel = v.alertLevel || v.alert || 'yellow';
+          return {
+            name: name,
+            country: country,
+            alert: alertLevel.toLowerCase().includes('warning') ? 'red' :
+                   alertLevel.toLowerCase().includes('watch') ? 'orange' : 'yellow',
+            status: alertLevel.toUpperCase() || 'ADVISORY',
+            lat: v.latitude ? parseFloat(v.latitude) : null,
+            lon: v.longitude ? parseFloat(v.longitude) : null,
+            vei: alertLevel === 'red' ? 5 : alertLevel === 'orange' ? 3 : 1
+          };
+        });
+        console.log(`[VOLCANO] Loaded ${STATE.volcano.data.length} volcanoes from API`);
       } else throw new Error('Invalid API response');
     } else throw new Error(`HTTP ${response.status}`);
   } catch(e) {
     console.warn('[VOLCANO] API failed, using static data:', e.message);
-    STATE.volcano.data = STATIC_VOLCANOES.map(v => ({ ...v, lat: v.lat, lon: v.lon, vei: v.alert === 'red' ? 5 : v.alert === 'orange' ? 3 : 1 }));
+    STATE.volcano.data = STATIC_VOLCANOES.map(v => ({ ...v, lat: v.lat, lon: v.lon }));
+    console.log(`[VOLCANO] Loaded ${STATE.volcano.data.length} volcanoes from static data`);
   }
   STATE.volcano.offset = 0;
   renderVolcanoesPage();
@@ -1584,7 +1593,7 @@ function buildTicker() {
     `🌍 Quakes 24h: <b>${qTt}</b> · Strongest: <span class="alert">${qSt}</span>`,
     `📈 S&P 500: <b>${sp}</b> · DAX: <b>${dax}</b>`,
     `🕋 RS Critical 2027: <b>0.0057 [0.00567–0.00576]</b>`,
-    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.10`,
+    `🌌 F₀ = 8,782,511,093 Hz · Mizan al-Malakut v8.11`,
     `🇺🇸 🇬🇧 🇩🇪 🇯🇵 🇸🇦 🕋`
   ];
   const html = items.map(i => `<span class="bt-item">${i}</span>`).join('');
@@ -1613,7 +1622,7 @@ function setLanguage(lang) {
 
 /* ==================== INIT ==================== */
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('🚀 TRIO SEAL v8.10 — Full Data Integration');
+  console.log('🚀 TRIO SEAL v8.11 — Fixed Lists (Volcano names display)');
   console.log('💡 debugClicks()');
 
   buildQuickLinks();
