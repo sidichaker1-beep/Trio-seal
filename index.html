@@ -945,8 +945,8 @@ function renderVolcanoesPage() {
   
   console.log(`[VOLCANO] Rendering page: offset=${offset}, displayed=${pageData.length}, total=${data.length}`);
   
-  container.innerHTML = '';
-  let high = 0;
+  // FIX: يحسب high من كامل البيانات لا الصفحة الحالية فقط
+  const high = data.filter(v => v.alert === 'red' || v.alert === 'orange').length;
 
   const badgeColors = {
     red:    'rgba(220,38,38,.12)',
@@ -957,7 +957,6 @@ function renderVolcanoesPage() {
   pageData.forEach(v => {
     const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
     const col = colors[v.alert] || '#64748b';
-    if (v.alert === 'red' || v.alert === 'orange') high++;
     const flag = getCountryFlag(v.country);
     const div = document.createElement('div');
     div.className = 'vol-item';
@@ -1043,8 +1042,10 @@ function volcanoPrevPage() {
 
 function volcanoNextPage() {
   const { offset, pageSize, data } = STATE.volcano;
-  const newOffset = Math.min(data.length - pageSize, offset + pageSize);
-  if (newOffset !== offset && newOffset >= 0) {
+  // FIX: إذا data.length < pageSize فإن data.length - pageSize سالب → newOffset خاطئ
+  const maxOffset = Math.max(0, data.length - pageSize);
+  const newOffset = Math.min(maxOffset, offset + pageSize);
+  if (newOffset !== offset) {
     STATE.volcano.offset = newOffset;
     renderVolcanoesPage();
     plotVolcanoesOnMap();
@@ -1148,18 +1149,20 @@ function plotEarthquakesOnMap() {
 function loadMoreEarthquakes() {
   if (STATE.quakes.loading) return;
   STATE.quakes.loading = true;
-  
-  const newOffset = STATE.quakes.offset + STATE.quakes.pageSize;
-  if (newOffset >= STATE.quakes.data.length) {
-    const btn = document.getElementById('quake-load-more');
-    if (btn) btn.classList.add('hidden');
+  try {
+    const newOffset = STATE.quakes.offset + STATE.quakes.pageSize;
+    if (newOffset >= STATE.quakes.data.length) {
+      const btn = document.getElementById('quake-load-more');
+      if (btn) btn.classList.add('hidden');
+      return;
+    }
+    STATE.quakes.offset = newOffset;
+    renderEarthquakes();
+  } catch(e) {
+    console.error('[QUAKE] loadMore error:', e);
+  } finally {
     STATE.quakes.loading = false;
-    return;
   }
-  
-  STATE.quakes.offset = newOffset;
-  renderEarthquakes();
-  STATE.quakes.loading = false;
 }
 
 /* ==================== MOON PHASE ==================== */
@@ -1234,10 +1237,27 @@ function updateMoon() {
   document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
   drawMoonCanvas(age);
 }
-setInterval(updateMoon, 60000); updateMoon();
+// ── كل setIntervals مُنقولة إلى window.addEventListener('load') ──
+// لا استدعاء مباشر هنا — DOM غير جاهز بعد
 
-/* ==================== CLOCK & HIJRI ==================== */
-function toHijri(d) {
+function updateMoon() {
+  const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
+  const illum = (1 - Math.cos((age / SYNODIC) * 2 * Math.PI)) / 2 * 100;
+  let phaseName;
+  if (age < 1) phaseName = 'New Moon';
+  else if (age < 7.4) phaseName = 'Waxing Crescent';
+  else if (age < 10.4) phaseName = 'First Quarter';
+  else if (age < 14.8) phaseName = 'Waxing Gibbous';
+  else if (age < 16.1) phaseName = 'Full Moon';
+  else if (age < 22.1) phaseName = 'Waning Gibbous';
+  else if (age < 25.1) phaseName = 'Last Quarter';
+  else phaseName = 'Waning Crescent';
+  document.getElementById('moon-phase-name').textContent = phaseName;
+  document.getElementById('moon-illumination').textContent = illum.toFixed(1) + '%';
+  document.getElementById('moon-thickness').textContent = `Thickness: ${(illum * 31 / 100).toFixed(2)}'`;
+  document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
+  drawMoonCanvas(age);
+}
   const JD = Math.floor(d.getTime() / 86400000 + 2440587.5);
   const l = JD - 1948440 + 10632, n = Math.floor((l - 1) / 10631);
   const l2 = l - 10631 * n + 354;
@@ -1255,8 +1275,6 @@ function updateTime() {
   document.getElementById('utc-clock').textContent = `${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
   document.getElementById('mecca-clock').textContent = `${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
 }
-setInterval(updateTime, 1000); updateTime();
-
 /* ==================== CORE INDICATORS ==================== */
 function updateCoreIndicators() {
   const kp = currentKp;
@@ -1271,8 +1289,6 @@ function updateCoreIndicators() {
   g('closure-gauge', parseFloat(clo), 5);
   g('balance-gauge', parseFloat(bal), 8);
 }
-setInterval(updateCoreIndicators, 5000);
-
 /* ==================== X-RAY ==================== */
 const XCLASSES = ['A1.2', 'B2.5', 'C1.2', 'C3.4', 'M1.1'];
 function updateXray() {
@@ -1285,8 +1301,6 @@ function updateXray() {
     el.style.color = col;
   }
 }
-setInterval(updateXray, 30000); updateXray();
-
 /* ==================== QUICK LINKS ==================== */
 const QUICK = [
   { key: 'aurora', label: '🌌 Aurora' }, { key: 'xray', label: '📡 X-Ray' },
@@ -1353,8 +1367,8 @@ function fetchSunspotDetails() {
   const t = document.getElementById('sunspot-table');
   if (!t) return;
   const data = [{ r: 4392, c: 12, cl: 'CSI' }, { r: 4393, c: 3, cl: 'BXO' }, { r: 4397, c: 6, cl: 'CRO' }];
-  let h = ' <th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th>';
-  data.forEach(s => h += ` <td class="region">AR ${s.r} <td class="count">${s.c} <td class="class">${s.cl} `);
+  let h = '<tr><th class="region">Region</th><th class="count">Spots</th><th class="class">Class</th></tr>';
+  data.forEach(s => h += `<tr><td class="region">AR ${s.r}</td><td class="count">${s.c}</td><td class="class">${s.cl}</td></tr>`);
   t.innerHTML = h;
 }
 function fetchHistoricalEvents() {
@@ -1496,38 +1510,47 @@ window.addEventListener('load', async () => {
   console.log('🚀 TRIO SEAL v8.8 — Volcano Pagination (Next/Previous)');
   console.log('💡 debugClicks() | STATE object available');
 
+  // ── بناء الواجهة الثابتة فوراً ──
   buildQuickLinks();
   buildSourceCards();
   buildIndicators();
   fetchKpForecast();
   fetchSunspotDetails();
   fetchHistoricalEvents();
+
+  // ── أول عرض للوقت والقمر والـ X-Ray ──
   updateTime();
   updateMoon();
-  updateCoreIndicators();
   updateXray();
   buildTicker();
 
+  // ── جلب Kp أولاً ثم حساب Core Indicators بالقيمة الحقيقية ──
   await fetchRealKp();
+  updateCoreIndicators();
+
+  // ── جلب البيانات الحية ──
   await fetchVolcanoes();
   await fetchEarthquakes();
 
+  // ── أزرار التحكم ──
   document.getElementById('quake-load-more').addEventListener('click', loadMoreEarthquakes);
-  
-  // Volcano pagination buttons
   const prevBtn = document.getElementById('vol-prev-btn');
   const nextBtn = document.getElementById('vol-next-btn');
   if (prevBtn) prevBtn.addEventListener('click', volcanoPrevPage);
   if (nextBtn) nextBtn.addEventListener('click', volcanoNextPage);
-  
+
+  // ── SDO Solar — Lazy Load ──
   MOD_SDO.init();
 
-  setInterval(fetchRealKp, 60000);
-  setInterval(fetchVolcanoes, 120000);
-  setInterval(fetchEarthquakes, 60000);
-  setInterval(buildTicker, 3000);
-  setInterval(updateTime, 1000);
-  setInterval(updateMoon, 60000);
+  // ── كل الـ setIntervals في مكان واحد ──
+  setInterval(updateTime,           1000);
+  setInterval(updateMoon,          60000);
+  setInterval(updateCoreIndicators, 5000);
+  setInterval(updateXray,          30000);
+  setInterval(buildTicker,          3000);
+  setInterval(fetchRealKp,         60000);
+  setInterval(fetchVolcanoes,     120000);
+  setInterval(fetchEarthquakes,    60000);
 
   const now = new Date();
   document.getElementById('last-update').textContent = now.toLocaleTimeString();
