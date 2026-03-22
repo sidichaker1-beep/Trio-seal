@@ -1193,13 +1193,13 @@ function drawMoonCanvas(age) {
   ctx.fillStyle = 'rgba(0,0,0,0.82)';
   ctx.fill();
   // FIX: rim يُرسم داخل ctx.save/restore (قبل restore) لتطبيق clip الدائري
-  //      كان يُرسم بعد restore() فيظهر مربعاً في بعض المتصفحات
   const rim = ctx.createRadialGradient(cx, cy, R * .82, cx, cy, R);
   rim.addColorStop(0, 'transparent');
   rim.addColorStop(1, 'rgba(200,180,100,.2)');
   ctx.fillStyle = rim;
   ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
+} // ← FIX CRITICAL: القوس المفقود كان يجعل updateMoon داخل drawMoonCanvas
 
 function updateMoon() {
   const age = (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
@@ -1219,7 +1219,7 @@ function updateMoon() {
   document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
   drawMoonCanvas(age);
 }
-setInterval(updateMoon, 60000); updateMoon();
+// setInterval(updateMoon) مُنقول إلى init — لا يعمل قبل DOM
 
 /* ==================== CLOCK & HIJRI ==================== */
 function toHijri(d) {
@@ -1240,7 +1240,7 @@ function updateTime() {
   document.getElementById('utc-clock').textContent = `${p2(now.getUTCHours())}:${p2(now.getUTCMinutes())}:${p2(now.getUTCSeconds())}`;
   document.getElementById('mecca-clock').textContent = `${p2(mecca.getHours())}:${p2(mecca.getMinutes())}:${p2(mecca.getSeconds())}`;
 }
-setInterval(updateTime, 1000); updateTime();
+// setInterval(updateTime) مُنقول إلى init — لا يعمل قبل DOM
 
 /* ==================== CORE INDICATORS ==================== */
 function updateCoreIndicators() {
@@ -1256,7 +1256,7 @@ function updateCoreIndicators() {
   g('closure-gauge', parseFloat(clo), 5);
   g('balance-gauge', parseFloat(bal), 8);
 }
-setInterval(updateCoreIndicators, 5000);
+// setInterval(updateCoreIndicators) مُنقول إلى init
 
 /* ==================== X-RAY ==================== */
 const XCLASSES = ['A1.2', 'B2.5', 'C1.2', 'C3.4', 'M1.1'];
@@ -1270,7 +1270,7 @@ function updateXray() {
     el.style.color = col;
   }
 }
-setInterval(updateXray, 30000); updateXray();
+// setInterval(updateXray) مُنقول إلى init
 
 /* ==================== QUICK LINKS ==================== */
 const QUICK = [
@@ -1483,38 +1483,47 @@ function setLanguage(lang) {
 
 /* ==================== INITIALIZATION ==================== */
 window.addEventListener('load', async () => {
-  console.log('🚀 TRIO SEAL v8.7a — SDO Solar Module (Lazy Load)');
+  console.log('🚀 TRIO SEAL v8.7a — Fixed Build');
   console.log('💡 debugClicks() | STATE object available');
 
+  // ── بناء واجهة ثابتة فوراً ──
   buildQuickLinks();
   buildSourceCards();
   buildIndicators();
   fetchKpForecast();
   fetchSunspotDetails();
   fetchHistoricalEvents();
+
+  // ── عرض وقت + قمر فورياً ──
   updateTime();
   updateMoon();
-  updateCoreIndicators();
   updateXray();
   buildTicker();
 
+  // ── جلب Kp أولاً ثم حساب Core Indicators بالقيمة الحقيقية ──
   await fetchRealKp();
+  updateCoreIndicators(); // يعمل الآن مع currentKp الحقيقي
+
+  // ── جلب البيانات الحية ──
   await fetchVolcanoes();
   await fetchEarthquakes();
 
+  // ── ربط أزرار Load More ──
   document.getElementById('vol-load-more').addEventListener('click', loadMoreVolcanoes);
   document.getElementById('quake-load-more').addEventListener('click', loadMoreEarthquakes);
-  
-  // Initialize SDO Solar module with Lazy Loading
+
+  // ── SDO Solar — Lazy Load عند التمرير ──
   MOD_SDO.init();
 
-  setInterval(fetchRealKp, 60000);
-  setInterval(fetchVolcanoes, 120000);
-  setInterval(fetchEarthquakes, 60000);
-  // FIX: setInterval واحد فقط لـ buildTicker (كان مكرراً: global + init = مرتين)
-  setInterval(buildTicker, 3000);
-  setInterval(updateTime, 1000);    // FIX: updateTime كانت تعتمد فقط على setInterval في body أعلى الكود
-  setInterval(updateMoon, 60000);   //      أُضيفت هنا لوضوح الـ lifecycle
+  // ── كل الـ setIntervals في مكان واحد ──
+  setInterval(updateTime,            1000);
+  setInterval(updateMoon,           60000);
+  setInterval(updateCoreIndicators,  5000);
+  setInterval(updateXray,           30000);
+  setInterval(buildTicker,           3000);
+  setInterval(fetchRealKp,          60000);
+  setInterval(fetchVolcanoes,      120000);
+  setInterval(fetchEarthquakes,     60000);
 
   const now = new Date();
   document.getElementById('last-update').textContent = now.toLocaleTimeString();
