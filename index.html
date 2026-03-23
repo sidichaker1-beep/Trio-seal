@@ -547,7 +547,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
   <div class="ticker-inner" id="topTicker">
     <span>🌍 Real-time Seismic Data · USGS</span>
     <span>🌊 NOAA Space Weather · Kp Index</span>
-    <span>🌙 Lunar Phase · Real Moon Image</span>
+    <span>🌙 Lunar Phase · Optimized Crescent Shadow v8.11</span>
     <span>📡 27 Indicators · Live Updates Every 60s</span>
     <span>🔗 Click any card → Direct Observatory Link</span>
   </div>
@@ -571,7 +571,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 
   <div class="saqar-wrap" id="saqarPanel" data-url="https://github.com/sidichaker1-beep/Trio-seal">
     <div class="saqar-header">
-      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance</span>
+      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance · Bridge 18,000</span>
       <span class="saqar-total" id="saqar-total">0.0000</span>
     </div>
     <div class="saqar-bar-track">
@@ -582,11 +582,11 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div class="saqar-hint">🔗 Click to view Saqar Engine Documentation</div>
   </div>
 
-  <div class="section-title">🌙 Moon Phase · Real NASA Image · Click for NASA Moon Data</div>
+  <div class="section-title">🌙 Moon Phase · Optimized Crescent v8.11 · Click for NASA Moon Data</div>
   <div class="moon-panel" id="moonPanel" data-url="https://moon.nasa.gov/">
     <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
     <div class="moon-info">
-      <h3>LUNAR PHASE · Real Moon Image</h3>
+      <h3>LUNAR PHASE · Silver Crescent</h3>
       <div><span id="moon-phase-name" style="font-size:.95rem;font-weight:700">--</span></div>
       <div><span class="moon-pct" id="moon-illumination">--%</span></div>
       <div class="moon-sub" id="moon-thickness">Silver thickness: --'</div>
@@ -673,7 +673,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 </div>
 
 <div class="footer">
-  TRIO SEAL · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s<br>
+  TRIO SEAL · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s · Cosmic Bridge 18,000<br>
   <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory</span>
 </div>
 
@@ -802,7 +802,7 @@ function getMoonTidalForce(age) {
   return 0.5 + 0.5 * Math.abs(Math.sin(age / SYNODIC * Math.PI * 2));
 }
 
-// Real Moon Image from NASA
+// ==================== OPTIMIZED MOON VISUAL LOGIC v8.11 ====================
 function drawRealMoonCanvas() {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
@@ -810,11 +810,11 @@ function drawRealMoonCanvas() {
   const size = 120;
   canvas.width = size;
   canvas.height = size;
-  const cx = size/2, cy = size/2, r = size/2 - 3;
+  const cx = size/2, cy = size/2, r = size/2 - 5; // margin for glow
   
-  const illumination = getMoonIllumination() / 100;
-  const age = getMoonAge();
-  const phase = age / SYNODIC;
+  const illumination = getMoonIllumination() / 100; // e.g., 0.295
+  const phase = getMoonAge() / SYNODIC;
+  const isWaxing = phase < 0.5; // Waxing = illuminated on the right
   
   const moonImage = new Image();
   moonImage.crossOrigin = 'Anonymous';
@@ -822,27 +822,54 @@ function drawRealMoonCanvas() {
   
   moonImage.onload = () => {
     ctx.clearRect(0, 0, size, size);
+    
+    // 1. Draw full moon as background
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
-    ctx.drawImage(moonImage, 0, 0, size, size);
+    ctx.drawImage(moonImage, cx - r, cy - r, r * 2, r * 2);
     
-    const terminatorX = cx + Math.cos(phase * 2 * Math.PI) * r;
-    const gradShadow = ctx.createLinearGradient(terminatorX - 15, cy - 15, terminatorX + 15, cy + 15);
-    if (phase < 0.5) {
-      gradShadow.addColorStop(0, `rgba(0, 0, 0, ${0.85 - illumination * 0.6})`);
-      gradShadow.addColorStop(0.5, `rgba(0, 0, 0, ${0.4 - illumination * 0.3})`);
-      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    // 2. Enhanced Shadow Mask (Sharp Transition)
+    const gradShadow = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
+    
+    if (isWaxing) {
+      // Waxing: illuminated on the right, shadow on the left
+      const stopPoint = illumination;
+      gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
+      gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.85)');
+      gradShadow.addColorStop(Math.min(stopPoint + 0.05, 1), 'rgba(0, 0, 0, 0)');
     } else {
+      // Waning: illuminated on the left, shadow on the right
+      const stopPoint = 1 - illumination;
       gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      gradShadow.addColorStop(0.5, `rgba(0, 0, 0, ${0.4 - illumination * 0.3})`);
-      gradShadow.addColorStop(1, `rgba(0, 0, 0, ${0.85 - illumination * 0.6})`);
+      gradShadow.addColorStop(Math.max(stopPoint - 0.05, 0), 'rgba(0, 0, 0, 0.1)');
+      gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.95)');
+      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.98)');
     }
+    
     ctx.fillStyle = gradShadow;
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
     
+    // 3. Saqar Golden Glow on illuminated edge
+    ctx.save();
+    const glow = ctx.createRadialGradient(
+      isWaxing ? cx + r : cx - r, cy,
+      0,
+      isWaxing ? cx + r : cx - r, cy,
+      r * 0.8
+    );
+    glow.addColorStop(0, 'rgba(255, 215, 0, 0.25)');
+    glow.addColorStop(1, 'rgba(255, 215, 0, 0)');
+    
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+    ctx.restore();
+    
+    // 4. Silver rim
     ctx.beginPath();
     ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
     ctx.strokeStyle = '#c0bcb0';
@@ -859,6 +886,8 @@ function drawRealMoonCanvas() {
 
 function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.clearRect(0, 0, size, size);
+  
+  // Silver gradient background
   const grad = ctx.createRadialGradient(cx - r*0.2, cy - r*0.2, r*0.1, cx, cy, r);
   grad.addColorStop(0, '#e8e4d8');
   grad.addColorStop(0.4, '#c0bcb0');
@@ -868,18 +897,39 @@ function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
+  
+  const isWaxing = phase < 0.5;
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.clip();
-  const termX = cx + Math.cos(phase * 2 * Math.PI) * r * 0.85;
-  const gradShadow = ctx.createLinearGradient(termX - 20, cy - 10, termX + 20, cy + 10);
-  gradShadow.addColorStop(0, `rgba(0,0,0,${0.85 - illumination * 0.6})`);
-  gradShadow.addColorStop(illumination, `rgba(0,0,0,${0.3 - illumination * 0.2})`);
-  gradShadow.addColorStop(1, 'rgba(0,0,0,0)');
+  
+  const gradShadow = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
+  if (isWaxing) {
+    const stopPoint = illumination;
+    gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
+    gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.85)');
+    gradShadow.addColorStop(Math.min(stopPoint + 0.05, 1), 'rgba(0, 0, 0, 0)');
+  } else {
+    const stopPoint = 1 - illumination;
+    gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradShadow.addColorStop(Math.max(stopPoint - 0.05, 0), 'rgba(0, 0, 0, 0.1)');
+    gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.95)');
+    gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.98)');
+  }
+  
   ctx.fillStyle = gradShadow;
-  ctx.fillRect(0, 0, size, size);
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
   ctx.restore();
+  
+  // Craters
+  const craters = [[0.2,0.3,0.08], [-0.25,0.15,0.06], [0.15,-0.2,0.07], [-0.1,-0.3,0.09]];
+  ctx.fillStyle = 'rgba(0,0,0,0.12)';
+  craters.forEach(([dx, dy, rad]) => {
+    ctx.beginPath();
+    ctx.arc(cx + dx * r, cy + dy * r, rad * r, 0, Math.PI * 2);
+    ctx.fill();
+  });
 }
 
 function updateMoon() {
@@ -1183,7 +1233,7 @@ function updateBottomTicker() {
     <span class="bt-item">🧲 Kp: <b>${kp}</b> · Click any card for observatory</span>
     <span class="bt-item">🌍 Quakes: <b>${quakes}</b> · Strongest: <span class="alert">M${mag}</span></span>
     <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}%</span>
-    <span class="bt-item">⚖️ Saqar Engine Active</span>
+    <span class="bt-item">⚖️ Saqar Engine Active · Bridge 18,000</span>
     <span class="bt-item">🕋 TRIO SEAL · Click → Observatory</span>
   `.repeat(2);
 }
