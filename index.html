@@ -405,10 +405,8 @@ body {
 
 /* Images Grid */
 .images-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.9rem;
-  margin-bottom: 1rem;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem; margin-bottom: 1rem;
 }
 .img-card {
   background: var(--bg-panel);
@@ -425,39 +423,19 @@ body {
   box-shadow: var(--shadow-hover);
 }
 .img-card h3 {
-  font-family: var(--f-hud);
-  font-size: 0.65rem;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 0.6rem;
+  font-family: var(--f-hud); font-size: 0.65rem;
+  letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 0.6rem;
 }
 .img-skeleton {
-  width: 100%;
-  height: 160px;
-  border-radius: 9px;
+  width: 100%; height: 160px; border-radius: 9px;
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 0.72rem;
 }
-.img-loaded {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 9px;
-  display: block;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+.img-loaded { width:100%; height:160px; object-fit:cover; border-radius:9px; display:block; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
 /* Bottom Ticker */
 .bticker {
@@ -567,11 +545,10 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 
 <div class="news-ticker">
   <div class="ticker-inner" id="topTicker">
-    <span>🌍 Real-time Seismic Data · USGS · Cosmic Bridge 18,000</span>
+    <span>🌍 Real-time Seismic Data · USGS</span>
     <span>🌊 NOAA Space Weather · Kp Index</span>
-    <span>🌙 Lunar Phase · 30% Dark Side Calibration · Gibbous Moon</span>
+    <span>🌙 Lunar Phase · Optimized Crescent Shadow v8.11</span>
     <span>📡 27 Indicators · Live Updates Every 60s</span>
-    <span>🛰️ Live NASA EPIC Earth & SDO Solar Images</span>
     <span>🔗 Click any card → Direct Observatory Link</span>
   </div>
 </div>
@@ -605,11 +582,11 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div class="saqar-hint">🔗 Click to view Saqar Engine Documentation</div>
   </div>
 
-  <div class="section-title">🌙 Moon Phase · 30% Dark Side Calibration · Gibbous Moon</div>
+  <div class="section-title">🌙 Moon Phase · Optimized Crescent v8.11 · Click for NASA Moon Data</div>
   <div class="moon-panel" id="moonPanel" data-url="https://moon.nasa.gov/">
     <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
     <div class="moon-info">
-      <h3>LUNAR PHASE · Gibbous (70% Illuminated)</h3>
+      <h3>LUNAR PHASE · Silver Crescent</h3>
       <div><span id="moon-phase-name" style="font-size:.95rem;font-weight:700">--</span></div>
       <div><span class="moon-pct" id="moon-illumination">--%</span></div>
       <div class="moon-sub" id="moon-thickness">Silver thickness: --'</div>
@@ -670,19 +647,19 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div id="quake-map" class="map-wrap"></div>
   </div>
 
-  <div class="section-title">🛰️ Live Space Images · NASA EPIC Earth & SDO Solar</div>
+  <div class="section-title">🛰️ Live Solar Images · Click for NASA SDO</div>
   <div class="images-grid">
     <div class="img-card" data-url="https://sdo.gsfc.nasa.gov/data/">
-      <h3>☀️ SDO Solar · AIA 193Å</h3>
-      <div id="sdo-container"><div class="img-skeleton">🌞 Loading SDO Solar Image...</div></div>
+      <h3>☀️ SDO Solar</h3>
+      <div id="sdo-container"><div class="img-skeleton">Loading...</div></div>
     </div>
     <div class="img-card" data-url="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast">
-      <h3>🌌 Aurora Forecast · NOAA Ovation</h3>
-      <div id="aurora-container"><div class="img-skeleton">✨ Loading Aurora Forecast...</div></div>
+      <h3>🌌 Aurora Forecast</h3>
+      <div id="aurora-container"><div class="img-skeleton">Loading...</div></div>
     </div>
     <div class="img-card" data-url="https://epic.gsfc.nasa.gov/">
-      <h3>🌍 EPIC Earth · DSCOVR Satellite</h3>
-      <div id="epic-container"><div class="img-skeleton">🌎 Loading EPIC Earth Image...</div></div>
+      <h3>🌍 EPIC Earth</h3>
+      <div id="epic-container"><div class="img-skeleton">DSCOVR EPIC</div></div>
     </div>
   </div>
 
@@ -697,7 +674,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 
 <div class="footer">
   TRIO SEAL · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s · Cosmic Bridge 18,000<br>
-  <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory · Calibrated by Gemini v8.12</span>
+  <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory</span>
 </div>
 
 <script>
@@ -825,8 +802,7 @@ function getMoonTidalForce(age) {
   return 0.5 + 0.5 * Math.abs(Math.sin(age / SYNODIC * Math.PI * 2));
 }
 
-// ==================== CALIBRATED MOON VISUAL v8.12 ====================
-// Dark Side Ratio = 30% (0.30) as per Gemini calibration
+// ==================== OPTIMIZED MOON VISUAL LOGIC v8.11 ====================
 function drawRealMoonCanvas() {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
@@ -834,14 +810,11 @@ function drawRealMoonCanvas() {
   const size = 120;
   canvas.width = size;
   canvas.height = size;
-  const cx = size/2, cy = size/2, r = size/2 - 5;
+  const cx = size/2, cy = size/2, r = size/2 - 5; // margin for glow
   
-  const illumination = getMoonIllumination() / 100;
+  const illumination = getMoonIllumination() / 100; // e.g., 0.295
   const phase = getMoonAge() / SYNODIC;
-  const isWaxing = phase < 0.5;
-  
-  // Gemini Calibration: 30% Dark Side
-  const darkRatio = 0.30;
+  const isWaxing = phase < 0.5; // Waxing = illuminated on the right
   
   const moonImage = new Image();
   moonImage.crossOrigin = 'Anonymous';
@@ -857,19 +830,22 @@ function drawRealMoonCanvas() {
     ctx.clip();
     ctx.drawImage(moonImage, cx - r, cy - r, r * 2, r * 2);
     
-    // 2. Calibrated Shadow Mask (30% Dark Side)
+    // 2. Enhanced Shadow Mask (Sharp Transition)
     const gradShadow = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
     
     if (isWaxing) {
-      // Waxing: 30% dark on left, 70% illuminated on right
+      // Waxing: illuminated on the right, shadow on the left
+      const stopPoint = illumination;
       gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
-      gradShadow.addColorStop(darkRatio, 'rgba(0, 0, 0, 0.85)');
-      gradShadow.addColorStop(darkRatio + 0.02, 'rgba(0, 0, 0, 0)');
+      gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.85)');
+      gradShadow.addColorStop(Math.min(stopPoint + 0.05, 1), 'rgba(0, 0, 0, 0)');
     } else {
-      // Waning: 30% dark on right, 70% illuminated on left
-      gradShadow.addColorStop(1 - darkRatio - 0.02, 'rgba(0, 0, 0, 0)');
-      gradShadow.addColorStop(1 - darkRatio, 'rgba(0, 0, 0, 0.85)');
-      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.95)');
+      // Waning: illuminated on the left, shadow on the right
+      const stopPoint = 1 - illumination;
+      gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      gradShadow.addColorStop(Math.max(stopPoint - 0.05, 0), 'rgba(0, 0, 0, 0.1)');
+      gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.95)');
+      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.98)');
     }
     
     ctx.fillStyle = gradShadow;
@@ -902,15 +878,16 @@ function drawRealMoonCanvas() {
   };
   
   moonImage.onerror = () => {
-    drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase, isWaxing, darkRatio);
+    drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase);
   };
   
   if (moonImage.complete) moonImage.onload();
 }
 
-function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase, isWaxing, darkRatio) {
+function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.clearRect(0, 0, size, size);
   
+  // Silver gradient background
   const grad = ctx.createRadialGradient(cx - r*0.2, cy - r*0.2, r*0.1, cx, cy, r);
   grad.addColorStop(0, '#e8e4d8');
   grad.addColorStop(0.4, '#c0bcb0');
@@ -921,27 +898,31 @@ function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase, isWax
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
   
+  const isWaxing = phase < 0.5;
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.clip();
   
   const gradShadow = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
-  
   if (isWaxing) {
+    const stopPoint = illumination;
     gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
-    gradShadow.addColorStop(darkRatio, 'rgba(0, 0, 0, 0.85)');
-    gradShadow.addColorStop(darkRatio + 0.02, 'rgba(0, 0, 0, 0)');
+    gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.85)');
+    gradShadow.addColorStop(Math.min(stopPoint + 0.05, 1), 'rgba(0, 0, 0, 0)');
   } else {
-    gradShadow.addColorStop(1 - darkRatio - 0.02, 'rgba(0, 0, 0, 0)');
-    gradShadow.addColorStop(1 - darkRatio, 'rgba(0, 0, 0, 0.85)');
-    gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.95)');
+    const stopPoint = 1 - illumination;
+    gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradShadow.addColorStop(Math.max(stopPoint - 0.05, 0), 'rgba(0, 0, 0, 0.1)');
+    gradShadow.addColorStop(stopPoint, 'rgba(0, 0, 0, 0.95)');
+    gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.98)');
   }
   
   ctx.fillStyle = gradShadow;
   ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
   ctx.restore();
   
+  // Craters
   const craters = [[0.2,0.3,0.08], [-0.25,0.15,0.06], [0.15,-0.2,0.07], [-0.1,-0.3,0.09]];
   ctx.fillStyle = 'rgba(0,0,0,0.12)';
   craters.forEach(([dx, dy, rad]) => {
@@ -1094,11 +1075,10 @@ function updateQuakeMap() {
   setTimeout(() => window.quakeMap.invalidateSize(), 300);
 }
 
-// ==================== SAQAR ENGINE WITH COSMIC BRIDGE 18,000 ====================
+// ==================== SAQAR ENGINE ====================
 function computeEarthquakeImpact(mag, moonAngle) {
   const k = Math.max(Math.abs(Math.cos(moonAngle * Math.PI / 180)), 0.1);
-  const phi = 1.618; // Golden Ratio
-  // Cosmic Bridge 18,000 remains the primary filter
+  const phi = 1.618;
   return (mag / (k * 1.44 * 10)) * phi * (1 + mag / 18000);
 }
 
@@ -1146,7 +1126,7 @@ function updateCorePanels() {
   const quakeCount = STATE.quakesData.length;
   
   const panels = [
-    { name: '🌙 Moon Illumination', value: `${moonIllum.toFixed(1)}%`, bar: moonIllum / 100, color: '#b8860b', badge: 'Gibbous (70%)', url: OBSERVATORY_LINKS.nasa_moon, label: 'NASA Moon' },
+    { name: '🌙 Moon Illumination', value: `${moonIllum.toFixed(1)}%`, bar: moonIllum / 100, color: '#b8860b', badge: 'Lunar Phase', url: OBSERVATORY_LINKS.nasa_moon, label: 'NASA Moon' },
     { name: '🧲 Kp Index', value: kp.toFixed(2), bar: kp / 9, color: '#3b82f6', badge: kp > 5 ? 'Storm' : kp > 3 ? 'Active' : 'Quiet', url: OBSERVATORY_LINKS.noaa_kp, label: 'NOAA Space Weather' },
     { name: '📊 Strongest Quake', value: `${mag.toFixed(1)} M`, bar: Math.min(1, mag / 9.5), color: '#dc2626', badge: 'Last 24h', url: OBSERVATORY_LINKS.usgs_main, label: 'USGS Earthquake' },
     { name: '🌍 Total Quakes', value: quakeCount, bar: Math.min(1, quakeCount / 200), color: '#2c7a4d', badge: '24h Events', url: OBSERVATORY_LINKS.usgs_main, label: 'USGS Map' },
@@ -1252,58 +1232,10 @@ function updateBottomTicker() {
   container.innerHTML = `
     <span class="bt-item">🧲 Kp: <b>${kp}</b> · Click any card for observatory</span>
     <span class="bt-item">🌍 Quakes: <b>${quakes}</b> · Strongest: <span class="alert">M${mag}</span></span>
-    <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}% · Gibbous (70%)</span>
-    <span class="bt-item">⚖️ Saqar Engine Active · Cosmic Bridge 18,000</span>
-    <span class="bt-item">🛰️ Live NASA EPIC & SDO Images</span>
+    <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}%</span>
+    <span class="bt-item">⚖️ Saqar Engine Active · Bridge 18,000</span>
     <span class="bt-item">🕋 TRIO SEAL · Click → Observatory</span>
   `.repeat(2);
-}
-
-// ==================== LIVE SPACE IMAGES ====================
-async function updateEpicImage() {
-  const epicContainer = document.getElementById('epic-container');
-  try {
-    const res = await fetch('https://epic.gsfc.nasa.gov/api/natural');
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    if (data && data.length > 0) {
-      const date = data[0].date.split(' ')[0].split('-');
-      const imgName = data[0].image;
-      const url = `https://epic.gsfc.nasa.gov/archive/natural/${date[0]}/${date[1]}/${date[2]}/png/${imgName}.png`;
-      epicContainer.innerHTML = `<img class="img-loaded" src="${url}" alt="EPIC Earth Image" onerror="this.parentElement.innerHTML='<div class=\'img-skeleton\'>🌍 EPIC Image Unavailable<br>Click for NASA EPIC</div>'">`;
-    } else {
-      epicContainer.innerHTML = '<div class="img-skeleton">🌍 EPIC Data Unavailable<br>Click for NASA EPIC</div>';
-    }
-  } catch (e) {
-    console.warn('EPIC API failed');
-    epicContainer.innerHTML = '<div class="img-skeleton">🌍 EPIC Image Unavailable<br>Click for NASA EPIC</div>';
-  }
-}
-
-function updateSdoImage() {
-  const sdoContainer = document.getElementById('sdo-container');
-  const sdoUrl = `https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0193.jpg?t=${Date.now()}`;
-  const img = new Image();
-  img.onload = () => {
-    sdoContainer.innerHTML = `<img class="img-loaded" src="${sdoUrl}" alt="SDO Solar Image" onerror="this.parentElement.innerHTML='<div class=\'img-skeleton\'>☀️ SDO Image Unavailable<br>Click for NASA SDO</div>'">`;
-  };
-  img.onerror = () => {
-    sdoContainer.innerHTML = '<div class="img-skeleton">☀️ SDO Image Unavailable<br>Click for NASA SDO</div>';
-  };
-  img.src = sdoUrl;
-}
-
-function updateAuroraImage() {
-  const auroraContainer = document.getElementById('aurora-container');
-  const auroraUrl = `https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg?t=${Date.now()}`;
-  const img = new Image();
-  img.onload = () => {
-    auroraContainer.innerHTML = `<img class="img-loaded" src="${auroraUrl}" alt="Aurora Forecast" onerror="this.parentElement.innerHTML='<div class=\'img-skeleton\'>✨ Aurora Image Unavailable<br>Click for NOAA Aurora</div>'">`;
-  };
-  img.onerror = () => {
-    auroraContainer.innerHTML = '<div class="img-skeleton">✨ Aurora Image Unavailable<br>Click for NOAA Aurora</div>';
-  };
-  img.src = auroraUrl;
 }
 
 // ==================== LANGUAGE SYSTEM ====================
@@ -1355,9 +1287,6 @@ async function refreshAll() {
   updateBottomTicker();
   renderVolcanoes();
   renderQuakes();
-  updateEpicImage();
-  updateSdoImage();
-  updateAuroraImage();
 }
 
 // ==================== INIT ====================
@@ -1367,10 +1296,14 @@ async function init() {
   updateQuakeMap();
   enablePanelClicks();
   
-  // Initial image load
-  updateEpicImage();
-  updateSdoImage();
-  updateAuroraImage();
+  setTimeout(() => {
+    const sdoImg = new Image();
+    sdoImg.src = 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg';
+    sdoImg.onload = () => document.getElementById('sdo-container').innerHTML = `<img class="img-loaded" src="${sdoImg.src}">`;
+    const auroraImg = new Image();
+    auroraImg.src = 'https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg';
+    auroraImg.onload = () => document.getElementById('aurora-container').innerHTML = `<img class="img-loaded" src="${auroraImg.src}">`;
+  }, 1000);
   
   document.getElementById('vol-prev').addEventListener('click', () => { STATE.volcanoOffset = Math.max(0, STATE.volcanoOffset - STATE.pageSize); renderVolcanoes(); });
   document.getElementById('vol-next').addEventListener('click', () => { STATE.volcanoOffset = Math.min(STATIC_VOLCANOES.length - STATE.pageSize, STATE.volcanoOffset + STATE.pageSize); renderVolcanoes(); });
@@ -1381,9 +1314,6 @@ async function init() {
   setInterval(updateTime, 1000);
   setInterval(updateMoon, 60000);
   setInterval(updateBottomTicker, 10000);
-  setInterval(updateEpicImage, 3600000); // تحديث صورة EPIC كل ساعة
-  setInterval(updateSdoImage, 600000);    // تحديث صورة SDO كل 10 دقائق
-  setInterval(updateAuroraImage, 300000); // تحديث صورة Aurora كل 5 دقائق
 }
 
 window.openObservatory = openObservatory;
