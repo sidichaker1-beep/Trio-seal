@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · مرصد الرنين v8.11_Final</title>
+    <title>TRIO SEAL · المرصد المتكامل v8.11_Final</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
@@ -16,51 +16,108 @@
         body {
             background: linear-gradient(145deg, #0a0f1e 0%, #141b2b 100%);
             min-height: 100vh;
-            padding: 2rem;
             color: #e0e7ff;
         }
+        
+        /* ==================== HEADER ==================== */
+        .main-header {
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 215, 140, 0.25);
+            padding: 0.6rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            letter-spacing: 1px;
+        }
+        .version {
+            background: #2a3a5e;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            color: #aad0ff;
+        }
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(31, 139, 76, 0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            border: 1px solid #1f8b4c;
+        }
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            background: #1f8b4c;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .live-text {
+            font-size: 0.7rem;
+            color: #4ade80;
+        }
+        .status-badge {
+            background: #26334d;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            color: #9babc5;
+        }
+        
+        /* ==================== INFO BAR ==================== */
+        .info-bar {
+            max-width: 1400px;
+            margin: 0.8rem auto;
+            padding: 0.4rem 1rem;
+            background: rgba(18, 25, 40, 0.5);
+            border-radius: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #8b9bb8;
+            border: 1px solid #2a3a5e;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        /* ==================== CONTAINER ==================== */
         .container {
             max-width: 1400px;
             margin: 0 auto;
-        }
-        h1 {
-            font-size: 2rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        h1 span {
-            background: #2a3a5e;
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            color: #aad0ff;
-        }
-        .subtitle {
-            color: #8b9bb8;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
-            border-right: 4px solid #f0b37b;
-            padding-right: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .live-badge {
-            background: #1f8b4c;
-            color: white;
-            padding: 0.2rem 0.8rem;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: bold;
+            padding: 0 1rem 1rem;
         }
         
-        /* ==================== PANELS ==================== */
+        /* ==================== PANELS (من engine.html) ==================== */
         .panels {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -244,9 +301,9 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            animation: pulse 1.5s infinite;
+            animation: pulseDot 1.5s infinite;
         }
-        @keyframes pulse {
+        @keyframes pulseDot {
             0%,100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.6; transform: scale(1.3); }
         }
@@ -294,11 +351,12 @@
         }
         
         .footer {
-            margin-top: 1.2rem;
             text-align: center;
             color: #6b7c9b;
             font-size: 0.65rem;
-            padding: 0.6rem;
+            padding: 0.8rem;
+            border-top: 1px solid #1e2a3a;
+            margin-top: 1rem;
         }
         .red-pulse {
             animation: redPulse 1.5s infinite;
@@ -315,440 +373,445 @@
         
         @media (max-width: 900px) {
             .panels { grid-template-columns: 1fr; }
-            body { padding: 1rem; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>
-        TRIO SEAL · رَصْد الرنين
-        <span>v8.11_Final</span>
-    </h1>
-    <div class="subtitle">
-        <span class="live-badge">⚡ حي + بيانات مدمجة</span>
-        مرصد متكامل – خرائط، تنقل، محرك سقر
-        <span id="live-time"></span>
+    <!-- HEADER -->
+    <div class="main-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <span class="logo">🌌 TRIO SEAL</span>
+                <span class="version">v8.11_Final</span>
+            </div>
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                <span class="live-text">مرصد حي</span>
+            </div>
+            <div class="status-badge">
+                ⚖️ Saqar Engine | COSMIC_BRIDGE 18000
+            </div>
+        </div>
     </div>
-
-    <!-- العيون الثلاث + المؤشرات الداعمة (6 Panels) -->
-    <div class="panels" id="corePanels"></div>
-
-    <!-- SAQAR ENGINE PANEL -->
-    <div class="panel saqar-panel">
-        <div class="saqar-header">
-            <span class="saqar-title">⚖️ Saqar Engine · Quad-Balance</span>
-            <span class="saqar-total" id="saqar-total">0.000</span>
+    
+    <!-- INFO BAR -->
+    <div class="info-bar">
+        <div class="info-item">
+            <span>🕋</span>
+            <span>توقيت مكة المكرمة · مرجع التقابل</span>
         </div>
-        <div class="saqar-bar-container">
-            <div class="saqar-bar-fill" id="saqar-bar" style="width:0%"></div>
+        <div class="info-item">
+            <span>🌍</span>
+            <span>بيانات مدمجة | تعمل بدون إنترنت</span>
         </div>
-        <div class="saqar-sectors" id="saqar-sectors">
-            <span>🌍 Eq: 0.000</span>
-            <span>🌋 Vol: 0.000</span>
-            <span>☀️ Sun: 0.000</span>
-            <span>✨ Aur: 0.000</span>
+        <div class="info-item">
+            <span>⚡</span>
+            <span id="live-time">تحميل المرصد...</span>
         </div>
-        <div class="saqar-red" id="saqar-red">⚠️ RED MODE ACTIVE</div>
     </div>
+    
+    <!-- MAIN CONTENT (دمج engine.html بالكامل) -->
+    <div class="container">
+        <!-- العيون الثلاث + المؤشرات الداعمة (6 Panels) -->
+        <div class="panels" id="corePanels"></div>
 
-    <!-- MOON PHASE -->
-    <div class="panel" style="text-align: center;">
-        <div class="panel-header">
-            <span class="panel-name">🌙 Moon Phase</span>
-            <span class="panel-value" id="moon-phase-name">--</span>
+        <!-- SAQAR ENGINE PANEL -->
+        <div class="panel saqar-panel">
+            <div class="saqar-header">
+                <span class="saqar-title">⚖️ Saqar Engine · Quad-Balance</span>
+                <span class="saqar-total" id="saqar-total">0.000</span>
+            </div>
+            <div class="saqar-bar-container">
+                <div class="saqar-bar-fill" id="saqar-bar" style="width:0%"></div>
+            </div>
+            <div class="saqar-sectors" id="saqar-sectors">
+                <span>🌍 Eq: 0.000</span>
+                <span>🌋 Vol: 0.000</span>
+                <span>☀️ Sun: 0.000</span>
+                <span>✨ Aur: 0.000</span>
+            </div>
+            <div class="saqar-red" id="saqar-red">⚠️ RED MODE ACTIVE</div>
         </div>
-        <div><span id="moon-illumination">--%</span> · <span id="moon-age">-- days</span></div>
-        <div class="gauge"><div class="gauge-fill" id="moon-gauge" style="width:0%; background:#fbbf24;"></div></div>
+
+        <!-- MOON PHASE -->
+        <div class="panel" style="text-align: center;">
+            <div class="panel-header">
+                <span class="panel-name">🌙 Moon Phase</span>
+                <span class="panel-value" id="moon-phase-name">--</span>
+            </div>
+            <div><span id="moon-illumination">--%</span> · <span id="moon-age">-- days</span></div>
+            <div class="gauge"><div class="gauge-fill" id="moon-gauge" style="width:0%; background:#fbbf24;"></div></div>
+        </div>
+
+        <!-- VOLCANO OBSERVATORY -->
+        <div class="section-title">🌋 Live Volcano Observatory</div>
+        <div class="list-container">
+            <div class="stats-row">
+                <div class="stat-box"><span class="stat-number" id="vol-total">--</span><div>Active Volcanoes</div></div>
+                <div class="stat-box"><span class="stat-number" id="vol-alert">--</span><div>High Alert</div></div>
+            </div>
+            <div id="vol-list" class="item-list"></div>
+            <div class="pagination">
+                <button class="pagination-btn" id="vol-prev" disabled>← Previous</button>
+                <button class="pagination-btn" id="vol-next">Next →</button>
+            </div>
+            <div id="vol-map" class="map-container"></div>
+        </div>
+
+        <!-- EARTHQUAKE OBSERVATORY -->
+        <div class="section-title">🌍 Live Earthquake Observatory</div>
+        <div class="list-container">
+            <div class="stats-row">
+                <div class="stat-box"><span class="stat-number" id="quake-total">--</span><div>Last 24h</div></div>
+                <div class="stat-box"><span class="stat-number" id="quake-strongest">--</span><div>Strongest</div></div>
+                <div class="stat-box"><span class="stat-number" id="quake-m5">--</span><div>M ≥ 5.0</div></div>
+            </div>
+            <div id="quake-list" class="item-list"></div>
+            <div class="pagination">
+                <button class="pagination-btn" id="quake-prev" disabled>← Previous</button>
+                <button class="pagination-btn" id="quake-next">Next →</button>
+            </div>
+            <div id="quake-map" class="map-container"></div>
+        </div>
     </div>
-
-    <!-- VOLCANO OBSERVATORY -->
-    <div class="section-title">🌋 Live Volcano Observatory</div>
-    <div class="list-container">
-        <div class="stats-row">
-            <div class="stat-box"><span class="stat-number" id="vol-total">--</span><div>Active Volcanoes</div></div>
-            <div class="stat-box"><span class="stat-number" id="vol-alert">--</span><div>High Alert</div></div>
-        </div>
-        <div id="vol-list" class="item-list"></div>
-        <div class="pagination">
-            <button class="pagination-btn" id="vol-prev" disabled>← Previous</button>
-            <button class="pagination-btn" id="vol-next">Next →</button>
-        </div>
-        <div id="vol-map" class="map-container"></div>
-    </div>
-
-    <!-- EARTHQUAKE OBSERVATORY -->
-    <div class="section-title">🌍 Live Earthquake Observatory</div>
-    <div class="list-container">
-        <div class="stats-row">
-            <div class="stat-box"><span class="stat-number" id="quake-total">--</span><div>Last 24h</div></div>
-            <div class="stat-box"><span class="stat-number" id="quake-strongest">--</span><div>Strongest</div></div>
-            <div class="stat-box"><span class="stat-number" id="quake-m5">--</span><div>M ≥ 5.0</div></div>
-        </div>
-        <div id="quake-list" class="item-list"></div>
-        <div class="pagination">
-            <button class="pagination-btn" id="quake-prev" disabled>← Previous</button>
-            <button class="pagination-btn" id="quake-next">Next →</button>
-        </div>
-        <div id="quake-map" class="map-container"></div>
-    </div>
-
+    
     <div class="footer">
-        <span id="timestamp"></span> · بيانات مدمجة · Kp محاكى · COSMIC_BRIDGE = 18000
+        <span>© Hicham Chigar · هشام شيكر · مرصد الرنين المتكامل v8.11_Final</span>
+        <span style="margin: 0 0.5rem">|</span>
+        <span>خرائط تفاعلية | محرك سقر | RED MODE</span>
     </div>
-</div>
 
-<script>
-'use strict';
-
-// ==================== DATA (مضمنة – 15 حدث) ====================
-const EVENT_DATA = [
-    {run:1, depth:34.1, mag:8.53, alpha:8.05978, resonance:0.20978, prox:0.20408, f_s:7.8734, f_g:13962.08, lat:-20.5, lon:-175.2, loc:'Tonga region'},
-    {run:2, depth:45.4, mag:9.38, alpha:11.3158, resonance:3.4658, prox:3.4601, f_s:7.7972, f_g:14134.38, lat:-22.1, lon:-176.5, loc:'Fiji region'},
-    {run:3, depth:27.3, mag:7.87, alpha:7.87707, resonance:0.02707, prox:0.02137, f_s:7.5152, f_g:13816.08, lat:-19.8, lon:-177.0, loc:'South Pacific'},
-    {run:4, depth:66.1, mag:9.01, alpha:8.84185, resonance:0.99185, prox:0.98615, f_s:6.9874, f_g:13904.06, lat:-17.5, lon:-173.5, loc:'Tonga'},
-    {run:5, depth:36.0, mag:8.71, alpha:8.16863, resonance:0.31863, prox:0.31293, f_s:8.3044, f_g:13890.52, lat:-21.2, lon:-174.8, loc:'Samoa region'},
-    {run:6, depth:50.6, mag:8.89, alpha:8.49255, resonance:0.64255, prox:0.63685, f_s:7.6413, f_g:14161.32, lat:-23.0, lon:-178.0, loc:'Kermadec'},
-    {run:7, depth:90.9, mag:8.39, alpha:7.94937, resonance:0.09937, prox:0.09367, f_s:7.7538, f_g:13258.65, lat:52.0, lon:-168.0, loc:'Aleutian Islands'},
-    {run:8, depth:97.6, mag:8.82, alpha:8.30838, resonance:0.45838, prox:0.45268, f_s:7.4844, f_g:13489.69, lat:51.5, lon:-175.5, loc:'Andreanof Islands'},
-    {run:9, depth:33.5, mag:7.63, alpha:7.83259, resonance:0.01741, prox:0.01171, f_s:7.6016, f_g:13532.66, lat:-15.0, lon:167.0, loc:'Vanuatu'},
-    {run:10, depth:72.9, mag:8.83, alpha:8.37894, resonance:0.52894, prox:0.52324, f_s:7.4207, f_g:13193.99, lat:-10.5, lon:161.5, loc:'Solomon Islands'},
-    {run:11, depth:58.5, mag:7.60, alpha:7.86472, resonance:0.01472, prox:0.00902, f_s:7.8010, f_g:13735.41, lat:-6.0, lon:154.0, loc:'Papua New Guinea'},
-    {run:12, depth:58.3, mag:9.23, alpha:9.86725, resonance:2.01725, prox:2.01155, f_s:7.8730, f_g:13524.80, lat:-2.5, lon:128.0, loc:'Indonesia'},
-    {run:13, depth:6.8, mag:8.67, alpha:8.16173, resonance:0.31173, prox:0.30603, f_s:7.7290, f_g:13579.54, lat:-3.0, lon:130.0, loc:'Seram, Indonesia'},
-    {run:14, depth:39.9, mag:8.81, alpha:8.29096, resonance:0.44096, prox:0.43526, f_s:8.0646, f_g:12940.07, lat:0.0, lon:98.0, loc:'Sumatra'},
-    {run:15, depth:49.0, mag:7.85, alpha:7.89245, resonance:0.04245, prox:0.03675, f_s:7.2709, f_g:14157.14, lat:-35.0, lon:-72.0, loc:'Chile'}
-];
-
-// ==================== STATIC VOLCANOES ====================
-const STATIC_VOLCANOES = [
-    { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', lat: 37.748, lon: 14.999, vei: 3 },
-    { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', lat: 19.421, lon: -155.287, vei: 3 },
-    { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING', lat: 14.473, lon: -90.880, vei: 5 },
-    { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH', lat: 31.581, lon: 130.659, vei: 3 },
-    { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY', lat: 19.023, lon: -98.622, vei: 1 },
-    { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY', lat: -7.541, lon: 110.446, vei: 1 },
-    { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH', lat: -8.108, lon: 112.922, vei: 3 },
-    { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY', lat: 38.789, lon: 15.213, vei: 1 },
-    { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -37.521, lon: 177.183, vei: 1 },
-    { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', lat: 56.653, lon: 161.360, vei: 3 }
-];
-
-// ==================== TRIO SEAL ENGINE ====================
-const TrioSealEngine = {
-    COSMIC_BRIDGE: 18000,
+    <script>
+    'use strict';
     
-    computeEarthquakeImpact(magnitude, moonAngleDeg) {
-        const k = Math.max(Math.abs(Math.cos(moonAngleDeg * Math.PI / 180)), 0.1);
-        const base = (magnitude / (k * 1.44 * 10)) * 1.618;
-        const scale = 1 + (magnitude / this.COSMIC_BRIDGE);
-        return base * scale;
-    },
+    // ==================== DATA ====================
+    const EVENT_DATA = [
+        {run:1, depth:34.1, mag:8.53, alpha:8.05978, resonance:0.20978, prox:0.20408, f_s:7.8734, f_g:13962.08, lat:-20.5, lon:-175.2, loc:'Tonga region'},
+        {run:2, depth:45.4, mag:9.38, alpha:11.3158, resonance:3.4658, prox:3.4601, f_s:7.7972, f_g:14134.38, lat:-22.1, lon:-176.5, loc:'Fiji region'},
+        {run:3, depth:27.3, mag:7.87, alpha:7.87707, resonance:0.02707, prox:0.02137, f_s:7.5152, f_g:13816.08, lat:-19.8, lon:-177.0, loc:'South Pacific'},
+        {run:4, depth:66.1, mag:9.01, alpha:8.84185, resonance:0.99185, prox:0.98615, f_s:6.9874, f_g:13904.06, lat:-17.5, lon:-173.5, loc:'Tonga'},
+        {run:5, depth:36.0, mag:8.71, alpha:8.16863, resonance:0.31863, prox:0.31293, f_s:8.3044, f_g:13890.52, lat:-21.2, lon:-174.8, loc:'Samoa region'},
+        {run:6, depth:50.6, mag:8.89, alpha:8.49255, resonance:0.64255, prox:0.63685, f_s:7.6413, f_g:14161.32, lat:-23.0, lon:-178.0, loc:'Kermadec'},
+        {run:7, depth:90.9, mag:8.39, alpha:7.94937, resonance:0.09937, prox:0.09367, f_s:7.7538, f_g:13258.65, lat:52.0, lon:-168.0, loc:'Aleutian Islands'},
+        {run:8, depth:97.6, mag:8.82, alpha:8.30838, resonance:0.45838, prox:0.45268, f_s:7.4844, f_g:13489.69, lat:51.5, lon:-175.5, loc:'Andreanof Islands'},
+        {run:9, depth:33.5, mag:7.63, alpha:7.83259, resonance:0.01741, prox:0.01171, f_s:7.6016, f_g:13532.66, lat:-15.0, lon:167.0, loc:'Vanuatu'},
+        {run:10, depth:72.9, mag:8.83, alpha:8.37894, resonance:0.52894, prox:0.52324, f_s:7.4207, f_g:13193.99, lat:-10.5, lon:161.5, loc:'Solomon Islands'},
+        {run:11, depth:58.5, mag:7.60, alpha:7.86472, resonance:0.01472, prox:0.00902, f_s:7.8010, f_g:13735.41, lat:-6.0, lon:154.0, loc:'Papua New Guinea'},
+        {run:12, depth:58.3, mag:9.23, alpha:9.86725, resonance:2.01725, prox:2.01155, f_s:7.8730, f_g:13524.80, lat:-2.5, lon:128.0, loc:'Indonesia'},
+        {run:13, depth:6.8, mag:8.67, alpha:8.16173, resonance:0.31173, prox:0.30603, f_s:7.7290, f_g:13579.54, lat:-3.0, lon:130.0, loc:'Seram, Indonesia'},
+        {run:14, depth:39.9, mag:8.81, alpha:8.29096, resonance:0.44096, prox:0.43526, f_s:8.0646, f_g:12940.07, lat:0.0, lon:98.0, loc:'Sumatra'},
+        {run:15, depth:49.0, mag:7.85, alpha:7.89245, resonance:0.04245, prox:0.03675, f_s:7.2709, f_g:14157.14, lat:-35.0, lon:-72.0, loc:'Chile'}
+    ];
     
-    computeVolcanoImpact(vei) {
-        return (vei / 10) * 1.618;
-    },
+    const STATIC_VOLCANOES = [
+        { name: 'Etna', country: 'Italy', alert: 'orange', status: 'WATCH', lat: 37.748, lon: 14.999, vei: 3 },
+        { name: 'Kilauea', country: 'Hawaii, USA', alert: 'orange', status: 'WATCH', lat: 19.421, lon: -155.287, vei: 3 },
+        { name: 'Fuego', country: 'Guatemala', alert: 'red', status: 'WARNING', lat: 14.473, lon: -90.880, vei: 5 },
+        { name: 'Sakurajima', country: 'Japan', alert: 'orange', status: 'WATCH', lat: 31.581, lon: 130.659, vei: 3 },
+        { name: 'Popocatépetl', country: 'Mexico', alert: 'yellow', status: 'ADVISORY', lat: 19.023, lon: -98.622, vei: 1 },
+        { name: 'Merapi', country: 'Indonesia', alert: 'yellow', status: 'ADVISORY', lat: -7.541, lon: 110.446, vei: 1 },
+        { name: 'Semeru', country: 'Indonesia', alert: 'orange', status: 'WATCH', lat: -8.108, lon: 112.922, vei: 3 },
+        { name: 'Stromboli', country: 'Italy', alert: 'yellow', status: 'ADVISORY', lat: 38.789, lon: 15.213, vei: 1 },
+        { name: 'Whakaari', country: 'New Zealand', alert: 'yellow', status: 'ADVISORY', lat: -37.521, lon: 177.183, vei: 1 },
+        { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', lat: 56.653, lon: 161.360, vei: 3 }
+    ];
     
-    computeSolarImpact(solarFlux) {
-        return (solarFlux / 200) * 1.618;
-    },
+    // ==================== TRIO SEAL ENGINE ====================
+    const TrioSealEngine = {
+        COSMIC_BRIDGE: 18000,
+        
+        computeEarthquakeImpact(magnitude, moonAngleDeg) {
+            const k = Math.max(Math.abs(Math.cos(moonAngleDeg * Math.PI / 180)), 0.1);
+            const base = (magnitude / (k * 1.44 * 10)) * 1.618;
+            const scale = 1 + (magnitude / this.COSMIC_BRIDGE);
+            return base * scale;
+        },
+        
+        computeVolcanoImpact(vei) { return (vei / 10) * 1.618; },
+        computeSolarImpact(solarFlux) { return (solarFlux / 200) * 1.618; },
+        computeAuroraImpact(kp) { return (kp / 9) * 1.618; },
+        computeTotalImpact(eq, vol, sun, aur) { return eq * 0.35 + vol * 0.20 + sun * 0.30 + aur * 0.15; },
+        
+        taqabulAngle(run, timestamp) {
+            const makkahTime = new Date(timestamp.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
+            const seconds = makkahTime.getSeconds() + 60 * (makkahTime.getMinutes() + 60 * makkahTime.getHours());
+            const baseAngle = (seconds / 86400) * 360;
+            const uniqueOffset = (run * 0.713) % 360;
+            return (baseAngle + uniqueOffset) % 360;
+        },
+        
+        closureIndex(depth, magnitude) {
+            const depthNorm = Math.min(depth / 700, 1);
+            const magNorm = Math.min(magnitude / 9.6, 1);
+            return depthNorm * 0.4 + magNorm * 0.6;
+        },
+        
+        balanceIndex(alpha_event, resonance_score, kp) {
+            const base = (alpha_event + resonance_score) / 20;
+            const kpFactor = kp / 9;
+            return Math.min(base + kpFactor * 0.3, 1);
+        },
+        
+        harmonicIndex(f_s, f_g) { return Math.min(Math.abs(f_s - f_g) / 2000, 1); },
+        proximityRaw(prox) { return prox; },
+        depthStress(depth) { return Math.min(depth / 100, 1); },
+        
+        getMoonAngleDeg() {
+            const now = Date.now();
+            const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
+            const synodic = 29.530588853;
+            const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
+            return (age / synodic) * 360;
+        },
+        
+        getMoonIllumination() {
+            const now = Date.now();
+            const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
+            const synodic = 29.530588853;
+            const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
+            const phase = age / synodic;
+            return (1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100;
+        }
+    };
     
-    computeAuroraImpact(kp) {
-        return (kp / 9) * 1.618;
-    },
+    // ==================== STATE ====================
+    let currentEventIndex = 0;
+    let currentVolcanoOffset = 0;
+    let currentQuakeOffset = 0;
+    const PAGE_SIZE = 5;
+    let currentKp = 3.3;
+    let quakeMap = null, volcanoMap = null;
     
-    computeTotalImpact(eq, vol, sun, aur) {
-        return eq * 0.35 + vol * 0.20 + sun * 0.30 + aur * 0.15;
-    },
+    function getCurrentEvent() { return EVENT_DATA[currentEventIndex % EVENT_DATA.length]; }
     
-    taqabulAngle(run, timestamp) {
-        const makkahTime = new Date(timestamp.toLocaleString('en-US', { timeZone: 'Asia/Riyadh' }));
-        const seconds = makkahTime.getSeconds() + 60 * (makkahTime.getMinutes() + 60 * makkahTime.getHours());
-        const baseAngle = (seconds / 86400) * 360;
-        const uniqueOffset = (run * 0.713) % 360;
-        return (baseAngle + uniqueOffset) % 360;
-    },
+    function updateCorePanels() {
+        const ev = getCurrentEvent();
+        const now = new Date();
+        const taqAngle = TrioSealEngine.taqabulAngle(ev.run, now);
+        const closureVal = TrioSealEngine.closureIndex(ev.depth, ev.mag);
+        const balanceVal = TrioSealEngine.balanceIndex(ev.alpha, ev.resonance, currentKp);
+        const harmVal = TrioSealEngine.harmonicIndex(ev.f_s, ev.f_g);
+        const proxVal = TrioSealEngine.proximityRaw(ev.prox);
+        const stressVal = TrioSealEngine.depthStress(ev.depth);
+        const isNearTaq = (taqAngle % 360 < 5 || taqAngle % 360 > 355);
+        
+        const panelsHtml = `
+            <div class="panel ${isNearTaq ? 'gold-glow' : ''}">
+                <div class="panel-header"><span class="panel-name">🕋 Taqābul · مكة</span><span class="panel-value">${taqAngle.toFixed(2)}°</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(taqAngle/360)*100}%; background:#fbbf24;"></div></div>
+                <div class="row-details"><span>الحدث #${ev.run}</span><span>التوقيت: ${now.toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false })}</span></div>
+                <div class="meta"><span class="badge">${isNearTaq ? '⚡ محاذاة قريبة' : '--'}</span><span>زاوية مطلقة</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌀 Closure · الدورة</span><span class="panel-value">${closureVal.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${closureVal*100}%; background:#60a5fa;"></div></div>
+                <div class="row-details"><span>عمق: ${ev.depth.toFixed(1)} كم</span><span>قوة: M${ev.mag.toFixed(2)}</span></div>
+                <div class="meta"><span class="badge">${closureVal > 0.7 ? 'عالية' : 'منخفضة'}</span><span>مؤشر دورة</span></div>
+            </div>
+            <div class="panel ${currentKp > 5 ? 'red-pulse' : ''}">
+                <div class="panel-header"><span class="panel-name">⚖️ Balance · التوازن</span><span class="panel-value">${balanceVal.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${balanceVal*100}%; background:#f87171;"></div></div>
+                <div class="row-details"><span>Kp: ${currentKp.toFixed(2)}</span><span>α-event: ${ev.alpha.toFixed(3)}</span></div>
+                <div class="meta"><span class="badge">${currentKp > 5 ? '⚠️ اضطراب قوي' : 'معتدل'}</span><span>res: ${ev.resonance.toFixed(3)}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🎵 هارمونيك الطيف</span><span class="panel-value">${harmVal.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${harmVal*100}%; background:#4b7bec;"></div></div>
+                <div class="meta"><span class="badge">انحراف ${(harmVal*100).toFixed(0)}%</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">📡 قرب 2027</span><span class="panel-value">${proxVal.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${proxVal*100}%; background:#a855f7;"></div></div>
+                <div class="meta"><span class="badge">قرب حرج</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">⚙️ إجهاد العمق</span><span class="panel-value">${stressVal.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${stressVal*100}%; background:#f97316;"></div></div>
+                <div class="meta"><span class="badge">ضغط: ${(stressVal*100).toFixed(0)}%</span></div>
+            </div>
+        `;
+        document.getElementById('corePanels').innerHTML = panelsHtml;
+        
+        // Saqar Engine
+        const moonAngle = TrioSealEngine.getMoonAngleDeg();
+        const eqImpact = TrioSealEngine.computeEarthquakeImpact(ev.mag, moonAngle);
+        const volImpact = TrioSealEngine.computeVolcanoImpact(STATIC_VOLCANOES[0]?.vei || 3);
+        const sunImpact = TrioSealEngine.computeSolarImpact(125);
+        const aurImpact = TrioSealEngine.computeAuroraImpact(currentKp);
+        const totalImpact = TrioSealEngine.computeTotalImpact(eqImpact, volImpact, sunImpact, aurImpact);
+        const isRed = totalImpact > 1.96;
+        
+        document.getElementById('saqar-total').textContent = totalImpact.toFixed(4);
+        const barFill = document.getElementById('saqar-bar');
+        barFill.style.width = `${Math.min(100, (totalImpact / 1.96) * 100)}%`;
+        barFill.style.background = totalImpact > 1.96 ? '#ef4444' : (totalImpact > 1.4 ? '#f97316' : '#22c55e');
+        document.getElementById('saqar-sectors').innerHTML = `
+            <span>🌍 Eq: ${eqImpact.toFixed(3)}</span>
+            <span>🌋 Vol: ${volImpact.toFixed(3)}</span>
+            <span>☀️ Sun: ${sunImpact.toFixed(3)}</span>
+            <span>✨ Aur: ${aurImpact.toFixed(3)}</span>
+        `;
+        const redIndicator = document.getElementById('saqar-red');
+        if (isRed) {
+            redIndicator.style.display = 'block';
+            redIndicator.classList.add('red-pulse');
+        } else {
+            redIndicator.style.display = 'none';
+            redIndicator.classList.remove('red-pulse');
+        }
+    }
     
-    closureIndex(depth, magnitude) {
-        const depthNorm = Math.min(depth / 700, 1);
-        const magNorm = Math.min(magnitude / 9.6, 1);
-        return depthNorm * 0.4 + magNorm * 0.6;
-    },
-    
-    balanceIndex(alpha_event, resonance_score, kp) {
-        const base = (alpha_event + resonance_score) / 20;
-        const kpFactor = kp / 9;
-        return Math.min(base + kpFactor * 0.3, 1);
-    },
-    
-    harmonicIndex(f_s, f_g) {
-        return Math.min(Math.abs(f_s - f_g) / 2000, 1);
-    },
-    
-    proximityRaw(prox) { return prox; },
-    depthStress(depth) { return Math.min(depth / 100, 1); },
-    
-    getMoonAngleDeg() {
+    function updateMoon() {
+        const illum = TrioSealEngine.getMoonIllumination();
         const now = Date.now();
         const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
         const synodic = 29.530588853;
         const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
-        return (age / synodic) * 360;
-    },
-    
-    getMoonIllumination() {
-        const now = Date.now();
-        const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
-        const synodic = 29.530588853;
-        const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
-        const phase = age / synodic;
-        return (1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100;
+        let phaseName;
+        if (age < 1) phaseName = 'New Moon';
+        else if (age < 7.4) phaseName = 'Waxing Crescent';
+        else if (age < 10.4) phaseName = 'First Quarter';
+        else if (age < 14.8) phaseName = 'Waxing Gibbous';
+        else if (age < 16.1) phaseName = 'Full Moon';
+        else if (age < 22.1) phaseName = 'Waning Gibbous';
+        else if (age < 25.1) phaseName = 'Last Quarter';
+        else phaseName = 'Waning Crescent';
+        document.getElementById('moon-phase-name').textContent = phaseName;
+        document.getElementById('moon-illumination').textContent = illum.toFixed(1) + '%';
+        document.getElementById('moon-age').textContent = age.toFixed(1) + ' days';
+        document.getElementById('moon-gauge').style.width = `${illum}%`;
     }
-};
-
-// ==================== STATE MANAGEMENT ====================
-let currentEventIndex = 0;
-let currentVolcanoOffset = 0;
-let currentQuakeOffset = 0;
-const PAGE_SIZE = 5;
-let currentKp = 3.3;
-let quakeMap = null;
-let volcanoMap = null;
-
-function getCurrentEvent() {
-    return EVENT_DATA[currentEventIndex % EVENT_DATA.length];
-}
-
-function updateCorePanels() {
-    const ev = getCurrentEvent();
-    const now = new Date();
-    const taqAngle = TrioSealEngine.taqabulAngle(ev.run, now);
-    const closureVal = TrioSealEngine.closureIndex(ev.depth, ev.mag);
-    const balanceVal = TrioSealEngine.balanceIndex(ev.alpha, ev.resonance, currentKp);
-    const harmVal = TrioSealEngine.harmonicIndex(ev.f_s, ev.f_g);
-    const proxVal = TrioSealEngine.proximityRaw(ev.prox);
-    const stressVal = TrioSealEngine.depthStress(ev.depth);
     
-    const isNearTaq = (taqAngle % 360 < 5 || taqAngle % 360 > 355);
-    
-    const panelsHtml = `
-        <div class="panel ${isNearTaq ? 'gold-glow' : ''}">
-            <div class="panel-header"><span class="panel-name">🕋 Taqābul · مكة</span><span class="panel-value">${taqAngle.toFixed(2)}°</span></div>
-            <div class="gauge"><div class="gauge-fill" style="width:${(taqAngle/360)*100}%; background:#fbbf24;"></div></div>
-            <div class="row-details"><span>الحدث #${ev.run}</span><span>التوقيت: ${now.toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false })}</span></div>
-            <div class="meta"><span class="badge">${isNearTaq ? '⚡ محاذاة قريبة' : '--'}</span><span>زاوية مطلقة</span></div>
-        </div>
-        <div class="panel">
-            <div class="panel-header"><span class="panel-name">🌀 Closure · الدورة</span><span class="panel-value">${closureVal.toFixed(3)}</span></div>
-            <div class="gauge"><div class="gauge-fill" style="width:${closureVal*100}%; background:#60a5fa;"></div></div>
-            <div class="row-details"><span>عمق: ${ev.depth.toFixed(1)} كم</span><span>قوة: M${ev.mag.toFixed(2)}</span></div>
-            <div class="meta"><span class="badge">${closureVal > 0.7 ? 'عالية' : 'منخفضة'}</span><span>مؤشر دورة</span></div>
-        </div>
-        <div class="panel ${currentKp > 5 ? 'red-pulse' : ''}">
-            <div class="panel-header"><span class="panel-name">⚖️ Balance · التوازن</span><span class="panel-value">${balanceVal.toFixed(3)}</span></div>
-            <div class="gauge"><div class="gauge-fill" style="width:${balanceVal*100}%; background:#f87171;"></div></div>
-            <div class="row-details"><span>Kp: ${currentKp.toFixed(2)}</span><span>α-event: ${ev.alpha.toFixed(3)}</span></div>
-            <div class="meta"><span class="badge">${currentKp > 5 ? '⚠️ اضطراب قوي' : 'معتدل'}</span><span>res: ${ev.resonance.toFixed(3)}</span></div>
-        </div>
-        <div class="panel">
-            <div class="panel-header"><span class="panel-name">🎵 هارمونيك الطيف</span><span class="panel-value">${harmVal.toFixed(3)}</span></div>
-            <div class="gauge"><div class="gauge-fill" style="width:${harmVal*100}%; background:#4b7bec;"></div></div>
-            <div class="meta"><span class="badge">انحراف ${(harmVal*100).toFixed(0)}%</span></div>
-        </div>
-        <div class="panel">
-            <div class="panel-header"><span class="panel-name">📡 قرب 2027</span><span class="panel-value">${proxVal.toFixed(3)}</span></div>
-            <div class="gauge"><div class="gauge-fill" style="width:${proxVal*100}%; background:#a855f7;"></div></div>
-            <div class="meta"><span class="badge">قرب حرج</span></div>
-        </div>
-        <div class="panel">
-            <div class="panel-header"><span class="panel-name">⚙️ إجهاد العمق</span><span class="panel-value">${stressVal.toFixed(3)}</span></div>
-            <div class="gauge"><div class="gauge-fill" style="width:${stressVal*100}%; background:#f97316;"></div></div>
-            <div class="meta"><span class="badge">ضغط: ${(stressVal*100).toFixed(0)}%</span></div>
-        </div>
-    `;
-    document.getElementById('corePanels').innerHTML = panelsHtml;
-    
-    // تحديث Saqar Engine
-    const moonAngle = TrioSealEngine.getMoonAngleDeg();
-    const eqImpact = TrioSealEngine.computeEarthquakeImpact(ev.mag, moonAngle);
-    const volImpact = TrioSealEngine.computeVolcanoImpact(STATIC_VOLCANOES[0]?.vei || 3);
-    const sunImpact = TrioSealEngine.computeSolarImpact(125);
-    const aurImpact = TrioSealEngine.computeAuroraImpact(currentKp);
-    const totalImpact = TrioSealEngine.computeTotalImpact(eqImpact, volImpact, sunImpact, aurImpact);
-    const isRed = totalImpact > 1.96;
-    
-    document.getElementById('saqar-total').textContent = totalImpact.toFixed(4);
-    const barFill = document.getElementById('saqar-bar');
-    barFill.style.width = `${Math.min(100, (totalImpact / 1.96) * 100)}%`;
-    barFill.style.background = totalImpact > 1.96 ? '#ef4444' : (totalImpact > 1.4 ? '#f97316' : '#22c55e');
-    document.getElementById('saqar-sectors').innerHTML = `
-        <span>🌍 Eq: ${eqImpact.toFixed(3)}</span>
-        <span>🌋 Vol: ${volImpact.toFixed(3)}</span>
-        <span>☀️ Sun: ${sunImpact.toFixed(3)}</span>
-        <span>✨ Aur: ${aurImpact.toFixed(3)}</span>
-    `;
-    const redIndicator = document.getElementById('saqar-red');
-    if (isRed) {
-        redIndicator.style.display = 'block';
-        redIndicator.classList.add('red-pulse');
-    } else {
-        redIndicator.style.display = 'none';
-        redIndicator.classList.remove('red-pulse');
+    // ==================== VOLCANO FUNCTIONS ====================
+    function renderVolcanoes() {
+        const container = document.getElementById('vol-list');
+        const pageData = STATIC_VOLCANOES.slice(currentVolcanoOffset, currentVolcanoOffset + PAGE_SIZE);
+        container.innerHTML = '';
+        let high = 0;
+        pageData.forEach(v => {
+            const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
+            const col = colors[v.alert] || '#64748b';
+            if (v.alert === 'red' || v.alert === 'orange') high++;
+            const div = document.createElement('div');
+            div.className = 'item-row';
+            div.style.borderRightColor = col;
+            div.onclick = () => window.open('https://volcano.si.edu/', '_blank');
+            div.innerHTML = `
+                <span class="pulse-dot" style="background:${col}"></span>
+                <span class="item-name">🌋 ${v.name} <span style="color:#8b9bb8;">(${v.country})</span></span>
+                <span class="item-badge" style="background:${col}20; color:${col};">${v.status}</span>
+            `;
+            container.appendChild(div);
+        });
+        document.getElementById('vol-total').textContent = STATIC_VOLCANOES.length;
+        document.getElementById('vol-alert').textContent = high;
+        document.getElementById('vol-prev').disabled = currentVolcanoOffset === 0;
+        document.getElementById('vol-next').disabled = currentVolcanoOffset + PAGE_SIZE >= STATIC_VOLCANOES.length;
     }
-}
-
-function updateMoon() {
-    const illum = TrioSealEngine.getMoonIllumination();
-    const now = Date.now();
-    const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
-    const synodic = 29.530588853;
-    const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
-    let phaseName;
-    if (age < 1) phaseName = 'New Moon';
-    else if (age < 7.4) phaseName = 'Waxing Crescent';
-    else if (age < 10.4) phaseName = 'First Quarter';
-    else if (age < 14.8) phaseName = 'Waxing Gibbous';
-    else if (age < 16.1) phaseName = 'Full Moon';
-    else if (age < 22.1) phaseName = 'Waning Gibbous';
-    else if (age < 25.1) phaseName = 'Last Quarter';
-    else phaseName = 'Waning Crescent';
-    document.getElementById('moon-phase-name').textContent = phaseName;
-    document.getElementById('moon-illumination').textContent = illum.toFixed(1) + '%';
-    document.getElementById('moon-age').textContent = age.toFixed(1) + ' days';
-    document.getElementById('moon-gauge').style.width = `${illum}%`;
-}
-
-// ==================== VOLCANO FUNCTIONS ====================
-function renderVolcanoes() {
-    const container = document.getElementById('vol-list');
-    const pageData = STATIC_VOLCANOES.slice(currentVolcanoOffset, currentVolcanoOffset + PAGE_SIZE);
-    container.innerHTML = '';
-    let high = 0;
-    pageData.forEach(v => {
-        const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
-        const col = colors[v.alert] || '#64748b';
-        if (v.alert === 'red' || v.alert === 'orange') high++;
-        const div = document.createElement('div');
-        div.className = 'item-row';
-        div.style.borderRightColor = col;
-        div.onclick = () => window.open('https://volcano.si.edu/', '_blank');
-        div.innerHTML = `
-            <span class="pulse-dot" style="background:${col}"></span>
-            <span class="item-name">🌋 ${v.name} <span style="color:#8b9bb8;">(${v.country})</span></span>
-            <span class="item-badge" style="background:${col}20; color:${col};">${v.status}</span>
-        `;
-        container.appendChild(div);
-    });
-    document.getElementById('vol-total').textContent = STATIC_VOLCANOES.length;
-    document.getElementById('vol-alert').textContent = high;
-    document.getElementById('vol-prev').disabled = currentVolcanoOffset === 0;
-    document.getElementById('vol-next').disabled = currentVolcanoOffset + PAGE_SIZE >= STATIC_VOLCANOES.length;
-}
-
-function initVolcanoMap() {
-    if (!document.getElementById('vol-map') || typeof L === 'undefined') return;
-    if (volcanoMap) volcanoMap.remove();
-    volcanoMap = L.map('vol-map').setView([20, 10], 2);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '©OpenStreetMap ©CARTO'
-    }).addTo(volcanoMap);
-    STATIC_VOLCANOES.forEach(v => {
-        if (!v.lat || !v.lon) return;
-        const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
-        const col = colors[v.alert] || '#64748b';
-        const marker = L.marker([v.lat, v.lon], {
-            icon: L.divIcon({ html: '🌋', className: '', iconSize: [20, 20], popupAnchor: [0, -10] })
-        }).bindPopup(`<b>${v.name}</b><br>${v.country}<br><span style="color:${col}">${v.status}</span>`).addTo(volcanoMap);
-    });
-}
-
-// ==================== EARTHQUAKE FUNCTIONS ====================
-function renderEarthquakes() {
-    const container = document.getElementById('quake-list');
-    const pageData = EVENT_DATA.slice(currentQuakeOffset, currentQuakeOffset + PAGE_SIZE);
-    container.innerHTML = '';
-    let maxMag = 0;
-    pageData.forEach(e => {
-        if (e.mag > maxMag) maxMag = e.mag;
-        const col = e.mag >= 6 ? '#DC2626' : e.mag >= 4.5 ? '#D97706' : '#22c55e';
-        const div = document.createElement('div');
-        div.className = 'item-row';
-        div.style.borderRightColor = col;
-        div.onclick = () => window.open('https://earthquake.usgs.gov/earthquakes/map/', '_blank');
-        div.innerHTML = `
-            <span class="item-name">🌍 M${e.mag.toFixed(2)} · ${e.loc}</span>
-            <span class="item-badge" style="background:${col}20; color:${col};">${e.depth.toFixed(0)} km</span>
-        `;
-        container.appendChild(div);
-    });
-    document.getElementById('quake-total').textContent = EVENT_DATA.length;
-    document.getElementById('quake-strongest').textContent = maxMag.toFixed(1) + ' M';
-    const m5Count = EVENT_DATA.filter(e => e.mag >= 5).length;
-    document.getElementById('quake-m5').textContent = m5Count;
-    document.getElementById('quake-prev').disabled = currentQuakeOffset === 0;
-    document.getElementById('quake-next').disabled = currentQuakeOffset + PAGE_SIZE >= EVENT_DATA.length;
-}
-
-function initQuakeMap() {
-    if (!document.getElementById('quake-map') || typeof L === 'undefined') return;
-    if (quakeMap) quakeMap.remove();
-    quakeMap = L.map('quake-map').setView([20, 0], 2);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '©OpenStreetMap ©CARTO'
-    }).addTo(quakeMap);
-    EVENT_DATA.forEach(e => {
-        if (!e.lat || !e.lon) return;
-        const col = e.mag >= 6 ? '#DC2626' : e.mag >= 4.5 ? '#D97706' : '#22c55e';
-        const radius = Math.max(4, e.mag * 1.2);
-        L.circleMarker([e.lat, e.lon], {
-            radius: radius,
-            color: col,
-            fillColor: col,
-            fillOpacity: 0.5,
-            weight: 1
-        }).bindPopup(`<b>M${e.mag.toFixed(1)}</b><br>${e.loc}<br>Depth: ${e.depth.toFixed(0)} km`).addTo(quakeMap);
-    });
-}
-
-// ==================== PAGINATION ====================
-function volcanoPrev() { if (currentVolcanoOffset > 0) { currentVolcanoOffset -= PAGE_SIZE; renderVolcanoes(); } }
-function volcanoNext() { if (currentVolcanoOffset + PAGE_SIZE < STATIC_VOLCANOES.length) { currentVolcanoOffset += PAGE_SIZE; renderVolcanoes(); } }
-function quakePrev() { if (currentQuakeOffset > 0) { currentQuakeOffset -= PAGE_SIZE; renderEarthquakes(); } }
-function quakeNext() { if (currentQuakeOffset + PAGE_SIZE < EVENT_DATA.length) { currentQuakeOffset += PAGE_SIZE; renderEarthquakes(); } }
-
-// ==================== KP UPDATE ====================
-setInterval(() => {
-    currentKp = Math.random() * 8;
-    updateCorePanels();
-    document.getElementById('timestamp').innerHTML = new Date().toLocaleString('ar-SA') + ' · Kp: ' + currentKp.toFixed(2);
-}, 8000);
-
-// ==================== INIT ====================
-function init() {
-    updateCorePanels();
-    updateMoon();
-    renderVolcanoes();
-    renderEarthquakes();
-    initVolcanoMap();
-    initQuakeMap();
     
-    document.getElementById('vol-prev').addEventListener('click', volcanoPrev);
-    document.getElementById('vol-next').addEventListener('click', volcanoNext);
-    document.getElementById('quake-prev').addEventListener('click', quakePrev);
-    document.getElementById('quake-next').addEventListener('click', quakeNext);
+    function initVolcanoMap() {
+        if (!document.getElementById('vol-map') || typeof L === 'undefined') return;
+        if (volcanoMap) volcanoMap.remove();
+        volcanoMap = L.map('vol-map').setView([20, 10], 2);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '©OpenStreetMap ©CARTO'
+        }).addTo(volcanoMap);
+        STATIC_VOLCANOES.forEach(v => {
+            if (!v.lat || !v.lon) return;
+            const colors = { red: '#DC2626', orange: '#D97706', yellow: '#B45309' };
+            const col = colors[v.alert] || '#64748b';
+            L.marker([v.lat, v.lon], {
+                icon: L.divIcon({ html: '🌋', className: '', iconSize: [20, 20], popupAnchor: [0, -10] })
+            }).bindPopup(`<b>${v.name}</b><br>${v.country}<br><span style="color:${col}">${v.status}</span>`).addTo(volcanoMap);
+        });
+    }
     
+    // ==================== EARTHQUAKE FUNCTIONS ====================
+    function renderEarthquakes() {
+        const container = document.getElementById('quake-list');
+        const pageData = EVENT_DATA.slice(currentQuakeOffset, currentQuakeOffset + PAGE_SIZE);
+        container.innerHTML = '';
+        let maxMag = 0;
+        pageData.forEach(e => {
+            if (e.mag > maxMag) maxMag = e.mag;
+            const col = e.mag >= 6 ? '#DC2626' : e.mag >= 4.5 ? '#D97706' : '#22c55e';
+            const div = document.createElement('div');
+            div.className = 'item-row';
+            div.style.borderRightColor = col;
+            div.onclick = () => window.open('https://earthquake.usgs.gov/earthquakes/map/', '_blank');
+            div.innerHTML = `
+                <span class="item-name">🌍 M${e.mag.toFixed(2)} · ${e.loc}</span>
+                <span class="item-badge" style="background:${col}20; color:${col};">${e.depth.toFixed(0)} km</span>
+            `;
+            container.appendChild(div);
+        });
+        document.getElementById('quake-total').textContent = EVENT_DATA.length;
+        document.getElementById('quake-strongest').textContent = maxMag.toFixed(1) + ' M';
+        const m5Count = EVENT_DATA.filter(e => e.mag >= 5).length;
+        document.getElementById('quake-m5').textContent = m5Count;
+        document.getElementById('quake-prev').disabled = currentQuakeOffset === 0;
+        document.getElementById('quake-next').disabled = currentQuakeOffset + PAGE_SIZE >= EVENT_DATA.length;
+    }
+    
+    function initQuakeMap() {
+        if (!document.getElementById('quake-map') || typeof L === 'undefined') return;
+        if (quakeMap) quakeMap.remove();
+        quakeMap = L.map('quake-map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '©OpenStreetMap ©CARTO'
+        }).addTo(quakeMap);
+        EVENT_DATA.forEach(e => {
+            if (!e.lat || !e.lon) return;
+            const col = e.mag >= 6 ? '#DC2626' : e.mag >= 4.5 ? '#D97706' : '#22c55e';
+            const radius = Math.max(4, e.mag * 1.2);
+            L.circleMarker([e.lat, e.lon], {
+                radius: radius,
+                color: col,
+                fillColor: col,
+                fillOpacity: 0.5,
+                weight: 1
+            }).bindPopup(`<b>M${e.mag.toFixed(1)}</b><br>${e.loc}<br>Depth: ${e.depth.toFixed(0)} km`).addTo(quakeMap);
+        });
+    }
+    
+    function volcanoPrev() { if (currentVolcanoOffset > 0) { currentVolcanoOffset -= PAGE_SIZE; renderVolcanoes(); } }
+    function volcanoNext() { if (currentVolcanoOffset + PAGE_SIZE < STATIC_VOLCANOES.length) { currentVolcanoOffset += PAGE_SIZE; renderVolcanoes(); } }
+    function quakePrev() { if (currentQuakeOffset > 0) { currentQuakeOffset -= PAGE_SIZE; renderEarthquakes(); } }
+    function quakeNext() { if (currentQuakeOffset + PAGE_SIZE < EVENT_DATA.length) { currentQuakeOffset += PAGE_SIZE; renderEarthquakes(); } }
+    
+    // ==================== KP UPDATE & INIT ====================
     setInterval(() => {
+        currentKp = Math.random() * 8;
+        updateCorePanels();
+        document.getElementById('live-time').innerHTML = new Date().toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false });
+    }, 8000);
+    
+    function updateLiveTime() {
+        const now = new Date();
+        const makkahTime = now.toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        const gregorian = now.toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('live-time').innerHTML = `📅 ${gregorian} · 🕋 ${makkahTime}`;
+    }
+    
+    function init() {
         updateCorePanels();
         updateMoon();
-    }, 2000);
+        renderVolcanoes();
+        renderEarthquakes();
+        initVolcanoMap();
+        initQuakeMap();
+        
+        document.getElementById('vol-prev').addEventListener('click', volcanoPrev);
+        document.getElementById('vol-next').addEventListener('click', volcanoNext);
+        document.getElementById('quake-prev').addEventListener('click', quakePrev);
+        document.getElementById('quake-next').addEventListener('click', quakeNext);
+        
+        setInterval(() => { updateCorePanels(); updateMoon(); }, 2000);
+        setInterval(updateLiveTime, 1000);
+        updateLiveTime();
+    }
     
-    document.getElementById('timestamp').innerHTML = new Date().toLocaleString('ar-SA') + ' · Kp: ' + currentKp.toFixed(2);
-    setInterval(() => {
-        document.getElementById('live-time').innerHTML = new Date().toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false });
-    }, 1000);
-}
-
-init();
-</script>
+    init();
+    </script>
 </body>
 </html>
