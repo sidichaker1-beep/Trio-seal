@@ -1,808 +1,44 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-<title>TRIO SEAL</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRIO SEAL - Moon Visual</title>
 <style>
-/* ==================== DESIGN TOKENS (WHITE BG + COLORED CARDS) ==================== */
-:root {
-  --bg:           #ffffff;
-  --bg-panel:     #f9fafb;
-  --bg-card:      #f8fafc;
-  --bg-subtle:    #f1f5f9;
-  --bg-hover:     #fef9e6;
-  --navy:         #1e293b;
-  --navy-mid:     #334155;
-  --text-primary: #0f172a;
-  --text-body:    #334155;
-  --text-muted:   #64748b;
-  --bdr:          #e2e8f0;
-  --bdr-subtle:   #e2e8f0;
-  --gold:         #b8860b;
-  --gold-light:   #d4af37;
-  --gold-bg:      #fef9e6;
-  --teal:         #2c7a4d;
-  --sky:          #3b82f6;
-  --crimson:      #dc2626;
-  --amber:        #f59e0b;
-  --violet:       #8b5cf6;
-  --shadow-md:    0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.06);
-  --f-hud:        'Orbitron', sans-serif;
-  --f-body:       'Rajdhani', sans-serif;
-  --f-mono:       'Share Tech Mono', monospace;
-  --t:            all 0.22s cubic-bezier(.4,0,.2,1);
-}
-
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: var(--f-body);
-  padding-bottom: 60px;
-}
-
-/* Header */
-.main-header {
-  background: #ffffff;
-  border-bottom: 1px solid var(--bdr);
-  padding: 0.6rem 1.5rem;
-  position: sticky; top: 0; z-index: 200;
-}
-.header-content {
-  max-width: 1400px; margin: 0 auto;
-  display: flex; justify-content: space-between;
-  align-items: center; flex-wrap: wrap; gap: 0.7rem;
-}
-.logo-section { display: flex; align-items: center; gap: 0.8rem; }
-.logo {
-  font-family: var(--f-hud);
-  font-size: 1.35rem; font-weight: 900;
-  color: var(--navy);
-  letter-spacing: 1.5px;
-}
-.live-indicator {
-  display: flex; align-items: center; gap: 0.4rem;
-  background: rgba(44,122,77,0.08);
-  padding: 0.25rem 0.8rem; border-radius: 99px;
-  border: 1px solid rgba(44,122,77,0.2);
-}
-.live-dot {
-  width: 7px; height: 7px;
-  background: var(--teal); border-radius: 50%;
-  animation: live-pulse 1.5s infinite;
-}
-@keyframes live-pulse {
-  0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.3)}
-}
-.live-text { font-size: 0.7rem; color: var(--teal); font-weight: 600; }
-
-/* Language Button */
-.lang-btn-header {
-  background: var(--bg-subtle);
-  border: 1px solid var(--bdr);
-  color: var(--text-primary);
-  padding: 6px 14px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 0.75rem;
-  font-family: var(--f-hud);
-  transition: var(--t);
-}
-.lang-btn-header:hover {
-  background: var(--gold-bg);
-  border-color: var(--gold-light);
-}
-.lang-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #ffffff;
-  border: 1px solid var(--bdr);
-  border-radius: 12px;
-  overflow: hidden;
-  min-width: 130px;
-  z-index: 999;
-  box-shadow: var(--shadow-md);
-}
-.lang-menu div {
-  padding: 8px 14px;
-  cursor: pointer;
-  font-size: 0.78rem;
-  transition: var(--t);
-  color: var(--text-primary);
-}
-.lang-menu div:hover {
-  background: var(--gold-bg);
-}
-
-/* Info Bar */
-.info-bar {
-  max-width: 1400px; margin: 0.7rem auto;
-  padding: 0.45rem 1.2rem;
-  background: var(--bg-subtle);
-  border-radius: 99px;
-  display: flex; justify-content: space-between;
-  align-items: center; flex-wrap: wrap; gap: 0.5rem;
-  font-size: 0.7rem; color: var(--text-muted);
-  border: 1px solid var(--bdr-subtle);
-}
-.info-item { display: flex; align-items: center; gap: 0.4rem; }
-#hijri-date { color: var(--gold); font-weight: 500; }
-
-/* Ticker */
-.news-ticker {
-  background: var(--bg-subtle);
-  border-bottom: 1px solid var(--bdr);
-  padding: 7px 0; overflow: hidden; white-space: nowrap;
-}
-.ticker-inner {
-  display: inline-block;
-  animation: ticker 40s linear infinite;
-  font-size: 0.78rem; color: var(--text-body);
-}
-.ticker-inner span { margin-right: 50px; }
-.ticker-inner span:first-child { color: var(--gold); }
-@keyframes ticker { 0%{transform:translateX(100vw)} 100%{transform:translateX(-100%)} }
-
-/* Container */
-.container { max-width: 1400px; margin: 0 auto; padding: 0.8rem 1rem 1rem; }
-
-/* Section Titles */
-.section-title {
-  font-family: var(--f-hud);
-  font-size: 0.9rem; letter-spacing: 2px;
-  color: var(--navy);
-  margin: 1.2rem 0 0.7rem;
-  display: flex; align-items: center; gap: 0.6rem;
-}
-.section-title::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, var(--bdr), transparent);
-}
-
-/* Core & Extended Grids */
-.core-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.9rem; margin-bottom: 1rem;
-}
-.panel {
-  background: var(--bg-panel);
-  border-radius: 18px; padding: 1rem;
-  border: 1px solid var(--bdr);
-  transition: var(--t);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-.panel::before {
-  content:''; position:absolute; top:0; left:0;
-  width:3px; height:100%;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-}
-.panel:hover {
-  border-color: var(--gold-light);
-  box-shadow: var(--shadow-hover);
-  background: #ffffff;
-  transform: translateY(-2px);
-}
-.panel-header {
-  display: flex; justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.7rem; flex-wrap: wrap; gap: 0.4rem;
-}
-.panel-name {
-  font-family: var(--f-hud); font-size: 0.68rem;
-  letter-spacing: 1px; color: var(--text-muted);
-  background: #ffffff;
-  padding: 0.2rem 0.7rem; border-radius: 99px;
-  border: 1px solid var(--bdr-subtle);
-}
-.panel-value {
-  font-family: var(--f-mono); font-size: 1.15rem; font-weight: 700;
-  background: #ffffff;
-  padding: 0.15rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid var(--bdr-subtle);
-  color: var(--text-primary);
-}
-.gauge-track {
-  height: 5px; background: #e2e8f0;
-  border-radius: 99px; overflow: hidden; margin: 0.6rem 0;
-}
-.gauge-fill {
-  height: 100%; border-radius: 99px;
-  transition: width 0.45s cubic-bezier(.4,0,.2,1);
-}
-.panel-meta {
-  display: flex; justify-content: space-between;
-  color: var(--text-muted); font-size: 0.63rem; margin-top: 0.4rem;
-}
-.panel-badge {
-  background: rgba(0,0,0,.03);
-  padding: 0.12rem 0.5rem; border-radius: 99px;
-  font-size: 0.58rem; color: var(--text-muted);
-}
-.panel-hint {
-  font-size: 0.55rem;
-  color: var(--gold);
-  margin-top: 0.3rem;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.panel:hover .panel-hint { opacity: 0.7; }
-
-/* Saqar Panel */
-.saqar-wrap {
-  background: #fefaf0;
-  border-radius: 18px; padding: 1rem 1.2rem;
-  border: 1px solid rgba(184,134,11,0.2);
-  margin-bottom: 1rem;
-  cursor: pointer;
-  transition: var(--t);
-}
-.saqar-wrap:hover {
-  background: #fffaf0;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-.saqar-header {
-  display: flex; justify-content: space-between;
-  align-items: center; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem;
-}
-.saqar-title {
-  font-family: var(--f-hud); font-size: 0.75rem;
-  letter-spacing: 1px; color: var(--gold);
-}
-.saqar-total {
-  font-family: var(--f-mono); font-size: 1.2rem; font-weight: 700;
-  color: var(--text-primary);
-}
-.saqar-bar-track {
-  height: 6px; background: rgba(0,0,0,.08);
-  border-radius: 99px; overflow: hidden; margin: 0.5rem 0;
-}
-.saqar-bar-fill {
-  height: 100%; border-radius: 99px;
-  transition: width 0.4s ease, background 0.4s ease;
-}
-.saqar-sectors {
-  display: flex; gap: 0.7rem; flex-wrap: wrap;
-  font-size: 0.67rem; color: var(--text-muted); margin-top: 0.3rem;
-}
-.saqar-red {
-  margin-top: 0.4rem; padding: 0.2rem 0.6rem;
-  border-radius: 6px; background: rgba(220,38,38,0.1);
-  color: var(--crimson); font-size: 0.64rem;
-  font-family: var(--f-hud); letter-spacing: 1px;
-  display: none;
-}
-.saqar-hint {
-  font-size: 0.55rem;
-  color: var(--gold);
-  margin-top: 0.3rem;
-  text-align: center;
-  opacity: 0.6;
-}
-
-/* Moon Panel */
-.moon-panel {
-  background: #f0f4fa;
-  border-radius: 18px; padding: 1rem 1.4rem;
-  border: 1px solid var(--bdr);
-  margin-bottom: 1rem;
-  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
-  cursor: pointer;
-  transition: var(--t);
-}
-.moon-panel:hover {
-  background: #f5f9ff;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-.moon-canvas { display:block; flex-shrink:0; border-radius:50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-.moon-info h3 {
-  font-family: var(--f-hud); font-size: 0.8rem;
-  letter-spacing: 1px; color: var(--gold); margin-bottom: 0.4rem;
-}
-.moon-pct { font-size: 1.4rem; font-weight: 900; color: var(--navy); font-family: var(--f-mono); }
-.moon-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
-.moon-extras {
-  font-size: 0.68rem; color: var(--text-muted);
-  margin-top: 0.3rem; display: flex; gap: 1rem; flex-wrap: wrap;
-}
-
-/* Lists */
-.list-wrap {
-  background: var(--bg-panel);
-  border-radius: 18px; padding: 1rem;
-  border: 1px solid var(--bdr); margin-bottom: 1rem;
-}
-.stats-row {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 0.7rem; margin-bottom: 0.8rem;
-}
-.stat-box {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 0.6rem; text-align: center;
-  border: 1px solid var(--bdr-subtle);
-  cursor: pointer;
-  transition: var(--t);
-}
-.stat-box:hover {
-  background: var(--gold-bg);
-  border-color: var(--gold-light);
-  transform: translateY(-1px);
-}
-.stat-number {
-  font-size: 1.3rem; font-weight: bold;
-  color: var(--gold); font-family: var(--f-mono);
-  display: block;
-}
-.stat-label { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
-.item-list { max-height: 220px; overflow-y: auto; margin-bottom: 0.6rem; scrollbar-width: thin; }
-.item-row {
-  background: #ffffff;
-  border-radius: 9px;
-  padding: 0.5rem 0.7rem; margin-bottom: 0.4rem;
-  display: flex; align-items: center; gap: 0.6rem;
-  border-right: 3px solid;
-  cursor: pointer;
-  transition: var(--t);
-}
-.item-row:hover {
-  background: var(--gold-bg);
-  transform: translateX(-3px);
-}
-.pulse-dot {
-  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-  animation: pd 1.6s ease-in-out infinite;
-}
-@keyframes pd { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:.55} }
-.item-name { flex: 1; font-size: 0.78rem; color: var(--text-body); }
-.item-badge {
-  font-size: 0.58rem; padding: 0.1rem 0.5rem;
-  border-radius: 99px; font-weight: 700;
-  font-family: var(--f-hud); letter-spacing: 0.5px;
-}
-
-/* Pagination */
-.pagination {
-  display: flex; gap: 0.5rem; margin-top: 0.6rem; justify-content: center;
-}
-.page-btn {
-  background: #ffffff;
-  border: 1px solid var(--bdr);
-  padding: 0.25rem 0.9rem; border-radius: 99px;
-  color: var(--text-body);
-  cursor: pointer;
-  font-size: 0.68rem;
-  font-family: var(--f-hud);
-  transition: var(--t);
-}
-.page-btn:hover:not(:disabled) {
-  background: var(--gold-bg);
-  border-color: var(--gold);
-  color: var(--gold);
-}
-.page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-/* Maps */
-.map-wrap {
-  margin-top: 0.7rem; height: 220px;
-  border-radius: 13px; overflow: hidden;
-  border: 1px solid var(--bdr-subtle);
-}
-.leaflet-container { background: var(--bg-subtle) !important; font-family: var(--f-body); }
-
-/* Images Grid */
-.images-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 0.9rem; margin-bottom: 1rem;
-}
-.img-card {
-  background: var(--bg-panel);
-  border-radius: 14px;
-  padding: 0.8rem;
-  border: 1px solid var(--bdr);
-  overflow: hidden;
-  cursor: pointer;
-  transition: var(--t);
-}
-.img-card:hover {
-  background: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-.img-card h3 {
-  font-family: var(--f-hud); font-size: 0.65rem;
-  letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 0.6rem;
-}
-.img-skeleton {
-  width: 100%; height: 160px; border-radius: 9px;
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s infinite;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted); font-size: 0.72rem;
-}
-.img-loaded { width:100%; height:160px; object-fit:cover; border-radius:9px; display:block; }
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-/* Bottom Ticker */
-.bticker {
-  position: fixed; bottom: 0; left: 0; width: 100%;
-  background: #ffffff;
-  border-top: 1px solid var(--bdr);
-  height: 44px; display: flex; align-items: center;
-  padding: 0 16px; z-index: 1000; overflow: hidden;
-}
-.bticker-lbl {
-  flex-shrink: 0; display: flex; align-items: center; gap: 6px;
-  padding-left: 14px; margin-left: 14px;
-  border-left: 1px solid var(--bdr);
-  font-family: var(--f-hud); font-size: 0.58rem;
-  letter-spacing: 2px; color: var(--gold);
-}
-.bticker-scroll { flex: 1; overflow: hidden; }
-.bticker-inner {
-  display: inline-flex; animation: bmarq 50s linear infinite;
-}
-.bticker-inner:hover { animation-play-state: paused; }
-@keyframes bmarq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-.bt-item {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 0 16px; height: 44px; white-space: nowrap;
-  border-left: 1px solid var(--bdr);
-  font-size: 0.78rem; color: var(--text-body);
-}
-.bt-item b { color: var(--gold); }
-
-/* Red Mode */
-body.red-mode { background: #fff5f5; }
-body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0.2); }
-.red-mode-pulse {
-  position: fixed; inset: 0; pointer-events: none; z-index: 999;
-  background: radial-gradient(circle at center, rgba(220,38,38,0.15), transparent 70%);
-  animation: rpm 1.2s ease-out forwards;
-}
-@keyframes rpm { 0%{opacity:0} 20%{opacity:1} 100%{opacity:0} }
-.notification-toast {
-  position: fixed; top: 18px; left: 18px; z-index: 9999;
-  background: #ffffff;
-  border-left: 4px solid var(--gold);
-  padding: 10px 18px; border-radius: 12px;
-  font-size: 0.82rem;
-  color: var(--text-primary);
-  animation: toast-in .3s ease-out;
-  box-shadow: var(--shadow-md);
-  max-width: 290px;
-}
-@keyframes toast-in { from{opacity:0;transform:translateX(-30px)} to{opacity:1;transform:translateX(0)} }
-
-/* Footer */
-.footer {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.64rem;
-  padding: 0.8rem;
-  border-top: 1px solid var(--bdr);
-  margin-bottom: 50px;
-  line-height: 1.6;
-}
-.footer-name {
-  color: var(--gold);
-  font-weight: 600;
-  margin-top: 6px;
-  display: inline-block;
-  letter-spacing: 1px;
-}
-
-/* Responsive */
-@media(max-width:900px) {
-  .core-grid { grid-template-columns: 1fr 1fr; }
-  .images-grid { grid-template-columns: 1fr; }
-}
-@media(max-width:600px) {
-  .core-grid, .images-grid { grid-template-columns: 1fr; }
-  .moon-panel { flex-direction: column; text-align: center; }
-}
+  body {
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+  }
+  #moonCanvas {
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 235, 190, 0.3);
+  }
 </style>
 </head>
 <body>
 
-<header class="main-header">
-  <div class="header-content">
-    <div class="logo-section">
-      <span class="logo">🌌 TRIO SEAL</span>
-    </div>
-    <div class="live-indicator">
-      <span class="live-dot"></span>
-      <span class="live-text">Live Data · 60s Refresh</span>
-    </div>
-    <div style="position:relative;z-index:300">
-      <button class="lang-btn-header" id="langBtn" onclick="toggleLangMenu()">🌐 العربية</button>
-      <div id="lang-menu" class="lang-menu" style="display:none">
-        <div onclick="setLanguage('ar')">🇸🇦 العربية</div>
-        <div onclick="setLanguage('en')">🇬🇧 English</div>
-        <div onclick="setLanguage('fr')">🇫🇷 Français</div>
-        <div onclick="setLanguage('es')">🇪🇸 Español</div>
-        <div onclick="setLanguage('de')">🇩🇪 Deutsch</div>
-        <div onclick="setLanguage('zh')">🇨🇳 中文</div>
-        <div onclick="setLanguage('ru')">🇷🇺 Русский</div>
-      </div>
-    </div>
-  </div>
-</header>
-
-<div class="news-ticker">
-  <div class="ticker-inner" id="topTicker">
-    <span>🌍 Real-time Seismic Data · USGS</span>
-    <span>🌊 NOAA Space Weather · Kp Index</span>
-    <span>🌙 Lunar Phase · Corrected Crescent Shadow</span>
-    <span>📡 27 Indicators · Live Updates Every 60s</span>
-    <span>🔗 Click any card → Direct Observatory Link</span>
-  </div>
-</div>
-
-<div class="info-bar">
-  <div class="info-item"><span>🕋</span><span>Mecca Time</span></div>
-  <div class="info-item"><span>📅</span><span id="gregorian-date">--</span> · <span id="hijri-date">--</span></div>
-  <div class="info-item"><span>🌐 UTC:</span><span id="utc-clock">--:--:--</span></div>
-  <div class="info-item"><span>🕋 Mecca:</span><span id="mecca-clock">--:--:--</span></div>
-  <div class="info-item"><span id="last-update-time">Last update: --</span></div>
-</div>
-
-<div class="container">
-
-  <div class="section-title">⚙️ Core Indicators · 6 Eyes · Click to Observatory</div>
-  <div class="core-grid" id="core-panels"></div>
-
-  <div class="section-title">🧲 Extended Indicators · 21 Metrics · Click to Source</div>
-  <div class="core-grid" id="ext-panels"></div>
-
-  <div class="saqar-wrap" id="saqarPanel" data-url="https://github.com/sidichaker1-beep/Trio-seal">
-    <div class="saqar-header">
-      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance</span>
-      <span class="saqar-total" id="saqar-total">0.0000</span>
-    </div>
-    <div class="saqar-bar-track">
-      <div class="saqar-bar-fill" id="saqar-bar" style="width:0%"></div>
-    </div>
-    <div class="saqar-sectors" id="saqar-sectors"></div>
-    <div class="saqar-red" id="saqar-red">⚠️ CRITICAL MODE ACTIVE</div>
-    <div class="saqar-hint">🔗 Click to view Saqar Engine Documentation</div>
-  </div>
-
-  <div class="section-title">🌙 Moon Phase · Corrected Crescent Shadow · Click for NASA Moon Data</div>
-  <div class="moon-panel" id="moonPanel" data-url="https://moon.nasa.gov/">
-    <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
-    <div class="moon-info">
-      <h3>LUNAR PHASE · Corrected Crescent</h3>
-      <div><span id="moon-phase-name" style="font-size:.95rem;font-weight:700">--</span></div>
-      <div><span class="moon-pct" id="moon-illumination">--%</span></div>
-      <div class="moon-sub" id="moon-thickness">Silver thickness: --'</div>
-      <div class="moon-sub" id="moon-age">Age: -- days</div>
-      <div class="moon-extras">
-        <span id="moon-perigee">🔵 Perigee: -- km</span>
-        <span id="moon-apogee">🔴 Apogee: -- km</span>
-        <span id="moon-tidal-force">🌊 Tidal: --</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-title">🌋 Live Volcano Observatory · Click for Smithsonian GVP</div>
-  <div class="list-wrap">
-    <div class="stats-row">
-      <div class="stat-box" data-url="https://volcano.si.edu/">
-        <span class="stat-number" id="vol-total">--</span>
-        <span class="stat-label">Active Volcanoes</span>
-      </div>
-      <div class="stat-box" data-url="https://volcano.si.edu/">
-        <span class="stat-number" id="vol-alert">--</span>
-        <span class="stat-label">High Alert</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number" id="vol-page">1/2</span>
-        <span class="stat-label">Page</span>
-      </div>
-    </div>
-    <div id="vol-list" class="item-list"></div>
-    <div class="pagination">
-      <button class="page-btn" id="vol-prev" disabled>← Previous</button>
-      <button class="page-btn" id="vol-next">Next →</button>
-    </div>
-    <div id="vol-map" class="map-wrap"></div>
-  </div>
-
-  <div class="section-title">🌍 Live Earthquake Observatory · Click for USGS Map</div>
-  <div class="list-wrap">
-    <div class="stats-row">
-      <div class="stat-box" data-url="https://earthquake.usgs.gov/earthquakes/map/">
-        <span class="stat-number" id="quake-total">--</span>
-        <span class="stat-label">Last 24h</span>
-      </div>
-      <div class="stat-box" data-url="https://earthquake.usgs.gov/earthquakes/map/">
-        <span class="stat-number" id="quake-strongest">--</span>
-        <span class="stat-label">Strongest</span>
-      </div>
-      <div class="stat-box" data-url="https://earthquake.usgs.gov/earthquakes/map/">
-        <span class="stat-number" id="quake-m5">--</span>
-        <span class="stat-label">M ≥ 5.0</span>
-      </div>
-    </div>
-    <div id="quake-list" class="item-list"></div>
-    <div class="pagination">
-      <button class="page-btn" id="quake-prev" disabled>← Previous</button>
-      <button class="page-btn" id="quake-next">Next →</button>
-    </div>
-    <div id="quake-map" class="map-wrap"></div>
-  </div>
-
-  <div class="section-title">🛰️ Live Solar Images · Click for NASA SDO</div>
-  <div class="images-grid">
-    <div class="img-card" data-url="https://sdo.gsfc.nasa.gov/data/">
-      <h3>☀️ SDO Solar</h3>
-      <div id="sdo-container"><div class="img-skeleton">Loading...</div></div>
-    </div>
-    <div class="img-card" data-url="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast">
-      <h3>🌌 Aurora Forecast</h3>
-      <div id="aurora-container"><div class="img-skeleton">Loading...</div></div>
-    </div>
-    <div class="img-card" data-url="https://epic.gsfc.nasa.gov/">
-      <h3>🌍 EPIC Earth</h3>
-      <div id="epic-container"><div class="img-skeleton">DSCOVR EPIC</div></div>
-    </div>
-  </div>
-
-</div>
-
-<div class="bticker">
-  <div class="bticker-lbl"><span class="live-dot"></span>LIVE</div>
-  <div class="bticker-scroll">
-    <div class="bticker-inner" id="botTicker"></div>
-  </div>
-</div>
-
-<div class="footer">
-  TRIO SEAL · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s<br>
-  <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory</span>
-</div>
+<canvas id="moonCanvas"></canvas>
 
 <script>
-'use strict';
+const SYNODIC = 29.53059; // طول الدورة الاقترانية للقمر بالأيام
 
-// ==================== OBSERVATORY LINKS ====================
-const OBSERVATORY_LINKS = {
-  usgs_main: 'https://earthquake.usgs.gov/earthquakes/map/',
-  smithsonian_gvp: 'https://volcano.si.edu/',
-  noaa_kp: 'https://www.swpc.noaa.gov/products/planetary-k-index',
-  noaa_aurora: 'https://www.swpc.noaa.gov/products/aurora-30-minute-forecast',
-  noaa_solar_wind: 'https://www.swpc.noaa.gov/products/real-time-solar-wind',
-  noaa_dst: 'https://www.swpc.noaa.gov/products/geophysical-alert-broadcast',
-  nasa_sdo: 'https://sdo.gsfc.nasa.gov/data/',
-  nasa_epic: 'https://epic.gsfc.nasa.gov/',
-  nasa_moon: 'https://moon.nasa.gov/',
-  saqar_docs: 'https://github.com/sidichaker1-beep/Trio-seal',
-  cosmic_bridge: 'https://www.noaa.gov/space-weather'
-};
-
-function openObservatory(url, name) {
-  if (url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-    showToast(`🔭 Opening ${name || 'Observatory'}`, '#b8860b', 2000);
-  } else {
-    showToast('🔗 No link available for this indicator', '#64748b', 2000);
-  }
-}
-
-function showToast(msg, borderColor, duration = 3000) {
-  const toast = document.createElement('div');
-  toast.className = 'notification-toast';
-  toast.style.borderLeftColor = borderColor;
-  toast.innerHTML = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s';
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-
-// ==================== GLOBAL STATE ====================
-const STATE = {
-  volcanoData: [],
-  quakesData: [],
-  currentKp: 3.0,
-  strongestQuake: 0,
-  redModeActive: false,
-  volcanoOffset: 0,
-  quakeOffset: 0,
-  pageSize: 5
-};
-
-// ==================== REAL APIs ====================
-async function fetchEarthquakes() {
-  try {
-    const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson', {signal: AbortSignal.timeout(10000)});
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    STATE.quakesData = data.features.sort((a,b) => (b.properties?.mag||0) - (a.properties?.mag||0));
-    const mags = STATE.quakesData.map(f => f.properties?.mag || 0);
-    STATE.strongestQuake = mags.length ? Math.max(...mags) : 0;
-    const m5 = STATE.quakesData.filter(f => (f.properties?.mag||0) >= 5).length;
-    document.getElementById('quake-total').textContent = STATE.quakesData.length;
-    document.getElementById('quake-strongest').textContent = STATE.strongestQuake.toFixed(1);
-    document.getElementById('quake-m5').textContent = m5;
-    STATE.quakeOffset = 0;
-    renderQuakes();
-    updateQuakeMap();
-    return true;
-  } catch(e) {
-    console.warn('USGS API failed');
-    return false;
-  }
-}
-
-async function fetchRealKp() {
-  try {
-    const res = await fetch('https://services.swpc.noaa.gov/json/planetary_k_index_24_hour.json');
-    const data = await res.json();
-    const last = data[data.length-1];
-    const kp = parseFloat(last?.Kp ?? last?.kp_index ?? 3);
-    STATE.currentKp = isNaN(kp) ? 3 : Math.min(9, Math.max(0, kp));
-  } catch(e) {
-    console.warn('Kp API failed');
-  }
-}
-
-// ==================== MOON CALCULATIONS ====================
-const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0);
-const SYNODIC = 29.530588853;
-
+// ==================== محاكاة البيانات ====================
 function getMoonAge() {
-  return (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
+  // مثال تجريبي: يوم 8 من الشهر القمري
+  return 8;
 }
 
 function getMoonIllumination() {
-  const age = getMoonAge();
-  return (1 - Math.cos((age / SYNODIC) * 2 * Math.PI)) / 2 * 100;
+  // مثال تجريبي: 29.5% إضاءة
+  return 29.5;
 }
 
-function getMoonPhaseName(age) {
-  if (age < 1) return 'New Moon';
-  if (age < 7.4) return 'Waxing Crescent';
-  if (age < 10.4) return 'First Quarter';
-  if (age < 14.8) return 'Waxing Gibbous';
-  if (age < 16.1) return 'Full Moon';
-  if (age < 22.1) return 'Waning Gibbous';
-  if (age < 25.1) return 'Last Quarter';
-  return 'Waning Crescent';
-}
-
-function getMoonPerigee() {
-  const t = Date.now() / 86400000;
-  return 356400 + Math.sin(t * 2 * Math.PI / 27.5) * 10000;
-}
-
-function getMoonApogee() {
-  const t = Date.now() / 86400000;
-  return 406700 + Math.cos(t * 2 * Math.PI / 27.5) * 5000;
-}
-
-function getMoonTidalForce(age) {
-  return 0.5 + 0.5 * Math.abs(Math.sin(age / SYNODIC * Math.PI * 2));
-}
-
-// ==================== CORRECTED MOON SHADOW LOGIC ====================
+// ==================== الرسم الرئيسي ====================
 function drawRealMoonCanvas() {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
@@ -811,87 +47,77 @@ function drawRealMoonCanvas() {
   canvas.width = size;
   canvas.height = size;
   const cx = size/2, cy = size/2, r = size/2 - 3;
-  
-  const illumination = getMoonIllumination() / 100; // 0.295 = 29.5%
+
+  const illumination = getMoonIllumination() / 100; // 0.295
   const age = getMoonAge();
   const phase = age / SYNODIC;
-  const isWaxing = phase < 0.5; // Waxing crescent to full moon
-  
-  // Base moon image (Full Moon)
+  const isWaxing = phase < 0.5;
+
+  // صورة القمر الأساسية
   const moonImage = new Image();
   moonImage.crossOrigin = 'Anonymous';
   moonImage.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg';
-  
+
   moonImage.onload = () => {
     ctx.clearRect(0, 0, size, size);
-    
-    // Draw full moon first
+
+    // ==================== رسم القمر الكامل ====================
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
     ctx.drawImage(moonImage, 0, 0, size, size);
-    
-    // ==================== CORRECTED SHADOW MASK ====================
-    // Shadow offset based on illumination percentage
-    // 29.5% illumination means 70.5% of the disk is dark
-    const shadowIntensity = 0.92;
-    
-    let gradShadow;
+    ctx.restore();
+
+    // ==================== تدرج الظل ====================
+    const gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
     if (isWaxing) {
-      // Waxing: illuminated from the right side
-      gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
-      gradShadow.addColorStop(0, `rgba(0, 0, 0, ${shadowIntensity})`);
-      gradShadow.addColorStop(illumination, `rgba(0, 0, 0, 0.55)`);
-      gradShadow.addColorStop(illumination + 0.12, `rgba(0, 0, 0, 0.25)`);
-      gradShadow.addColorStop(1, `rgba(0, 0, 0, 0)`);
+      gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.92)');
+      gradShadow.addColorStop(illumination, 'rgba(0, 0, 0, 0.5)');
+      gradShadow.addColorStop(illumination + 0.1, 'rgba(0, 0, 0, 0.2)');
+      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     } else {
-      // Waning: illuminated from the left side
-      gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
-      gradShadow.addColorStop(0, `rgba(0, 0, 0, 0)`);
-      gradShadow.addColorStop(1 - illumination, `rgba(0, 0, 0, 0.25)`);
-      gradShadow.addColorStop(1 - illumination + 0.12, `rgba(0, 0, 0, 0.55)`);
-      gradShadow.addColorStop(1, `rgba(0, 0, 0, ${shadowIntensity})`);
+      gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      gradShadow.addColorStop(1 - illumination, 'rgba(0, 0, 0, 0.2)');
+      gradShadow.addColorStop(1 - illumination + 0.1, 'rgba(0, 0, 0, 0.5)');
+      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.92)');
     }
-    
     ctx.fillStyle = gradShadow;
     ctx.fillRect(0, 0, size, size);
-    ctx.restore();
-    
-    // Silver rim
+
+    // ==================== إطار فضي ====================
     ctx.beginPath();
     ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
     ctx.strokeStyle = '#c0bcb0';
     ctx.lineWidth = 1.5;
     ctx.stroke();
-    
-    // Glow effect on illuminated side only
+
+    // ==================== توهج ذهبي على الجانب المضيء ====================
     const glowGrad = ctx.createLinearGradient(
-      isWaxing ? cx + r * 0.4 : cx - r * 0.4,
+      isWaxing ? cx + r * 0.5 : cx - r * 0.5,
       cy,
       isWaxing ? cx + r : cx - r,
       cy
     );
-    glowGrad.addColorStop(0, `rgba(255, 235, 190, ${0.15 + illumination * 0.25})`);
+    glowGrad.addColorStop(0, `rgba(255, 235, 190, ${0.1 + illumination * 0.3})`);
     glowGrad.addColorStop(1, 'rgba(255, 235, 190, 0)');
-    
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fillStyle = glowGrad;
     ctx.fill();
   };
-  
+
   moonImage.onerror = () => {
     drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase);
   };
-  
+
   if (moonImage.complete) moonImage.onload();
 }
 
+// ==================== Fallback فضي ====================
 function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.clearRect(0, 0, size, size);
-  
-  // Silver base gradient
+
   const grad = ctx.createRadialGradient(cx - r*0.2, cy - r*0.2, r*0.1, cx, cy, r);
   grad.addColorStop(0, '#e8e4d8');
   grad.addColorStop(0.4, '#c0bcb0');
@@ -901,35 +127,34 @@ function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
-  
+
   const isWaxing = phase < 0.5;
-  const shadowIntensity = 0.92;
-  
+
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.clip();
-  
+
   let gradShadow;
   if (isWaxing) {
     gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
-    gradShadow.addColorStop(0, `rgba(0, 0, 0, ${shadowIntensity})`);
-    gradShadow.addColorStop(illumination, `rgba(0, 0, 0, 0.55)`);
-    gradShadow.addColorStop(illumination + 0.12, `rgba(0, 0, 0, 0.25)`);
-    gradShadow.addColorStop(1, `rgba(0, 0, 0, 0)`);
+    gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.92)');
+    gradShadow.addColorStop(illumination, 'rgba(0, 0, 0, 0.5)');
+    gradShadow.addColorStop(illumination + 0.15, 'rgba(0, 0, 0, 0.2)');
+    gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0)');
   } else {
     gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
-    gradShadow.addColorStop(0, `rgba(0, 0, 0, 0)`);
-    gradShadow.addColorStop(1 - illumination, `rgba(0, 0, 0, 0.25)`);
-    gradShadow.addColorStop(1 - illumination + 0.12, `rgba(0, 0, 0, 0.55)`);
-    gradShadow.addColorStop(1, `rgba(0, 0, 0, ${shadowIntensity})`);
+    gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradShadow.addColorStop(1 - illumination, 'rgba(0, 0, 0, 0.2)');
+    gradShadow.addColorStop(1 - illumination + 0.15, 'rgba(0, 0, 0, 0.5)');
+    gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.92)');
   }
-  
+
   ctx.fillStyle = gradShadow;
   ctx.fillRect(0, 0, size, size);
   ctx.restore();
-  
-  // Add crater details (deterministic, no random)
+
+  // إضافة فوهات
   const craters = [[0.2,0.3,0.08], [-0.25,0.15,0.06], [0.15,-0.2,0.07], [-0.1,-0.3,0.09]];
   ctx.fillStyle = 'rgba(0,0,0,0.12)';
   craters.forEach(([dx, dy, rad]) => {
@@ -939,392 +164,9 @@ function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   });
 }
 
-function updateMoon() {
-  const age = getMoonAge();
-  const illum = getMoonIllumination();
-  const thickness = illum * 31 / 100;
-  const phaseName = getMoonPhaseName(age);
-  const perigee = getMoonPerigee();
-  const apogee = getMoonApogee();
-  const tidal = getMoonTidalForce(age);
-  
-  document.getElementById('moon-phase-name').textContent = phaseName;
-  document.getElementById('moon-illumination').textContent = illum.toFixed(1) + '%';
-  document.getElementById('moon-thickness').textContent = `Silver thickness: ${thickness.toFixed(2)}'`;
-  document.getElementById('moon-age').textContent = `Age: ${age.toFixed(1)} days`;
-  document.getElementById('moon-perigee').textContent = `🔵 Perigee: ${Math.round(perigee).toLocaleString()} km`;
-  document.getElementById('moon-apogee').textContent = `🔴 Apogee: ${Math.round(apogee).toLocaleString()} km`;
-  document.getElementById('moon-tidal-force').textContent = `🌊 Tidal: ${tidal.toFixed(3)}`;
-  
-  drawRealMoonCanvas();
-}
-
-// ==================== VOLCANO DATA ====================
-const STATIC_VOLCANOES = [
-  {name:'Etna', country:'Italy', alert:'orange', status:'WATCH', lat:37.748, lon:14.999, url:'https://volcano.si.edu/volcano.cfm?vn=211060'},
-  {name:'Kilauea', country:'Hawaii, USA', alert:'orange', status:'WATCH', lat:19.421, lon:-155.287, url:'https://volcano.si.edu/volcano.cfm?vn=332010'},
-  {name:'Fuego', country:'Guatemala', alert:'red', status:'WARNING', lat:14.473, lon:-90.880, url:'https://volcano.si.edu/volcano.cfm?vn=342090'},
-  {name:'Sakurajima', country:'Japan', alert:'orange', status:'WATCH', lat:31.581, lon:130.659, url:'https://volcano.si.edu/volcano.cfm?vn=282080'},
-  {name:'Popocatépetl', country:'Mexico', alert:'yellow', status:'ADVISORY', lat:19.023, lon:-98.622, url:'https://volcano.si.edu/volcano.cfm?vn=341090'},
-  {name:'Merapi', country:'Indonesia', alert:'yellow', status:'ADVISORY', lat:-7.541, lon:110.446, url:'https://volcano.si.edu/volcano.cfm?vn=263250'},
-  {name:'Semeru', country:'Indonesia', alert:'orange', status:'WATCH', lat:-8.108, lon:112.922, url:'https://volcano.si.edu/volcano.cfm?vn=263300'},
-  {name:'Stromboli', country:'Italy', alert:'yellow', status:'ADVISORY', lat:38.789, lon:15.213, url:'https://volcano.si.edu/volcano.cfm?vn=211040'},
-  {name:'Whakaari', country:'New Zealand', alert:'yellow', status:'ADVISORY', lat:-37.521, lon:177.183, url:'https://volcano.si.edu/volcano.cfm?vn=241040'},
-  {name:'Sheveluch', country:'Russia', alert:'orange', status:'WATCH', lat:56.653, lon:161.360, url:'https://volcano.si.edu/volcano.cfm?vn=300270'},
-  {name:'Reykjanes', country:'Iceland', alert:'orange', status:'WATCH', lat:63.880, lon:-22.560, url:'https://volcano.si.edu/volcano.cfm?vn=371020'}
-];
-
-function renderVolcanoes() {
-  const {volcanoOffset, pageSize} = STATE;
-  const page = STATIC_VOLCANOES.slice(volcanoOffset, volcanoOffset + pageSize);
-  const container = document.getElementById('vol-list');
-  if (!container) return;
-  container.innerHTML = '';
-  
-  const high = STATIC_VOLCANOES.filter(v => v.alert === 'red' || v.alert === 'orange').length;
-  document.getElementById('vol-total').textContent = STATIC_VOLCANOES.length;
-  document.getElementById('vol-alert').textContent = high;
-  document.getElementById('vol-page').textContent = `${Math.floor(volcanoOffset/pageSize)+1}/${Math.ceil(STATIC_VOLCANOES.length/pageSize)}`;
-  
-  page.forEach(v => {
-    const col = v.alert === 'red' ? '#dc2626' : v.alert === 'orange' ? '#f59e0b' : '#64748b';
-    const div = document.createElement('div');
-    div.className = 'item-row';
-    div.style.borderRightColor = col;
-    div.onclick = () => openObservatory(v.url || OBSERVATORY_LINKS.smithsonian_gvp, `${v.name} Volcano`);
-    div.innerHTML = `
-      <span class="pulse-dot" style="background:${col}"></span>
-      <span class="item-name"><b>${v.name}</b> · ${v.country}</span>
-      <span class="item-badge" style="background:${col}20;color:${col}">${v.status}</span>
-    `;
-    container.appendChild(div);
-  });
-  
-  document.getElementById('vol-prev').disabled = volcanoOffset <= 0;
-  document.getElementById('vol-next').disabled = volcanoOffset + pageSize >= STATIC_VOLCANOES.length;
-}
-
-function initVolcanoMap() {
-  const el = document.getElementById('vol-map');
-  if (!el || typeof L === 'undefined') return;
-  const map = L.map('vol-map').setView([20, 10], 2);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-  
-  STATIC_VOLCANOES.forEach(v => {
-    if (v.lat && v.lon) {
-      const marker = L.circleMarker([v.lat, v.lon], {
-        radius: 6,
-        color: v.alert === 'red' ? '#dc2626' : v.alert === 'orange' ? '#f59e0b' : '#64748b',
-        fillColor: v.alert === 'red' ? '#dc2626' : v.alert === 'orange' ? '#f59e0b' : '#64748b',
-        fillOpacity: 0.5
-      }).bindPopup(`<b>${v.name}</b><br>${v.country}<br>Status: ${v.status}<br><i>Click for details</i>`);
-      marker.on('click', () => openObservatory(v.url || OBSERVATORY_LINKS.smithsonian_gvp, `${v.name} Volcano`));
-      marker.addTo(map);
-    }
-  });
-  setTimeout(() => map.invalidateSize(), 300);
-}
-
-function renderQuakes() {
-  const {quakeOffset, pageSize, quakesData} = STATE;
-  const page = quakesData.slice(quakeOffset, quakeOffset + pageSize);
-  const container = document.getElementById('quake-list');
-  if (!container) return;
-  container.innerHTML = '';
-  
-  page.forEach(q => {
-    const mag = q.properties?.mag || 0;
-    const place = q.properties?.place || 'Unknown';
-    const time = new Date(q.properties?.time).toLocaleTimeString();
-    const col = mag >= 6 ? '#dc2626' : mag >= 4.5 ? '#f59e0b' : '#2c7a4d';
-    const url = `https://earthquake.usgs.gov/earthquakes/eventpage/${q.id || ''}`;
-    const div = document.createElement('div');
-    div.className = 'item-row';
-    div.style.borderRightColor = col;
-    div.onclick = () => openObservatory(url || OBSERVATORY_LINKS.usgs_main, `M${mag.toFixed(1)} Earthquake`);
-    div.innerHTML = `
-      <span class="pulse-dot" style="background:${col}"></span>
-      <span class="item-name"><b style="color:${col}">M${mag.toFixed(1)}</b> · ${place} · ${time}</span>
-    `;
-    container.appendChild(div);
-  });
-  
-  document.getElementById('quake-prev').disabled = quakeOffset <= 0;
-  document.getElementById('quake-next').disabled = quakeOffset + pageSize >= quakesData.length;
-}
-
-function updateQuakeMap() {
-  const el = document.getElementById('quake-map');
-  if (!el || typeof L === 'undefined') return;
-  if (window.quakeMap) window.quakeMap.remove();
-  window.quakeMap = L.map('quake-map').setView([20, 0], 2);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(window.quakeMap);
-  
-  STATE.quakesData.slice(0, 50).forEach(q => {
-    const coords = q.geometry?.coordinates;
-    if (coords && coords[0] && coords[1]) {
-      const mag = q.properties?.mag || 0;
-      const url = `https://earthquake.usgs.gov/earthquakes/eventpage/${q.id || ''}`;
-      const marker = L.circleMarker([coords[1], coords[0]], {
-        radius: Math.max(3, mag * 1.5),
-        color: mag >= 6 ? '#dc2626' : mag >= 4.5 ? '#f59e0b' : '#2c7a4d',
-        fillColor: mag >= 6 ? '#dc2626' : mag >= 4.5 ? '#f59e0b' : '#2c7a4d',
-        fillOpacity: 0.6
-      }).bindPopup(`<b>M${mag.toFixed(1)}</b><br>${q.properties?.place || ''}<br><i>Click for USGS page</i>`);
-      marker.on('click', () => openObservatory(url, `M${mag.toFixed(1)} Earthquake`));
-      marker.addTo(window.quakeMap);
-    }
-  });
-  setTimeout(() => window.quakeMap.invalidateSize(), 300);
-}
-
-// ==================== SAQAR ENGINE ====================
-function computeEarthquakeImpact(mag, moonAngle) {
-  const k = Math.max(Math.abs(Math.cos(moonAngle * Math.PI / 180)), 0.1);
-  const phi = 1.618;
-  return (mag / (k * 1.44 * 10)) * phi * (1 + mag / 18000);
-}
-
-function updateSaqarPanel() {
-  const mag = STATE.strongestQuake || 5;
-  const moonAge = getMoonAge();
-  const moonAngle = (moonAge / SYNODIC) * 360;
-  const eqImpact = computeEarthquakeImpact(mag, moonAngle);
-  const volImpact = 0.5;
-  const solarImpact = (STATE.currentKp / 9) * 1.618;
-  const total = eqImpact * 0.4 + volImpact * 0.2 + solarImpact * 0.4;
-  const criticalRatio = 1.96;
-  const isRed = total >= criticalRatio;
-  
-  document.getElementById('saqar-total').textContent = total.toFixed(4);
-  const bar = document.getElementById('saqar-bar');
-  bar.style.width = `${Math.min(100, (total / criticalRatio) * 100)}%`;
-  bar.style.background = isRed ? '#dc2626' : total > 1.4 ? '#f59e0b' : '#2c7a4d';
-  document.getElementById('saqar-sectors').innerHTML = `
-    <span>🌍 Eq: ${eqImpact.toFixed(3)}</span>
-    <span>🌋 Vol: ${volImpact.toFixed(3)}</span>
-    <span>☀️ Solar: ${solarImpact.toFixed(3)}</span>
-  `;
-  const redEl = document.getElementById('saqar-red');
-  if (isRed) {
-    redEl.style.display = 'block';
-    if (!STATE.redModeActive) {
-      STATE.redModeActive = true;
-      document.body.classList.add('red-mode');
-    }
-  } else {
-    redEl.style.display = 'none';
-    if (STATE.redModeActive) {
-      STATE.redModeActive = false;
-      document.body.classList.remove('red-mode');
-    }
-  }
-}
-
-// ==================== CORE PANELS ====================
-function updateCorePanels() {
-  const moonIllum = getMoonIllumination();
-  const kp = STATE.currentKp;
-  const mag = STATE.strongestQuake || 5;
-  const quakeCount = STATE.quakesData.length;
-  
-  const panels = [
-    { name: '🌙 Moon Illumination', value: `${moonIllum.toFixed(1)}%`, bar: moonIllum / 100, color: '#b8860b', badge: 'Lunar Phase', url: OBSERVATORY_LINKS.nasa_moon, label: 'NASA Moon' },
-    { name: '🧲 Kp Index', value: kp.toFixed(2), bar: kp / 9, color: '#3b82f6', badge: kp > 5 ? 'Storm' : kp > 3 ? 'Active' : 'Quiet', url: OBSERVATORY_LINKS.noaa_kp, label: 'NOAA Space Weather' },
-    { name: '📊 Strongest Quake', value: `${mag.toFixed(1)} M`, bar: Math.min(1, mag / 9.5), color: '#dc2626', badge: 'Last 24h', url: OBSERVATORY_LINKS.usgs_main, label: 'USGS Earthquake' },
-    { name: '🌍 Total Quakes', value: quakeCount, bar: Math.min(1, quakeCount / 200), color: '#2c7a4d', badge: '24h Events', url: OBSERVATORY_LINKS.usgs_main, label: 'USGS Map' },
-    { name: '🌊 Solar Wind', value: `${380 + Math.sin(Date.now()/3600000)*40} km/s`, bar: 0.5, color: '#8b5cf6', badge: 'Real-time', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'NOAA Solar Wind' },
-    { name: '📡 Saqar Ratio', value: (STATE.currentKp / 9 * 1.96).toFixed(3), bar: STATE.currentKp / 9, color: '#f59e0b', badge: 'Critical: 1.96', url: OBSERVATORY_LINKS.saqar_docs, label: 'Saqar Docs' }
-  ];
-  
-  const container = document.getElementById('core-panels');
-  container.innerHTML = panels.map(p => `
-    <div class="panel" data-url="${p.url}" data-name="${p.label}">
-      <div class="panel-header">
-        <span class="panel-name">${p.name}</span>
-        <span class="panel-value">${p.value}</span>
-      </div>
-      <div class="gauge-track"><div class="gauge-fill" style="width:${(p.bar*100).toFixed(1)}%;background:${p.color}"></div></div>
-      <div class="panel-meta"><span class="panel-badge">${p.badge}</span></div>
-      <div class="panel-hint">🔗 Click for ${p.label}</div>
-    </div>
-  `).join('');
-}
-
-// ==================== EXTENDED PANELS ====================
-function updateExtendedPanels() {
-  const moonAge = getMoonAge();
-  const kp = STATE.currentKp;
-  const mag = STATE.strongestQuake || 5;
-  const tidal = getMoonTidalForce(moonAge);
-  const perigee = getMoonPerigee();
-  
-  const indicators = [
-    { name: '🌙 Moon Age', value: `${moonAge.toFixed(1)} days`, bar: moonAge / 29.5, color: '#b8860b', url: OBSERVATORY_LINKS.nasa_moon, label: 'Moon Age' },
-    { name: '🌊 Tidal Force', value: tidal.toFixed(3), bar: tidal, color: '#3b82f6', url: OBSERVATORY_LINKS.nasa_moon, label: 'Tidal Forces' },
-    { name: '🔵 Perigee', value: `${Math.round(perigee).toLocaleString()} km`, bar: 0.5, color: '#2c7a4d', url: OBSERVATORY_LINKS.nasa_moon, label: 'Moon Perigee' },
-    { name: '⚡ Seismic Energy', value: `${Math.pow(10, 1.5 * mag).toExponential(2)} J`, bar: Math.min(1, mag / 9), color: '#f59e0b', url: OBSERVATORY_LINKS.usgs_main, label: 'Seismic Energy' },
-    { name: '🌋 Volcanic Alert', value: `${STATIC_VOLCANOES.filter(v=>v.alert==='red').length} Red`, bar: 0.3, color: '#dc2626', url: OBSERVATORY_LINKS.smithsonian_gvp, label: 'Volcano Alerts' },
-    { name: '📡 Proton Flux', value: `${(0.8 + Math.sin(Date.now()/9000)*0.3).toFixed(2)} pfu`, bar: 0.4, color: '#8b5cf6', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Proton Flux' },
-    { name: '🌬️ Solar Wind Density', value: `${(5 + Math.sin(Date.now()/7200000)*2).toFixed(1)} p/cm³`, bar: 0.35, color: '#3b82f6', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Solar Wind Density' },
-    { name: '🌡️ Solar Wind Temp', value: `${(100 + Math.sin(Date.now()/5400000)*20).toFixed(0)}k K`, bar: 0.5, color: '#f59e0b', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Solar Wind Temp' },
-    { name: '🧲 Bz (IMF)', value: `${(-1.2 + Math.sin(Date.now()/7000)*0.8).toFixed(2)} nT`, bar: 0.4, color: '#22c55e', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Bz IMF' },
-    { name: '🌍 DST Index', value: `${(-27 - kp * 4).toFixed(0)} nT`, bar: Math.min(1, Math.abs(-27 - kp * 4) / 100), color: '#ef4444', url: OBSERVATORY_LINKS.noaa_dst, label: 'DST Index' },
-    { name: '✨ Aurora Probability', value: `${Math.min(100, 30 + kp * 8).toFixed(0)}%`, bar: (30 + kp * 8) / 100, color: '#a855f7', url: OBSERVATORY_LINKS.noaa_aurora, label: 'Aurora Forecast' },
-    { name: '⚠️ Geomagnetic Storm', value: `${Math.min(100, kp * 12).toFixed(0)}%`, bar: (kp * 12) / 100, color: '#f97316', url: OBSERVATORY_LINKS.noaa_kp, label: 'Storm Probability' },
-    { name: '🔄 Solar Rotation', value: `${(0.6 + Math.sin(Date.now()/100000)*0.2).toFixed(3)}`, bar: 0.6, color: '#fbbf24', url: OBSERVATORY_LINKS.nasa_sdo, label: 'Solar Rotation' },
-    { name: '📈 Auroral Expansion', value: `${Math.min(1, kp / 7).toFixed(3)}`, bar: Math.min(1, kp / 7), color: '#c084fc', url: OBSERVATORY_LINKS.noaa_aurora, label: 'Auroral Zone' },
-    { name: '📊 Magnitude Index', value: mag.toFixed(1), bar: mag / 10, color: '#ef4444', url: OBSERVATORY_LINKS.usgs_main, label: 'Earthquake Magnitude' },
-    { name: '🌊 Moon Tidal Index', value: tidal.toFixed(3), bar: tidal, color: '#3b82f6', url: OBSERVATORY_LINKS.nasa_moon, label: 'Tidal Index' },
-    { name: '🌬️ Solar Wind Speed', value: `${(380 + Math.sin(Date.now()/3600000)*40).toFixed(0)} km/s`, bar: 0.5, color: '#22c55e', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Wind Speed' },
-    { name: '💨 SW Density', value: `${(5 + Math.sin(Date.now()/7200000)*2).toFixed(1)} p/cm³`, bar: 0.35, color: '#f97316', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Density' },
-    { name: '🌡️ SW Temperature', value: `${(100 + Math.sin(Date.now()/5400000)*20).toFixed(0)}k K`, bar: 0.5, color: '#f97316', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Temperature' },
-    { name: '🕋 Cosmic Bridge', value: '18,000', bar: 0.72, color: '#b8860b', url: OBSERVATORY_LINKS.cosmic_bridge, label: 'Cosmic Bridge' },
-    { name: '⚖️ F₀ Reference', value: '8.78e9 Hz', bar: 0.88, color: '#a855f7', url: OBSERVATORY_LINKS.saqar_docs, label: 'Reference Frequency' }
-  ];
-  
-  const container = document.getElementById('ext-panels');
-  container.innerHTML = indicators.map(p => `
-    <div class="panel" data-url="${p.url}" data-name="${p.label}">
-      <div class="panel-header">
-        <span class="panel-name">${p.name}</span>
-        <span class="panel-value">${p.value}</span>
-      </div>
-      <div class="gauge-track"><div class="gauge-fill" style="width:${(p.bar*100).toFixed(1)}%;background:${p.color}"></div></div>
-      <div class="panel-meta"><span class="panel-badge">live</span></div>
-      <div class="panel-hint">🔗 Click for ${p.label}</div>
-    </div>
-  `).join('');
-}
-
-// ==================== HIJRI DATE ====================
-function toHijri(date) {
-  const jd = Math.floor(date.getTime() / 86400000 + 2440587.5);
-  const l = jd - 1948440 + 10632;
-  const n = Math.floor((l - 1) / 10631);
-  const l2 = l - 10631 * n + 354;
-  const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
-  const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
-  const day = l3 - Math.floor(709 * Math.floor(24 * l3 / 709) / 24);
-  const month = Math.floor(24 * l3 / 709);
-  const hijriMonths = ['Muharram', 'Safar', "Rabi' I", "Rabi' II", 'Jumada I', 'Jumada II', 'Rajab', "Sha'ban", 'Ramadan', 'Shawwal', "Dhu'l-Qa'da", "Dhu'l-Hijja"];
-  return { day: day, month: hijriMonths[month - 1], year: 30 * n + j - 30 };
-}
-
-function updateHijriDate() {
-  const hijri = toHijri(new Date());
-  document.getElementById('hijri-date').textContent = `${hijri.day} ${hijri.month} ${hijri.year} AH`;
-}
-
-// ==================== TIME ====================
-function updateTime() {
-  const now = new Date();
-  const mecca = new Date(now.toLocaleString('en-US', {timeZone: 'Asia/Riyadh'}));
-  document.getElementById('gregorian-date').textContent = now.toLocaleDateString();
-  updateHijriDate();
-  document.getElementById('utc-clock').textContent = now.toUTCString().slice(17, 25);
-  document.getElementById('mecca-clock').textContent = mecca.toLocaleTimeString();
-  document.getElementById('last-update-time').textContent = `Last update: ${now.toLocaleTimeString()}`;
-}
-
-function updateBottomTicker() {
-  const kp = STATE.currentKp.toFixed(2);
-  const quakes = STATE.quakesData.length;
-  const mag = STATE.strongestQuake.toFixed(1);
-  const container = document.getElementById('botTicker');
-  container.innerHTML = `
-    <span class="bt-item">🧲 Kp: <b>${kp}</b> · Click any card for observatory</span>
-    <span class="bt-item">🌍 Quakes: <b>${quakes}</b> · Strongest: <span class="alert">M${mag}</span></span>
-    <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}%</span>
-    <span class="bt-item">⚖️ Saqar Engine Active</span>
-    <span class="bt-item">🕋 TRIO SEAL · Click → Observatory</span>
-  `.repeat(2);
-}
-
-// ==================== LANGUAGE SYSTEM ====================
-const translations = { ar: { lang: 'العربية' }, en: { lang: 'English' }, fr: { lang: 'Français' }, es: { lang: 'Español' }, de: { lang: 'Deutsch' }, zh: { lang: '中文' }, ru: { lang: 'Русский' } };
-let currentLang = 'ar';
-
-function toggleLangMenu() {
-  const menu = document.getElementById('lang-menu');
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
-
-function setLanguage(lang) {
-  currentLang = lang;
-  document.getElementById('langBtn').textContent = `🌐 ${translations[lang]?.lang || 'العربية'}`;
-  document.getElementById('lang-menu').style.display = 'none';
-  document.documentElement.lang = lang === 'ar' ? 'ar' : 'en';
-  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-}
-
-// ==================== ENABLE PANEL CLICKS ====================
-function enablePanelClicks() {
-  document.querySelectorAll('.panel, .stat-box, .img-card, .moon-panel, .saqar-wrap').forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      let url = el.getAttribute('data-url');
-      let name = el.getAttribute('data-name') || el.querySelector('.panel-name')?.textContent || el.querySelector('h3')?.textContent || 'Observatory';
-      if (!url) {
-        if (el.id === 'moonPanel') url = OBSERVATORY_LINKS.nasa_moon;
-        else if (el.id === 'saqarPanel') url = OBSERVATORY_LINKS.saqar_docs;
-        else if (el.classList.contains('stat-box')) url = OBSERVATORY_LINKS.usgs_main;
-        else if (el.classList.contains('img-card')) url = el.getAttribute('data-url') || OBSERVATORY_LINKS.nasa_sdo;
-        else url = OBSERVATORY_LINKS.saqar_docs;
-      }
-      if (url) openObservatory(url, name);
-      else showToast('🔗 No link available for this indicator', '#64748b', 2000);
-    });
-  });
-}
-
-// ==================== MAIN REFRESH ====================
-async function refreshAll() {
-  await fetchEarthquakes();
-  await fetchRealKp();
-  updateMoon();
-  updateCorePanels();
-  updateExtendedPanels();
-  updateSaqarPanel();
-  updateTime();
-  updateBottomTicker();
-  renderVolcanoes();
-  renderQuakes();
-}
-
-// ==================== INIT ====================
-async function init() {
-  await refreshAll();
-  initVolcanoMap();
-  updateQuakeMap();
-  enablePanelClicks();
-  
-  setTimeout(() => {
-    const sdoImg = new Image();
-    sdoImg.src = 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg';
-    sdoImg.onload = () => document.getElementById('sdo-container').innerHTML = `<img class="img-loaded" src="${sdoImg.src}">`;
-    const auroraImg = new Image();
-    auroraImg.src = 'https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg';
-    auroraImg.onload = () => document.getElementById('aurora-container').innerHTML = `<img class="img-loaded" src="${auroraImg.src}">`;
-  }, 1000);
-  
-  document.getElementById('vol-prev').addEventListener('click', () => { STATE.volcanoOffset = Math.max(0, STATE.volcanoOffset - STATE.pageSize); renderVolcanoes(); });
-  document.getElementById('vol-next').addEventListener('click', () => { STATE.volcanoOffset = Math.min(STATIC_VOLCANOES.length - STATE.pageSize, STATE.volcanoOffset + STATE.pageSize); renderVolcanoes(); });
-  document.getElementById('quake-prev').addEventListener('click', () => { STATE.quakeOffset = Math.max(0, STATE.quakeOffset - STATE.pageSize); renderQuakes(); });
-  document.getElementById('quake-next').addEventListener('click', () => { STATE.quakeOffset = Math.min(STATE.quakesData.length - STATE.pageSize, STATE.quakeOffset + STATE.pageSize); renderQuakes(); });
-  
-  setInterval(refreshAll, 60000);
-  setInterval(updateTime, 1000);
-  setInterval(updateMoon, 60000);
-  setInterval(updateBottomTicker, 10000);
-}
-
-window.openObservatory = openObservatory;
-init();
+// ==================== تنفيذ الرسم ====================
+drawRealMoonCanvas();
 </script>
+
 </body>
 </html>
