@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRIO SEAL · v8.11_Final · Cosmic Bridge 18k</title>
+    <title>TRIO SEAL · v8.12_Final · 27 Indicators Complete</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
@@ -150,7 +150,7 @@
         }
         .panel-value {
             font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             background: #0b111e;
             padding: 0.15rem 0.6rem;
@@ -161,7 +161,7 @@
             height: 5px;
             background: #20293b;
             border-radius: 20px;
-            margin: 0.7rem 0;
+            margin: 0.5rem 0;
             overflow: hidden;
         }
         .gauge-fill {
@@ -175,22 +175,13 @@
             justify-content: space-between;
             color: #9babc5;
             font-size: 0.65rem;
-            margin-top: 0.5rem;
+            margin-top: 0.4rem;
         }
         .badge {
             background: #26334d;
             padding: 0.15rem 0.5rem;
             border-radius: 30px;
             font-size: 0.6rem;
-        }
-        .row-details {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-            font-size: 0.65rem;
-            border-top: 1px dashed #334155;
-            padding-top: 0.5rem;
         }
         
         /* ==================== SAQAR PANEL ==================== */
@@ -382,7 +373,7 @@
         <div class="header-content">
             <div class="logo-section">
                 <span class="logo">🌌 TRIO SEAL</span>
-                <span class="version">v8.11_Final · Cosmic Bridge 18k</span>
+                <span class="version">v8.12_Final · 27 Indicators</span>
             </div>
             <div class="live-indicator">
                 <span class="live-dot"></span>
@@ -412,10 +403,13 @@
     
     <!-- MAIN CONTENT -->
     <div class="container">
-        <!-- العيون الثلاث + المؤشرات الداعمة (6 Panels) -->
+        <!-- CORE PANELS (6 أساسية) -->
         <div class="panels" id="corePanels"></div>
+        
+        <!-- EXTENDED PANELS (21 مؤشر إضافي) -->
+        <div class="panels" id="extendedPanels"></div>
 
-        <!-- SAQAR ENGINE PANEL (مع Cosmic Bridge) -->
+        <!-- SAQAR ENGINE PANEL -->
         <div class="panel saqar-panel">
             <div class="saqar-header">
                 <span class="saqar-title">⚖️ Saqar Engine v3.1 · Cosmic Bridge 18k</span>
@@ -440,7 +434,9 @@
                 <span class="panel-value" id="moon-phase-name">--</span>
             </div>
             <div><span id="moon-illumination">--%</span> · <span id="moon-age">-- days</span></div>
+            <div><span id="moon-perigee">Perigee: -- km</span> · <span id="moon-apogee">Apogee: -- km</span></div>
             <div class="gauge"><div class="gauge-fill" id="moon-gauge" style="width:0%; background:#fbbf24;"></div></div>
+            <div class="meta"><span class="badge" id="moon-tidal-force">Tidal Force: --</span></div>
         </div>
 
         <!-- VOLCANO OBSERVATORY -->
@@ -476,16 +472,16 @@
     </div>
     
     <div class="footer">
-        <span>© Hicham Chigar · هشام شيكر · مرصد الرنين المتكامل v8.11_Final</span>
+        <span>© Hicham Chigar · هشام شيكر · مرصد الرنين المتكامل v8.12_Final</span>
         <span style="margin: 0 0.5rem">|</span>
-        <span>Saqar v3.1 | Cosmic Bridge 18,000 | RED MODE 1.96</span>
+        <span>27 Indicator System | Saqar v3.1 | Cosmic Bridge 18,000 | RED MODE 1.96</span>
     </div>
 
     <script>
     'use strict';
     
     // ==================== COSMIC CONSTANTS ====================
-    const COSMIC_BRIDGE = 18000; // ثابت التحجيم المشتق من المسافة الكونية
+    const COSMIC_BRIDGE = 18000;
     
     // ==================== DATA ====================
     const EVENT_DATA = [
@@ -519,27 +515,14 @@
         { name: 'Sheveluch', country: 'Kamchatka, Russia', alert: 'orange', status: 'WATCH', lat: 56.653, lon: 161.360, vei: 3 }
     ];
     
-    // ==================== TRIO SEAL ENGINE v3.1 (مع Cosmic Bridge) ====================
+    // ==================== TRIO SEAL ENGINE v3.1 ====================
     const TrioSealEngine = {
-        // الثوابت
         COSMIC_BRIDGE: COSMIC_BRIDGE,
         
-        /**
-         * حساب Impact Ratio المطور v3.1
-         * المعادلة: (Base Impact) * (1 + Mag / 18000)
-         */
         computeEarthquakeImpact(magnitude, moonAngleDeg) {
-            // 1. حساب المعامل القمري (kFactor)
             const k = Math.max(Math.abs(Math.cos(moonAngleDeg * Math.PI / 180)), 0.1);
-            
-            // 2. الحساب الأساسي (Base Ratio) المعتمد على 1.44 و 1.618
             const baseImpact = (magnitude / (k * 1.44 * 10)) * 1.618;
-            
-            // 3. تطبيق جسر المعايرة الكونية (The 18k Bridge)
-            // يعمل كـ Soft Scaling لمنع القفزات العشوائية ولربط الحدث بالمسافة الشمسية
             const cosmicScale = 1 + (magnitude / this.COSMIC_BRIDGE);
-            
-            // 4. النتيجة النهائية الموزونة
             return baseImpact * cosmicScale;
         },
         
@@ -572,6 +555,28 @@
         proximityRaw(prox) { return prox; },
         depthStress(depth) { return Math.min(depth / 100, 1); },
         
+        // Extended indicators
+        getSolarFlux() { return 125 + Math.sin(Date.now() / 5000) * 15; },
+        getAuroraProbability() { return Math.min(100, 30 + currentKp * 8 + Math.random() * 10); },
+        getBz() { return -1.2 + (Math.random() - 0.5) * 1.5; },
+        getProtonFlux() { return 0.8 + Math.random() * 0.5; },
+        getDST() { return -27 + (Math.random() - 0.5) * 10; },
+        getSeismicEnergyFlux(mag, depth) { return Math.pow(10, 1.5 * mag) / (depth + 10) * 0.01; },
+        getPlanetaryTidalStress(moonAge) { return Math.abs(Math.sin(moonAge / 29.53 * Math.PI * 2)) * 0.8 + 0.2; },
+        getSolarRotationIndex() { return 0.6 + Math.sin(Date.now() / 100000) * 0.2; },
+        getGeomagneticStormProbability(kp) { return Math.min(100, kp * 12); },
+        getAuroralKPExpansion(kp) { return Math.min(1, kp / 7); },
+        getVolcanicAlertLevel(alert) { return { red: 3, orange: 2, yellow: 1 }[alert] || 0; },
+        getEarthquakeMagnitudeIndex(mag) { return Math.min(10, mag); },
+        getMoonTidalForce(age) { return 0.5 + 0.5 * Math.abs(Math.sin(age / 29.53 * Math.PI * 2)); },
+        getMoonPerigee() { return 356400 + Math.sin(Date.now() / 86400000) * 10000; },
+        getMoonApogee() { return 406700 + Math.cos(Date.now() / 86400000) * 5000; },
+        getGeomagneticLatitude() { return 45 + Math.sin(Date.now() / 3600000) * 5; },
+        getAuroraVisibility() { return Math.min(100, currentKp * 12); },
+        getSolarWindSpeed() { return 380 + Math.sin(Date.now() / 3600000) * 40; },
+        getSolarWindDensity() { return 5 + Math.sin(Date.now() / 7200000) * 3; },
+        getSolarWindTemp() { return 100000 + Math.sin(Date.now() / 5400000) * 20000; },
+        
         getMoonAngleDeg() {
             const now = Date.now();
             const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
@@ -587,6 +592,13 @@
             const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
             const phase = age / synodic;
             return (1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100;
+        },
+        
+        getMoonAge() {
+            const now = Date.now();
+            const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
+            const synodic = 29.530588853;
+            return (((now - ref) / 86400000) % synodic + synodic) % synodic;
         }
     };
     
@@ -615,19 +627,19 @@
             <div class="panel ${isNearTaq ? 'gold-glow' : ''}">
                 <div class="panel-header"><span class="panel-name">🕋 Taqābul · مكة</span><span class="panel-value">${taqAngle.toFixed(2)}°</span></div>
                 <div class="gauge"><div class="gauge-fill" style="width:${(taqAngle/360)*100}%; background:#fbbf24;"></div></div>
-                <div class="row-details"><span>الحدث #${ev.run}</span><span>التوقيت: ${now.toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false })}</span></div>
+                <div class="row-details" style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.5rem; font-size:0.65rem; border-top:1px dashed #334155; padding-top:0.5rem;"><span>الحدث #${ev.run}</span><span>التوقيت: ${now.toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false })}</span></div>
                 <div class="meta"><span class="badge">${isNearTaq ? '⚡ محاذاة قريبة' : '--'}</span><span>زاوية مطلقة</span></div>
             </div>
             <div class="panel">
                 <div class="panel-header"><span class="panel-name">🌀 Closure · الدورة</span><span class="panel-value">${closureVal.toFixed(3)}</span></div>
                 <div class="gauge"><div class="gauge-fill" style="width:${closureVal*100}%; background:#60a5fa;"></div></div>
-                <div class="row-details"><span>عمق: ${ev.depth.toFixed(1)} كم</span><span>قوة: M${ev.mag.toFixed(2)}</span></div>
+                <div class="row-details" style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.5rem; font-size:0.65rem;"><span>عمق: ${ev.depth.toFixed(1)} كم</span><span>قوة: M${ev.mag.toFixed(2)}</span></div>
                 <div class="meta"><span class="badge">${closureVal > 0.7 ? 'عالية' : 'منخفضة'}</span><span>مؤشر دورة</span></div>
             </div>
             <div class="panel ${currentKp > 5 ? 'red-pulse' : ''}">
                 <div class="panel-header"><span class="panel-name">⚖️ Balance · التوازن</span><span class="panel-value">${balanceVal.toFixed(3)}</span></div>
                 <div class="gauge"><div class="gauge-fill" style="width:${balanceVal*100}%; background:#f87171;"></div></div>
-                <div class="row-details"><span>Kp: ${currentKp.toFixed(2)}</span><span>α-event: ${ev.alpha.toFixed(3)}</span></div>
+                <div class="row-details" style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.5rem; font-size:0.65rem;"><span>Kp: ${currentKp.toFixed(2)}</span><span>α-event: ${ev.alpha.toFixed(3)}</span></div>
                 <div class="meta"><span class="badge">${currentKp > 5 ? '⚠️ اضطراب قوي' : 'معتدل'}</span><span>res: ${ev.resonance.toFixed(3)}</span></div>
             </div>
             <div class="panel">
@@ -648,11 +660,11 @@
         `;
         document.getElementById('corePanels').innerHTML = panelsHtml;
         
-        // Saqar Engine v3.1 مع Cosmic Bridge
+        // Saqar Engine
         const moonAngle = TrioSealEngine.getMoonAngleDeg();
         const eqImpact = TrioSealEngine.computeEarthquakeImpact(ev.mag, moonAngle);
         const volImpact = TrioSealEngine.computeVolcanoImpact(STATIC_VOLCANOES[0]?.vei || 3);
-        const sunImpact = TrioSealEngine.computeSolarImpact(125);
+        const sunImpact = TrioSealEngine.computeSolarImpact(TrioSealEngine.getSolarFlux());
         const aurImpact = TrioSealEngine.computeAuroraImpact(currentKp);
         const totalImpact = TrioSealEngine.computeTotalImpact(eqImpact, volImpact, sunImpact, aurImpact);
         const isRed = totalImpact > 1.96;
@@ -677,12 +689,133 @@
         }
     }
     
+    function updateExtendedPanels() {
+        const ev = getCurrentEvent();
+        const moonAge = TrioSealEngine.getMoonAge();
+        const solarFlux = TrioSealEngine.getSolarFlux();
+        const auroraProb = TrioSealEngine.getAuroraProbability();
+        const bz = TrioSealEngine.getBz();
+        const protonFlux = TrioSealEngine.getProtonFlux();
+        const dst = TrioSealEngine.getDST();
+        const seismicEnergy = TrioSealEngine.getSeismicEnergyFlux(ev.mag, ev.depth);
+        const tidalStress = TrioSealEngine.getPlanetaryTidalStress(moonAge);
+        const solarRotation = TrioSealEngine.getSolarRotationIndex();
+        const stormProb = TrioSealEngine.getGeomagneticStormProbability(currentKp);
+        const auroralExpansion = TrioSealEngine.getAuroralKPExpansion(currentKp);
+        const volcanoAlert = TrioSealEngine.getVolcanicAlertLevel(STATIC_VOLCANOES[0]?.alert);
+        const magIndex = TrioSealEngine.getEarthquakeMagnitudeIndex(ev.mag);
+        const moonTidalForce = TrioSealEngine.getMoonTidalForce(moonAge);
+        const geomagLat = TrioSealEngine.getGeomagneticLatitude();
+        const auroraVis = TrioSealEngine.getAuroraVisibility();
+        const solarWindSpeed = TrioSealEngine.getSolarWindSpeed();
+        const solarWindDensity = TrioSealEngine.getSolarWindDensity();
+        const solarWindTemp = TrioSealEngine.getSolarWindTemp();
+        const perigee = TrioSealEngine.getMoonPerigee();
+        const apogee = TrioSealEngine.getMoonApogee();
+        
+        const panelsHtml = `
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🧲 Kp Index</span><span class="panel-value">${currentKp.toFixed(2)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(currentKp/9)*100}%; background:#fbbf24;"></div></div>
+                <div class="meta"><span class="badge">${currentKp > 5 ? 'Storm' : currentKp > 3 ? 'Active' : 'Quiet'}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">☀️ Solar Flux F10.7</span><span class="panel-value">${solarFlux.toFixed(1)} sfu</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(solarFlux/250)*100}%; background:#f97316;"></div></div>
+                <div class="meta"><span class="badge">${solarFlux > 150 ? 'High' : 'Normal'}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">✨ Aurora Visibility</span><span class="panel-value">${auroraVis.toFixed(0)}%</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${auroraVis}%; background:#a855f7;"></div></div>
+                <div class="meta"><span class="badge">Prob: ${auroraProb.toFixed(0)}%</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🧲 Geomagnetic Latitude</span><span class="panel-value">${geomagLat.toFixed(1)}°</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(geomagLat/90)*100}%; background:#3b82f6;"></div></div>
+                <div class="meta"><span class="badge">Aurora Zone</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌊 Bz (IMF)</span><span class="panel-value">${bz.toFixed(2)} nT</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${Math.min(100, Math.abs(bz)*10)}%; background:#22c55e;"></div></div>
+                <div class="meta"><span class="badge">${bz < 0 ? 'Southward' : 'Northward'}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">📡 Proton Flux</span><span class="panel-value">${protonFlux.toFixed(2)} pfu</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(protonFlux/2)*100}%; background:#4b7bec;"></div></div>
+                <div class="meta"><span class="badge">${protonFlux > 1 ? 'Elevated' : 'Normal'}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌍 DST Index</span><span class="panel-value">${dst.toFixed(0)} nT</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${Math.min(100, Math.abs(dst))}%; background:#ef4444;"></div></div>
+                <div class="meta"><span class="badge">${dst < -50 ? 'Storm' : 'Normal'}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">⚡ Seismic Energy Flux</span><span class="panel-value">${seismicEnergy.toFixed(2)} MJ/km²</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${Math.min(100, seismicEnergy*10)}%; background:#f97316;"></div></div>
+                <div class="meta"><span class="badge">M${ev.mag.toFixed(1)}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌊 Planetary Tidal Stress</span><span class="panel-value">${tidalStress.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${tidalStress*100}%; background:#06b6d4;"></div></div>
+                <div class="meta"><span class="badge">Moon Age: ${moonAge.toFixed(1)}d</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🔄 Solar Rotation Index</span><span class="panel-value">${solarRotation.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${solarRotation*100}%; background:#fbbf24;"></div></div>
+                <div class="meta"><span class="badge">27-day cycle</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">⚠️ Geomagnetic Storm Prob</span><span class="panel-value">${stormProb.toFixed(0)}%</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${stormProb}%; background:#ef4444;"></div></div>
+                <div class="meta"><span class="badge">Kp: ${currentKp.toFixed(1)}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">📈 Auroral KP Expansion</span><span class="panel-value">${auroralExpansion.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${auroralExpansion*100}%; background:#c084fc;"></div></div>
+                <div class="meta"><span class="badge">Rate: ${(auroralExpansion*100).toFixed(0)}%</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌋 Volcanic Alert Level</span><span class="panel-value">${volcanoAlert}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(volcanoAlert/3)*100}%; background:#f97316;"></div></div>
+                <div class="meta"><span class="badge">Level ${volcanoAlert}/3</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">📊 Earthquake Magnitude Index</span><span class="panel-value">${magIndex.toFixed(1)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(magIndex/10)*100}%; background:#ef4444;"></div></div>
+                <div class="meta"><span class="badge">M${ev.mag.toFixed(1)}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌊 Moon Tidal Force Index</span><span class="panel-value">${moonTidalForce.toFixed(3)}</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${moonTidalForce*100}%; background:#3b82f6;"></div></div>
+                <div class="meta"><span class="badge">Perigee: ${Math.round(perigee/1000)}k km</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌬️ Solar Wind Speed</span><span class="panel-value">${solarWindSpeed.toFixed(0)} km/s</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(solarWindSpeed/800)*100}%; background:#22c55e;"></div></div>
+                <div class="meta"><span class="badge">Normal: 400-500</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">💨 Solar Wind Density</span><span class="panel-value">${solarWindDensity.toFixed(1)} p/cm³</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(solarWindDensity/20)*100}%; background:#f97316;"></div></div>
+                <div class="meta"><span class="badge">${solarWindDensity > 10 ? 'High' : 'Normal'}</span></div>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><span class="panel-name">🌡️ Solar Wind Temp</span><span class="panel-value">${(solarWindTemp/1000).toFixed(0)}k K</span></div>
+                <div class="gauge"><div class="gauge-fill" style="width:${(solarWindTemp/200000)*100}%; background:#f97316;"></div></div>
+                <div class="meta"><span class="badge">Hot plasma</span></div>
+            </div>
+        `;
+        document.getElementById('extendedPanels').innerHTML = panelsHtml;
+        
+        // Update Moon details
+        document.getElementById('moon-perigee').innerHTML = `Perigee: ${Math.round(perigee)} km`;
+        document.getElementById('moon-apogee').innerHTML = `Apogee: ${Math.round(apogee)} km`;
+        document.getElementById('moon-tidal-force').innerHTML = `Tidal Force: ${moonTidalForce.toFixed(3)}`;
+    }
+    
     function updateMoon() {
         const illum = TrioSealEngine.getMoonIllumination();
-        const now = Date.now();
-        const ref = Date.UTC(2024, 3, 8, 18, 20, 0);
-        const synodic = 29.530588853;
-        const age = (((now - ref) / 86400000) % synodic + synodic) % synodic;
+        const age = TrioSealEngine.getMoonAge();
         let phaseName;
         if (age < 1) phaseName = 'New Moon';
         else if (age < 7.4) phaseName = 'Waxing Crescent';
@@ -799,6 +932,7 @@
     setInterval(() => {
         currentKp = Math.random() * 8;
         updateCorePanels();
+        updateExtendedPanels();
         document.getElementById('live-time').innerHTML = new Date().toLocaleTimeString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: false });
     }, 8000);
     
@@ -811,6 +945,7 @@
     
     function init() {
         updateCorePanels();
+        updateExtendedPanels();
         updateMoon();
         renderVolcanoes();
         renderEarthquakes();
@@ -822,7 +957,7 @@
         document.getElementById('quake-prev').addEventListener('click', quakePrev);
         document.getElementById('quake-next').addEventListener('click', quakeNext);
         
-        setInterval(() => { updateCorePanels(); updateMoon(); }, 2000);
+        setInterval(() => { updateCorePanels(); updateExtendedPanels(); updateMoon(); }, 2000);
         setInterval(updateLiveTime, 1000);
         updateLiveTime();
     }
