@@ -547,7 +547,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
   <div class="ticker-inner" id="topTicker">
     <span>🌍 Real-time Seismic Data · USGS</span>
     <span>🌊 NOAA Space Weather · Kp Index</span>
-    <span>🌙 Lunar Phase · Real Moon Image</span>
+    <span>🌙 Lunar Phase · Corrected Crescent Shadow</span>
     <span>📡 27 Indicators · Live Updates Every 60s</span>
     <span>🔗 Click any card → Direct Observatory Link</span>
   </div>
@@ -582,11 +582,11 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div class="saqar-hint">🔗 Click to view Saqar Engine Documentation</div>
   </div>
 
-  <div class="section-title">🌙 Moon Phase · Real NASA Image · Click for NASA Moon Data</div>
+  <div class="section-title">🌙 Moon Phase · Corrected Crescent Shadow · Click for NASA Moon Data</div>
   <div class="moon-panel" id="moonPanel" data-url="https://moon.nasa.gov/">
     <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
     <div class="moon-info">
-      <h3>LUNAR PHASE · Real Moon Image</h3>
+      <h3>LUNAR PHASE · Corrected Crescent</h3>
       <div><span id="moon-phase-name" style="font-size:.95rem;font-weight:700">--</span></div>
       <div><span class="moon-pct" id="moon-illumination">--%</span></div>
       <div class="moon-sub" id="moon-thickness">Silver thickness: --'</div>
@@ -802,7 +802,7 @@ function getMoonTidalForce(age) {
   return 0.5 + 0.5 * Math.abs(Math.sin(age / SYNODIC * Math.PI * 2));
 }
 
-// Real Moon Image from NASA
+// ==================== CORRECTED MOON SHADOW LOGIC ====================
 function drawRealMoonCanvas() {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
@@ -812,42 +812,73 @@ function drawRealMoonCanvas() {
   canvas.height = size;
   const cx = size/2, cy = size/2, r = size/2 - 3;
   
-  const illumination = getMoonIllumination() / 100;
+  const illumination = getMoonIllumination() / 100; // 0.295 = 29.5%
   const age = getMoonAge();
   const phase = age / SYNODIC;
+  const isWaxing = phase < 0.5; // Waxing crescent to full moon
   
+  // Base moon image (Full Moon)
   const moonImage = new Image();
   moonImage.crossOrigin = 'Anonymous';
   moonImage.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg';
   
   moonImage.onload = () => {
     ctx.clearRect(0, 0, size, size);
+    
+    // Draw full moon first
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
     ctx.drawImage(moonImage, 0, 0, size, size);
     
-    const terminatorX = cx + Math.cos(phase * 2 * Math.PI) * r;
-    const gradShadow = ctx.createLinearGradient(terminatorX - 15, cy - 15, terminatorX + 15, cy + 15);
-    if (phase < 0.5) {
-      gradShadow.addColorStop(0, `rgba(0, 0, 0, ${0.85 - illumination * 0.6})`);
-      gradShadow.addColorStop(0.5, `rgba(0, 0, 0, ${0.4 - illumination * 0.3})`);
-      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    // ==================== CORRECTED SHADOW MASK ====================
+    // Shadow offset based on illumination percentage
+    // 29.5% illumination means 70.5% of the disk is dark
+    const shadowIntensity = 0.92;
+    
+    let gradShadow;
+    if (isWaxing) {
+      // Waxing: illuminated from the right side
+      gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+      gradShadow.addColorStop(0, `rgba(0, 0, 0, ${shadowIntensity})`);
+      gradShadow.addColorStop(illumination, `rgba(0, 0, 0, 0.55)`);
+      gradShadow.addColorStop(illumination + 0.12, `rgba(0, 0, 0, 0.25)`);
+      gradShadow.addColorStop(1, `rgba(0, 0, 0, 0)`);
     } else {
-      gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      gradShadow.addColorStop(0.5, `rgba(0, 0, 0, ${0.4 - illumination * 0.3})`);
-      gradShadow.addColorStop(1, `rgba(0, 0, 0, ${0.85 - illumination * 0.6})`);
+      // Waning: illuminated from the left side
+      gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+      gradShadow.addColorStop(0, `rgba(0, 0, 0, 0)`);
+      gradShadow.addColorStop(1 - illumination, `rgba(0, 0, 0, 0.25)`);
+      gradShadow.addColorStop(1 - illumination + 0.12, `rgba(0, 0, 0, 0.55)`);
+      gradShadow.addColorStop(1, `rgba(0, 0, 0, ${shadowIntensity})`);
     }
+    
     ctx.fillStyle = gradShadow;
     ctx.fillRect(0, 0, size, size);
     ctx.restore();
     
+    // Silver rim
     ctx.beginPath();
     ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
     ctx.strokeStyle = '#c0bcb0';
     ctx.lineWidth = 1.5;
     ctx.stroke();
+    
+    // Glow effect on illuminated side only
+    const glowGrad = ctx.createLinearGradient(
+      isWaxing ? cx + r * 0.4 : cx - r * 0.4,
+      cy,
+      isWaxing ? cx + r : cx - r,
+      cy
+    );
+    glowGrad.addColorStop(0, `rgba(255, 235, 190, ${0.15 + illumination * 0.25})`);
+    glowGrad.addColorStop(1, 'rgba(255, 235, 190, 0)');
+    
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = glowGrad;
+    ctx.fill();
   };
   
   moonImage.onerror = () => {
@@ -859,6 +890,8 @@ function drawRealMoonCanvas() {
 
 function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.clearRect(0, 0, size, size);
+  
+  // Silver base gradient
   const grad = ctx.createRadialGradient(cx - r*0.2, cy - r*0.2, r*0.1, cx, cy, r);
   grad.addColorStop(0, '#e8e4d8');
   grad.addColorStop(0.4, '#c0bcb0');
@@ -868,18 +901,42 @@ function drawSilverMoonFallback(ctx, size, cx, cy, r, illumination, phase) {
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
+  
+  const isWaxing = phase < 0.5;
+  const shadowIntensity = 0.92;
+  
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.clip();
-  const termX = cx + Math.cos(phase * 2 * Math.PI) * r * 0.85;
-  const gradShadow = ctx.createLinearGradient(termX - 20, cy - 10, termX + 20, cy + 10);
-  gradShadow.addColorStop(0, `rgba(0,0,0,${0.85 - illumination * 0.6})`);
-  gradShadow.addColorStop(illumination, `rgba(0,0,0,${0.3 - illumination * 0.2})`);
-  gradShadow.addColorStop(1, 'rgba(0,0,0,0)');
+  
+  let gradShadow;
+  if (isWaxing) {
+    gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+    gradShadow.addColorStop(0, `rgba(0, 0, 0, ${shadowIntensity})`);
+    gradShadow.addColorStop(illumination, `rgba(0, 0, 0, 0.55)`);
+    gradShadow.addColorStop(illumination + 0.12, `rgba(0, 0, 0, 0.25)`);
+    gradShadow.addColorStop(1, `rgba(0, 0, 0, 0)`);
+  } else {
+    gradShadow = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+    gradShadow.addColorStop(0, `rgba(0, 0, 0, 0)`);
+    gradShadow.addColorStop(1 - illumination, `rgba(0, 0, 0, 0.25)`);
+    gradShadow.addColorStop(1 - illumination + 0.12, `rgba(0, 0, 0, 0.55)`);
+    gradShadow.addColorStop(1, `rgba(0, 0, 0, ${shadowIntensity})`);
+  }
+  
   ctx.fillStyle = gradShadow;
   ctx.fillRect(0, 0, size, size);
   ctx.restore();
+  
+  // Add crater details (deterministic, no random)
+  const craters = [[0.2,0.3,0.08], [-0.25,0.15,0.06], [0.15,-0.2,0.07], [-0.1,-0.3,0.09]];
+  ctx.fillStyle = 'rgba(0,0,0,0.12)';
+  craters.forEach(([dx, dy, rad]) => {
+    ctx.beginPath();
+    ctx.arc(cx + dx * r, cy + dy * r, rad * r, 0, Math.PI * 2);
+    ctx.fill();
+  });
 }
 
 function updateMoon() {
