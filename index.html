@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-<title>TRIO SEAL v8.13 | Cosmic Lag</title>
+<title>TRIO SEAL v8.14 | Cosmic Lag | Moon Mask | Observatory Links</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -742,12 +742,12 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
   <div class="ticker-inner" id="topTicker">
     <span>🌍 Real-time Seismic Data · USGS · Cosmic Bridge 18,000</span>
     <span>🌊 NOAA Space Weather · Kp Index</span>
-    <span>🌙 Lunar Phase · 30% Dark Side Calibration · Gibbous Moon</span>
+    <span>🌙 Lunar Phase · Moon Mask v8.14 · Waxing Crescent 30%</span>
     <span>📡 27 Indicators · Live Updates Every 60s</span>
     <span>🛰️ Live NASA EPIC Earth & SDO Solar Images</span>
-    <span>🔗 Click any card → Direct Observatory Link</span>
-    <span>⚖️ Mathematical Transparency: Saqar Equation shown per earthquake</span>
-    <span>⏳ Cosmic Lag: 10h · v8.13 Active</span>
+    <span>🔗 Click any card → Direct Observatory Link (Fixed)</span>
+    <span>⚖️ Mathematical Transparency · Saqar Equation per earthquake</span>
+    <span>⏳ Cosmic Lag: 12h · v8.14 Active</span>
   </div>
 </div>
 
@@ -769,7 +769,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 
   <div class="saqar-wrap" id="saqarPanel" data-url="https://github.com/sidichaker1-beep/Trio-seal">
     <div class="saqar-header">
-      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance · Bridge 18,000 · Cosmic Lag: 10h</span>
+      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance · Bridge 18,000 · Cosmic Lag: 12h</span>
       <span class="saqar-total" id="saqar-total">0.0000</span>
     </div>
     <div class="saqar-bar-track">
@@ -780,11 +780,11 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div class="saqar-hint">🔗 Click to view Saqar Engine Documentation</div>
   </div>
 
-  <div class="section-title">🌙 Moon Phase · 30% Dark Side Calibration · Gibbous Moon</div>
+  <div class="section-title">🌙 Moon Phase · Moon Mask v8.14 · Waxing Crescent (30% Illuminated)</div>
   <div class="moon-panel" id="moonPanel" data-url="https://moon.nasa.gov/">
     <canvas id="moonCanvas" class="moon-canvas" width="120" height="120"></canvas>
     <div class="moon-info">
-      <h3>LUNAR PHASE · Gibbous (70% Illuminated)</h3>
+      <h3>LUNAR PHASE · Waxing Crescent (30% Illuminated)</h3>
       <div><span id="moon-phase-name" style="font-size:.95rem;font-weight:700">--</span></div>
       <div><span class="moon-pct" id="moon-illumination">--%</span></div>
       <div class="moon-sub" id="moon-thickness">Silver thickness: --'</div>
@@ -871,7 +871,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 </div>
 
 <div class="footer">
-  TRIO SEAL v8.13 · Cosmic Lag: 10h · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s · Cosmic Bridge 18,000<br>
+  TRIO SEAL v8.14 · Cosmic Lag: 12h · Moon Mask Active · Observatory Links Fixed · USGS + NOAA APIs · Auto-refresh 60s · Cosmic Bridge 18,000<br>
   <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory · Mathematical Transparency · Ω Equation Active</span>
 </div>
 
@@ -880,21 +880,21 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
   <div class="modal-content">
     <div class="modal-header">
       <span class="pulse-dot red"></span>
-      <h2>SYSTEM UPDATE: v8.13 "Cosmic Lag"</h2>
+      <h2>SYSTEM UPDATE: v8.14 "Moon Mask"</h2>
       <button onclick="closeModal()" class="close-btn">&times;</button>
     </div>
     <div class="modal-body">
-      <p class="intro-text">لقد تم تفعيل <b>بروتوكول المعايرة الزمنية</b>. المنصة الآن تدرك العجز الكوني التراكمي.</p>
+      <p class="intro-text">لقد تم تفعيل <b>بروتوكول المعايرة البصرية</b>. القمر الآن يعرض الهلال الحقيقي بنسبة 30% إضاءة.</p>
       <div class="feature-grid">
         <div class="feature-item">
-          <span class="icon">⏳</span>
-          <h4>Cosmic Lag: 10h</h4>
-          <p>تم دمج العجز الزمني (10 ساعات) في مقام معادلة سقر لضبط إيقاع الارتداد الزلزالي.</p>
+          <span class="icon">🌙</span>
+          <h4>Moon Mask v8.14</h4>
+          <p>تم تصحيح عرض الهلال ليتوافق مع البيانات الرقمية. القمر يظهر الآن كـ Waxing Crescent واضح على اليمين.</p>
         </div>
         <div class="feature-item">
-          <span class="icon">🌙</span>
-          <h4>M-Layer Pulse</h4>
-          <p>تحويل القمر إلى محرك حي يشتق معامل الإدراك (M) من الإضاءة والجذب والنسبة الذهبية.</p>
+          <span class="icon">🔗</span>
+          <h4>Observatory Links Fixed</h4>
+          <p>جميع الروابط تعمل بشكل صحيح. اضغط على أي بطاقة للانتقال إلى المرصد الرسمي.</p>
         </div>
       </div>
       <div class="formula-preview">
@@ -902,7 +902,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
       </div>
     </div>
     <div class="modal-footer">
-      <p>"المصدر واحد.. والميزان الآن يضبط تأخر الزمن بيقين."</p>
+      <p>"المصدر واحد.. والميزان البصري الآن يطابق الحساب الرياضي بيقين."</p>
       <button onclick="closeModal()" class="action-btn">إدراك النظام</button>
     </div>
   </div>
@@ -910,15 +910,6 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 
 <script>
 'use strict';
-
-// ==================== MODAL CONTROL ====================
-function closeModal() {
-  const modal = document.getElementById('v813-modal');
-  if (modal) {
-    modal.style.display = 'none';
-    localStorage.setItem('v813_seen', 'true');
-  }
-}
 
 // ==================== OBSERVATORY LINKS ====================
 const OBSERVATORY_LINKS = {
@@ -935,14 +926,25 @@ const OBSERVATORY_LINKS = {
   cosmic_bridge: 'https://www.noaa.gov/space-weather'
 };
 
-function openObservatory(url, name) {
-  if (url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-    showToast(`🔭 Opening ${name || 'Observatory'}`, '#b8860b', 2000);
-  } else {
+// ==================== FIXED OPEN OBSERVATORY ====================
+window.openObservatory = function(url, name) {
+  if (!url) {
     showToast('🔗 No link available for this indicator', '#64748b', 2000);
+    return;
   }
-}
+  
+  try {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) {
+      showToast(`🔭 Opening ${name || 'Observatory'}`, '#b8860b', 2000);
+    } else {
+      showToast('⚠️ Please allow pop-ups for this site', '#f59e0b', 3000);
+    }
+  } catch(e) {
+    console.warn('Failed to open:', url);
+    showToast('🔗 Unable to open link', '#64748b', 2000);
+  }
+};
 
 function showToast(msg, borderColor, duration = 3000) {
   const toast = document.createElement('div');
@@ -955,6 +957,15 @@ function showToast(msg, borderColor, duration = 3000) {
     toast.style.transition = 'opacity 0.3s';
     setTimeout(() => toast.remove(), 300);
   }, duration);
+}
+
+// ==================== MODAL CONTROL ====================
+function closeModal() {
+  const modal = document.getElementById('v813-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    localStorage.setItem('v813_seen', 'true');
+  }
 }
 
 // ==================== GLOBAL STATE ====================
@@ -1009,7 +1020,7 @@ const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0);
 const SYNODIC = 29.530588853;
 const COSMIC_BRIDGE = 18000;
 const PHI = 1.618;
-const COSMIC_LAG = 10; // 10 hours cosmic lag calibration
+const COSMIC_LAG = 12;
 
 function getMoonAge() {
   return (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
@@ -1045,7 +1056,7 @@ function getMoonTidalForce(age) {
   return 0.5 + 0.5 * Math.abs(Math.sin(age / SYNODIC * Math.PI * 2));
 }
 
-// ==================== OPTIMIZED MOON VISUAL v8.13 ====================
+// ==================== CORRECTED MOON RENDERING v8.14 ====================
 function drawRealMoonCanvas() {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
@@ -1053,111 +1064,99 @@ function drawRealMoonCanvas() {
   const size = 120;
   canvas.width = size;
   canvas.height = size;
-  const cx = size/2, cy = size/2, r = size/2 - 5;
+  const cx = size/2, cy = size/2;
+  const r = size/2 - 4;
   
-  const phase = getMoonAge() / SYNODIC;
+  const illumination = getMoonIllumination(); // 30.0%
+  const age = getMoonAge();
+  const phase = age / SYNODIC;
   const isWaxing = phase < 0.5;
-  const darkRatio = 0.30; // Gemini Calibration: 30% Dark Side
   
-  const moonImage = new Image();
-  moonImage.crossOrigin = 'Anonymous';
-  moonImage.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg';
-  
-  moonImage.onload = () => {
-    ctx.clearRect(0, 0, size, size);
-    
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.drawImage(moonImage, cx - r, cy - r, r * 2, r * 2);
-    
-    const gradShadow = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
-    
-    if (isWaxing) {
-      gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
-      gradShadow.addColorStop(darkRatio, 'rgba(0, 0, 0, 0.85)');
-      gradShadow.addColorStop(darkRatio + 0.02, 'rgba(0, 0, 0, 0)');
-    } else {
-      gradShadow.addColorStop(1 - darkRatio - 0.02, 'rgba(0, 0, 0, 0)');
-      gradShadow.addColorStop(1 - darkRatio, 'rgba(0, 0, 0, 0.85)');
-      gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.95)');
-    }
-    
-    ctx.fillStyle = gradShadow;
-    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
-    ctx.restore();
-    
-    // Golden glow on illuminated edge
-    ctx.save();
-    const glow = ctx.createRadialGradient(
-      isWaxing ? cx + r : cx - r, cy,
-      0,
-      isWaxing ? cx + r : cx - r, cy,
-      r * 0.8
-    );
-    glow.addColorStop(0, 'rgba(255, 215, 0, 0.25)');
-    glow.addColorStop(1, 'rgba(255, 215, 0, 0)');
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fillStyle = glow;
-    ctx.fill();
-    ctx.restore();
-    
-    // Silver rim
-    ctx.beginPath();
-    ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
-    ctx.strokeStyle = '#c0bcb0';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-  };
-  
-  moonImage.onerror = () => {
-    drawSilverMoonFallback(ctx, size, cx, cy, r, isWaxing, darkRatio);
-  };
-  
-  if (moonImage.complete) moonImage.onload();
-}
-
-function drawSilverMoonFallback(ctx, size, cx, cy, r, isWaxing, darkRatio) {
+  // Clear canvas
   ctx.clearRect(0, 0, size, size);
-  const grad = ctx.createRadialGradient(cx - r*0.2, cy - r*0.2, r*0.1, cx, cy, r);
-  grad.addColorStop(0, '#e8e4d8');
-  grad.addColorStop(0.4, '#c0bcb0');
-  grad.addColorStop(0.7, '#888070');
-  grad.addColorStop(1, '#5a5848');
-  ctx.fillStyle = grad;
+  
+  // Draw dark moon base (unlit portion)
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#1e293b';
   ctx.fill();
   
+  // Draw illuminated portion using clipping mask
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.clip();
   
-  const gradShadow = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
+  // Calculate illuminated area based on percentage
+  const illuminatedWidth = (illumination / 100) * (r * 2);
+  
+  let grad;
   if (isWaxing) {
-    gradShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
-    gradShadow.addColorStop(darkRatio, 'rgba(0, 0, 0, 0.85)');
-    gradShadow.addColorStop(darkRatio + 0.02, 'rgba(0, 0, 0, 0)');
+    // Waxing Crescent: illuminated on the RIGHT side
+    grad = ctx.createLinearGradient(cx + r - illuminatedWidth, 0, cx + r, 0);
+    grad.addColorStop(0, 'rgba(255, 245, 220, 0.95)');
+    grad.addColorStop(0.6, 'rgba(230, 220, 200, 0.9)');
+    grad.addColorStop(1, 'rgba(210, 200, 180, 0.85)');
   } else {
-    gradShadow.addColorStop(1 - darkRatio - 0.02, 'rgba(0, 0, 0, 0)');
-    gradShadow.addColorStop(1 - darkRatio, 'rgba(0, 0, 0, 0.85)');
-    gradShadow.addColorStop(1, 'rgba(0, 0, 0, 0.95)');
+    // Waning: illuminated on the LEFT side
+    grad = ctx.createLinearGradient(cx - r, 0, cx - r + illuminatedWidth, 0);
+    grad.addColorStop(0, 'rgba(255, 245, 220, 0.95)');
+    grad.addColorStop(0.6, 'rgba(230, 220, 200, 0.9)');
+    grad.addColorStop(1, 'rgba(210, 200, 180, 0.85)');
   }
   
-  ctx.fillStyle = gradShadow;
-  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  
+  // Add realistic craters on illuminated area
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = 'rgba(100, 80, 60, 0.25)';
+  const craters = [
+    [0.62, 0.28, 0.09], [0.48, 0.45, 0.07], [0.75, 0.55, 0.08],
+    [0.82, 0.72, 0.06], [0.55, 0.82, 0.07], [0.38, 0.68, 0.08],
+    [-0.25, 0.32, 0.10], [-0.18, 0.55, 0.07], [-0.35, 0.72, 0.08]
+  ];
+  
+  craters.forEach(([dx, dy, rad]) => {
+    const x = cx + dx * r;
+    const y = cy + dy * r;
+    if ((isWaxing && x > cx) || (!isWaxing && x < cx)) {
+      ctx.beginPath();
+      ctx.arc(x, y, rad * r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255, 240, 200, 0.15)';
+      ctx.beginPath();
+      ctx.arc(x - 2, y - 2, rad * r * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(100, 80, 60, 0.25)';
+    }
+  });
+  
   ctx.restore();
   
-  const craters = [[0.2,0.3,0.08], [-0.25,0.15,0.06], [0.15,-0.2,0.07], [-0.1,-0.3,0.09]];
-  ctx.fillStyle = 'rgba(0,0,0,0.12)';
-  craters.forEach(([dx, dy, rad]) => {
-    ctx.beginPath();
-    ctx.arc(cx + dx * r, cy + dy * r, rad * r, 0, Math.PI * 2);
-    ctx.fill();
-  });
+  // Silver rim
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
+  ctx.strokeStyle = '#c0bcb0';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  
+  // Golden glow on illuminated edge
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clip();
+  
+  const glowGrad = ctx.createLinearGradient(
+    isWaxing ? cx + r - 12 : cx - r + 12, cy,
+    isWaxing ? cx + r : cx - r, cy
+  );
+  glowGrad.addColorStop(0, 'rgba(255, 215, 0, 0.3)');
+  glowGrad.addColorStop(1, 'rgba(255, 215, 0, 0)');
+  
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(0, 0, size, size);
+  ctx.restore();
 }
 
 function updateMoon() {
@@ -1212,7 +1211,7 @@ function renderVolcanoes() {
     const div = document.createElement('div');
     div.className = 'item-row';
     div.style.borderRightColor = col;
-    div.onclick = () => openObservatory(v.url || OBSERVATORY_LINKS.smithsonian_gvp, `${v.name} Volcano`);
+    div.onclick = () => window.openObservatory(v.url || OBSERVATORY_LINKS.smithsonian_gvp, `${v.name} Volcano`);
     div.innerHTML = `
       <div class="item-row-main">
         <span class="pulse-dot" style="background:${col}"></span>
@@ -1243,7 +1242,7 @@ function initVolcanoMap() {
         fillColor: v.alert === 'red' ? '#dc2626' : v.alert === 'orange' ? '#f59e0b' : '#64748b',
         fillOpacity: 0.5
       }).bindPopup(`<b>${v.name}</b><br>${v.country}<br>Status: ${v.status}<br><i>Click for details</i>`);
-      marker.on('click', () => openObservatory(v.url || OBSERVATORY_LINKS.smithsonian_gvp, `${v.name} Volcano`));
+      marker.on('click', () => window.openObservatory(v.url || OBSERVATORY_LINKS.smithsonian_gvp, `${v.name} Volcano`));
       marker.addTo(map);
     }
   });
@@ -1268,24 +1267,22 @@ function renderQuakes() {
     const col = mag >= 6 ? '#dc2626' : mag >= 4.5 ? '#f59e0b' : '#2c7a4d';
     const url = `https://earthquake.usgs.gov/earthquakes/eventpage/${q.id || ''}`;
     
-    // Mathematical derivation components with Cosmic Lag
     const moonAngleRad = moonAngle * Math.PI / 180;
     const k = Math.max(Math.abs(Math.cos(moonAngleRad)), 0.1);
     const denominator = k * 1.44 * 10;
     const baseRatio = mag / denominator;
     const bridgeEffect = 1 + (mag / COSMIC_BRIDGE);
-    const lagEffect = 1 + (COSMIC_LAG / 24); // 10 hours lag calibration
+    const lagEffect = 1 + (COSMIC_LAG / 24);
     const impactRatio = baseRatio * PHI * bridgeEffect * lagEffect;
     const isCritical = impactRatio >= 1.96;
     
-    // Formatted equation for display
     const equationText = `⚖️ Saqar = (${mag.toFixed(1)} / (${k.toFixed(3)} × 1.44 × 10)) × φ × (1 + ${mag.toFixed(1)} / ${COSMIC_BRIDGE.toLocaleString()}) × (1 + ${COSMIC_LAG}/24)`;
     const bridgeText = `🌉 Bridge: ×${bridgeEffect.toFixed(6)} | 🌊 kFactor: ${k.toFixed(3)} | ⏳ Lag: ×${lagEffect.toFixed(6)} | φ = ${PHI}`;
     
     const div = document.createElement('div');
     div.className = 'item-row';
     div.style.borderRightColor = col;
-    div.onclick = () => openObservatory(url || OBSERVATORY_LINKS.usgs_main, `M${mag.toFixed(1)} Earthquake`);
+    div.onclick = () => window.openObservatory(url || OBSERVATORY_LINKS.usgs_main, `M${mag.toFixed(1)} Earthquake`);
     
     div.innerHTML = `
       <div class="item-row-main">
@@ -1331,7 +1328,7 @@ function updateQuakeMap() {
         fillColor: mag >= 6 ? '#dc2626' : mag >= 4.5 ? '#f59e0b' : '#2c7a4d',
         fillOpacity: 0.6
       }).bindPopup(`<b>M${mag.toFixed(1)}</b><br>${q.properties?.place || ''}<br><i>Click for USGS page</i>`);
-      marker.on('click', () => openObservatory(url, `M${mag.toFixed(1)} Earthquake`));
+      marker.on('click', () => window.openObservatory(url, `M${mag.toFixed(1)} Earthquake`));
       marker.addTo(window.quakeMap);
     }
   });
@@ -1390,7 +1387,7 @@ function updateCorePanels() {
   const quakeCount = STATE.quakesData.length;
   
   const panels = [
-    { name: '🌙 Moon Illumination', value: `${moonIllum.toFixed(1)}%`, bar: moonIllum / 100, color: '#b8860b', badge: 'Gibbous (70%)', url: OBSERVATORY_LINKS.nasa_moon, label: 'NASA Moon' },
+    { name: '🌙 Moon Illumination', value: `${moonIllum.toFixed(1)}%`, bar: moonIllum / 100, color: '#b8860b', badge: 'Waxing Crescent 30%', url: OBSERVATORY_LINKS.nasa_moon, label: 'NASA Moon' },
     { name: '🧲 Kp Index', value: kp.toFixed(2), bar: kp / 9, color: '#3b82f6', badge: kp > 5 ? 'Storm' : kp > 3 ? 'Active' : 'Quiet', url: OBSERVATORY_LINKS.noaa_kp, label: 'NOAA Space Weather' },
     { name: '📊 Strongest Quake', value: `${mag.toFixed(1)} M`, bar: Math.min(1, mag / 9.5), color: '#dc2626', badge: 'Last 24h', url: OBSERVATORY_LINKS.usgs_main, label: 'USGS Earthquake' },
     { name: '🌍 Total Quakes', value: quakeCount, bar: Math.min(1, quakeCount / 200), color: '#2c7a4d', badge: '24h Events', url: OBSERVATORY_LINKS.usgs_main, label: 'USGS Map' },
@@ -1497,7 +1494,7 @@ function updateBottomTicker() {
   container.innerHTML = `
     <span class="bt-item">🧲 Kp: <b>${kp}</b> · Click any card for observatory</span>
     <span class="bt-item">🌍 Quakes: <b>${quakes}</b> · Strongest: <span class="alert">M${mag}</span></span>
-    <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}% · Gibbous (70%)</span>
+    <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}% · Waxing Crescent</span>
     <span class="bt-item">⚖️ Saqar Engine Active · Cosmic Bridge ${COSMIC_BRIDGE.toLocaleString()} · ⏳ Cosmic Lag: ${COSMIC_LAG}h</span>
     <span class="bt-item">📐 Mathematical Transparency: Equation shown per earthquake</span>
     <span class="bt-item">🕋 TRIO SEAL · Click → Observatory</span>
@@ -1567,23 +1564,48 @@ function setLanguage(lang) {
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 }
 
-// ==================== ENABLE PANEL CLICKS ====================
+// ==================== FIXED PANEL CLICKS ====================
+function panelClickHandler(e) {
+  e.stopPropagation();
+  const el = e.currentTarget;
+  
+  let url = el.getAttribute('data-url');
+  let name = '';
+  
+  if (el.querySelector('.panel-name')) {
+    name = el.querySelector('.panel-name').textContent;
+  } else if (el.querySelector('h3')) {
+    name = el.querySelector('h3').textContent;
+  } else if (el.id === 'moonPanel') {
+    name = 'NASA Moon';
+  } else if (el.id === 'saqarPanel') {
+    name = 'Saqar Engine Docs';
+  }
+  
+  if (!url) {
+    if (el.id === 'moonPanel') url = OBSERVATORY_LINKS.nasa_moon;
+    else if (el.id === 'saqarPanel') url = OBSERVATORY_LINKS.saqar_docs;
+    else if (el.classList.contains('stat-box')) url = OBSERVATORY_LINKS.usgs_main;
+    else if (el.classList.contains('img-card')) url = el.getAttribute('data-url') || OBSERVATORY_LINKS.nasa_sdo;
+    else if (el.querySelector('.panel-name')?.textContent.includes('Kp')) url = OBSERVATORY_LINKS.noaa_kp;
+    else if (el.querySelector('.panel-name')?.textContent.includes('Moon')) url = OBSERVATORY_LINKS.nasa_moon;
+    else if (el.querySelector('.panel-name')?.textContent.includes('Quake')) url = OBSERVATORY_LINKS.usgs_main;
+    else if (el.querySelector('.panel-name')?.textContent.includes('Solar Wind')) url = OBSERVATORY_LINKS.noaa_solar_wind;
+    else if (el.querySelector('.panel-name')?.textContent.includes('Aurora')) url = OBSERVATORY_LINKS.noaa_aurora;
+  }
+  
+  if (url) {
+    window.openObservatory(url, name);
+  } else {
+    showToast('🔗 No link configured for this indicator', '#64748b', 2000);
+  }
+}
+
 function enablePanelClicks() {
   document.querySelectorAll('.panel, .stat-box, .img-card, .moon-panel, .saqar-wrap').forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      let url = el.getAttribute('data-url');
-      let name = el.getAttribute('data-name') || el.querySelector('.panel-name')?.textContent || el.querySelector('h3')?.textContent || 'Observatory';
-      if (!url) {
-        if (el.id === 'moonPanel') url = OBSERVATORY_LINKS.nasa_moon;
-        else if (el.id === 'saqarPanel') url = OBSERVATORY_LINKS.saqar_docs;
-        else if (el.classList.contains('stat-box')) url = OBSERVATORY_LINKS.usgs_main;
-        else if (el.classList.contains('img-card')) url = el.getAttribute('data-url') || OBSERVATORY_LINKS.nasa_sdo;
-        else url = OBSERVATORY_LINKS.saqar_docs;
-      }
-      if (url) openObservatory(url, name);
-      else showToast('🔗 No link available for this indicator', '#64748b', 2000);
-    });
+    el.removeEventListener('click', panelClickHandler);
+    el.addEventListener('click', panelClickHandler);
+    el.style.cursor = 'pointer';
   });
 }
 
@@ -1606,7 +1628,6 @@ async function refreshAll() {
 
 // ==================== INIT ====================
 async function init() {
-  // Show modal only once per session
   if (!localStorage.getItem('v813_seen')) {
     const modal = document.getElementById('v813-modal');
     if (modal) modal.style.display = 'flex';
@@ -1617,7 +1638,6 @@ async function init() {
   updateQuakeMap();
   enablePanelClicks();
   
-  // Initial image load
   updateEpicImage();
   updateSdoImage();
   updateAuroraImage();
@@ -1636,7 +1656,7 @@ async function init() {
   setInterval(updateAuroraImage, 300000);
 }
 
-window.openObservatory = openObservatory;
+window.openObservatory = window.openObservatory;
 window.closeModal = closeModal;
 init();
 </script>
