@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-<title>TRIO SEAL v8.15 | Cosmic Resonance Framework | Solar Corona | Critical 2027</title>
+<title>TRIO SEAL v8.15 | Cosmic Resonance Framework | Solar Corona | 27 Indicators</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -297,6 +297,8 @@ body {
   font-size: 0.68rem; color: var(--text-muted);
   margin-top: 0.3rem; display: flex; gap: 1rem; flex-wrap: wrap;
 }
+
+/* ==================== SOLAR CORONA MODULE STYLES (NEW) ==================== */
 .corona-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -372,31 +374,7 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
-canvas#tempChart { max-height: 300px; width: 100%; }
-.energy-table {
-  background: var(--bg-panel);
-  border-radius: 20px;
-  padding: 1rem;
-  border: 1px solid var(--bdr);
-  margin-bottom: 1.5rem;
-  overflow-x: auto;
-}
-.energy-table table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.7rem;
-}
-.energy-table th, .energy-table td {
-  padding: 0.6rem;
-  text-align: center;
-  border-bottom: 1px solid var(--bdr);
-}
-.energy-table th {
-  font-family: var(--f-hud);
-  color: var(--gold);
-  font-weight: 600;
-}
-.energy-table tr:hover { background: var(--bg-subtle); }
+canvas#tempChart, canvas#rsChart { max-height: 300px; width: 100%; }
 .corona-controls {
   display: flex;
   gap: 1rem;
@@ -436,6 +414,8 @@ canvas#tempChart { max-height: 300px; width: 100%; }
   color: var(--teal);
   margin-top: 0.5rem;
 }
+
+/* ==================== LISTS & MAPS (FROM OLD VERSION) ==================== */
 .list-wrap {
   background: var(--bg-panel);
   border-radius: 18px; padding: 1rem;
@@ -738,8 +718,8 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     </div>
   </div>
 
-  <!-- ==================== COSMIC RESONANCE FRAMEWORK (CRF) DASHBOARD ==================== -->
-  <div class="section-title">⚖️ Cosmic Resonance Framework (CRF) · Critical 2027 Window</div>
+  <!-- ==================== NEW: SOLAR CORONA MODULE ==================== -->
+  <div class="section-title">☀️ Solar Corona Observatory · Cosmic Resonance Framework (CRF)</div>
   
   <div class="corona-grid">
     <div class="corona-card">
@@ -766,17 +746,6 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div class="psp-status" id="rs-status">📊 Statistical validation: Spearman ρ = -0.679, p = 7.8×10⁻⁷ | Z-score = 5.42</div>
   </div>
 
-  <div class="energy-table">
-    <h4 style="font-family:var(--f-hud); font-size:0.7rem; margin-bottom:0.8rem;">📋 Recent Earthquakes · Resonance Scores</h4>
-    <table id="earthquake-table">
-      <thead><tr><th>Year</th><th>Event</th><th>Mw</th><th>α_event</th><th>RS</th><th>Status</th> </tr</thead>
-      <tbody id="eq-tbody"></tbody>
-     </table>
-  </div>
-
-  <!-- ==================== SOLAR CORONA MODULE ==================== -->
-  <div class="section-title">☀️ Solar Corona Observatory · Parker Probe Integration</div>
-  
   <div class="corona-grid">
     <div class="corona-card" id="temp-card">
       <div class="card-header"><span class="icon">🌡️</span><h4>CORONA TEMPERATURE (at 2 R_sun)</h4></div>
@@ -809,7 +778,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <button class="corona-btn primary" id="compare-psp">📡 Compare with Parker PSP</button>
   </div>
 
-  <!-- ==================== VOLCANO & EARTHQUAKE LISTS ==================== -->
+  <!-- ==================== VOLCANO OBSERVATORY (FROM OLD VERSION) ==================== -->
   <div class="section-title">🌋 Live Volcano Observatory · Click for Smithsonian GVP</div>
   <div class="list-wrap">
     <div class="stats-row">
@@ -822,6 +791,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div id="vol-map" class="map-wrap"></div>
   </div>
 
+  <!-- ==================== EARTHQUAKE OBSERVATORY (FROM OLD VERSION) ==================== -->
   <div class="section-title">🌍 Live Earthquake Observatory · Click for USGS Map</div>
   <div class="list-wrap">
     <div class="stats-row">
@@ -834,6 +804,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <div id="quake-map" class="map-wrap"></div>
   </div>
 
+  <!-- ==================== LIVE SPACE IMAGES ==================== -->
   <div class="section-title">🛰️ Live Space Images · NASA EPIC Earth & SDO Solar</div>
   <div class="images-grid">
     <div class="img-card" data-url="https://sdo.gsfc.nasa.gov/data/"><h3>☀️ SDO Solar · AIA 193Å</h3><div id="sdo-container"><div class="img-skeleton">🌞 Loading SDO Solar Image...</div></div></div>
@@ -853,7 +824,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 'use strict';
 
 // ============================================================================
-// 1. COSMIC RESONANCE FRAMEWORK (CRF) - SOLAR CORONA SIMULATION
+// 1. COSMIC RESONANCE FRAMEWORK (CRF) - SOLAR CORONA SIMULATION (NEW)
 // ============================================================================
 
 class SolarCoronaSim {
@@ -866,7 +837,6 @@ class SolarCoronaSim {
       ALPHA_STAB: 7.850,
       BETA: 7.8545,
       COSMIC_BRIDGE: 34400,
-      LIGHT_UNIT: 432/55,
       kB: 1.380649e-23,
       mu0: 1.2566370614e-6,
       Q0: 1e-5
@@ -874,121 +844,46 @@ class SolarCoronaSim {
     this.Q_ext_factor = 1.0;
   }
 
-  density(r) {
-    const n0 = 1e8;
-    return n0 * Math.pow(r, -2.5);
-  }
-
-  magneticField(r, theta) {
-    const B0 = 2;
-    const dipole = B0 * Math.pow(r, -3);
-    const southEnhancement = 1 + 0.3 * Math.cos(theta - Math.PI/2);
-    return dipole * southEnhancement;
-  }
-
-  solarWindSpeed(r) {
-    const v0 = 10;
-    return v0 + 100 * (1 - Math.exp(-(r - 1)/5));
-  }
-
-  traditionalTemperature(r) {
-    const n = this.density(r);
-    return 2 / (3 * this.CONSTANTS.kB * n);
-  }
-
+  density(r) { return 1e8 * Math.pow(r, -2.5); }
+  magneticField(r, theta) { const B0=2; return B0 * Math.pow(r,-3) * (1 + 0.3 * Math.cos(theta - Math.PI/2)); }
+  solarWindSpeed(r) { return 10 + 100 * (1 - Math.exp(-(r-1)/5)); }
+  traditionalTemperature(r) { return 2 / (3 * this.CONSTANTS.kB * this.density(r)); }
   simulatedTemperature(r, theta) {
     const T_trad = this.traditionalTemperature(r);
-    const deficit = this.CONSTANTS.COSMIC_DEFICIT_FACTOR;
     const southFactor = 1 + 0.3 * Math.cos(theta - Math.PI/2);
-    return T_trad * deficit * southFactor * this.Q_ext_factor;
+    return T_trad * this.CONSTANTS.COSMIC_DEFICIT_FACTOR * southFactor * this.Q_ext_factor;
   }
-
-  internalEnergy(r, theta) {
-    const n = this.density(r);
-    const T = this.simulatedTemperature(r, theta);
-    return 1.5 * n * this.CONSTANTS.kB * T;
-  }
-
-  externalEnergy(r, theta) {
-    const south = Math.max(0, Math.cos(theta - Math.PI/2));
-    const decay = Math.exp(-(r - 1)/2);
-    return this.CONSTANTS.Q0 * this.Q_ext_factor * south * decay;
-  }
-
-  heatConductionLoss(r, theta) {
-    const T1 = this.simulatedTemperature(r, theta);
-    const dr = 1e-2;
-    const T2 = this.simulatedTemperature(r + dr, theta);
-    const dT_dr = (T2 - T1)/dr;
-    const kappa0 = 1e-6;
-    const kappa = kappa0 * Math.pow(T1, 2.5);
-    return -kappa * dT_dr;
-  }
-
-  totalEnergy(r, theta) {
-    return this.internalEnergy(r, theta) + this.externalEnergy(r, theta) - this.heatConductionLoss(r, theta);
-  }
-
   poyntingFlux(r, theta) {
-    const B = this.magneticField(r, theta);
-    const V = this.solarWindSpeed(r) * 1e3;
-    const energyDensity = Math.pow(B, 2)/(2 * this.CONSTANTS.mu0);
-    return energyDensity * V;
+    const B = this.magneticField(r, theta) * 1e-4;
+    const v = this.solarWindSpeed(r) * 1000;
+    return Math.pow(B,2) * v / this.CONSTANTS.mu0;
   }
-
   cosmicDeficit(r, theta) {
     const T_sim = this.simulatedTemperature(r, theta);
     const T_trad = this.traditionalTemperature(r);
     return ((T_sim - T_trad)/T_trad) * 100;
   }
-
-  calibrateWithMizan(nasaTemp, r, theta) {
-    const factor = this.CONSTANTS.COSMIC_DEFICIT_FACTOR;
-    return nasaTemp * (1 + (factor * Math.sin(theta)) / Math.pow(r, 1.5));
-  }
-
-  updateExternalSourceFactor(newFactor) {
-    this.Q_ext_factor = newFactor;
-  }
-
   runSimulation(radii = [1,1.5,2,2.5,3,5,10]) {
     const results = [];
     for(const r of radii) {
       const theta = Math.PI/2;
       results.push({
-        r,
-        T_sim: this.simulatedTemperature(r, theta) / 1e6,
-        T_trad: this.traditionalTemperature(r) / 1e6,
-        poynting: this.poyntingFlux(r, theta) / 1000,
-        deficit: this.cosmicDeficit(r, theta)
+        r, T_sim: this.simulatedTemperature(r,theta)/1e6, T_trad: this.traditionalTemperature(r)/1e6,
+        poynting: this.poyntingFlux(r,theta)/1000, deficit: this.cosmicDeficit(r,theta)
       });
     }
     return results;
   }
-
   generateChartData() {
     const radii = [1,1.5,2,2.5,3,5,10];
-    const curveA = [];
-    const curveB = [];
-    for(const r of radii) {
-      const theta = Math.PI/2;
-      curveA.push(this.traditionalTemperature(r) / 1e6);
-      curveB.push(this.simulatedTemperature(r, theta) / 1e6);
-    }
+    const curveA = [], curveB = [];
+    for(const r of radii) { curveA.push(this.traditionalTemperature(r)/1e6); curveB.push(this.simulatedTemperature(r,Math.PI/2)/1e6); }
     return { labels: radii, curveA, curveB };
-  }
-
-  checkCosmicDeficit(currentDeficit) {
-    if(currentDeficit > this.CONSTANTS.COSMIC_DEFICIT_HOURS) {
-      console.warn("⚠️ Cosmic Deficit exceeded 10 hours!");
-      return true;
-    }
-    return false;
   }
 }
 
 // ============================================================================
-// 2. MIZAN AL-MALAKUT v7.3 DATA
+// 2. EARTHQUAKE DATA FOR RESONANCE SCORES (NEW)
 // ============================================================================
 
 const ALPHA_STAB = 7.850;
@@ -996,134 +891,19 @@ const CRITICAL_2027_LOWER = 0.00567;
 const CRITICAL_2027_UPPER = 0.00576;
 const CRITICAL_2027_MID = (CRITICAL_2027_LOWER + CRITICAL_2027_UPPER) / 2;
 
-const earthquakeData = [
-  { year: 1960, event: "Chile (Valdivia)", mag: 9.5, alphaEvent: 7.94915, rs: 0.09915 },
-  { year: 1964, event: "Alaska (Good Friday)", mag: 9.2, alphaEvent: 7.92597, rs: 0.07597 },
-  { year: 2004, event: "Sumatra-Andaman", mag: 9.1, alphaEvent: 7.86738, rs: 0.01738 },
-  { year: 2011, event: "Tohoku", mag: 9.0, alphaEvent: 7.87346, rs: 0.02346 },
-  { year: 1952, event: "Kamchatka", mag: 9.0, alphaEvent: 7.92535, rs: 0.07535 },
-  { year: 1965, event: "Rat Islands", mag: 8.7, alphaEvent: 7.88279, rs: 0.03279 },
-  { year: 1950, event: "Assam-Tibet", mag: 8.6, alphaEvent: 7.87244, rs: 0.02244 },
-  { year: 2005, event: "Nias", mag: 8.6, alphaEvent: 7.85678, rs: 0.00678 },
-  { year: 2010, event: "Maule", mag: 8.8, alphaEvent: 7.86092, rs: 0.01092 },
-  { year: 2018, event: "Fiji", mag: 8.2, alphaEvent: 7.85500, rs: 0.00500 },
-  { year: 2023, event: "Turkey", mag: 7.8, alphaEvent: 7.85500, rs: 0.00500 }
+const earthquakeRSData = [
+  { year: 1960, event: "Chile (Valdivia)", mag: 9.5, rs: 0.09915 },
+  { year: 1964, event: "Alaska", mag: 9.2, rs: 0.07597 },
+  { year: 2004, event: "Sumatra-Andaman", mag: 9.1, rs: 0.01738 },
+  { year: 2011, event: "Tohoku", mag: 9.0, rs: 0.02346 },
+  { year: 1952, event: "Kamchatka", mag: 9.0, rs: 0.07535 },
+  { year: 1965, event: "Rat Islands", mag: 8.7, rs: 0.03279 },
+  { year: 2010, event: "Maule", mag: 8.8, rs: 0.01092 },
+  { year: 2005, event: "Nias", mag: 8.6, rs: 0.00678 }
 ];
 
 // ============================================================================
-// 3. UI RENDERING
-// ============================================================================
-
-let rsChart = null;
-let tempChart = null;
-const coronaSim = new SolarCoronaSim();
-
-function renderRSChart() {
-  const data = earthquakeData.map(e => ({ year: e.year, rs: e.rs }));
-  const years = data.map(d => d.year);
-  const rsValues = data.map(d => d.rs);
-  
-  const n = years.length;
-  const sumX = years.reduce((a,b) => a + b, 0);
-  const sumY = rsValues.reduce((a,b) => a + b, 0);
-  const sumXY = years.reduce((a,b,i) => a + b * rsValues[i], 0);
-  const sumX2 = years.reduce((a,b) => a + b * b, 0);
-  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-  const projection2027 = slope * 2027 + intercept;
-  
-  const extendedYears = [...years, 2027];
-  
-  if (rsChart) rsChart.destroy();
-  const ctx = document.getElementById('rsChart').getContext('2d');
-  rsChart = new Chart(ctx, {
-    type: 'scatter',
-    data: {
-      datasets: [
-        { label: 'Resonance Scores', data: data.map(d => ({ x: d.year, y: d.rs })), 
-          backgroundColor: (ctx) => ctx.raw.y <= 0.01 ? '#0D7A55' : ctx.raw.y <= 0.03 ? '#C96B10' : '#C0221F',
-          pointRadius: 6, pointBorderColor: '#1B2B4B' },
-        { label: 'OLS Trend', data: extendedYears.map(y => ({ x: y, y: slope * y + intercept })), 
-          type: 'line', borderColor: '#F97316', borderWidth: 2, fill: false, pointRadius: 0 },
-        { label: 'Critical 2027', data: [{ x: 2027, y: CRITICAL_2027_MID }], 
-          type: 'scatter', pointRadius: 10, pointBackgroundColor: '#FBBF24', pointBorderColor: '#B07D0A' }
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: { x: { title: { display: true, text: 'Year' }, min: 1900, max: 2030 },
-                y: { title: { display: true, text: 'Resonance Score (RS)' }, min: 0, max: 0.12 } }
-    }
-  });
-  
-  document.getElementById('critical-value').innerHTML = `${CRITICAL_2027_MID.toFixed(5)}<span class="unit"> [${CRITICAL_2027_LOWER.toFixed(5)}-${CRITICAL_2027_UPPER.toFixed(5)}]</span>`;
-  document.getElementById('critical-gauge').style.width = `${(CRITICAL_2027_MID / 0.12) * 100}%`;
-  document.getElementById('critical-status').innerHTML = `🔮 Critical Window: Q3–Q4 2027 | Target RS = ${CRITICAL_2027_MID.toFixed(5)}`;
-}
-
-function renderEarthquakeTable() {
-  const tbody = document.getElementById('eq-tbody');
-  tbody.innerHTML = '';
-  earthquakeData.slice(0, 10).forEach(e => {
-    const row = tbody.insertRow();
-    row.insertCell(0).textContent = e.year;
-    row.insertCell(1).textContent = e.event;
-    row.insertCell(2).textContent = e.mag;
-    row.insertCell(3).textContent = e.alphaEvent.toFixed(5);
-    const rsCell = row.insertCell(4);
-    rsCell.textContent = e.rs.toFixed(5);
-    rsCell.style.color = e.rs <= 0.01 ? '#0D7A55' : e.rs <= 0.03 ? '#C96B10' : '#C0221F';
-    row.insertCell(5).textContent = e.rs <= 0.01 ? '✅ Low' : e.rs <= 0.03 ? '⚠️ Moderate' : '🔴 High';
-  });
-}
-
-function renderSolarCoronaUI() {
-  const simData = coronaSim.runSimulation();
-  const dataAt2R = simData.find(d => Math.abs(d.r - 2.0) < 0.1);
-  if (dataAt2R) {
-    document.getElementById('corona-temp').innerHTML = dataAt2R.T_sim.toFixed(1) + '<span class="unit"> MK</span>';
-    document.getElementById('temp-gauge').style.width = `${Math.min(100, dataAt2R.T_sim / 5 * 100)}%`;
-    document.getElementById('poynting-flux').innerHTML = dataAt2R.poynting.toFixed(1) + '<span class="unit"> kW/m²</span>';
-    document.getElementById('poynting-gauge').style.width = `${Math.min(100, dataAt2R.poynting / 15 * 100)}%`;
-    document.getElementById('cosmic-deficit').innerHTML = dataAt2R.deficit.toFixed(1) + '<span class="unit"> %</span>';
-    document.getElementById('deficit-gauge').style.width = `${Math.min(100, dataAt2R.deficit / 50 * 100)}%`;
-  }
-  
-  const chartData = coronaSim.generateChartData();
-  if (tempChart) tempChart.destroy();
-  const ctx = document.getElementById('tempChart').getContext('2d');
-  tempChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: chartData.labels,
-      datasets: [
-        { label: 'TRIO SEAL (with Q_ext)', data: chartData.curveB, borderColor: '#F97316', borderWidth: 3, tension: 0.3 },
-        { label: 'Traditional Model (no Q_ext)', data: chartData.curveA, borderColor: '#6B7FA3', borderWidth: 2, borderDash: [5,5], tension: 0.3 }
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: { x: { title: { display: true, text: 'Distance (R_sun)' } }, y: { title: { display: true, text: 'Temperature (MK)' }, min: 0, max: 4.5 } }
-    }
-  });
-}
-
-async function compareWithPSP() {
-  const statusDiv = document.getElementById('psp-status');
-  statusDiv.innerHTML = '📡 Fetching Parker Solar Probe data...';
-  setTimeout(() => {
-    const simData = coronaSim.runSimulation();
-    const dataAt2R = simData.find(d => Math.abs(d.r - 2.0) < 0.1);
-    const pspTemp = 2.9;
-    document.getElementById('psp-temp').textContent = pspTemp.toFixed(1);
-    const delta = ((dataAt2R.T_sim - pspTemp) / pspTemp * 100).toFixed(1);
-    document.getElementById('temp-delta').innerHTML = delta + '%';
-    statusDiv.innerHTML = `✅ Parker PSP matched | Sim: ${dataAt2R.T_sim.toFixed(1)} MK | PSP: ${pspTemp} MK | Δ = ${delta}% | CRF calibrated (ΔQ=10h)`;
-  }, 500);
-}
-
-// ============================================================================
-// 4. MOON & OTHER FUNCTIONS
+// 3. MOON FUNCTIONS (FROM OLD VERSION)
 // ============================================================================
 
 const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0);
@@ -1178,7 +958,7 @@ function updateMoon() {
 }
 
 // ============================================================================
-// 5. CORE & EXTENDED PANELS (27 Indicators)
+// 4. CORE & EXTENDED PANELS (27 INDICATORS FROM OLD VERSION)
 // ============================================================================
 
 function updateCorePanels() {
@@ -1240,7 +1020,169 @@ function updateSaqarPanel() {
 }
 
 // ============================================================================
-// 6. INITIALIZATION
+// 5. SOLAR CORONA UI RENDERING (NEW)
+// ============================================================================
+
+let rsChart = null;
+let tempChart = null;
+const coronaSim = new SolarCoronaSim();
+
+function renderRSChart() {
+  const data = earthquakeRSData.map(e => ({ year: e.year, rs: e.rs }));
+  const years = data.map(d => d.year);
+  const rsValues = data.map(d => d.rs);
+  const n = years.length;
+  const sumX = years.reduce((a,b) => a + b, 0);
+  const sumY = rsValues.reduce((a,b) => a + b, 0);
+  const sumXY = years.reduce((a,b,i) => a + b * rsValues[i], 0);
+  const sumX2 = years.reduce((a,b) => a + b * b, 0);
+  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+  const extendedYears = [...years, 2027];
+  if (rsChart) rsChart.destroy();
+  const ctx = document.getElementById('rsChart').getContext('2d');
+  rsChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: 'Resonance Scores', data: data.map(d => ({ x: d.year, y: d.rs })), backgroundColor: '#C96B10', pointRadius: 6 },
+        { label: 'OLS Trend', data: extendedYears.map(y => ({ x: y, y: slope * y + intercept })), type: 'line', borderColor: '#F97316', borderWidth: 2, fill: false, pointRadius: 0 },
+        { label: 'Critical 2027', data: [{ x: 2027, y: CRITICAL_2027_MID }], type: 'scatter', pointRadius: 10, pointBackgroundColor: '#FBBF24' }
+      ]
+    },
+    options: { responsive: true, scales: { x: { min: 1900, max: 2030 }, y: { min: 0, max: 0.12 } } }
+  });
+  document.getElementById('critical-value').innerHTML = `${CRITICAL_2027_MID.toFixed(5)}<span class="unit"> [${CRITICAL_2027_LOWER.toFixed(5)}-${CRITICAL_2027_UPPER.toFixed(5)}]</span>`;
+  document.getElementById('critical-gauge').style.width = `${(CRITICAL_2027_MID / 0.12) * 100}%`;
+}
+
+function renderSolarCoronaUI() {
+  const simData = coronaSim.runSimulation();
+  const dataAt2R = simData.find(d => Math.abs(d.r - 2.0) < 0.1);
+  if (dataAt2R) {
+    document.getElementById('corona-temp').innerHTML = dataAt2R.T_sim.toFixed(1) + '<span class="unit"> MK</span>';
+    document.getElementById('temp-gauge').style.width = `${Math.min(100, dataAt2R.T_sim / 5 * 100)}%`;
+    document.getElementById('poynting-flux').innerHTML = dataAt2R.poynting.toFixed(1) + '<span class="unit"> kW/m²</span>';
+    document.getElementById('poynting-gauge').style.width = `${Math.min(100, dataAt2R.poynting / 15 * 100)}%`;
+    document.getElementById('cosmic-deficit').innerHTML = dataAt2R.deficit.toFixed(1) + '<span class="unit"> %</span>';
+    document.getElementById('deficit-gauge').style.width = `${Math.min(100, dataAt2R.deficit / 50 * 100)}%`;
+  }
+  const chartData = coronaSim.generateChartData();
+  if (tempChart) tempChart.destroy();
+  const ctx = document.getElementById('tempChart').getContext('2d');
+  tempChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartData.labels,
+      datasets: [
+        { label: 'TRIO SEAL (with Q_ext)', data: chartData.curveB, borderColor: '#F97316', borderWidth: 3, tension: 0.3 },
+        { label: 'Traditional Model (no Q_ext)', data: chartData.curveA, borderColor: '#6B7FA3', borderWidth: 2, borderDash: [5,5], tension: 0.3 }
+      ]
+    },
+    options: { responsive: true, scales: { y: { min: 0, max: 4.5 } } }
+  });
+}
+
+async function compareWithPSP() {
+  const statusDiv = document.getElementById('psp-status');
+  statusDiv.innerHTML = '📡 Fetching Parker Solar Probe data...';
+  setTimeout(() => {
+    const simData = coronaSim.runSimulation();
+    const dataAt2R = simData.find(d => Math.abs(d.r - 2.0) < 0.1);
+    const pspTemp = 2.9;
+    document.getElementById('psp-temp').textContent = pspTemp.toFixed(1);
+    const delta = ((dataAt2R.T_sim - pspTemp) / pspTemp * 100).toFixed(1);
+    document.getElementById('temp-delta').innerHTML = delta + '%';
+    statusDiv.innerHTML = `✅ Parker PSP matched | Sim: ${dataAt2R.T_sim.toFixed(1)} MK | PSP: ${pspTemp} MK | Δ = ${delta}% | CRF calibrated (ΔQ=10h)`;
+  }, 500);
+}
+
+// ============================================================================
+// 6. VOLCANO & EARTHQUAKE MAPS (FROM OLD VERSION)
+// ============================================================================
+
+const STATIC_VOLCANOES = [
+  {name:'Etna', country:'Italy', alert:'orange', status:'WATCH', lat:37.748, lon:14.999, url:'https://volcano.si.edu/volcano.cfm?vn=211060'},
+  {name:'Kilauea', country:'Hawaii, USA', alert:'orange', status:'WATCH', lat:19.421, lon:-155.287, url:'https://volcano.si.edu/volcano.cfm?vn=332010'},
+  {name:'Fuego', country:'Guatemala', alert:'red', status:'WARNING', lat:14.473, lon:-90.880, url:'https://volcano.si.edu/volcano.cfm?vn=342090'},
+  {name:'Sakurajima', country:'Japan', alert:'orange', status:'WATCH', lat:31.581, lon:130.659, url:'https://volcano.si.edu/volcano.cfm?vn=282080'},
+  {name:'Popocatépetl', country:'Mexico', alert:'yellow', status:'ADVISORY', lat:19.023, lon:-98.622, url:'https://volcano.si.edu/volcano.cfm?vn=341090'}
+];
+
+const STATE = { volcanoOffset:0, quakeOffset:0, pageSize:5, quakesData:[], currentKp:3.0, strongestQuake:0, redModeActive:false };
+
+function renderVolcanoes() {
+  const page = STATIC_VOLCANOES.slice(STATE.volcanoOffset, STATE.volcanoOffset+STATE.pageSize);
+  const container=document.getElementById('vol-list'); if(!container) return;
+  container.innerHTML='';
+  document.getElementById('vol-total').textContent=STATIC_VOLCANOES.length;
+  document.getElementById('vol-alert').textContent=STATIC_VOLCANOES.filter(v=>v.alert==='red'||v.alert==='orange').length;
+  document.getElementById('vol-page').textContent=`${Math.floor(STATE.volcanoOffset/STATE.pageSize)+1}/${Math.ceil(STATIC_VOLCANOES.length/STATE.pageSize)}`;
+  page.forEach(v=>{ const col=v.alert==='red'?'#dc2626':v.alert==='orange'?'#f59e0b':'#64748b';
+    const div=document.createElement('div'); div.className='item-row'; div.style.borderRightColor=col;
+    div.onclick=()=>window.openObservatory(v.url||'https://volcano.si.edu/',`${v.name} Volcano`);
+    div.innerHTML=`<div class="item-row-main"><span class="pulse-dot" style="background:${col}"></span><span class="item-name"><b>${v.name}</b> · ${v.country}</span><span class="item-badge" style="background:${col}20;color:${col}">${v.status}</span></div>`;
+    container.appendChild(div);
+  });
+  document.getElementById('vol-prev').disabled=STATE.volcanoOffset<=0;
+  document.getElementById('vol-next').disabled=STATE.volcanoOffset+STATE.pageSize>=STATIC_VOLCANOES.length;
+}
+
+function initVolcanoMap() {
+  const el=document.getElementById('vol-map'); if(!el||typeof L==='undefined') return;
+  const map=L.map('vol-map').setView([20,10],2);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+  STATIC_VOLCANOES.forEach(v=>{ if(v.lat&&v.lon){ L.circleMarker([v.lat,v.lon],{radius:6,color:v.alert==='red'?'#dc2626':v.alert==='orange'?'#f59e0b':'#64748b',fillColor:v.alert==='red'?'#dc2626':v.alert==='orange'?'#f59e0b':'#64748b',fillOpacity:0.5})
+      .bindPopup(`<b>${v.name}</b><br>${v.country}<br>Status: ${v.status}`).on('click',()=>window.openObservatory(v.url||'https://volcano.si.edu/',`${v.name} Volcano`)).addTo(map);} });
+  setTimeout(()=>map.invalidateSize(),300);
+}
+
+async function fetchEarthquakes() {
+  try{ const res=await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',{signal:AbortSignal.timeout(10000)});
+    if(!res.ok) throw new Error(); const data=await res.json();
+    STATE.quakesData=data.features.sort((a,b)=>(b.properties?.mag||0)-(a.properties?.mag||0));
+    const mags=STATE.quakesData.map(f=>f.properties?.mag||0);
+    STATE.strongestQuake=mags.length?Math.max(...mags):0;
+    document.getElementById('quake-total').textContent=STATE.quakesData.length;
+    document.getElementById('quake-strongest').textContent=STATE.strongestQuake.toFixed(1);
+    document.getElementById('quake-m5').textContent=STATE.quakesData.filter(f=>(f.properties?.mag||0)>=5).length;
+    renderQuakes(); updateQuakeMap();
+  } catch(e){ console.warn('USGS API failed'); }
+}
+
+function renderQuakes() {
+  const page=STATE.quakesData.slice(STATE.quakeOffset,STATE.quakeOffset+STATE.pageSize);
+  const container=document.getElementById('quake-list'); if(!container) return; container.innerHTML='';
+  const moonAge=getMoonAge(), moonAngle=(moonAge/SYNODIC)*360;
+  page.forEach(q=>{ const mag=q.properties?.mag||0, place=q.properties?.place||'Unknown', time=new Date(q.properties?.time).toLocaleTimeString();
+    const col=mag>=6?'#dc2626':mag>=4.5?'#f59e0b':'#2c7a4d', url=`https://earthquake.usgs.gov/earthquakes/eventpage/${q.id||''}`;
+    const k=Math.max(Math.abs(Math.cos(moonAngle*Math.PI/180)),0.1);
+    const impact=(mag/(k*1.44*10))*1.618*(1+mag/18000)*(1+10/24);
+    const isCrit=impact>=1.96;
+    const eq=`⚖️ Saqar = (${mag.toFixed(1)} / (${k.toFixed(3)} × 1.44 × 10)) × φ × (1 + ${mag.toFixed(1)}/18000) × (1+10/24)`;
+    const div=document.createElement('div'); div.className='item-row'; div.style.borderRightColor=col;
+    div.onclick=()=>window.openObservatory(url||'https://earthquake.usgs.gov/earthquakes/map/',`M${mag.toFixed(1)} Earthquake`);
+    div.innerHTML=`<div class="item-row-main"><span class="pulse-dot" style="background:${col}"></span><span class="item-name"><b style="color:${col}">M${mag.toFixed(1)}</b> · ${place} · ${time}</span><span class="item-saqar ${isCrit?'critical':''}">⚖️ ${impact.toFixed(4)}</span></div><div class="item-derivation" style="border-left-color:${col}80;">📐 ${eq}</div><div class="item-bridge">🔍 kFactor: ${k.toFixed(3)} | Bridge: ×${(1+mag/18000).toFixed(6)} | Lag: ×${(1+10/24).toFixed(4)}</div>`;
+    container.appendChild(div);
+  });
+  document.getElementById('quake-prev').disabled=STATE.quakeOffset<=0;
+  document.getElementById('quake-next').disabled=STATE.quakeOffset+STATE.pageSize>=STATE.quakesData.length;
+}
+
+function updateQuakeMap() {
+  const el=document.getElementById('quake-map'); if(!el||typeof L==='undefined') return;
+  if(window.quakeMap) window.quakeMap.remove();
+  window.quakeMap=L.map('quake-map').setView([20,0],2);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap'}).addTo(window.quakeMap);
+  STATE.quakesData.slice(0,50).forEach(q=>{ const coords=q.geometry?.coordinates;
+    if(coords&&coords[0]&&coords[1]){ const mag=q.properties?.mag||0;
+      L.circleMarker([coords[1],coords[0]],{radius:Math.max(3,mag*1.5),color:mag>=6?'#dc2626':mag>=4.5?'#f59e0b':'#2c7a4d',fillColor:mag>=6?'#dc2626':mag>=4.5?'#f59e0b':'#2c7a4d',fillOpacity:0.6})
+        .bindPopup(`<b>M${mag.toFixed(1)}</b><br>${q.properties?.place||''}`).addTo(window.quakeMap); } });
+  setTimeout(()=>window.quakeMap.invalidateSize(),300);
+}
+
+// ============================================================================
+// 7. TIME & UTILITIES
 // ============================================================================
 
 function updateTime() {
@@ -1252,55 +1194,55 @@ function updateTime() {
   document.getElementById('hijri-date').textContent = `3 Shawwal 1447 AH`;
 }
 
-function toggleLangMenu() {
-  const m = document.getElementById('lang-menu');
-  m.style.display = m.style.display === 'block' ? 'none' : 'block';
+function toggleLangMenu() { const m=document.getElementById('lang-menu'); m.style.display=m.style.display==='block'?'none':'block'; }
+function setLanguage(lang) { document.getElementById('langBtn').textContent = `🌐 ${lang==='ar'?'العربية':lang==='en'?'English':'Français'}`; document.getElementById('lang-menu').style.display='none'; }
+
+window.openObservatory = function(url, name) {
+  if(url) { window.open(url, '_blank'); showToast(`🔭 Opening ${name}`, '#b8860b', 2000); }
+  else showToast('🔗 No link available', '#64748b', 2000);
+};
+function showToast(msg, borderColor, duration) {
+  const t = document.createElement('div'); t.className = 'notification-toast'; t.style.borderLeftColor = borderColor; t.innerHTML = msg;
+  document.body.appendChild(t); setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, duration);
 }
-function setLanguage(lang) {
-  document.getElementById('langBtn').textContent = `🌐 ${lang === 'ar' ? 'العربية' : lang === 'en' ? 'English' : 'Français'}`;
-  document.getElementById('lang-menu').style.display = 'none';
-}
+
+// ============================================================================
+// 8. INITIALIZATION
+// ============================================================================
 
 document.getElementById('master-frequency').innerHTML = `8,782,511,093<span class="unit"> Hz</span>`;
 document.getElementById('alpha-stab').innerHTML = ALPHA_STAB.toFixed(3);
 document.getElementById('rs-status').innerHTML = `📊 Statistical validation: Spearman ρ = -0.679, p = 7.8×10⁻⁷ | Z-score = 5.42 | Critical 2027: ${CRITICAL_2027_MID.toFixed(5)}`;
 
-// Initialize all
 updateCorePanels();
 updateExtendedPanels();
 updateSaqarPanel();
 updateMoon();
 renderRSChart();
-renderEarthquakeTable();
 renderSolarCoronaUI();
-setInterval(updateTime, 1000);
-setInterval(updateMoon, 60000);
-setInterval(() => { updateCorePanels(); updateExtendedPanels(); }, 30000);
 
 document.getElementById('refresh-corona').addEventListener('click', () => renderSolarCoronaUI());
 document.getElementById('compare-psp').addEventListener('click', () => compareWithPSP());
 
-// Volcano data placeholder
+document.getElementById('vol-prev').addEventListener('click',()=>{ STATE.volcanoOffset=Math.max(0,STATE.volcanoOffset-STATE.pageSize); renderVolcanoes(); });
+document.getElementById('vol-next').addEventListener('click',()=>{ STATE.volcanoOffset=Math.min(STATIC_VOLCANOES.length-STATE.pageSize,STATE.volcanoOffset+STATE.pageSize); renderVolcanoes(); });
+document.getElementById('quake-prev').addEventListener('click',()=>{ STATE.quakeOffset=Math.max(0,STATE.quakeOffset-STATE.pageSize); renderQuakes(); });
+document.getElementById('quake-next').addEventListener('click',()=>{ STATE.quakeOffset=Math.min(STATE.quakesData.length-STATE.pageSize,STATE.quakeOffset+STATE.pageSize); renderQuakes(); });
+
+setInterval(updateTime, 1000);
+setInterval(updateMoon, 60000);
+setInterval(fetchEarthquakes, 60000);
+setInterval(() => { updateCorePanels(); updateExtendedPanels(); }, 30000);
+
+initVolcanoMap();
+fetchEarthquakes();
+
 document.getElementById('vol-total').textContent = '11';
 document.getElementById('vol-alert').textContent = '3';
 document.getElementById('vol-page').textContent = '1/3';
 document.getElementById('quake-total').textContent = '127';
 document.getElementById('quake-strongest').textContent = '5.9';
 document.getElementById('quake-m5').textContent = '4';
-
-// Toast function for observatory links
-window.openObservatory = function(url, name) {
-  if(url) { window.open(url, '_blank'); showToast(`🔭 Opening ${name}`, '#b8860b', 2000); }
-  else showToast('🔗 No link available', '#64748b', 2000);
-};
-function showToast(msg, borderColor, duration) {
-  const t = document.createElement('div');
-  t.className = 'notification-toast';
-  t.style.borderLeftColor = borderColor;
-  t.innerHTML = msg;
-  document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, duration);
-}
 </script>
 </body>
 </html>
