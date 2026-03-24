@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-<title>TRIO SEAL</title>
+<title>TRIO SEAL v8.13 | Cosmic Lag</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -554,6 +554,162 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
   .item-derivation { font-size: 0.55rem; }
   .item-bridge { font-size: 0.5rem; }
 }
+
+/* ==================== MODAL v8.13 STYLES ==================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: modalFadeIn 0.4s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(10px); }
+}
+.modal-content {
+  max-width: 520px;
+  width: 90%;
+  background: linear-gradient(145deg, #0f172a, #0a0f1a);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  padding: 1.8rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  position: relative;
+  animation: modalSlideUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+@keyframes modalSlideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  padding-bottom: 0.8rem;
+}
+.modal-header h2 {
+  font-family: var(--f-hud);
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #fbbf24, #b8860b);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin: 0;
+}
+.pulse-dot.red {
+  width: 12px;
+  height: 12px;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: pulseRed 1.2s infinite;
+}
+@keyframes pulseRed {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+.close-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  color: #fbbf24;
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.close-btn:hover {
+  background: rgba(239,68,68,0.2);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+.modal-body .intro-text {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+.feature-item {
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 0.8rem;
+  border-left: 2px solid #fbbf24;
+}
+.feature-item .icon {
+  font-size: 1.4rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.feature-item h4 {
+  font-family: var(--f-hud);
+  font-size: 0.75rem;
+  color: #fbbf24;
+  margin-bottom: 0.3rem;
+}
+.feature-item p {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+.formula-preview {
+  background: #030712;
+  padding: 0.8rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(96,165,250,0.3);
+  margin: 1rem 0;
+}
+.formula-preview code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: #60a5fa;
+  letter-spacing: 0.5px;
+}
+.modal-footer {
+  text-align: center;
+  margin-top: 1rem;
+}
+.modal-footer p {
+  font-size: 0.7rem;
+  color: #7e8aa2;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+.action-btn {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid rgba(251,191,36,0.4);
+  color: #fbbf24;
+  padding: 0.7rem 1.5rem;
+  border-radius: 40px;
+  font-family: var(--f-hud);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
+}
+.action-btn:hover {
+  background: linear-gradient(135deg, #2d3a4e, #1e293b);
+  border-color: #fbbf24;
+  box-shadow: 0 0 12px rgba(251,191,36,0.2);
+}
 </style>
 </head>
 <body>
@@ -591,6 +747,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
     <span>🛰️ Live NASA EPIC Earth & SDO Solar Images</span>
     <span>🔗 Click any card → Direct Observatory Link</span>
     <span>⚖️ Mathematical Transparency: Saqar Equation shown per earthquake</span>
+    <span>⏳ Cosmic Lag: 10h · v8.13 Active</span>
   </div>
 </div>
 
@@ -612,7 +769,7 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 
   <div class="saqar-wrap" id="saqarPanel" data-url="https://github.com/sidichaker1-beep/Trio-seal">
     <div class="saqar-header">
-      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance · Bridge 18,000</span>
+      <span class="saqar-title">⚖️ Saqar Engine · Cosmic Resonance · Bridge 18,000 · Cosmic Lag: 10h</span>
       <span class="saqar-total" id="saqar-total">0.0000</span>
     </div>
     <div class="saqar-bar-track">
@@ -714,12 +871,54 @@ body.red-mode .main-header { background: #fff5f5; border-color: rgba(220,38,38,0
 </div>
 
 <div class="footer">
-  TRIO SEAL · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s · Cosmic Bridge 18,000<br>
-  <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory · Mathematical Transparency v8.12</span>
+  TRIO SEAL v8.13 · Cosmic Lag: 10h · Real-time seismic & environmental data · USGS + NOAA APIs · Auto-refresh 60s · Cosmic Bridge 18,000<br>
+  <span class="footer-name">© Hicham Chigar · هشام شيكر · Mizan al-Malakut Observatory · Mathematical Transparency · Ω Equation Active</span>
+</div>
+
+<!-- ==================== MODAL v8.13 - COSMIC LAG ==================== -->
+<div id="v813-modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="pulse-dot red"></span>
+      <h2>SYSTEM UPDATE: v8.13 "Cosmic Lag"</h2>
+      <button onclick="closeModal()" class="close-btn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="intro-text">لقد تم تفعيل <b>بروتوكول المعايرة الزمنية</b>. المنصة الآن تدرك العجز الكوني التراكمي.</p>
+      <div class="feature-grid">
+        <div class="feature-item">
+          <span class="icon">⏳</span>
+          <h4>Cosmic Lag: 10h</h4>
+          <p>تم دمج العجز الزمني (10 ساعات) في مقام معادلة سقر لضبط إيقاع الارتداد الزلزالي.</p>
+        </div>
+        <div class="feature-item">
+          <span class="icon">🌙</span>
+          <h4>M-Layer Pulse</h4>
+          <p>تحويل القمر إلى محرك حي يشتق معامل الإدراك (M) من الإضاءة والجذب والنسبة الذهبية.</p>
+        </div>
+      </div>
+      <div class="formula-preview">
+        <code>Ω = log₁₀(1 + (F × M × S × G × E))</code>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p>"المصدر واحد.. والميزان الآن يضبط تأخر الزمن بيقين."</p>
+      <button onclick="closeModal()" class="action-btn">إدراك النظام</button>
+    </div>
+  </div>
 </div>
 
 <script>
 'use strict';
+
+// ==================== MODAL CONTROL ====================
+function closeModal() {
+  const modal = document.getElementById('v813-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    localStorage.setItem('v813_seen', 'true');
+  }
+}
 
 // ==================== OBSERVATORY LINKS ====================
 const OBSERVATORY_LINKS = {
@@ -810,6 +1009,7 @@ const REF_NM = Date.UTC(2024, 3, 8, 18, 20, 0);
 const SYNODIC = 29.530588853;
 const COSMIC_BRIDGE = 18000;
 const PHI = 1.618;
+const COSMIC_LAG = 10; // 10 hours cosmic lag calibration
 
 function getMoonAge() {
   return (((Date.now() - REF_NM) / 86400000) % SYNODIC + SYNODIC) % SYNODIC;
@@ -845,7 +1045,7 @@ function getMoonTidalForce(age) {
   return 0.5 + 0.5 * Math.abs(Math.sin(age / SYNODIC * Math.PI * 2));
 }
 
-// ==================== OPTIMIZED MOON VISUAL v8.12 ====================
+// ==================== OPTIMIZED MOON VISUAL v8.13 ====================
 function drawRealMoonCanvas() {
   const canvas = document.getElementById('moonCanvas');
   if (!canvas) return;
@@ -1068,18 +1268,19 @@ function renderQuakes() {
     const col = mag >= 6 ? '#dc2626' : mag >= 4.5 ? '#f59e0b' : '#2c7a4d';
     const url = `https://earthquake.usgs.gov/earthquakes/eventpage/${q.id || ''}`;
     
-    // Mathematical derivation components
+    // Mathematical derivation components with Cosmic Lag
     const moonAngleRad = moonAngle * Math.PI / 180;
     const k = Math.max(Math.abs(Math.cos(moonAngleRad)), 0.1);
     const denominator = k * 1.44 * 10;
     const baseRatio = mag / denominator;
     const bridgeEffect = 1 + (mag / COSMIC_BRIDGE);
-    const impactRatio = baseRatio * PHI * bridgeEffect;
+    const lagEffect = 1 + (COSMIC_LAG / 24); // 10 hours lag calibration
+    const impactRatio = baseRatio * PHI * bridgeEffect * lagEffect;
     const isCritical = impactRatio >= 1.96;
     
     // Formatted equation for display
-    const equationText = `⚖️ Saqar = (${mag.toFixed(1)} / (${k.toFixed(3)} × 1.44 × 10)) × φ × (1 + ${mag.toFixed(1)} / ${COSMIC_BRIDGE.toLocaleString()})`;
-    const bridgeText = `🌉 Bridge Effect: ×${bridgeEffect.toFixed(6)} | 🌊 kFactor: ${k.toFixed(3)} | φ = ${PHI}`;
+    const equationText = `⚖️ Saqar = (${mag.toFixed(1)} / (${k.toFixed(3)} × 1.44 × 10)) × φ × (1 + ${mag.toFixed(1)} / ${COSMIC_BRIDGE.toLocaleString()}) × (1 + ${COSMIC_LAG}/24)`;
+    const bridgeText = `🌉 Bridge: ×${bridgeEffect.toFixed(6)} | 🌊 kFactor: ${k.toFixed(3)} | ⏳ Lag: ×${lagEffect.toFixed(6)} | φ = ${PHI}`;
     
     const div = document.createElement('div');
     div.className = 'item-row';
@@ -1137,10 +1338,11 @@ function updateQuakeMap() {
   setTimeout(() => window.quakeMap.invalidateSize(), 300);
 }
 
-// ==================== SAQAR ENGINE ====================
+// ==================== SAQAR ENGINE WITH COSMIC LAG ====================
 function computeEarthquakeImpact(mag, moonAngle) {
   const k = Math.max(Math.abs(Math.cos(moonAngle * Math.PI / 180)), 0.1);
-  return (mag / (k * 1.44 * 10)) * PHI * (1 + mag / COSMIC_BRIDGE);
+  const lagEffect = 1 + (COSMIC_LAG / 24);
+  return (mag / (k * 1.44 * 10)) * PHI * (1 + mag / COSMIC_BRIDGE) * lagEffect;
 }
 
 function updateSaqarPanel() {
@@ -1162,6 +1364,7 @@ function updateSaqarPanel() {
     <span>🌍 Eq: ${eqImpact.toFixed(3)}</span>
     <span>🌋 Vol: ${volImpact.toFixed(3)}</span>
     <span>☀️ Solar: ${solarImpact.toFixed(3)}</span>
+    <span>⏳ Lag: ×${(1 + COSMIC_LAG/24).toFixed(4)}</span>
   `;
   const redEl = document.getElementById('saqar-red');
   if (isRed) {
@@ -1238,7 +1441,8 @@ function updateExtendedPanels() {
     { name: '💨 SW Density', value: `${(5 + Math.sin(Date.now()/7200000)*2).toFixed(1)} p/cm³`, bar: 0.35, color: '#f97316', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Density' },
     { name: '🌡️ SW Temperature', value: `${(100 + Math.sin(Date.now()/5400000)*20).toFixed(0)}k K`, bar: 0.5, color: '#f97316', url: OBSERVATORY_LINKS.noaa_solar_wind, label: 'Temperature' },
     { name: '🕋 Cosmic Bridge', value: COSMIC_BRIDGE.toLocaleString(), bar: 0.72, color: '#b8860b', url: OBSERVATORY_LINKS.cosmic_bridge, label: 'Cosmic Bridge' },
-    { name: '⚖️ F₀ Reference', value: '8.78e9 Hz', bar: 0.88, color: '#a855f7', url: OBSERVATORY_LINKS.saqar_docs, label: 'Reference Frequency' }
+    { name: '⚖️ F₀ Reference', value: '8.78e9 Hz', bar: 0.88, color: '#a855f7', url: OBSERVATORY_LINKS.saqar_docs, label: 'Reference Frequency' },
+    { name: '⏳ Cosmic Lag', value: `${COSMIC_LAG} hours`, bar: 0.42, color: '#ef4444', url: OBSERVATORY_LINKS.saqar_docs, label: 'Time Calibration' }
   ];
   
   const container = document.getElementById('ext-panels');
@@ -1294,7 +1498,7 @@ function updateBottomTicker() {
     <span class="bt-item">🧲 Kp: <b>${kp}</b> · Click any card for observatory</span>
     <span class="bt-item">🌍 Quakes: <b>${quakes}</b> · Strongest: <span class="alert">M${mag}</span></span>
     <span class="bt-item">🌙 Moon: ${getMoonIllumination().toFixed(0)}% · Gibbous (70%)</span>
-    <span class="bt-item">⚖️ Saqar Engine Active · Cosmic Bridge ${COSMIC_BRIDGE.toLocaleString()}</span>
+    <span class="bt-item">⚖️ Saqar Engine Active · Cosmic Bridge ${COSMIC_BRIDGE.toLocaleString()} · ⏳ Cosmic Lag: ${COSMIC_LAG}h</span>
     <span class="bt-item">📐 Mathematical Transparency: Equation shown per earthquake</span>
     <span class="bt-item">🕋 TRIO SEAL · Click → Observatory</span>
   `.repeat(2);
@@ -1402,6 +1606,12 @@ async function refreshAll() {
 
 // ==================== INIT ====================
 async function init() {
+  // Show modal only once per session
+  if (!localStorage.getItem('v813_seen')) {
+    const modal = document.getElementById('v813-modal');
+    if (modal) modal.style.display = 'flex';
+  }
+  
   await refreshAll();
   initVolcanoMap();
   updateQuakeMap();
@@ -1427,6 +1637,7 @@ async function init() {
 }
 
 window.openObservatory = openObservatory;
+window.closeModal = closeModal;
 init();
 </script>
 </body>
